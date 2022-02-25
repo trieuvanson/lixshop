@@ -43,6 +43,9 @@ dependencies:
   liquid_pull_to_refresh:
   bottom_navy_bar:
   scroll_to_index:
+  carousel_slider:
+  dots_indicator:
+
 
 
 dev_dependencies:
