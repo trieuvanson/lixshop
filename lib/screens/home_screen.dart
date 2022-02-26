@@ -1,11 +1,12 @@
-
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:lixshop/contains/colors.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../models/restaurants.dart';
+import '../widgets/restaurants_list.dart';
 import '../widgets/search_card.dart';
 import '../widgets/slide_item.dart';
 
@@ -19,11 +20,11 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-  GlobalKey<LiquidPullToRefreshState>();
+      GlobalKey<LiquidPullToRefreshState>();
 
   static int refreshNum = 10; // number that changes when refreshed
   Stream<int> counterStream =
-  Stream<int>.periodic(const Duration(seconds: 3), (x) => refreshNum);
+      Stream<int>.periodic(const Duration(seconds: 3), (x) => refreshNum);
 
   ScrollController? _scrollController;
 
@@ -32,23 +33,6 @@ class _FeedScreenState extends State<FeedScreen> {
     super.initState();
     _scrollController = ScrollController();
   }
-
-  static final List<String> _items = <String>[
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N'
-  ];
 
   Future<void> _handleRefresh() {
     final Completer<void> completer = Completer<void>();
@@ -91,11 +75,18 @@ class _FeedScreenState extends State<FeedScreen> {
             child: ListView(
               children: <Widget>[
                 buildSearchBar(context),
-                20.heightBox,
-                buildRestaurantRow('Trending Restaurants', context),
+                5.heightBox,
+                buildLocation(context),
                 10.heightBox,
                 buildRestaurantList(context),
-                // SizedBox(height: 10.0),
+                10.heightBox,
+                buildRestaurantList(context),
+                10.heightBox,
+                buildRestaurantList(context),10.heightBox,
+                buildRestaurantList(context),
+                10.heightBox,
+                buildRestaurantRow("Sản phẩm", context)
+              
                 // buildCategoryRow('Category', context),
                 // SizedBox(height: 10.0),
                 // buildCategoryList(context),
@@ -134,9 +125,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
   buildSearchBar(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-        child: SearchCard()
-    );
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0), child: SearchCard());
   }
 
   buildRestaurantRow(String restaurant, BuildContext context) {
@@ -152,7 +141,7 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
         FlatButton(
           child: Text(
-            "See all (9)",
+            "Xem thêm (9)",
             style: TextStyle(
               color: Theme.of(context).accentColor,
             ),
@@ -173,27 +162,69 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   buildRestaurantList(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 2.4,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        primary: false,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: restaurants == null ? 0 : restaurants.length,
-        itemBuilder: (BuildContext context, int index) {
-          Map restaurant = restaurants[index];
+    return const RestaurantList();
+  }
+}
 
-          return Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: SlideItem(
-              img: restaurant["img"],
-              title: restaurant["title"],
-              address: restaurant["address"],
-              rating: restaurant["rating"],
+buildRestaurantList(BuildContext context) {
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
+  return SizedBox(
+    height: MediaQuery.of(context).size.height / 2.4,
+    width: MediaQuery.of(context).size.width,
+    child: ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: restaurants == null ? 0 : restaurants.length,
+      itemBuilder: (BuildContext context, int index) {
+        Map restaurant = restaurants[index];
+        return Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: SlideItem(
+            img: restaurant["img"],
+            title: restaurant["title"],
+            address: restaurant["address"],
+            rating: restaurant["rating"],
+          ),
+        );
+      },
+    ),
+  );
+}
+
+buildLocation(BuildContext context) {
+  return SizedBox(
+    // alignment: Alignment.center,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            const Icon(
+              Icons.location_on_outlined,
+              color: Vx.green700,
             ),
-          );
-        },
-      ),
-    );
-  }}
+            5.widthBox,
+            "Giao tới: Số 3, đường số 2, khu phố 4, P.Linh..."
+                .text
+                .bold
+                .green700
+                .make(),
+          ],
+        ),
+        // 64.widthBox,
+        const Icon(
+          Icons.arrow_drop_down,
+          color: Vx.green700,
+        ),
+      ],
+    ),
+  );
+}

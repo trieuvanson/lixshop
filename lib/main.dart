@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
               webScreenLayout: WebScreenLayout(),
               mobileScreenLayout: MobileScreenLayout(),
             ),
-        '/login': (_) => const LoginScreen(),
+        '/login': (_) => LoginScreen(),
       },
     );
   }

@@ -23,8 +23,8 @@ class _SlideItemState extends State<SlideItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-      child: Container(
+      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+      child: SizedBox(
         height: MediaQuery.of(context).size.height / 2.9,
         width: MediaQuery.of(context).size.width / 1.2,
         child: Card(
@@ -35,17 +35,23 @@ class _SlideItemState extends State<SlideItem> {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height / 3.7,
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0),
                       ),
                       child: Image.asset(
-                        "${widget.img}",
+                        widget.img,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          print(error);
+                          return const Center(
+                            child: Icon(Icons.error),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -56,7 +62,7 @@ class _SlideItemState extends State<SlideItem> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0)),
                       child: Padding(
-                        padding: EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: Row(
                           children: <Widget>[
                             Icon(
@@ -66,7 +72,7 @@ class _SlideItemState extends State<SlideItem> {
                             ),
                             Text(
                               " ${widget.rating} ",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 10.0,
                               ),
                             ),
@@ -81,7 +87,7 @@ class _SlideItemState extends State<SlideItem> {
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0)),
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.all(4.0),
                         child: Text(
                           " OPEN ",
@@ -96,14 +102,14 @@ class _SlideItemState extends State<SlideItem> {
                   ),
                 ],
               ),
-              SizedBox(height: 7.0),
+              const SizedBox(height: 7.0),
               Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Container(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "${widget.title}",
-                    style: TextStyle(
+                    widget.title,
+                    style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w800,
                     ),
@@ -111,21 +117,21 @@ class _SlideItemState extends State<SlideItem> {
                   ),
                 ),
               ),
-              SizedBox(height: 7.0),
+              const SizedBox(height: 7.0),
               Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Container(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "${widget.address}",
-                    style: TextStyle(
+                    widget.address,
+                    style: const TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
             ],
           ),
         ),

@@ -28,12 +28,23 @@ class SearchCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Icon(
-                  Icons.search,
-                  color: Colors.black,
+                InkWell(
+                  onTap: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      "Search for Bột giặt, Nước giặt...".text.gray500.make(),
+                    ],
+                  ),
                 ),
-                "Search for Bột giặt, Nước giặt...".text.gray500.make(),
-                64.widthBox,
+                // 64.widthBox,
                 IconButton(
                   onPressed: () {
                     print('Search for camera');
