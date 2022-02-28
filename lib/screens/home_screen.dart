@@ -80,11 +80,11 @@ class _FeedScreenState extends State<FeedScreen> {
                 10.heightBox,
                 buildRestaurantList(context),
                 10.heightBox,
-                buildRestaurantList(context),
-                10.heightBox,
-                buildRestaurantList(context),10.heightBox,
-                buildRestaurantList(context),
-                10.heightBox,
+                  // buildRestaurantList(context),
+                  // 10.heightBox,
+                  // buildRestaurantList(context),10.heightBox,
+                  // buildRestaurantList(context),
+                  // 10.heightBox,
                 buildRestaurantRow("Sản phẩm", context)
               
                 // buildCategoryRow('Category', context),
@@ -123,80 +123,48 @@ class _FeedScreenState extends State<FeedScreen> {
     );
   }
 
-  buildSearchBar(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0), child: SearchCard());
-  }
+}
 
-  buildRestaurantRow(String restaurant, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          restaurant,
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w800,
+buildSearchBar(BuildContext context) {
+  return Container(
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0), child: SearchCard());
+}
+
+buildRestaurantRow(String restaurant, BuildContext context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: <Widget>[
+      Text(
+        restaurant,
+        style: const TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      FlatButton(
+        child: Text(
+          "Xem thêm (9)",
+          style: TextStyle(
+            color: Theme.of(context).accentColor,
           ),
         ),
-        FlatButton(
-          child: Text(
-            "Xem thêm (9)",
-            style: TextStyle(
-              color: Theme.of(context).accentColor,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return "ABC".text.make();
+              },
             ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return "ABC".text.make();
-                },
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  buildRestaurantList(BuildContext context) {
-    return const RestaurantList();
-  }
+          );
+        },
+      ),
+    ],
+  );
 }
 
 buildRestaurantList(BuildContext context) {
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
-    }
-    return result;
-  }
-
-  return SizedBox(
-    height: MediaQuery.of(context).size.height / 2.4,
-    width: MediaQuery.of(context).size.width,
-    child: ListView.builder(
-      primary: false,
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemCount: restaurants == null ? 0 : restaurants.length,
-      itemBuilder: (BuildContext context, int index) {
-        Map restaurant = restaurants[index];
-        return Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: SlideItem(
-            img: restaurant["img"],
-            title: restaurant["title"],
-            address: restaurant["address"],
-            rating: restaurant["rating"],
-          ),
-        );
-      },
-    ),
-  );
+  return const RestaurantList();
 }
 
 buildLocation(BuildContext context) {
@@ -212,7 +180,7 @@ buildLocation(BuildContext context) {
               color: Vx.green700,
             ),
             5.widthBox,
-            "Giao tới: Số 3, đường số 2, khu phố 4, P.Linh..."
+            "Giao tới: Số 3, đường số 2, khu phố 4,..."
                 .text
                 .bold
                 .green700

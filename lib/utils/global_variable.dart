@@ -16,8 +16,8 @@ List<Widget> homeScreenItems = [
   const AddPostScreen(),
   // const TestContainer(),
   // const Text('notifications'),
-  LoginScreen(),
-  const RestaurantList(),
+  // LoginScreen(),
+  // const RestaurantList(),
   const ProfileScreen(
   ),
 ];

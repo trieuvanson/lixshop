@@ -4,6 +4,7 @@ import 'package:lixshop/responsive/responsive_layout_screen.dart';
 import 'package:lixshop/responsive/web_screen_layout.dart';
 import 'package:lixshop/screens/login_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   setPathUrlStrategy();
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
       title: 'Lix Shop',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      theme: ThemeData.light(),
+      theme: ThemeData.light().copyWith(
+        primaryColor: const Color(0xFFFFC107),
+      ),
       darkTheme: ThemeData.dark(),
       initialRoute: "/",
       routes: {

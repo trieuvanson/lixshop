@@ -41,66 +41,62 @@ class _RestaurantListState extends State<RestaurantList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // height: MediaQuery.of(context).size.height / 2.4,
-      // width: MediaQuery.of(context).size.width,
-      child: SizedBox(
-        child: Column(
-          children: <Widget>[
-            CarouselSlider(
-              carouselController: _controller,
-              options: CarouselOptions(
-                height: MediaQuery.of(context).size.height / 2.4,
-                autoPlay: true,
-                scrollDirection: Axis.horizontal,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                pauseAutoPlayOnTouch: true,
-                enlargeStrategy: CenterPageEnlargeStrategy.height,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-              ),
-              items: restaurantList.map((item) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return item;
-                  },
-                );
-              }).toList(),
+      child: Column(
+        children: <Widget>[
+          CarouselSlider(
+            carouselController: _controller,
+            options: CarouselOptions(
+              height: MediaQuery.of(context).size.height / 2.3,
+              autoPlay: true,
+              scrollDirection: Axis.horizontal,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              pauseAutoPlayOnTouch: true,
+              enlargeStrategy: CenterPageEnlargeStrategy.height,
+              aspectRatio: 2.0,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: map<Widget>(
-                restaurants,
-                (index, url) {
-                  return InkWell(
-                    onTap: () => _controller.animateToPage(index),
-                    child: Container(
-                      padding: EdgeInsets.zero,
-                      width: _currentIndex == index ? 40.0 : 15.0,
-                      height: 10.0,
-                      decoration: BoxDecoration(
-                        color: _currentIndex == index
-                            ? Vx.green700
-                            : Colors.grey,
-                        shape: _currentIndex == index
-                            ? BoxShape.rectangle
-                            : BoxShape.circle,
-                        borderRadius: _currentIndex == index
-                            ? const BorderRadius.all(Radius.circular(8.0))
-                            : null,
-                      ),
+            items: restaurantList.map((item) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return item;
+                },
+              );
+            }).toList(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: map<Widget>(
+              restaurants,
+              (index, url) {
+                return InkWell(
+                  onTap: () => _controller.animateToPage(index),
+                  child: Container(
+                    padding: EdgeInsets.zero,
+                    width: _currentIndex == index ? 40.0 : 15.0,
+                    height: 10.0,
+                    decoration: BoxDecoration(
+                      color: _currentIndex == index
+                          ? Vx.green700
+                          : Colors.grey,
+                      shape: _currentIndex == index
+                          ? BoxShape.rectangle
+                          : BoxShape.circle,
+                      borderRadius: _currentIndex == index
+                          ? const BorderRadius.all(Radius.circular(8.0))
+                          : null,
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

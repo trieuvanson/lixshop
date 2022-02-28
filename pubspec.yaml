@@ -45,7 +45,7 @@ dependencies:
   scroll_to_index:
   carousel_slider:
   dots_indicator:
-
+  google_fonts:
 
 
 dev_dependencies:

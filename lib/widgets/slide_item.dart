@@ -30,10 +30,11 @@ class _SlideItemState extends State<SlideItem> {
         child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 3.0,
+          // elevation: 3.0,
           child: Column(
             children: <Widget>[
               Stack(
+                overflow: Overflow.visible,
                 children: <Widget>[
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 3.7,
@@ -47,7 +48,6 @@ class _SlideItemState extends State<SlideItem> {
                         widget.img,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          print(error);
                           return const Center(
                             child: Icon(Icons.error),
                           );

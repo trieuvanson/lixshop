@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:lixshop/screens/login_screen.dart';
+import 'home_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -39,8 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 200.0,
                   autoPlay: true,
                   autoPlayInterval: const Duration(seconds: 3),
-                  autoPlayAnimationDuration:
-                      const Duration(milliseconds: 1000),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 1000),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   pauseAutoPlayOnTouch: true,
                   aspectRatio: 2.0,
@@ -178,7 +179,7 @@ class Item3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -193,7 +194,7 @@ class Item3 extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[Text("data")],
+        children: const <Widget>[Text("data")],
       ),
     );
   }
@@ -204,20 +205,29 @@ class Item4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("Data",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold)),
-          Text("Data",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600)),
+          const Text(
+            "Data",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold),
+          ),
+          const Text(
+            "Data",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600),
+          ),
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LoginScreen())),
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
     );
