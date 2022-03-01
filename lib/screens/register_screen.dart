@@ -9,12 +9,12 @@ import 'package:velocity_x/velocity_x.dart';
 import '../contains/colors.dart';
 import '../utils/utils.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -26,7 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool showPassword = false;
 
-  handleLogin(BuildContext context) async {
+  var _currentSelectedValue;
+
+  handleRegister(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _loading = true;
@@ -60,6 +62,17 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
   }
+
+  var _currencies = [
+    "Food",
+    "Transport",
+    "Personal",
+    "Shopping",
+    "Medical",
+    "Rent",
+    "Movie",
+    "Salary"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Email/Tên đăng nhập/Số điện thoại"),
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Email/Tên đăng nhập/Số điện thoại"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
@@ -110,59 +125,123 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         15.heightBox,
                         TextFormField(
-                          onChanged: (value) {
-                            setState(() {
-                              password = value;
-                            });
-                          },
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Tên cửa hàng"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
-                            } else if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
                             }
                             return null;
                           },
-                          obscureText: showPassword ? true : false,
-                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Mật khẩu").copyWith(
-                            suffixIcon: showPassword
-                                ? IconButton(
-                              icon: const Icon(Icons.visibility, color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            )
-                                : IconButton(
-                              icon: const Icon(Icons.visibility_off, color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            ),
-                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
                         ),
+                        15.heightBox,
+                        TextFormField(
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Họ và tên chủ cửa hàng"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Không được để trống';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
+                        ),
+                        15.heightBox,
+                        FormField<String>(
+                          builder: (FormFieldState<String> state) {
+                            return InputDecorator(
+                              decoration: TextFormFieldCommonStyle.textFormFieldStyle("Địa chỉ"),
+                              isEmpty: _currentSelectedValue == '',
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _currentSelectedValue,
+                                  isDense: true,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _currentSelectedValue = newValue;
+                                      state.didChange(newValue);
+                                    });
+                                  },
+                                  items: _currencies.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        TextFormField(
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Email/Tên đăng nhập/Số điện thoại"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Không được để trống';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
+                        ),
+                        15.heightBox,
+                        TextFormField(
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Email/Tên đăng nhập/Số điện thoại"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Không được để trống';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
+                        ),
+                        15.heightBox,
                         20.heightBox,
                         Material(
                           color: appColor,
                           borderRadius: BorderRadius.circular(8),
                           child: InkWell(
-                            onTap: () => handleLogin(context),
+                            onTap: () => handleRegister(context),
                             child: AnimatedContainer(
                               duration: const Duration(seconds: 1),
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
+                              width: MediaQuery.of(context).size.width,
                               height: 50,
                               alignment: Alignment.center,
                               child: _loading
                                   ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white),
-                              )
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
+                                    )
                                   : const Text(
-                                "Đăng nhập",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                                      "Đăng ký",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ),
@@ -181,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                    const SignupScreen()));
+                                        const SignupScreen()));
                               },
                               child: Container(
                                 child: " Đăng ký ngay."
@@ -189,10 +268,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .bold
                                     .color(appColor)
                                     .textStyle(const TextStyle(
-                                    fontWeight: FontWeight.bold))
+                                        fontWeight: FontWeight.bold))
                                     .make(),
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 8),
+                                    const EdgeInsets.symmetric(vertical: 8),
                               ),
                             ),
                           ],
@@ -213,28 +292,19 @@ class _LoginScreenState extends State<LoginScreen> {
 buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
-    child: Image.asset('assets/images/login.png',
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+    child: Image.asset('assets/images/register.png',
+        width: MediaQuery.of(context).size.width,
         errorBuilder: (context, error, stackTrace) {
-          return SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 2,
-            child: const Center(
-              child: CircularProgressIndicator(
-                semanticsLabel: 'Loading',
-                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
-              ),
-            ),
-          );
-        }, fit: BoxFit.cover),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 2,
+        child: const Center(
+          child: CircularProgressIndicator(
+            semanticsLabel: 'Loading',
+            valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+          ),
+        ),
+      );
+    }, fit: BoxFit.cover),
   );
 }

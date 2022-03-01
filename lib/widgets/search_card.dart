@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/screens/login_screen.dart';
+import 'package:get/get.dart';
+import 'package:lixshop/screens/register_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SearchCard extends StatelessWidget {
@@ -29,11 +30,10 @@ class SearchCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  ),
+                  onTap: () => Get.to(() => RegisterScreen(),
+                      routeName: '/register',
+                      transition: Transition.downToUp,
+                      duration: const Duration(milliseconds: 300)),
                   child: Row(
                     children: [
                       const Icon(
@@ -58,45 +58,6 @@ class SearchCard extends StatelessWidget {
             ),
           ),
         ),
-        // child: TextFormField(
-        //   onTap: () => Navigator.of(context).pushNamed("/login"),
-        //   readOnly: true,
-        //   style: const TextStyle(
-        //     fontSize: 15.0,
-        //     color: Colors.black,
-        //   ),
-        //   focusNode: FocusNode(),
-        //   decoration: InputDecoration(
-        //     focusedBorder: InputBorder.none,
-        //     // contentPadding: const EdgeInsets.all(10.0),
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(5.0),
-        //       borderSide: const BorderSide(
-        //         color: Colors.white,
-        //       ),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderSide: const BorderSide(
-        //         color: Colors.white,
-        //       ),
-        //       borderRadius: BorderRadius.circular(5.0),
-        //     ),
-        //     hintText: "Search for Bột giặt, Nước giặt...",
-        //     prefixIcon: const Icon(
-        //       Icons.search,
-        //       color: Colors.black,
-        //     ),
-        //     suffixIcon: const Icon(
-        //       Icons.filter_list,
-        //       color: Colors.black,
-        //     ),
-        //     hintStyle: const TextStyle(
-        //       fontSize: 15.0,
-        //       color: Colors.black,
-        //     ),
-        //   ),
-        //   maxLines: 1,
-        // ),
       ),
     );
   }

@@ -46,6 +46,11 @@ dependencies:
   carousel_slider:
   dots_indicator:
   google_fonts:
+  animations:
+  shared_preferences:
+  get:
+
+
 
 
 dev_dependencies:
@@ -75,6 +80,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/logos/
+    - assets/introduction_animation/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
