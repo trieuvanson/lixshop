@@ -5,6 +5,8 @@ import 'package:lixshop/responsive/responsive_layout_screen.dart';
 import 'package:lixshop/responsive/web_screen_layout.dart';
 import 'package:lixshop/screens/login_screen.dart';
 import 'package:lixshop/screens/register_screen.dart';
+import 'package:lixshop/widgets/restaurant_tabview.dart';
+import 'package:lixshop/widgets/test.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
             mobileScreenLayout: MobileScreenLayout()),
         '/login': (_) => LoginScreen(),
         '/register': (_) => RegisterScreen(),
+        "/test": (_) => const TestContainer(),
       },
     );
   }

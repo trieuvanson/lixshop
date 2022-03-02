@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/screens/register_screen.dart';
+import 'package:lixshop/widgets/test.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SearchCard extends StatelessWidget {
@@ -47,6 +48,10 @@ class SearchCard extends StatelessWidget {
                 // 64.widthBox,
                 IconButton(
                   onPressed: () {
+                    Get.to(() => const TestContainer(),
+                        routeName: '/test',
+                        transition: Transition.downToUp,
+                        duration: const Duration(milliseconds: 300));
                     print('Search for camera');
                   },
                   icon: const Icon(

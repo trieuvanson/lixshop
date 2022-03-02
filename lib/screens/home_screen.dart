@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lixshop/contains/colors.dart';
+import 'package:lixshop/widgets/restaurant_tabview.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../models/restaurants.dart';
@@ -70,6 +71,13 @@ class _FeedScreenState extends State<FeedScreen> {
         backgroundColor: Vx.indigo500,
         showChildOpacityTransition: false,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Vx.red700,
+            onPressed: () {
+
+            },
+            child: const Icon(Icons.shopping_cart, color: Colors.white),
+          ),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
             child: ListView(
@@ -79,22 +87,21 @@ class _FeedScreenState extends State<FeedScreen> {
                 buildLocation(context),
                 10.heightBox,
                 buildRestaurantList(context),
+                20.heightBox,
+                const RestaurantView(),
                 10.heightBox,
-                  // buildRestaurantList(context),
-                  // 10.heightBox,
-                  // buildRestaurantList(context),10.heightBox,
-                  // buildRestaurantList(context),
-                  // 10.heightBox,
-                buildRestaurantRow("Sản phẩm", context)
-              
-                // buildCategoryRow('Category', context),
-                // SizedBox(height: 10.0),
-                // buildCategoryList(context),
-                // SizedBox(height: 20.0),
-                // buildCategoryRow('Friends', context),
-                // SizedBox(height: 10.0),
-                // buildFriendsList(),
-                // SizedBox(height: 30.0),
+                buildRestaurantRow("Khuyến mãi", context),
+                10.heightBox,
+                buildProductPromotion(context),
+                10.heightBox,
+                buildRestaurantRow("Sản phẩm bán chạy", context),
+                10.heightBox,
+                buildProductPromotion(context),
+                10.heightBox,
+                buildRestaurantRow("Sản phẩm mới", context),
+                10.heightBox,
+                buildProductPromotion(context),
+
               ],
             ),
           ),
@@ -122,7 +129,6 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
     );
   }
-
 }
 
 buildSearchBar(BuildContext context) {
@@ -193,6 +199,32 @@ buildLocation(BuildContext context) {
           color: Vx.green700,
         ),
       ],
+    ),
+  );
+}
+
+buildProductPromotion(BuildContext context) {
+  return Container(
+    height: MediaQuery.of(context).size.height / 2,
+    width: 100,
+    child: ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: restaurants == null ? 0 : restaurants.length,
+      itemBuilder: (BuildContext context, int index) {
+        Map restaurant = restaurants[index];
+
+        return Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: SlideItem(
+            img: restaurant["img"],
+            title: restaurant["title"],
+            address: restaurant["address"],
+            rating: restaurant["rating"],
+          ),
+        );
+      },
     ),
   );
 }
