@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/signup_screen.dart';
+import 'package:lixshop/screens/forgot_password_screen.dart';
+import 'package:lixshop/screens/register_screen.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -95,7 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Số điện thoại"),
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Số điện thoại"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
@@ -124,16 +127,46 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                           obscureText: showPassword ? true : false,
-                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Mật khẩu").copyWith(
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                      "Mật khẩu")
+                                  .copyWith(
                             suffixIcon: showPassword
                                 ? IconButton(
-                              icon: const Icon(Icons.visibility, color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            )
+                                    icon: const Icon(Icons.visibility,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  )
                                 : IconButton(
-                              icon: const Icon(Icons.visibility_off, color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            ),
+                                    icon: const Icon(Icons.visibility_off,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordScreen(),
+                                    settings: const RouteSettings(name: '/forgot-password'),
+                                  ));
+                                },
+                                child: const Text(
+                                  "Quên mật khẩu?",
+                                  style: TextStyle(
+                                    color: appColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         20.heightBox,
@@ -144,25 +177,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () => handleLogin(context),
                             child: AnimatedContainer(
                               duration: const Duration(seconds: 1),
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
+                              width: MediaQuery.of(context).size.width,
                               height: 50,
                               alignment: Alignment.center,
                               child: _loading
                                   ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white),
-                              )
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
+                                    )
                                   : const Text(
-                                "Đăng nhập",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                                      "Đăng nhập",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ),
@@ -179,9 +209,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                    const SignupScreen()));
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(),
+                                    settings: const RouteSettings(
+                                      name: '/register',
+                                    ),
+                                  ),
+                                );
                               },
                               child: Container(
                                 child: " Đăng ký ngay."
@@ -189,10 +224,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .bold
                                     .color(appColor)
                                     .textStyle(const TextStyle(
-                                    fontWeight: FontWeight.bold))
+                                        fontWeight: FontWeight.bold))
                                     .make(),
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 8),
+                                    const EdgeInsets.symmetric(vertical: 8),
                               ),
                             ),
                           ],
@@ -214,27 +249,18 @@ buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
     child: Image.asset('assets/images/login.png',
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         errorBuilder: (context, error, stackTrace) {
-          return SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 2,
-            child: const Center(
-              child: CircularProgressIndicator(
-                semanticsLabel: 'Loading',
-                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
-              ),
-            ),
-          );
-        }, fit: BoxFit.cover),
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 2,
+        child: const Center(
+          child: CircularProgressIndicator(
+            semanticsLabel: 'Loading',
+            valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+          ),
+        ),
+      );
+    }, fit: BoxFit.cover),
   );
 }

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/signup_screen.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 

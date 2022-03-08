@@ -2,18 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:lixshop/screens/forgot_password_screen.dart';
+import 'package:lixshop/screens/register_screen.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../contains/colors.dart';
 import '../utils/utils.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _CartScreenState extends State<CartScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -25,7 +27,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   bool showPassword = false;
 
-  handleForgotPassword(BuildContext context) async {
+  handleCart(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _loading = true;
@@ -86,39 +88,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               key: _formKey,
               child: Column(
                 children: [
+                  buildImageHeader(context),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 20,
                       horizontal: 16.0,
                     ),
                     child: Column(
                       children: [
-                        SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              "Đặt lại mật khẩu"
-                                  .text
-                                  .bold
-                                  .color(Vx.black)
-                                  .xl4
-                                  .make(),
-                              "Mã xác nhận đã được gửi đến số điện thoại"
-                                  .text
-                                  .color(Vx.black)
-                                  .xl
-                                  .make(),
-                            ],
-                          ),
-                        ),
-                        10.heightBox,
                         TextFormField(
                           decoration:
                               TextFormFieldCommonStyle.textFormFieldStyle(
-                            "Mã xác nhận",
-                          ).copyWith(
-                            suffix: "Gửi mã xác minh".text.color(Vx.blue400).make(),
-                          ),
+                                  "Số điện thoại"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
@@ -164,37 +144,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   ),
                           ),
                         ),
-                        15.heightBox,
-                        TextFormField(
-                          onChanged: (value) {
-                            setState(() {
-                              password = value;
-                            });
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Không được để trống';
-                            } else if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
-                          obscureText: showPassword ? true : false,
-                          decoration:
-                          TextFormFieldCommonStyle.textFormFieldStyle(
-                              "Nhập lại mật khẩu")
-                              .copyWith(
-                            suffixIcon: showPassword
-                                ? IconButton(
-                              icon: const Icon(Icons.visibility,
-                                  color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            )
-                                : IconButton(
-                              icon: const Icon(Icons.visibility_off,
-                                  color: appColor),
-                              onPressed: () => handleShowPassword(),
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordScreen(),
+                                    settings: const RouteSettings(name: '/forgot-password'),
+                                  ));
+                                },
+                                child: const Text(
+                                  "Quên mật khẩu?",
+                                  style: TextStyle(
+                                    color: appColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         20.heightBox,
@@ -202,7 +174,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           color: appColor,
                           borderRadius: BorderRadius.circular(8),
                           child: InkWell(
-                            onTap: () => handleForgotPassword(context),
+                            onTap: () => handleCart(context),
                             child: AnimatedContainer(
                               duration: const Duration(seconds: 1),
                               width: MediaQuery.of(context).size.width,
@@ -214,7 +186,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                           Colors.white),
                                     )
                                   : const Text(
-                                      "Hoàn thành",
+                                      "Đăng nhập",
                                       style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
@@ -224,6 +196,42 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ),
                         ),
+                        10.heightBox,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: "Bạn chưa có tài khoản?"
+                                  .text
+                                  .color(appColor)
+                                  .make(),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(),
+                                    settings: const RouteSettings(
+                                      name: '/register',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                child: " Đăng ký ngay."
+                                    .text
+                                    .bold
+                                    .color(appColor)
+                                    .textStyle(const TextStyle(
+                                        fontWeight: FontWeight.bold))
+                                    .make(),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -240,7 +248,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
-    child: Image.asset('assets/images/ForgotPassword.png',
+    child: Image.asset('assets/images/Cart.png',
         width: MediaQuery.of(context).size.width,
         errorBuilder: (context, error, stackTrace) {
       return SizedBox(

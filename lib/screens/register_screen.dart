@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/signup_screen.dart';
+import 'package:lixshop/screens/login_screen.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -161,7 +161,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         FormField<String>(
                           builder: (FormFieldState<String> state) {
                             return InputDecorator(
-                              decoration: TextFormFieldCommonStyle.textFormFieldStyle("Địa chỉ"),
+                              decoration:
+                                  TextFormFieldCommonStyle.textFormFieldStyle(
+                                      "Địa chỉ"),
                               isEmpty: _currentSelectedValue == '',
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
@@ -250,7 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              child: "Bạn chưa có tài khoản?"
+                              child: "Bạn đã có tài khoản?"
                                   .text
                                   .color(appColor)
                                   .make(),
@@ -260,10 +262,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        const SignupScreen()));
+                                        LoginScreen()));
                               },
                               child: Container(
-                                child: " Đăng ký ngay."
+                                child: " Đăng nhập ngay."
                                     .text
                                     .bold
                                     .color(appColor)

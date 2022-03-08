@@ -236,13 +236,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                 Navigator.of(context).push(
                                   HeroDialogRoute(
                                       builder: (context) => Column(
-                                        children: [
-                                          Flexible(child: Container(), flex: 2),
-                                          const TodoPopupCard(),
-                                        ],
-                                      ),
-                                      fullscreenDialog: false
-                                  ),
+                                            children: [
+                                              Flexible(
+                                                  child: Container(), flex: 2),
+                                              const TodoPopupCard(),
+                                            ],
+                                          ),
+                                      fullscreenDialog: false),
                                 );
                               },
                               child: Container(
@@ -370,26 +370,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -403,26 +407,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -436,26 +444,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -469,26 +481,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -502,26 +518,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -535,26 +555,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -568,26 +592,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -601,26 +629,30 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   border: Border.all(
-                                                      color: Vx.gray700.withOpacity(0.2),
+                                                      color: Vx.gray700
+                                                          .withOpacity(0.2),
                                                       width: 1),
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -634,23 +666,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -664,23 +699,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -694,23 +732,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -724,23 +765,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -754,23 +798,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
                                               child: Container(
                                                 width: 70,
                                                 height: 70,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                  const BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4.0),
                                                   ),
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
-                                                        color: DesignCourseAppTheme
-                                                            .grey
-                                                            .withOpacity(0.2),
-                                                        offset:
-                                                        const Offset(1.1, 1.1),
+                                                        color:
+                                                            DesignCourseAppTheme
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                        offset: const Offset(
+                                                            1.1, 1.1),
                                                         blurRadius: 8.0),
                                                   ],
                                                 ),
@@ -783,7 +830,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                                 ),
                                               ),
                                             ),
-
                                           ],
                                         ),
                                       ),
@@ -807,16 +853,39 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   ],
                                 ),
                                 child: Container()),
-                            AnimatedOpacity(
-                              duration: const Duration(milliseconds: 500),
-                              opacity: opacity1,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Row(
+                            // AnimatedOpacity(
+                            //   duration: const Duration(milliseconds: 500),
+                            //   opacity: opacity1,
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.all(8),
+                            //     child: Row(
+                            //       children: <Widget>[
+                            //         getTimeBoxUI('24', 'Classe'),
+                            //         getTimeBoxUI('2hours', 'Time'),
+                            //         getTimeBoxUI('24', 'Seat'),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            Expanded(
+                              child: Card(
+                                color: Colors.yellow,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    getTimeBoxUI('24', 'Classe'),
-                                    getTimeBoxUI('2hours', 'Time'),
-                                    getTimeBoxUI('24', 'Seat'),
+                                    const Text(
+                                      "Header",
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        children: const [
+                                          Text("Thông số 1"),
+                                          Text("Thông số 2"),
+                                          Text("Thông số 3"),
+                                          Text("Thông số 4"), 
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

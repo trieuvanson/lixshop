@@ -5,6 +5,7 @@ import 'package:lixshop/screens/home/products_show_card.dart';
 import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../widgets/search_card.dart';
+import '../cart_page.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -27,7 +28,14 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Vx.red700,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CartPage(),
+            ),
+          );
+        },
         child: const Icon(Icons.shopping_cart, color: Colors.white),
       ),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
