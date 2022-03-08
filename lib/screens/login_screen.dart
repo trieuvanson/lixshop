@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Email/Tên đăng nhập/Số điện thoại"),
+                          decoration: TextFormFieldCommonStyle.textFormFieldStyle("Số điện thoại"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';

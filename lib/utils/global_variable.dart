@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lixshop/screens/login_screen.dart';
-import 'package:lixshop/widgets/restaurants_list.dart';
 import 'package:lixshop/widgets/test.dart';
 
 import '../screens/add_post_screen.dart';
-import '../screens/home_screen.dart';
+import '../screens/home/home_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/search_screen.dart';
 

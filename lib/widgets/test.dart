@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/screens/home_screen.dart';
+import 'package:lixshop/screens/home/home_screen.dart';
 import 'package:lixshop/widgets/slide_item.dart';
 import 'package:lixshop/widgets/test_canva.dart';
 import 'package:velocity_x/velocity_x.dart';

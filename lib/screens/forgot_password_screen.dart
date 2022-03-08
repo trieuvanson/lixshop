@@ -9,12 +9,12 @@ import 'package:velocity_x/velocity_x.dart';
 import '../contains/colors.dart';
 import '../utils/utils.dart';
 
-class RegisterScreen extends StatefulWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -26,9 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool showPassword = false;
 
-  var _currentSelectedValue;
-
-  handleRegister(BuildContext context) async {
+  handleForgotPassword(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _loading = true;
@@ -63,17 +61,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _passwordController.dispose();
   }
 
-  var _currencies = [
-    "Food",
-    "Transport",
-    "Personal",
-    "Shopping",
-    "Medical",
-    "Rent",
-    "Movie",
-    "Salary"
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,17 +87,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  buildImageHeader(context),
                   Padding(
                     padding: const EdgeInsets.symmetric(
+                      vertical: 20,
                       horizontal: 16.0,
                     ),
                     child: Column(
                       children: [
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              "Đặt lại mật khẩu"
+                                  .text
+                                  .bold
+                                  .color(Vx.black)
+                                  .xl4
+                                  .make(),
+                              "Mã xác nhận đã được gửi đến số điện thoại"
+                                  .text
+                                  .color(Vx.black)
+                                  .xl
+                                  .make(),
+                            ],
+                          ),
+                        ),
+                        10.heightBox,
                         TextFormField(
                           decoration:
                               TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Số điện thoại"),
+                            "Mã xác nhận",
+                          ).copyWith(
+                            suffix: "Gửi mã xác minh".text.color(Vx.blue400).make(),
+                          ),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
@@ -125,105 +134,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         15.heightBox,
                         TextFormField(
-                          decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Tên cửa hàng"),
+                          onChanged: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
                             }
                             return null;
                           },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
+                          obscureText: showPassword ? true : false,
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                      "Mật khẩu")
+                                  .copyWith(
+                            suffixIcon: showPassword
+                                ? IconButton(
+                                    icon: const Icon(Icons.visibility,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(Icons.visibility_off,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  ),
+                          ),
                         ),
                         15.heightBox,
                         TextFormField(
-                          decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Họ và tên chủ cửa hàng"),
+                          onChanged: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
                             }
                             return null;
                           },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
-                        ),
-                        15.heightBox,
-                        FormField<String>(
-                          builder: (FormFieldState<String> state) {
-                            return InputDecorator(
-                              decoration: TextFormFieldCommonStyle.textFormFieldStyle("Địa chỉ"),
-                              isEmpty: _currentSelectedValue == '',
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _currentSelectedValue,
-                                  isDense: true,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _currentSelectedValue = newValue;
-                                      state.didChange(newValue);
-                                    });
-                                  },
-                                  items: _currencies.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        TextFormField(
+                          obscureText: showPassword ? true : false,
                           decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Số điện thoại"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Không được để trống';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
+                          TextFormFieldCommonStyle.textFormFieldStyle(
+                              "Nhập lại mật khẩu")
+                              .copyWith(
+                            suffixIcon: showPassword
+                                ? IconButton(
+                              icon: const Icon(Icons.visibility,
+                                  color: appColor),
+                              onPressed: () => handleShowPassword(),
+                            )
+                                : IconButton(
+                              icon: const Icon(Icons.visibility_off,
+                                  color: appColor),
+                              onPressed: () => handleShowPassword(),
+                            ),
+                          ),
                         ),
-                        15.heightBox,
-                        TextFormField(
-                          decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Số điện thoại"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Không được để trống';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
-                        ),
-                        15.heightBox,
                         20.heightBox,
                         Material(
                           color: appColor,
                           borderRadius: BorderRadius.circular(8),
                           child: InkWell(
-                            onTap: () => handleRegister(context),
+                            onTap: () => handleForgotPassword(context),
                             child: AnimatedContainer(
                               duration: const Duration(seconds: 1),
                               width: MediaQuery.of(context).size.width,
@@ -235,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           Colors.white),
                                     )
                                   : const Text(
-                                      "Đăng ký",
+                                      "Hoàn thành",
                                       style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
@@ -245,37 +225,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        10.heightBox,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: "Bạn chưa có tài khoản?"
-                                  .text
-                                  .color(appColor)
-                                  .make(),
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SignupScreen()));
-                              },
-                              child: Container(
-                                child: " Đăng ký ngay."
-                                    .text
-                                    .bold
-                                    .color(appColor)
-                                    .textStyle(const TextStyle(
-                                        fontWeight: FontWeight.bold))
-                                    .make(),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                              ),
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),
@@ -292,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
-    child: Image.asset('assets/images/register.png',
+    child: Image.asset('assets/images/ForgotPassword.png',
         width: MediaQuery.of(context).size.width,
         errorBuilder: (context, error, stackTrace) {
       return SizedBox(

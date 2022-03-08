@@ -49,6 +49,9 @@ dependencies:
   animations:
   shared_preferences:
   get:
+  flutter_staggered_grid_view:
+  flutter_rating_bar:
+  popup_menu:
 
 
 

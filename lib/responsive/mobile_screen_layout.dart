@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../contains/colors.dart';
+import '../screens/introduction_animation/introduction_animation_screen.dart';
 import '../utils/global_variable.dart';
 
 class MobileScreenLayout extends StatefulWidget {
@@ -14,7 +16,7 @@ class MobileScreenLayout extends StatefulWidget {
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
 }
 
-class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+class _MobileScreenLayoutState extends State<MobileScreenLayout>  with TickerProviderStateMixin<MobileScreenLayout>{
   //
   // int _currentIndex = 0;
   //  late PageController _pageController;
@@ -78,9 +80,40 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   // }
   int _selectedIndex = 0;
 
+  bool? checkFirstTime = false;
+
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
+    setState(() {});
+    if (!checkFirstTime!) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const IntroductionAnimationScreen(),
+        ),
+      );
+    }
+    print('isFirstTime2: $checkFirstTime');
+  }
+
+  @override
+  void initState() {
+    checkFirstSeen();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return !checkFirstTime!
+        ? Container(
+      color: Colors.white,
+      child: const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+        ),
+      ),
+    )
+        : Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: homeScreenItems.elementAt(_selectedIndex),
