@@ -1,13 +1,16 @@
 import 'dart:math';
 
+import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import '../../models/restaurants.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 import '../../widgets/popup/product_voucer_popup.dart';
+import '../../widgets/product_card_item.dart';
 import '../../widgets/text_form_field.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -63,36 +66,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: Scaffold(
-        appBar: appBar(context),
+        resizeToAvoidBottomInset: true,
+        appBar: _appBar(context),
         backgroundColor: Colors.transparent,
         bottomNavigationBar: _BottomNavigation(opacity3: opacity3),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const _ProductImage(),
-              5.heightBox,
-              Container(
-                decoration: BoxDecoration(
-                  color: DesignCourseAppTheme.nearlyWhite,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(32.0),
-                      topRight: Radius.circular(32.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                        offset: const Offset(1.1, 1.1),
-                        blurRadius: 10.0),
-                  ],
-                ),
-                child: Container(
-                  constraints: BoxConstraints(
-                      minHeight: infoHeight,
-                      maxHeight:
-                      tempHeight > infoHeight ? tempHeight : infoHeight),
+        body: SizedBox(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const _ProductImage(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: DesignCourseAppTheme.nearlyWhite,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(32.0),
+                        topRight: Radius.circular(32.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 10.0),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       const Padding(
                         padding: EdgeInsets.only(top: 16.0, left: 8, right: 8),
                         child: Text(
@@ -157,11 +155,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           Navigator.of(context).push(
                             HeroDialogRoute(
                                 builder: (context) => Column(
-                                  children: [
-                                    Flexible(child: Container(), flex: 2),
-                                    const TodoPopupCard(),
-                                  ],
-                                ),
+                                      children: [
+                                        Flexible(child: Container(), flex: 2),
+                                        const TodoPopupCard(),
+                                      ],
+                                    ),
                                 fullscreenDialog: false),
                           );
                         },
@@ -170,7 +168,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           decoration: BoxDecoration(
                             color: DesignCourseAppTheme.nearlyWhite,
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
+                                const BorderRadius.all(Radius.circular(8.0)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   color: DesignCourseAppTheme.grey
@@ -187,7 +185,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
                                       child: "Khuyến mãi sản phẩm".text.make(),
@@ -220,628 +218,448 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                         ),
                       ),
                       10.heightBox,
-                      InkWell(
-                        onTap: () {
-                          print('Ahiih');
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                      //Khuyến mãi
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child: Row(
+                                      children: [
+                                        "Chọn loại hàng ".text.bold.make(),
+                                        "(1 sản phẩm, 4 hình thức)"
+                                            .text
+                                            .italic
+                                            .make(),
+                                      ],
+                                    ),
+                                  ),
+                                  // 64.widthBox,
+                                  const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
                                   children: [
-                                    SizedBox(
-                                      child: Row(
-                                        children: [
-                                          "Chọn loại hàng ".text.bold.make(),
-                                          "(1 sản phẩm, 4 hình thức)"
-                                              .text
-                                              .italic
-                                              .make(),
-                                        ],
+                                    for (var i = 0; i < 10; i++)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: DesignCourseAppTheme
+                                                  .nearlyWhite,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(8.0)),
+                                              border: Border.all(
+                                                  color: Vx.green500)),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              splashColor: Colors.white24,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(8.0)),
+                                              onTap: () {
+                                                print('Tap ${++i}');
+                                                setState(() {
+                                                  // categoryType = categoryTypeData;
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8,
+                                                    bottom: 8,
+                                                    left: 8,
+                                                    right: 8),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Size ${i + 1}",
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 14,
+                                                      letterSpacing: 0.27,
+                                                      color: Vx.green500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    // 64.widthBox,
-                                    const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16,
-                                    ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 8,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      10.heightBox,
+                      //Sản phẩm tương tự (Hương chanh, hương bưởi...)
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child: "Sản phẩm tương tự".text.bold.make(),
+                                  ),
+                                  Row(
+                                    children: [
+                                      "Xem tất cả".text.green600.make(),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Vx.green600,
+                                        size: 16,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: List.generate(
+                                      6,
+                                      (index) => Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: Container(
+                                              width: 100,
+                                              height: 140,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: Vx.gray700
+                                                        .withOpacity(0.2),
+                                                    width: 1),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(16),
+                                                        topRight:
+                                                            Radius.circular(8),
+                                                        bottomLeft:
+                                                            Radius.circular(8),
+                                                        bottomRight:
+                                                            Radius.circular(8)),
+                                                boxShadow: <BoxShadow>[
+                                                  BoxShadow(
+                                                      color:
+                                                          DesignCourseAppTheme
+                                                              .grey
+                                                              .withOpacity(0.2),
+                                                      offset: const Offset(
+                                                          1.1, 1.1),
+                                                      blurRadius: 8.0),
+                                                ],
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Hero(
+                                                    tag: Random()
+                                                        .nextInt(1000)
+                                                        .toString(),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                16.0),
+                                                      ),
+                                                      child: Image.asset(
+                                                        "assets/images/lix1.png",
+                                                        width: double.infinity,
+                                                        height: 80,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 4.0,
+                                                        left: 4,
+                                                        right: 8),
+                                                    child: Text(
+                                                      "Bột giặt thương hiệu Lixco",
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 12,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Flexible(child: Container()),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 4.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: const [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 4),
+                                                          child: Text(
+                                                            'đ12.345',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              letterSpacing:
+                                                                  0.27,
+                                                              color: Vx.red600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )).toList(),
                                 ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      10.heightBox,
+                      //Thông tin chi tiết
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                child: "Thông tin chi tiết".text.bold.make(),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Divider(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.6),
+                                height: 1,
+                              ),
+                              for (var i = 0; i < 4; i++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
+                                      SizedBox(
+                                        width: 120,
+                                        child: Text(
+                                          'Tồn kho ${i + 1}',
+                                          style: const TextStyle(
+                                            color:
+                                                DesignCourseAppTheme.darkerText,
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color:
-                                                Vx.gray700.withOpacity(0.2),
-                                                width: 1),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(right: 8.0),
-                                        child: Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(4.0),
-                                            ),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: DesignCourseAppTheme
-                                                      .grey
-                                                      .withOpacity(0.2),
-                                                  offset:
-                                                  const Offset(1.1, 1.1),
-                                                  blurRadius: 8.0),
-                                            ],
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/lix1.png",
-                                              width: 50,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                136,
+                                        child: Text(
+                                          "Đây là văn bản test $i",
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              const _ExpandAbleDescription(),
+                            ],
                           ),
                         ),
                       ),
+                      //Đoạn này dành cho comment
                       10.heightBox,
                       Container(
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
-                            ],
-                          ),
-                          child: Container()),
-                      // AnimatedOpacity(
-                      //   duration: const Duration(milliseconds: 500),
-                      //   opacity: opacity1,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8),
-                      //     child: Row(
-                      //       children: <Widget>[
-                      //         getTimeBoxUI('24', 'Classe'),
-                      //         getTimeBoxUI('2hours', 'Time'),
-                      //         getTimeBoxUI('24', 'Seat'),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //   child: Card(
-                      //     color: Colors.yellow,
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: <Widget>[
-                      //         const Text(
-                      //           "Header",
-                      //         ),
-                      //         Expanded(
-                      //           child: Column(
-                      //             children: const [
-                      //               Text("Thông số 1"),
-                      //               Text("Thông số 2"),
-                      //               Text("Thông số 3"),
-                      //               Text("Thông số 4"),
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 500),
-                            opacity: opacity2,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 16, right: 16, top: 8, bottom: 8),
-                              child: Column(
-                                children: const [
-                                  Text(
-                                    'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 14,
-                                      letterSpacing: 0.27,
-                                      color: DesignCourseAppTheme.grey,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child:
+                                        "Đoạn này là comment".text.bold.make(),
                                   ),
-                                  Text(
-                                    'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 14,
-                                      letterSpacing: 0.27,
-                                      color: DesignCourseAppTheme.grey,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 14,
-                                      letterSpacing: 0.27,
-                                      color: DesignCourseAppTheme.grey,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 14,
-                                      letterSpacing: 0.27,
-                                      color: DesignCourseAppTheme.grey,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
+                                  Row(
+                                    children: [
+                                      "Xem tất cả".text.green600.make(),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Vx.green600,
+                                        size: 16,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.bottom,
-                      )
+                      //Đoạn này dành cho các sản phẩm cùng loại(Bột giặt, nước giặt,...)
+                      10.heightBox,
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                child: "Có thể bạn cần".text.bold.make(),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              AlignedGridView.count(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 4,
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                crossAxisSpacing: 8,
+                                itemBuilder: (context, index) {
+                                  Map restaurant = restaurants[index];
+                                  return ProductCardItem(
+                                    img: restaurant['img'],
+                                    title: restaurant['title'],
+                                    address: restaurant['address'],
+                                    rating: restaurant['rating'],
+                                  );
+                                },
+                                itemCount: restaurants.length,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -884,7 +702,7 @@ class _ProductImage extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget appBar(BuildContext context) {
+PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
     elevation: 0.0,
     toolbarHeight: 40.0,
@@ -950,129 +768,176 @@ class _BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 500),
-      opacity: opacity3,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Row(
+    return Container(
+      margin: MediaQuery.of(context).viewInsets,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 500),
+        opacity: opacity3,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 96,
+            child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          border: Border.all(
-                            color: Vx.green500,
-                          )),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Vx.green500,
-                        size: 28,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: DesignCourseAppTheme.nearlyWhite,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                  border: Border.all(
+                                    color: Vx.green500,
+                                  )),
+                              child: const Icon(
+                                Icons.remove,
+                                color: Vx.green500,
+                                size: 28,
+                              ),
                             ),
-                            border: Border.all(
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: DesignCourseAppTheme.nearlyWhite,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                border: Border.all(
+                                  color: Vx.green500,
+                                )),
+                            child: TextFormField(
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
+                                //  Giới hạn 3 kí tự
+                                LengthLimitingTextInputFormatter(3),
+                              ],
+
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 14.0),
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  color: DesignCourseAppTheme.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: DesignCourseAppTheme.nearlyWhite,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                border: Border.all(
+                                  color: Vx.green500,
+                                )),
+                            child: const Icon(
+                              Icons.add,
                               color: Vx.green500,
-                            )),
-                        child: TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^[+]?\d+([.]\d+)?$')),
-                            //  Chỉ số dương
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Vx.green500,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 10.0),
                           ],
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              color: DesignCourseAppTheme.grey,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Thêm vào giỏ hàng',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              letterSpacing: 0.0,
+                              color: DesignCourseAppTheme.nearlyWhite,
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        border: Border.all(
-                          color: Vx.green500,
-                        )),
-                    child: const Icon(
-                      Icons.add,
-                      color: Vx.green500,
-                      size: 28,
-                    ),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+
+                  ],
                 ),
               ],
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            Expanded(
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Vx.green500,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(16.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
-                        offset: const Offset(1.1, 1.1),
-                        blurRadius: 10.0),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    'Thêm vào giỏ hàng',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      letterSpacing: 0.0,
-                      color: DesignCourseAppTheme.nearlyWhite,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class _ExpandAbleDescription extends StatelessWidget {
+  const _ExpandAbleDescription({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String abc =
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test";
+    return SizedBox(
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: ExpandText(abc),
       ),
     );
   }

@@ -107,7 +107,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only( left: 4),
+                  padding: const EdgeInsets.only( left: 4),
                   child: SizedBox(
                     child: Column(
                       children: <Widget>[

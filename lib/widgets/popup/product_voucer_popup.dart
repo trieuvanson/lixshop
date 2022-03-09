@@ -14,7 +14,7 @@ class TodoPopupCard extends StatelessWidget {
         color: DesignCourseAppTheme.nearlyWhite,
         child: Container(
           constraints:
-          BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
@@ -71,7 +71,7 @@ class _FooterVoucher extends StatelessWidget {
         Navigator.pop(context);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.only(bottom: 8.0),
         child: Container(
           height: 48,
           decoration: BoxDecoration(

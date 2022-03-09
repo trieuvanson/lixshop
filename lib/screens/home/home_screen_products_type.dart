@@ -37,7 +37,7 @@ class _HomeScreenProductsTypeState extends State<HomeScreenProductsType> {
               restaurants.length,
                   (index) => ProductTypeCard(
                 imagePath: restaurants[index]['img'],
-                title: (restaurants[index]['title']).substring(0, 5),
+                title: restaurants[index]['type'],
               ),
             ),
           ),

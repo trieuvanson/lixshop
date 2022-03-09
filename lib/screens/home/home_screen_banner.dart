@@ -19,7 +19,8 @@ class _HomeScreenBannerState extends State<HomeScreenBanner> with TickerProvider
 
   List<Widget> restaurantList(BuildContext context) {
     return restaurants.map((restaurant) {
-      return Center(
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

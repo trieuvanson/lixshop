@@ -61,63 +61,71 @@ class ProductsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-        child: AlignedGridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          itemBuilder: (context, index) {
-            Map restaurant = restaurants[index];
-            return ProductCardItem(
-              img: restaurant['img'],
-              title: restaurant['title'],
-              address: restaurant['address'],
-              rating: restaurant['rating'],
-            );
-          },
-          itemCount: restaurants.length,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+          child: Column(
+            children: [
+              AlignedGridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 4,
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                crossAxisSpacing: 8,
+                itemBuilder: (context, index) {
+                  Map restaurant = restaurants[index];
+                  return ProductCardItem(
+                    img: restaurant['img'],
+                    title: restaurant['title'],
+                    address: restaurant['address'],
+                    rating: restaurant['rating'],
+                  );
+                },
+                itemCount: restaurants.length,
+              ),
+            ],
+          ),
+          // child: GridView.builder(
+          //   physics: const BouncingScrollPhysics(),
+          //   padding: const EdgeInsets.all(4.0),
+          //   itemCount: restaurants.length,
+          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //     childAspectRatio: 0.501,
+          //     mainAxisSpacing: 4.0,
+          //     crossAxisSpacing: 4.0,
+          //   ),
+          //   itemBuilder: (BuildContext context, int index) {
+          //     Map restaurant = restaurants[index];
+          //     return Container(
+          //         constraints: const BoxConstraints(
+          //           maxHeight: double.infinity,
+          //         ),
+          //         // width: MediaQuery.of(context).size.width * 0.5,
+          //         decoration: BoxDecoration(
+          //           color: Colors.grey[200],
+          //           borderRadius: BorderRadius.circular(8),
+          //           boxShadow: const [
+          //             BoxShadow(
+          //               color: Colors.white,
+          //               blurRadius: 5.0,
+          //               spreadRadius: 1.0,
+          //               offset: Offset(
+          //                 2.0,
+          //                 2.0,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         child: ProductCardItem(
+          //           img: restaurant['img'],
+          //           title: restaurant['title'],
+          //           address: restaurant['address'],
+          //           rating: restaurant['rating'],
+          //         ));
+          //   },
+          // ),
         ),
-        // child: GridView.builder(
-        //   physics: const BouncingScrollPhysics(),
-        //   padding: const EdgeInsets.all(4.0),
-        //   itemCount: restaurants.length,
-        //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //     crossAxisCount: 2,
-        //     childAspectRatio: 0.501,
-        //     mainAxisSpacing: 4.0,
-        //     crossAxisSpacing: 4.0,
-        //   ),
-        //   itemBuilder: (BuildContext context, int index) {
-        //     Map restaurant = restaurants[index];
-        //     return Container(
-        //         constraints: const BoxConstraints(
-        //           maxHeight: double.infinity,
-        //         ),
-        //         // width: MediaQuery.of(context).size.width * 0.5,
-        //         decoration: BoxDecoration(
-        //           color: Colors.grey[200],
-        //           borderRadius: BorderRadius.circular(8),
-        //           boxShadow: const [
-        //             BoxShadow(
-        //               color: Colors.white,
-        //               blurRadius: 5.0,
-        //               spreadRadius: 1.0,
-        //               offset: Offset(
-        //                 2.0,
-        //                 2.0,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //         child: ProductCardItem(
-        //           img: restaurant['img'],
-        //           title: restaurant['title'],
-        //           address: restaurant['address'],
-        //           rating: restaurant['rating'],
-        //         ));
-        //   },
-        // ),
       ),
     );
   }

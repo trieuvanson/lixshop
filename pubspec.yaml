@@ -40,7 +40,6 @@ dependencies:
   image_picker:
   google_nav_bar:
   line_icons:
-  liquid_pull_to_refresh:
   bottom_navy_bar:
   scroll_to_index:
   carousel_slider:
@@ -52,9 +51,7 @@ dependencies:
   flutter_staggered_grid_view:
   flutter_rating_bar:
   popup_menu:
-
-
-
+  expand_widget:
 
 dev_dependencies:
   flutter_test:
