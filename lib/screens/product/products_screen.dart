@@ -62,23 +62,18 @@ class ProductsScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 8, left: 8),
+        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
         child: AlignedGridView.count(
           crossAxisCount: 2,
           mainAxisSpacing: 4,
           crossAxisSpacing: 4,
           itemBuilder: (context, index) {
             Map restaurant = restaurants[index];
-            return InkWell(
-              onTap: () {},
-              child: Center(
-                child: ProductCardItem(
-                  img: restaurant['img'],
-                  title: restaurant['title'],
-                  address: restaurant['address'],
-                  rating: restaurant['rating'],
-                ),
-              ),
+            return ProductCardItem(
+              img: restaurant['img'],
+              title: restaurant['title'],
+              address: restaurant['address'],
+              rating: restaurant['rating'],
             );
           },
           itemCount: restaurants.length,

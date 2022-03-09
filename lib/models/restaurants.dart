@@ -1,7 +1,7 @@
 List restaurants = [
   {
     "img": "assets/images/lix1.png",
-    "title": "Bột giặt LixBột giặt LixBột giặt LixBột giặt LixBột giặt",
+    "title": "Bột giặt LixBột giặt LixBột giặt LixBột t",
     "address": "12345VNĐ",
     "rating": "4.5"
   },

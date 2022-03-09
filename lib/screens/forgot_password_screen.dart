@@ -72,10 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const MobileScreenLayout(),
-              settings: const RouteSettings(name: '/'),
-            ));
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -114,7 +111,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         10.heightBox,
                         TextFormField(
                           decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
+                          TextFormFieldCommonStyle.textFormFieldStyle(
                             "Mã xác nhận",
                           ).copyWith(
                             suffix: "Gửi mã xác minh".text.color(Vx.blue400).make(),
@@ -148,20 +145,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           },
                           obscureText: showPassword ? true : false,
                           decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                      "Mật khẩu")
-                                  .copyWith(
+                          TextFormFieldCommonStyle.textFormFieldStyle(
+                              "Mật khẩu")
+                              .copyWith(
                             suffixIcon: showPassword
                                 ? IconButton(
-                                    icon: const Icon(Icons.visibility,
-                                        color: appColor),
-                                    onPressed: () => handleShowPassword(),
-                                  )
+                              icon: const Icon(Icons.visibility,
+                                  color: appColor),
+                              onPressed: () => handleShowPassword(),
+                            )
                                 : IconButton(
-                                    icon: const Icon(Icons.visibility_off,
-                                        color: appColor),
-                                    onPressed: () => handleShowPassword(),
-                                  ),
+                              icon: const Icon(Icons.visibility_off,
+                                  color: appColor),
+                              onPressed: () => handleShowPassword(),
+                            ),
                           ),
                         ),
                         15.heightBox,
@@ -210,17 +207,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               alignment: Alignment.center,
                               child: _loading
                                   ? const CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
-                                    )
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white),
+                              )
                                   : const Text(
-                                      "Hoàn thành",
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                "Hoàn thành",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -243,16 +240,16 @@ buildImageHeader(BuildContext context) {
     child: Image.asset('assets/images/ForgotPassword.png',
         width: MediaQuery.of(context).size.width,
         errorBuilder: (context, error, stackTrace) {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 2,
-        child: const Center(
-          child: CircularProgressIndicator(
-            semanticsLabel: 'Loading',
-            valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
-          ),
-        ),
-      );
-    }, fit: BoxFit.cover),
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 2,
+            child: const Center(
+              child: CircularProgressIndicator(
+                semanticsLabel: 'Loading',
+                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+              ),
+            ),
+          );
+        }, fit: BoxFit.cover),
   );
 }

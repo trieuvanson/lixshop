@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -32,28 +34,25 @@ class _ProductCardItemState extends State<ProductCardItem> {
     return InkWell(
       onTap: () {
         Get.to(
-          () => CourseInfoScreen(),
+              () => CourseInfoScreen(),
           routeName: '/product-detail1/${widget.title}',
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          width: MediaQuery.of(context).size.width / 2,
-          height: 350,
-          decoration: BoxDecoration(
-            color: DesignCourseAppTheme.nearlyWhite,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DesignCourseAppTheme.nearlyBlack.withOpacity(1),)
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        width: 180,
+        height: 300,
+        decoration: BoxDecoration(
+          color: DesignCourseAppTheme.nearlyWhite,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Hero(
+              tag: Random().nextInt(1000).toString(),
+              child: SizedBox(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.0),
@@ -61,126 +60,120 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   ),
                   child: Image.asset(
                     widget.img,
-                    height: 200,
+                    width: double.infinity,
+                    height: 180,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
-                child: Text(
-                  widget.title,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                    letterSpacing: 0.27,
-                    color: DesignCourseAppTheme.darkerText,
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
+              child: Text(
+                widget.title,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  letterSpacing: 0.27,
+                  color: DesignCourseAppTheme.darkerText,
                 ),
               ),
-              Flexible(
-                child: Container(),
-                flex: 1,
-              ),
-              Row(
+            ),
+            Flexible(
+              child: Container(),
+              flex: 1,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   Padding(
-                    padding:
-                        EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 8),
+                    padding: EdgeInsets.only( left: 4),
                     child: Text(
-                      'VNĐ 12.345',
+                      '12.345 - 45.6789',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 18,
                         letterSpacing: 0.27,
                         color: Vx.red600,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: SizedBox(
-                      child: Text(
-                        'Đã bán 12,5k',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 0.0,
-                          color: DesignCourseAppTheme.nearlyBlack,
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only( left: 4),
+                  child: SizedBox(
+                    child: Column(
+                      children: <Widget>[
+                        RatingBarIndicator(
+                          rating: double.parse(widget.rating),
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          itemCount: 5,
+                          itemSize: 14.0,
+                          unratedColor: Colors.amber.withAlpha(50),
+                          direction: Axis.horizontal,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 8, top: 8),
+                          child: SizedBox(
+                            child: Text(
+                              'Đã bán 12,5k',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 10,
+                                letterSpacing: 0.0,
+                                color: DesignCourseAppTheme.nearlyBlack,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only( right: 4),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          border: Border.all(
+                            color: Vx.green500,
+                          )),
+                      child: GestureDetector(
+                        onTap: () => {
+                          print('Add to cart'),
+                        },
+                        child: const Icon(
+                          Icons.add,
+                          color: Vx.green500,
+                          size: 28,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      child: Row(
-                        children: <Widget>[
-                          RatingBarIndicator(
-                            rating: double.parse(widget.rating),
-                            itemBuilder: (context, index) => const Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                            ),
-                            itemCount: 5,
-                            itemSize: 20.0,
-                            unratedColor: Colors.amber.withAlpha(50),
-                            direction: Axis.horizontal,
-                          ),
-                          Text(
-                            widget.rating,
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w200,
-                              fontSize: 16,
-                              letterSpacing: 0.27,
-                              color: DesignCourseAppTheme.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: DesignCourseAppTheme.nearlyWhite,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              border: Border.all(
-                                color: Vx.green500,
-                              )),
-                          child: GestureDetector(
-                            onTap: () => {
-                              print('Add to cart'),
-                            },
-                            child: const Icon(
-                              Icons.add,
-                              color: Vx.green500,
-                              size: 28,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -31,26 +31,22 @@ class _ProductShowCardState extends State<ProductShowCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.only(
-            left: 4.0, right: 4.0, top: 8.0, bottom: 0.0),
+            left: 8.0, top: 8.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               restaurants.length,
-              (index) {
+                  (index) {
                 Map restaurant = restaurants[index];
-                return InkWell(
-                  onTap: () {
-
-                  },
-                  child: Center(
-                    child: ProductCardItem(
-                      img: restaurant['img'],
-                      title: restaurant['title'],
-                      address: restaurant['address'],
-                      rating: restaurant['rating'],
-                    ),
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0, bottom: 8),
+                  child: ProductCardItem(
+                    img: restaurant['img'],
+                    title: restaurant['title'],
+                    address: restaurant['address'],
+                    rating: restaurant['rating'],
                   ),
                 );
               },

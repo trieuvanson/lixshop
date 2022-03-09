@@ -28,14 +28,14 @@ class _HomeScreenProductsTypeState extends State<HomeScreenProductsType> {
       ),
       child: Padding(
         padding: const EdgeInsets.only(
-            left: 4.0, right: 4.0, top: 4.0, bottom: 4.0),
+            left: 8.0, top: 4.0, bottom: 4.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               restaurants.length,
-              (index) => ProductTypeCard(
+                  (index) => ProductTypeCard(
                 imagePath: restaurants[index]['img'],
                 title: (restaurants[index]['title']).substring(0, 5),
               ),
@@ -83,7 +83,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
             color: DesignCourseAppTheme.nearlyWhite,
             borderRadius: BorderRadius.circular(10),
             border:
-                Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
+            Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: DesignCourseAppTheme.grey.withOpacity(0.2),
