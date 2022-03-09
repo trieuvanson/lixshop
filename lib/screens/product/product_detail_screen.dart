@@ -5,17 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../utils/design_course_app_theme.dart';
-import '../utils/hero_dialog_route.dart';
-import '../widgets/popup/product_voucer_popup.dart';
-import '../widgets/text_form_field.dart';
+import '../../utils/design_course_app_theme.dart';
+import '../../utils/hero_dialog_route.dart';
+import '../../widgets/popup/product_voucer_popup.dart';
+import '../../widgets/text_form_field.dart';
 
-class CourseInfoScreen extends StatefulWidget {
+class ProductDetailScreen extends StatefulWidget {
+  const ProductDetailScreen({Key? key}) : super(key: key);
+
   @override
-  _CourseInfoScreenState createState() => _CourseInfoScreenState();
+  _ProductDetailScreenState createState() => _ProductDetailScreenState();
 }
 
-class _CourseInfoScreenState extends State<CourseInfoScreen>
+class _ProductDetailScreenState extends State<ProductDetailScreen>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController? animationController;

@@ -3,11 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/screens/course_info_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
-import '../screens/product_detail.dart';
-import '../utils/const.dart';
+import '../screens/product/product_detail_screen.dart';
 import '../utils/design_course_app_theme.dart';
 
 class ProductCardItem extends StatefulWidget {
@@ -34,7 +31,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
     return InkWell(
       onTap: () {
         Get.to(
-              () => CourseInfoScreen(),
+              () => const ProductDetailScreen(),
           routeName: '/product-detail1/${widget.title}',
         );
       },

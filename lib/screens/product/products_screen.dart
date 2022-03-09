@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:lixshop/models/restaurants.dart';
-import 'package:lixshop/screens/course_info_screen.dart';
+import 'package:lixshop/screens/product/product_detail_screen.dart';
 
 import '../../widgets/product_card_item.dart';
 

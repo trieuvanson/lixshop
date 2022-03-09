@@ -5,7 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../models/restaurants.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../widgets/product_card_item.dart';
-import '../course_info_screen.dart';
+import '../product/product_detail_screen.dart';
 
 class ProductShowCard extends StatefulWidget {
   const ProductShowCard({Key? key}) : super(key: key);

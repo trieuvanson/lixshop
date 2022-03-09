@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/responsive/responsive_layout_screen.dart';
-import 'package:lixshop/responsive/web_screen_layout.dart';
-import 'package:lixshop/screens/course_info_screen.dart';
-import 'package:lixshop/screens/forgot_password_screen.dart';
-import 'package:lixshop/screens/login_screen.dart';
-import 'package:lixshop/screens/product/products_screen.dart';
-import 'package:lixshop/screens/product_detail.dart';
-import 'package:lixshop/screens/register_screen.dart';
-import 'package:lixshop/widgets/restaurant_tabview.dart';
-import 'package:lixshop/widgets/test.dart';
 import 'package:url_strategy/url_strategy.dart';
+
+import 'responsive/mobile_screen_layout.dart';
+import 'responsive/responsive_layout_screen.dart';
+import 'responsive/web_screen_layout.dart';
+import 'screens/forgot_password_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/product/product_detail_screen.dart';
+import 'screens/product/products_screen.dart';
+import 'screens/register_screen.dart';
 
 void main() {
   setPathUrlStrategy();
@@ -48,7 +46,6 @@ class MyApp extends StatelessWidget {
         "/test": (_) => const ProductsScreen(),
         "/products": (_) => const ProductsScreen(),
         "/product-detail": (_) => const ProductDetailScreen(),
-        "/product-detail1": (_) => CourseInfoScreen(),
       },
     );
   }
