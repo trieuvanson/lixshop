@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +11,7 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../models/restaurants.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
-import '../../widgets/popup/product_voucer_popup.dart';
 import '../../widgets/product_card_item.dart';
-import '../../widgets/text_form_field.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key}) : super(key: key);
@@ -28,6 +28,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+  //Size
+
 
   @override
   void initState() {
@@ -60,9 +62,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double tempHeight = MediaQuery.of(context).size.height -
-        (MediaQuery.of(context).size.width / 1.2) +
-        24.0;
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: Scaffold(
@@ -157,7 +156,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 builder: (context) => Column(
                                       children: [
                                         Flexible(child: Container(), flex: 2),
-                                        const TodoPopupCard(),
+                                        const _Voucher_Popup(),
                                       ],
                                     ),
                                 fullscreenDialog: false),
@@ -218,7 +217,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                         ),
                       ),
                       10.heightBox,
-                      //Khuyến mãi
+                      //Size
                       Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
@@ -734,28 +733,49 @@ PreferredSizeWidget _appBar(BuildContext context) {
       //share
       IconButton(
         icon: const Icon(
-          Icons.share,
+          Icons.shopping_cart,
           color: DesignCourseAppTheme.dark_grey,
         ),
         onPressed: () {},
       ),
-      //menu
-      PopupMenuButton<String>(
-        onSelected: (String value) {},
-        icon: const Icon(
-          Icons.more_vert,
-          color: DesignCourseAppTheme.dark_grey,
+      DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          customButton: const Icon(
+            Icons.more_vert,
+            color: DesignCourseAppTheme.dark_grey,
+            size: 24,
+          ),
+          customItemsIndexes: const [3],
+          customItemsHeight: 8,
+          items: [
+            ...MenuItems.firstItems.map(
+              (item) => DropdownMenuItem<MenuItem>(
+                value: item,
+                child: MenuItems.buildItem(item),
+              ),
+            ),
+            const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
+            ...MenuItems.secondItems.map(
+              (item) => DropdownMenuItem<MenuItem>(
+                value: item,
+                child: MenuItems.buildItem(item),
+              ),
+            ),
+          ],
+          onChanged: (value) {
+            MenuItems.onChanged(context, value as MenuItem);
+          },
+          itemHeight: 48,
+          itemPadding: const EdgeInsets.only(left: 16, right: 16),
+          dropdownWidth: 200,
+          dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
+          dropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          dropdownElevation: 8,
+          offset: const Offset(0, 8),
         ),
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-          const PopupMenuItem<String>(
-            value: 'Edit',
-            child: Text('Edit'),
-          ),
-          const PopupMenuItem<String>(
-            value: 'Delete',
-            child: Text('Delete'),
-          ),
-        ],
       ),
     ],
   );
@@ -777,134 +797,143 @@ class _BottomNavigation extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 96,
-            child: Column(
-              children: [
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                  border: Border.all(
-                                    color: Vx.green500,
-                                  )),
-                              child: const Icon(
-                                Icons.remove,
-                                color: Vx.green500,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
-                                //  Giới hạn 3 kí tự
-                                LengthLimitingTextInputFormatter(3),
-                              ],
-
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 14.0),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: DesignCourseAppTheme.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: const Icon(
-                              Icons.add,
-                              color: Vx.green500,
-                              size: 28,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Vx.green500,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(16.0),
-                          ),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 10.0),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Thêm vào giỏ hàng',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              letterSpacing: 0.0,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Container(
+                          decoration: BoxDecoration(
                               color: DesignCourseAppTheme.nearlyWhite,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                              border: Border.all(
+                                color: Vx.green500,
+                              )),
+                          child: const Icon(
+                            Icons.remove,
+                            color: Vx.green500,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            border: Border.all(
+                              color: Vx.green500,
+                            )),
+                        child: TextFormField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^[+]?\d+([.]\d+)?$')),
+                            //  Giới hạn 3 kí tự
+                            LengthLimitingTextInputFormatter(3),
+                          ],
+                          textAlignVertical: TextAlignVertical.center,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 14.0),
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: DesignCourseAppTheme.grey,
                             ),
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            border: Border.all(
+                              color: Vx.green500,
+                            )),
+                        child: const Icon(
+                          Icons.add,
+                          color: Vx.green500,
+                          size: 28,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-
-                  ],
+                16.widthBox,
+                CustomDropdownButton2(
+                  buttonDecoration: BoxDecoration(
+                    color: DesignCourseAppTheme.nearlyWhite,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                    border: Border.all(
+                      color: Vx.green500,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    size: 18,
+                    color: Vx.green500,
+                  ),
+                  buttonWidth: 80,
+                  hint: 'Đơn vị tính',
+                  value: 'Gói',
+                  onChanged: (String? value) {},
+                  dropdownItems: const ["Gói", "Thùng"],
                 ),
+                16.widthBox,
+                Expanded(
+                  child: Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Vx.green500,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: DesignCourseAppTheme.nearlyBlue
+                                .withOpacity(0.5),
+                            offset: const Offset(1.1, 1.1),
+                            blurRadius: 10.0),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Thêm vào giỏ hàng',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          letterSpacing: 0.0,
+                          color: DesignCourseAppTheme.nearlyWhite,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                //Cart icon
               ],
             ),
           ),
@@ -942,3 +971,177 @@ class _ExpandAbleDescription extends StatelessWidget {
     );
   }
 }
+
+class MenuItem {
+  final String text;
+  final IconData icon;
+
+  const MenuItem({
+    required this.text,
+    required this.icon,
+  });
+}
+
+class MenuItems {
+  static const List<MenuItem> firstItems = [home, share, settings];
+  static const List<MenuItem> secondItems = [logout];
+
+  static const home = MenuItem(text: 'Quay lại trang chủ', icon: Icons.home);
+  static const share = MenuItem(text: 'Chia sẻ sản phẩm', icon: Icons.share);
+  static const settings = MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
+  static const logout = MenuItem(text: 'Đăng xuất', icon: Icons.logout);
+
+  static Widget buildItem(MenuItem item) {
+    return Row(
+      children: [
+        Icon(item.icon, color: Colors.black, size: 22),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          item.text,
+          style: const TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static onChanged(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.home:
+        //Do something
+        break;
+      case MenuItems.settings:
+        //Do something
+        break;
+      case MenuItems.share:
+        //Do something
+        break;
+      case MenuItems.logout:
+        //Do something
+        break;
+    }
+  }
+}
+
+
+//Voucher
+class _Voucher_Popup extends StatelessWidget {
+  const _Voucher_Popup({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: "null",
+      child: Material(
+        borderRadius: BorderRadius.circular(16),
+        color: DesignCourseAppTheme.nearlyWhite,
+        child: Container(
+          constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                const _HeaderVoucher(),
+                const Divider(),
+                const _VoucherList().expand(),
+                const Divider(),
+                const _FooterVoucher(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderVoucher extends StatelessWidget {
+  const _HeaderVoucher({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          const SizedBox(
+            child: Center(
+                child: Text("Khuyến mãi của sản phẩm",
+                    style:
+                    TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+          ),
+          4.heightBox,
+          const SizedBox(
+            child: Text(
+              "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterVoucher extends StatelessWidget {
+  const _FooterVoucher({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: Vx.green500,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16.0),
+            ),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
+                  offset: const Offset(1.1, 1.1),
+                  blurRadius: 10.0),
+            ],
+          ),
+          child: const Center(
+            child: Text(
+              'Đóng',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                letterSpacing: 0.0,
+                color: DesignCourseAppTheme.nearlyWhite,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VoucherList extends StatefulWidget {
+  const _VoucherList({Key? key}) : super(key: key);
+
+  @override
+  State<_VoucherList> createState() => _VoucherListState();
+}
+
+class _VoucherListState extends State<_VoucherList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 100, itemBuilder: (context, index) => Container());
+  }
+}
+

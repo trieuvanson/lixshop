@@ -115,8 +115,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                      letterSpacing: 0.27,
+                      fontSize: 13,
                       color: DesignCourseAppTheme.darkerText,
                     ),
                   ),

@@ -18,19 +18,6 @@ class ProductsScreen extends StatelessWidget {
         elevation: 0,
         leadingWidth: MediaQuery.of(context).size.width * 0.1,
         backgroundColor: Colors.white,
-        // automaticallyImplyLeading:
-        //     FocusManager.instance.primaryFocus!.hasFocus != null ? false : true,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-        //   onPressed: () {
-        //     FocusManager.instance.primaryFocus?.unfocus();
-        //   },
-        // ),
-        // // The search area here
-        // leading: const Icon(
-        //   Icons.arrow_back_ios,
-        //   color: Colors.black,
-        // ),
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),

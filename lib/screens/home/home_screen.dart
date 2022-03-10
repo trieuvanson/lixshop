@@ -5,7 +5,7 @@ import 'package:lixshop/screens/home/products_show_card.dart';
 import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../widgets/search_card.dart';
-import '../cart_page.dart';
+import '../cart/cart_screen.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CartPage(),
+              builder: (context) => const CartScreen(),
             ),
           );
         },

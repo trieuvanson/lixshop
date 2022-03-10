@@ -52,7 +52,7 @@ dependencies:
   flutter_rating_bar:
   popup_menu:
   expand_widget:
-
+  dropdown_button2:
 dev_dependencies:
   flutter_test:
     sdk: flutter
