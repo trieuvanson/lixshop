@@ -100,7 +100,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                     topLeft: Radius.circular(8.0),
                     topRight: Radius.circular(8.0),
                   ),
-                  child: Image.asset(
+                  child: Image.network(
                     widget.imagePath,
                     height: 100,
                     fit: BoxFit.cover,

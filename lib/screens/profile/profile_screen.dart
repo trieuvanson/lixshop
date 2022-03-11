@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lixshop/screens/auth/login_screen.dart';
+import 'package:lixshop/screens/order_history/order_history_list_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
@@ -12,6 +16,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
+  int _selectedIndex = 0;
+
   AnimationController? animationController;
   Animation<double>? animation;
   double opacity3 = 0.0;
@@ -33,6 +39,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     setState(() {
       opacity3 = 1.0;
     });
+  }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,19 +102,27 @@ class _ProfileScreenState extends State<ProfileScreen>
                                           .bold
                                           .make(),
                                     ),
-                                    Row(
-                                      children: [
-                                        "Xem tất cả"
-                                            .text
-                                            .size(16)
-                                            .green500
-                                            .make(),
-                                        const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Vx.green700,
-                                          size: 20,
-                                        ),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(
+                                          () => const OrderHistoryListScreen(),
+                                          transition: Transition.rightToLeft,
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          "Xem tất cả"
+                                              .text
+                                              .size(16)
+                                              .green500
+                                              .make(),
+                                          const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: Vx.green700,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -232,7 +252,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -261,8 +280,7 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Material(
       child: InkWell(
-        onTap: () {
-        },
+        onTap: () {},
         child: Stack(
           fit: StackFit.expand,
           overflow: Overflow.visible,
@@ -297,13 +315,15 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                         SizedBox(
                           child: IconButton(
                             onPressed: () {},
-                            icon: const Icon(Icons.settings, color: Colors.white),
+                            icon:
+                                const Icon(Icons.settings, color: Colors.white),
                           ),
                         ),
                         SizedBox(
                           child: IconButton(
                             onPressed: () {},
-                            icon: const Icon(Icons.message, color: Colors.white),
+                            icon:
+                                const Icon(Icons.message, color: Colors.white),
                           ),
                         ),
                       ],

@@ -36,7 +36,7 @@ class _SlideItemState extends State<SlideItem> {
                     topLeft: Radius.circular(8.0),
                     topRight: Radius.circular(8.0),
                   ),
-                  child: Image.asset(
+                  child: Image.network(
                     widget.img,
                     height: 300,
                     fit: BoxFit.cover,

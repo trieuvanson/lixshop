@@ -9,6 +9,8 @@ import '../../contains/colors.dart';
 import '../../utils/utils.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
+
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
