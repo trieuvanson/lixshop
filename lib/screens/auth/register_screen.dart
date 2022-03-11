@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/login_screen.dart';
+import 'package:lixshop/screens/auth/login_screen.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../contains/colors.dart';
-import '../utils/utils.dart';
+import '../../contains/colors.dart';
+import '../../utils/utils.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override

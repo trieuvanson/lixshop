@@ -5,8 +5,8 @@ import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../contains/colors.dart';
-import '../utils/utils.dart';
+import '../../contains/colors.dart';
+import '../../utils/utils.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
