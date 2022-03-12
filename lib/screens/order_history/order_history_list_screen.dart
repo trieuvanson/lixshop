@@ -14,12 +14,9 @@ class OrderHistoryListScreen extends StatelessWidget {
           children: [
             SingleChildScrollView(
               child: Column(
-                children: const [
-                  _CheckoutItem(),
-                  _CheckoutItem(),
-                  _CheckoutItem(),
-                  _CheckoutItem(),
-                  _CheckoutItem(),
+                children: [
+                  for (var i = 0; i < 100; i++)
+                    const _CheckoutItem(),
                 ],
               ),
             ),

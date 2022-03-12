@@ -36,7 +36,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
         ),
       );
     }
-    print('isFirstTime2: $checkFirstTime');
   }
 
   bool isLogin = false;
@@ -48,7 +47,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
       Get.to(() => LoginScreen());
     }
     setState(() {});
-    print('checkLogin: $isLogin');
   }
 
   @override
@@ -97,7 +95,10 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
                       color: Vx.red600),
                   onTabChange: (index) {
                     if (!isLogin && index == 3) {
-                      checkLogin();
+                      setState(() {
+                        _selectedIndex = index;
+                        checkLogin();
+                      });
                     } else {
                       setState(() {
                         _selectedIndex = index;

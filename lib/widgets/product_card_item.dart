@@ -38,7 +38,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
       child: Container(
         padding: const EdgeInsets.only(bottom: 8.0),
         width: 180,
-        height: 312,
+        height: 300,
         decoration: BoxDecoration(
           color: DesignCourseAppTheme.nearlyWhite,
           borderRadius: BorderRadius.circular(8),
@@ -48,7 +48,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Hero(
-              tag: Random().nextInt(1000).toString(),
+              tag: widget.title,
               child: SizedBox(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -65,13 +65,15 @@ class _ProductCardItemState extends State<ProductCardItem> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
+              padding: const EdgeInsets.only(top: 4.0, left: 4, right: 4),
               child: Text(
                 widget.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 16,
+                  fontSize: 14,
                   letterSpacing: 0.27,
                   color: DesignCourseAppTheme.darkerText,
                 ),
@@ -79,7 +81,6 @@ class _ProductCardItemState extends State<ProductCardItem> {
             ),
             Flexible(
               child: Container(),
-              flex: 1,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
@@ -88,12 +89,12 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   Padding(
-                    padding: EdgeInsets.only( left: 4),
+                    padding: EdgeInsets.only(left: 4),
                     child: Text(
-                      '12.345 - 45.6789',
+                      'đ12.345 - đ45.6789',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         letterSpacing: 0.27,
                         color: Vx.red600,
                       ),
@@ -141,7 +142,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only( right: 4),
+                  padding: const EdgeInsets.only( right: 4),
                   child: SizedBox(
                     width: 40,
                     height: 40,
@@ -170,6 +171,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ),
               ],
             ),
+
           ],
         ),
       ),

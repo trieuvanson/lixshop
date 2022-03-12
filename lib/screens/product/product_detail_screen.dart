@@ -156,7 +156,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 builder: (context) => Column(
                                       children: [
                                         Flexible(child: Container(), flex: 2),
-                                        const _Voucher_Popup(),
+                                        const VoucherPopup(),
                                       ],
                                     ),
                                 fullscreenDialog: false),
@@ -1028,8 +1028,8 @@ class MenuItems {
 
 
 //Voucher
-class _Voucher_Popup extends StatelessWidget {
-  const _Voucher_Popup({Key? key}) : super(key: key);
+class VoucherPopup extends StatelessWidget {
+  const VoucherPopup({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

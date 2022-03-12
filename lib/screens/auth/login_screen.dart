@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
-                        obscureText: showPassword ? true : false,
+                        obscureText: showPassword ? false : true,
                         decoration:
                             TextFormFieldCommonStyle.textFormFieldStyle(
                                     "Mật khẩu")

@@ -1,7 +1,7 @@
 List restaurants = [
   {
     "img": "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
-    "title": "Bột giặt LixBột giặt LixBột giặt LixBột t",
+    "title": "Bột giặt LixBột giặt LixBột giặt LixBột 213213213123123t",
     "address": "12345VNĐ",
     "rating": "4.5",
     "type": "Bột giặt",

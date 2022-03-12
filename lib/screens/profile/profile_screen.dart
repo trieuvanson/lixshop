@@ -179,6 +179,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                               children: [
                                 const _MenuItem(
                                     icon: Icons.add_to_home_screen,
+                                    title: "Trưng bày"),
+                                16.heightBox,
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
                                     title: "Săn thưởng"),
                                 16.heightBox,
                                 const _MenuItem(
@@ -480,39 +484,43 @@ class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget? subTitle;
+  final GestureTapCallback? onTap;
 
   const _MenuItem(
-      {Key? key, required this.icon, required this.title, this.subTitle})
+      {Key? key, required this.icon, required this.title, this.subTitle, this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(
-                icon,
-                size: 24,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Icon(
+                  icon,
+                  size: 24,
+                ),
               ),
-            ),
-            title.text.size(18).gray700.make(),
-          ],
-        ),
-        Row(
-          children: [
-            subTitle ?? const SizedBox.shrink(),
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: Vx.gray500,
-              size: 20,
-            ),
-          ],
-        ),
-      ],
+              title.text.size(16).gray700.make(),
+            ],
+          ),
+          Row(
+            children: [
+              subTitle ?? const SizedBox.shrink(),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: Vx.gray500,
+                size: 20,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

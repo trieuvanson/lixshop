@@ -53,6 +53,10 @@ dependencies:
   popup_menu:
   expand_widget:
   dropdown_button2:
+  expandable:
+  readmore:
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
