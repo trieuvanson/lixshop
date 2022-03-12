@@ -197,6 +197,8 @@ class _BottomNavigation extends StatelessWidget {
                 ),
                 5.heightBox,
                 const Divider(),
+                Flexible(child: Container(), flex: 1,),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

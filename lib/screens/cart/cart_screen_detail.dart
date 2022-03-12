@@ -692,6 +692,8 @@ class _DetailCartItemListState extends State<_DetailCartItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 100, itemBuilder: (context, index) => Container());
+        itemCount: 100, itemBuilder: (context, index) => Container(
+      child: Text("$index"),
+    ));
   }
 }

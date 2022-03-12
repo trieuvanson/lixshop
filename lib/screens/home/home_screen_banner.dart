@@ -41,7 +41,7 @@ class _HomeScreenBannerState extends State<HomeScreenBanner> with TickerProvider
           ),
         ),
       );
-    }).toList();
+    }).toList().getRange(0, 5).toList();
   }
 
   List<T> map<T>(List list, Function handler) {
