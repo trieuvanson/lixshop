@@ -655,8 +655,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 crossAxisSpacing: 8,
                                 itemBuilder: (context, index) {
                                   Map restaurant = restaurants.filter((element) => element['id'] != widget.id).toList()[index];
-                                  restaurant.removeWhere((item) => item.id == '001')
-
                                   return ProductCardItem(
                                     id: restaurant['id'],
                                     img: restaurant['img'],
