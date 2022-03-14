@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         "/forgot-password": (_) => ForgotPasswordScreen(),
         "/test": (_) => const ProductsScreen(),
         "/products": (_) => const ProductsScreen(),
-        "/product-detail": (_) => const ProductDetailScreen(),
+        // "/product-detail": (_) => ProductDetailScreen(),
       },
     );
   }

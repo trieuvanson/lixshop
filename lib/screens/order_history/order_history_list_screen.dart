@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import 'order_history_item_detail_screen.dart';
 
 class OrderHistoryListScreen extends StatelessWidget {
   const OrderHistoryListScreen({Key? key}) : super(key: key);
@@ -15,8 +19,7 @@ class OrderHistoryListScreen extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  for (var i = 0; i < 100; i++)
-                    const _CheckoutItem(),
+                  for (var i = 0; i < 100; i++) const _CheckoutItem(),
                 ],
               ),
             ),
@@ -32,8 +35,6 @@ class OrderHistoryListScreen extends StatelessWidget {
     );
   }
 }
-
-
 
 PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
@@ -81,6 +82,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
     backgroundColor: Colors.white,
   );
 }
+
 class _CheckoutItem extends StatelessWidget {
   const _CheckoutItem({Key? key}) : super(key: key);
 
@@ -91,7 +93,13 @@ class _CheckoutItem extends StatelessWidget {
         Radius.circular(16.0),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.to(
+            () => const OrderHistoryItemDetailScreen(),
+            curve: Curves.easeInToLinear,
+            transition: Transition.rightToLeft,
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -123,8 +131,11 @@ class _CheckoutItem extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
-                                child:
-                                "Đang chờ xác nhận".text.green500.bold.make()),
+                                child: "Đang chờ xác nhận"
+                                    .text
+                                    .green500
+                                    .bold
+                                    .make()),
                           ),
                         ),
                       ),

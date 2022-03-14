@@ -13,15 +13,16 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
-class CartScreenDetail extends StatefulWidget {
-  const CartScreenDetail({Key? key}) : super(key: key);
+class OrderHistoryItemDetailScreen extends StatefulWidget {
+  const OrderHistoryItemDetailScreen({Key? key}) : super(key: key);
 
   @override
-  State<CartScreenDetail> createState() => _CartScreenDetailState();
+  State<OrderHistoryItemDetailScreen> createState() =>
+      _OrderHistoryItemDetailScreenState();
 }
 
-class _CartScreenDetailState extends State<CartScreenDetail>
-    with TickerProviderStateMixin {
+class _OrderHistoryItemDetailScreenState
+    extends State<OrderHistoryItemDetailScreen> with TickerProviderStateMixin {
   AnimationController? animationController;
   Animation<double>? animation;
   double opacity3 = 0.0;
@@ -48,42 +49,166 @@ class _CartScreenDetailState extends State<CartScreenDetail>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        titleSpacing: 0.0,
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            "Cửa hàng thứ n".text.black.make(),
-            const Text("Địa chỉ giao hàng",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Vx.green500))
-          ],
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: _appBar(),
       bottomNavigationBar: _BottomNavigation(opacity3: opacity3),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
-          children: const [
-            Padding(
+          children: [
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: _CartCard(),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: DesignCourseAppTheme.nearlyWhite,
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                        offset: const Offset(1.1, 1.1),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: Material(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(16.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                child:
+                                    "Thông tin đơn hàng".text.xl2.bold.make(),
+                              ),
+                              Container()
+                            ],
+                          ),
+                          10.heightBox,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              "Tổng 10 sản phẩm".text.xl.gray500.make(),
+                              "1,000,000đ"
+                                  .text
+                                  .color(Vx.black.withOpacity(0.8))
+                                  .bold
+                                  .xl2
+                                  .make(),
+                            ],
+                          ),
+                          5.heightBox,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              "Khuyến mãi đơn hàng".text.xl.gray500.make(),
+                              "- 100,000đ"
+                                  .text
+                                  .color(Vx.green500.withOpacity(0.8))
+                                  .bold
+                                  .xl2
+                                  .make(),
+                            ],
+                          ),
+                          5.heightBox,
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  "Tạm tính".text.xl2.black.bold.make(),
+                                  " (đã có VAT)"
+                                      .text
+                                      .color(Vx.gray800.withOpacity(0.8))
+                                      .xl
+                                      .make(),
+                                ],
+                              ),
+                              "900,000đ"
+                                  .text
+                                  .color(Vx.red700.withOpacity(0.8))
+                                  .bold
+                                  .xl2
+                                  .make(),
+                              // Button thanh toán
+                              //Cart icon
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _appBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      titleSpacing: 0.0,
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              "Đơn hàng #12412312".text.size(16).black.make(),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Vx.green200,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Vx.green50.withOpacity(0.5),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 8.0),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                        child: "Đang chờ xác nhận".text.green500.sm.make()),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Text("Địa chỉ giao hàng",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Vx.green500))
+        ],
+      ),
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
@@ -121,116 +246,30 @@ class _BottomNavigation extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 110,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                    "1,000,000đ"
-                        .text
-                        .color(Vx.black.withOpacity(0.8))
-                        .bold
-                        .xl2
-                        .make(),
-                  ],
+            width: 150,
+            height: 50,
+            child: RaisedButton(
+              onPressed: () {
+
+              },
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
                 ),
-                5.heightBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                    "- 100,000đ"
-                        .text
-                        .color(Vx.green500.withOpacity(0.8))
-                        .bold
-                        .xl2
-                        .make(),
-                  ],
-                ),
-                5.heightBox,
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        "Tạm tính".text.xl2.black.bold.make(),
-                        " (đã có VAT)"
-                            .text
-                            .color(Vx.gray800.withOpacity(0.8))
-                            .xl
-                            .make(),
-                      ],
-                    ),
-                    "900,000đ"
-                        .text
-                        .color(Vx.red700.withOpacity(0.8))
-                        .bold
-                        .xl2
-                        .make(),
-                    // Button thanh toán
-                    //Cart icon
-                  ],
-                ),
-                /*  10.heightBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          border: Border.all(
-                            color: Vx.green500,
-                          )),
-                      child: const Icon(
-                        Icons.add_shopping_cart,
-                        color: Vx.green500,
-                        size: 28,
-                      ),
-                    ),
-                    16.widthBox,
-                    Expanded(
-                      child: Container(
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Vx.green500,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: DesignCourseAppTheme.nearlyBlue
-                                    .withOpacity(0.5),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 10.0),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Thêm vào giỏ hàng',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              letterSpacing: 0.0,
-                              color: DesignCourseAppTheme.nearlyWhite,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),*/
-              ],
+              ),
+              color: Vx.green500,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //Icon ban
+                  const Icon(
+                    Icons.block,
+                    color: Colors.white,
+                  ),
+                  8.widthBox,
+                  "Huỷ đơn hàng".text.white.bold.xl.make(),
+                ],
+              ),
             ),
           ),
         ),
@@ -692,8 +731,9 @@ class _DetailCartItemListState extends State<_DetailCartItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 100, itemBuilder: (context, index) => Container(
-      child: Text("$index"),
-    ));
+        itemCount: 100,
+        itemBuilder: (context, index) => Container(
+              child: Text("$index"),
+            ));
   }
 }

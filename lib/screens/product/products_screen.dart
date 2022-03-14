@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
-import 'package:lixshop/models/restaurants.dart';
+import 'package:lixshop/models/productlist.dart';
 import 'package:lixshop/screens/product/product_detail_screen.dart';
 
 import '../../widgets/product_card_item.dart';
@@ -62,6 +62,7 @@ class ProductsScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Map restaurant = restaurants[index];
                   return ProductCardItem(
+                    id: restaurant['id'],
                     img: restaurant['img'],
                     title: restaurant['title'],
                     address: restaurant['address'],

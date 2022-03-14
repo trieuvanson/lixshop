@@ -2,17 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../models/restaurants.dart';
+import '../../models/productlist.dart';
 import '../../widgets/slide_item.dart';
 
-class HomeScreenBanner extends StatefulWidget {
-  const HomeScreenBanner({Key? key}) : super(key: key);
+class HomeBannerScreen extends StatefulWidget {
+  const HomeBannerScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreenBanner> createState() => _HomeScreenBannerState();
+  State<HomeBannerScreen> createState() => _HomeBannerScreenState();
 }
 
-class _HomeScreenBannerState extends State<HomeScreenBanner> with TickerProviderStateMixin{
+class _HomeBannerScreenState extends State<HomeBannerScreen> with TickerProviderStateMixin{
   final CarouselController _controller = CarouselController();
 
   int _currentIndex = 0;

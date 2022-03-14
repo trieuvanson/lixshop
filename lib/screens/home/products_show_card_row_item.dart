@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lixshop/models/product.dart';
 
-import '../../models/restaurants.dart';
+import '../../models/productlist.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../widgets/product_card_item.dart';
 import '../product/product_detail_screen.dart';
 
-class ProductShowCard extends StatefulWidget {
-  const ProductShowCard({Key? key}) : super(key: key);
+class ProductShowCardRowItem extends StatefulWidget {
+  const ProductShowCardRowItem({Key? key}) : super(key: key);
 
   @override
-  _ProductShowCardState createState() => _ProductShowCardState();
+  _ProductShowCardRowItemState createState() => _ProductShowCardRowItemState();
 }
 
-class _ProductShowCardState extends State<ProductShowCard> {
+class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,6 +44,7 @@ class _ProductShowCardState extends State<ProductShowCard> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0, bottom: 8),
                   child: ProductCardItem(
+                    id: restaurant['id'],
                     img: restaurant['img'],
                     title: restaurant['title'],
                     address: restaurant['address'],

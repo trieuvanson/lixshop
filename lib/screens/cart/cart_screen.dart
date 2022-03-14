@@ -98,7 +98,7 @@ class _CartCard extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Get.to(
-                      () => const CartScreenDetail(),
+                      () => const CartDetailScreen(),
                       curve: Curves.easeInToLinear,
                       transition: Transition.rightToLeft,
                     );

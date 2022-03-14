@@ -8,6 +8,7 @@ import '../screens/product/product_detail_screen.dart';
 import '../utils/design_course_app_theme.dart';
 
 class ProductCardItem extends StatefulWidget {
+  final String id;
   final String img;
   final String title;
   final String address;
@@ -15,6 +16,7 @@ class ProductCardItem extends StatefulWidget {
 
   const ProductCardItem({
     Key? key,
+    required this.id,
     required this.img,
     required this.title,
     required this.address,
@@ -31,8 +33,13 @@ class _ProductCardItemState extends State<ProductCardItem> {
     return InkWell(
       onTap: () {
         Get.to(
-              () => const ProductDetailScreen(),
-          routeName: '/product-detail1/${widget.title}',
+          () => ProductDetailScreen(
+              id: widget.id,
+              img: widget.img,
+              title: widget.title,
+              address: widget.address,
+              rating: widget.rating),
+          routeName: '/product-detail1/${widget.id}',
         );
       },
       child: Container(
@@ -48,7 +55,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Hero(
-              tag: widget.title,
+              tag: widget.id,
               child: SizedBox(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -108,7 +115,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only( left: 4),
+                  padding: const EdgeInsets.only(left: 4),
                   child: SizedBox(
                     child: Column(
                       children: <Widget>[
@@ -142,7 +149,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only( right: 4),
+                  padding: const EdgeInsets.only(right: 4),
                   child: SizedBox(
                     width: 40,
                     height: 40,
@@ -171,7 +178,6 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ),
               ],
             ),
-
           ],
         ),
       ),

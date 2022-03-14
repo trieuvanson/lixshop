@@ -8,13 +8,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:velocity_x/velocity_x.dart';
-import '../../models/restaurants.dart';
+import '../../models/productlist.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 import '../../widgets/product_card_item.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  final String id;
+  final String img;
+  final String title;
+  final String address;
+  final String rating;
+
+  const ProductDetailScreen(
+      {Key? key,
+      required this.id,
+      required this.img,
+      required this.title,
+      required this.address,
+      required this.rating})
+      : super(key: key);
 
   @override
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
@@ -28,8 +41,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
-  //Size
 
+  //Size
 
   @override
   void initState() {
@@ -73,7 +86,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const _ProductImage(),
+                 _ProductImage(id: widget.id, img: widget.img),
                 Container(
                   decoration: BoxDecoration(
                     color: DesignCourseAppTheme.nearlyWhite,
@@ -90,12 +103,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 16.0, left: 8, right: 8),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 16.0, left: 8, right: 8),
                         child: Text(
-                          'Nước rửa chén thương hiệu Lixco',
+                          widget.title,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 22,
                             letterSpacing: 0.27,
@@ -109,10 +123,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            const Text(
-                              'VNĐ 12.345',
+                            Text(
+                              'VNĐ ${widget.address}',
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
                                 letterSpacing: 0.27,
@@ -123,7 +137,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               child: Row(
                                 children: <Widget>[
                                   RatingBarIndicator(
-                                    rating: 4.9,
+                                    rating: double.parse(widget.rating),
                                     itemBuilder: (context, index) => const Icon(
                                       Icons.star,
                                       color: Colors.yellow,
@@ -133,10 +147,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                     unratedColor: Colors.amber.withAlpha(50),
                                     direction: Axis.horizontal,
                                   ),
-                                  const Text(
-                                    ' 4.9',
+                                  Text(
+                                    widget.rating,
                                     textAlign: TextAlign.left,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w200,
                                       fontSize: 16,
                                       letterSpacing: 0.27,
@@ -410,35 +424,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                               ),
                                               child: Column(
                                                 children: [
-                                                  Hero(
-                                                    tag: Random()
-                                                        .nextInt(1000)
-                                                        .toString(),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .only(
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                16.0),
-                                                      ),
-                                                      child: Image.asset(
-                                                        "assets/images/lix1.png",
-                                                        width: double.infinity,
-                                                        height: 80,
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius
+                                                            .only(
+                                                      topLeft:
+                                                          Radius.circular(
+                                                              16.0),
+                                                    ),
+                                                    child: Image.network(
+                                                      widget.img,
+                                                      width: double.infinity,
+                                                      height: 80,
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 4.0,
-                                                        left: 4,
-                                                        right: 8),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 4.0,
+                                                            left: 4,
+                                                            right: 8),
                                                     child: Text(
-                                                      "Bột giặt thương hiệu Lixco",
+                                                      widget.title,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 2,
                                                       textAlign: TextAlign.left,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w400,
                                                         fontSize: 12,
@@ -458,14 +470,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .center,
-                                                      children: const [
+                                                      children: [
                                                         Padding(
                                                           padding:
-                                                              EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                      .only(
                                                                   left: 4),
                                                           child: Text(
-                                                            'đ12.345',
-                                                            style: TextStyle(
+                                                            widget.address,
+                                                            style:
+                                                                const TextStyle(
                                                               fontSize: 15,
                                                               letterSpacing:
                                                                   0.27,
@@ -640,15 +654,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 physics: const ScrollPhysics(),
                                 crossAxisSpacing: 8,
                                 itemBuilder: (context, index) {
-                                  Map restaurant = restaurants[index];
+                                  Map restaurant = restaurants.filter((element) => element['id'] != widget.id).toList()[index];
+                                  restaurant.removeWhere((item) => item.id == '001')
+
                                   return ProductCardItem(
+                                    id: restaurant['id'],
                                     img: restaurant['img'],
                                     title: restaurant['title'],
                                     address: restaurant['address'],
                                     rating: restaurant['rating'],
                                   );
                                 },
-                                itemCount: restaurants.length,
+                                itemCount: restaurants.length-1,
+
                               ),
                             ],
                           ),
@@ -667,21 +685,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 }
 
 class _ProductImage extends StatelessWidget {
-  const _ProductImage({Key? key}) : super(key: key);
+  final String id;
+  final String img;
+
+  const _ProductImage({Key? key, required this.id, required this.img}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: Random().nextInt(1000).toString(),
+      tag: id,
       child: AspectRatio(
         aspectRatio: 1.2,
         child: SizedBox(
           // color: appColor,
-          child: Image.asset(
-            'assets/images/lix3.png',
+          child: Image.network(
+            img,
             width: MediaQuery.of(context).size.width,
             errorBuilder: (context, error, stackTrace) {
-              print('$error');
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 2,
@@ -988,7 +1008,8 @@ class MenuItems {
 
   static const home = MenuItem(text: 'Quay lại trang chủ', icon: Icons.home);
   static const share = MenuItem(text: 'Chia sẻ sản phẩm', icon: Icons.share);
-  static const settings = MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
+  static const settings =
+      MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
   static const logout = MenuItem(text: 'Đăng xuất', icon: Icons.logout);
 
   static Widget buildItem(MenuItem item) {
@@ -1026,7 +1047,6 @@ class MenuItems {
   }
 }
 
-
 //Voucher
 class VoucherPopup extends StatelessWidget {
   const VoucherPopup({Key? key}) : super(key: key);
@@ -1039,8 +1059,8 @@ class VoucherPopup extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: DesignCourseAppTheme.nearlyWhite,
         child: Container(
-          constraints:
-          BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
+          constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height / 1.5),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
@@ -1072,7 +1092,7 @@ class _HeaderVoucher extends StatelessWidget {
             child: Center(
                 child: Text("Khuyến mãi của sản phẩm",
                     style:
-                    TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
           ),
           4.heightBox,
           const SizedBox(
@@ -1144,4 +1164,3 @@ class _VoucherListState extends State<_VoucherList> {
         itemCount: 100, itemBuilder: (context, index) => Container());
   }
 }
-

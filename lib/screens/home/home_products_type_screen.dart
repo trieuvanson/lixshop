@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/models/restaurants.dart';
+import 'package:lixshop/models/productlist.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
 
-class HomeScreenProductsType extends StatefulWidget {
-  const HomeScreenProductsType({Key? key}) : super(key: key);
+class HomeProductsTypeScreen extends StatefulWidget {
+  const HomeProductsTypeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenProductsTypeState createState() => _HomeScreenProductsTypeState();
+  _HomeProductsTypeScreenState createState() => _HomeProductsTypeScreenState();
 }
 
-class _HomeScreenProductsTypeState extends State<HomeScreenProductsType> {
+class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(

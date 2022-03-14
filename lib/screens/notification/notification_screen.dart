@@ -37,7 +37,6 @@ class NotificationScreen extends StatelessWidget {
                   time: "Thứ 2, ngày 12/12/2020",
                   image: "assets/images/lix3.png",
                   onTap: () {
-                    Get.to(const ProductDetailScreen());
                   },
                 ),
             ],

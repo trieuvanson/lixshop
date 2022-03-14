@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/screens/auth/login_screen.dart';
 import 'package:lixshop/screens/garniture/garniture_screen.dart';
 import 'package:lixshop/screens/order_history/order_history_list_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lixshop/screens/profile/profile_information_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
@@ -231,7 +230,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -311,83 +309,92 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                width: 80,
-                                child: CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: NetworkImage(
-                                    "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                    InkWell(
+                      onTap: () {
+                        Get.to(
+                              () => const ProfileInformationScreen(),
+                          curve: Curves.easeInToLinear,
+                          transition: Transition.rightToLeft,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 80,
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: NetworkImage(
+                                      "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                    ),
                                   ),
                                 ),
-                              ),
-                              16.widthBox,
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    child: Text(
-                                      "Tên người dùng",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  4.heightBox,
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Vx.green500,
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
+                                16.widthBox,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
                                       child: Text(
-                                        "Thứ hạng",
+                                        "Tên người dùng",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  4.heightBox,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Người theo dõi 123",
-                                        style: TextStyle(
-                                          color: Colors.white,
+                                    4.heightBox,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Vx.green500,
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        child: Text(
+                                          "Thứ hạng",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                      8.widthBox,
-                                      const Text(
-                                        "Đang theo dõi 123",
-                                        style: TextStyle(
-                                          color: Colors.white,
+                                    ),
+                                    4.heightBox,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Người theo dõi 123",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          )
-                        ],
+                                        8.widthBox,
+                                        const Text(
+                                          "Đang theo dõi 123",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lixshop/screens/home/home_banner_screen.dart';
 import 'package:lixshop/screens/home/home_products_type_screen.dart';
-import 'package:lixshop/screens/home/products_show_card_screen.dart';
+import 'package:lixshop/screens/home/products_show_card_row_item.dart';
 import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../widgets/search_card.dart';
@@ -47,19 +47,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             5.heightBox,
             buildLocation(context),
             10.heightBox,
-            const HomeScreenBanner(),
+            const HomeBannerScreen(),
             10.heightBox,
             buildRestaurantRow("", context),
-            const HomeScreenProductsType(),
+            const HomeProductsTypeScreen(),
             10.heightBox,
             buildRestaurantRow("Khuyến mãi", context),
-            const ProductShowCard(),
+            const ProductShowCardRowItem(),
             10.heightBox,
-            buildRestaurantRow("Sản phẩm bán chạy", context),
-            const ProductShowCard(),
-            10.heightBox,
-            buildRestaurantRow("Sản phẩm mới", context),
-            const ProductShowCard(),
+            // buildRestaurantRow("Sản phẩm bán chạy", context),
+            // const ProductShowCardRowItem(),
+            // 10.heightBox,
+            // buildRestaurantRow("Sản phẩm mới", context),
+            // const ProductShowCardRowItem(),
             10.heightBox,
           ],
         ),

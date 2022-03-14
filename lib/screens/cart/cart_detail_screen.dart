@@ -13,14 +13,14 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
-class CartScreenDetail extends StatefulWidget {
-  const CartScreenDetail({Key? key}) : super(key: key);
+class CartDetailScreen extends StatefulWidget {
+  const CartDetailScreen({Key? key}) : super(key: key);
 
   @override
-  State<CartScreenDetail> createState() => _CartScreenDetailState();
+  State<CartDetailScreen> createState() => _CartDetailScreenState();
 }
 
-class _CartScreenDetailState extends State<CartScreenDetail>
+class _CartDetailScreenState extends State<CartDetailScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   Animation<double>? animation;
