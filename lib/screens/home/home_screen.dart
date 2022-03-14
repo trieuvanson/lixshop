@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/screens/home/home_screen_banner.dart';
-import 'package:lixshop/screens/home/home_screen_products_type.dart';
-import 'package:lixshop/screens/home/products_show_card.dart';
+import 'package:lixshop/screens/home/home_banner_screen.dart';
+import 'package:lixshop/screens/home/home_products_type_screen.dart';
+import 'package:lixshop/screens/home/products_show_card_screen.dart';
 import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../widgets/search_card.dart';

@@ -7,21 +7,21 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lixshop/contains/colors.dart';
-import 'package:lixshop/screens/cart/cart_detail_screen.dart';
 import 'package:lixshop/screens/cart/checkout_card_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+class CartScreenDetail extends StatefulWidget {
+  const CartScreenDetail({Key? key}) : super(key: key);
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<CartScreenDetail> createState() => _CartScreenDetailState();
 }
 
-class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
+class _CartScreenDetailState extends State<CartScreenDetail>
+    with TickerProviderStateMixin {
   AnimationController? animationController;
   Animation<double>? animation;
   double opacity3 = 0.0;
@@ -50,7 +50,19 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: "Giỏ hàng".text.black.make(),
+        titleSpacing: 0.0,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            "Cửa hàng thứ n".text.black.make(),
+            const Text("Địa chỉ giao hàng",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Vx.green500))
+          ],
+        ),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -65,12 +77,11 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
-          children: [
-            for (var i = 0; i < 5; i++)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: _CartCard(),
-              ),
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: _CartCard(),
+            ),
           ],
         ),
       ),
@@ -88,64 +99,6 @@ class _CartCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.to(
-                      () => const CartScreenDetail(),
-                      curve: Curves.easeInToLinear,
-                      transition: Transition.rightToLeft,
-                    );
-                  },
-                  child: SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(Icons.store_sharp,
-                                  color: Vx.gray500, size: 30),
-                            ),
-                            SizedBox(
-                              child: "Cửa hàng thứ n".text.xl2.bold.make(),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Vx.gray800,
-                          size: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      "Tổng tiền".text.xl.gray500.make(),
-                      "1,000,000đ"
-                          .text
-                          .color(Vx.red700.withOpacity(0.8))
-                          .bold
-                          .xl2
-                          .make(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
           for (var i = 0; i < 5; i++) const _CartItem(),
         ],
       ),
@@ -169,14 +122,14 @@ class _BottomNavigation extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 140,
+            height: 110,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                    "9,999,999đ"
+                    "1,000,000đ"
                         .text
                         .color(Vx.black.withOpacity(0.8))
                         .bold
@@ -189,7 +142,7 @@ class _BottomNavigation extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                    "- 999,999đ"
+                    "- 100,000đ"
                         .text
                         .color(Vx.green500.withOpacity(0.8))
                         .bold
@@ -199,51 +152,26 @@ class _BottomNavigation extends StatelessWidget {
                 ),
                 5.heightBox,
                 const Divider(),
-                Flexible(child: Container(), flex: 1,),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            "Tạm tính".text.xl2.black.bold.make(),
-                            " (đã có VAT)"
-                                .text
-                                .color(Vx.gray800.withOpacity(0.8))
-                                .xl
-                                .make(),
-                          ],
-                        ),
-                        "9,000,000đ"
+                        "Tạm tính".text.xl2.black.bold.make(),
+                        " (đã có VAT)"
                             .text
-                            .color(Vx.red700.withOpacity(0.8))
-                            .bold
-                            .xl2
+                            .color(Vx.gray800.withOpacity(0.8))
+                            .xl
                             .make(),
                       ],
                     ),
+                    "900,000đ"
+                        .text
+                        .color(Vx.red700.withOpacity(0.8))
+                        .bold
+                        .xl2
+                        .make(),
                     // Button thanh toán
-                    SizedBox(
-                      width: 150,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Get.to(
-                            () => const CheckoutCardScreen(),
-                          );
-                        },
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                        color: Vx.green500,
-                        child: "Đặt hàng".text.white.bold.xl.make(),
-                      ),
-                    )
                     //Cart icon
                   ],
                 ),
@@ -337,8 +265,8 @@ class _CartItem extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
+                padding: const EdgeInsets.only(
+                    top: 16.0, left: 8, right: 8, bottom: 0),
                 child: SizedBox(
                   height: 100,
                   child: Row(
@@ -360,12 +288,6 @@ class _CartItem extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // SizedBox(
-                          //   child: "Nước rửa chén Lix Siêu"
-                          //       .text
-                          //       .xl
-                          //       .make(),
-                          // ),
                           Flexible(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width - 150,
@@ -429,11 +351,117 @@ class _CartItem extends StatelessWidget {
                                     .make(),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       )
                     ],
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      width: 100,
+                    ),
+                    16.widthBox,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              "Khuyến mãi"
+                                  .text
+                                  .color(Vx.black.withOpacity(0.8))
+                                  .bold
+                                  .make(),
+                              "".text.xl.gray500.make(),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 150,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
+                                    child: const Text(
+                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(color: Vx.gray500),
+                                    ),
+                                  ),
+                                  "3 can".text.gray500.make(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
+                                    child: const Text(
+                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(color: Vx.gray500),
+                                    ),
+                                  ),
+                                  "3 can".text.gray500.make(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
+                                    child: const Text(
+                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(color: Vx.gray500),
+                                    ),
+                                  ),
+                                  "3 can".text.gray500.make(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
+                                    child: const Text(
+                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(color: Vx.gray500),
+                                    ),
+                                  ),
+                                  "3 can".text.gray500.make(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
               Padding(
@@ -664,6 +692,8 @@ class _DetailCartItemListState extends State<_DetailCartItemList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 100, itemBuilder: (context, index) => Container());
+        itemCount: 100, itemBuilder: (context, index) => Container(
+      child: Text("$index"),
+    ));
   }
 }
