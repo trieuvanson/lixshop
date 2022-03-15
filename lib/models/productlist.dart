@@ -4,7 +4,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt LixBột giặt LixBột giặt LixBột 213213213123123t",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -13,7 +13,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -22,7 +22,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -31,7 +31,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -40,7 +40,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/8dc571e336b3c7e5c75994476a20439f.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt Lix",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -49,7 +49,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/cd3e55c4feb05a9509532acad3da248d.jpg_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -58,7 +58,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -67,7 +67,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -76,7 +76,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt LixBột giặt LixBột giặt LixBột t",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -85,7 +85,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -94,7 +94,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -103,7 +103,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -112,7 +112,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/8dc571e336b3c7e5c75994476a20439f.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt Lix",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -121,7 +121,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/cd3e55c4feb05a9509532acad3da248d.jpg_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -130,7 +130,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -139,7 +139,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -148,7 +148,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt LixBột giặt LixBột giặt LixBột 213213213123123t",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -157,7 +157,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -166,7 +166,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -175,7 +175,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -184,7 +184,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/8dc571e336b3c7e5c75994476a20439f.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt Lix",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -193,7 +193,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/cd3e55c4feb05a9509532acad3da248d.jpg_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -202,7 +202,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -211,7 +211,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -220,7 +220,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt LixBột giặt LixBột giặt LixBột t",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -229,7 +229,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -238,7 +238,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f1a67493cdd75ec2239d0b7834dd1574.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -247,7 +247,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },
@@ -256,7 +256,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/8dc571e336b3c7e5c75994476a20439f.jpg_200x200q80.jpg_.webp",
     "title": "Bột giặt Lix",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Bột giặt",
   },
@@ -265,7 +265,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/cd3e55c4feb05a9509532acad3da248d.jpg_200x200q80.jpg_.webp",
     "title": "Nước giặt",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Nước giặt",
   },
@@ -274,7 +274,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Dầu rửa chén",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Dầu rửa chén",
   },
@@ -283,7 +283,7 @@ List restaurants = [
     "img":
         "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
     "title": "Iron & Stone",
-    "address": "12345VNĐ",
+    "address": "12345",
     "rating": "4.5",
     "type": "Iron & Stone",
   },

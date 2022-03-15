@@ -623,25 +623,22 @@ class _DetailCartItemPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "null",
-      child: Material(
-        borderRadius: BorderRadius.circular(16),
-        color: DesignCourseAppTheme.nearlyWhite,
-        child: Container(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 1.5),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                const _HeaderCartItemPopup(),
-                const Divider(),
-                const _DetailCartItemList().expand(),
-                const Divider(),
-                const _FooterCartItemPopup(),
-              ],
-            ),
+    return Material(
+      borderRadius: BorderRadius.circular(16),
+      color: DesignCourseAppTheme.nearlyWhite,
+      child: Container(
+        constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height / 1.5),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: [
+              const _HeaderCartItemPopup(),
+              const Divider(),
+              const _DetailCartItemList().expand(),
+              const Divider(),
+              const _FooterCartItemPopup(),
+            ],
           ),
         ),
       ),

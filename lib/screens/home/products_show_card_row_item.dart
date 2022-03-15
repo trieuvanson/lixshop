@@ -21,7 +21,7 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: DesignCourseAppTheme.nearlyWhite,
+        color: DesignCourseAppTheme.notWhite,
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -31,15 +31,14 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 8.0, top: 8.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 8.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               restaurants.length,
-                  (index) {
+              (index) {
                 Map restaurant = restaurants[index];
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0, bottom: 8),

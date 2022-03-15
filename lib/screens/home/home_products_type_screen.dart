@@ -16,13 +16,13 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: DesignCourseAppTheme.nearlyWhite,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-              offset: const Offset(1.1, 1.1),
+              color: DesignCourseAppTheme.notWhite,
+              offset: Offset(1.1, 1.1),
               blurRadius: 8.0),
         ],
       ),

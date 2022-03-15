@@ -4,7 +4,6 @@ import 'package:lixshop/screens/profile/profile_screen.dart';
 import '../screens/add_post_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/notification/notification_screen.dart';
-import '../screens/search_screen.dart';
 
 const webScreenSize = 600;
 

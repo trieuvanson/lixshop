@@ -1,120 +1,169 @@
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:lixshop/models/productlist.dart';
-import 'package:lixshop/screens/product/product_detail_screen.dart';
+import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:velocity_x/velocity_x.dart';
 
+import '../../utils/design_course_app_theme.dart';
 import '../../widgets/product_card_item.dart';
+import '../search/search_screen.dart';
 
-class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({Key? key}) : super(key: key);
+class ProductsScreen extends StatefulWidget {
+  final String? keyword;
 
+  const ProductsScreen({Key? key, this.keyword = ""}) : super(key: key);
+
+  @override
+  State<ProductsScreen> createState() => _ProductsScreenState();
+}
+
+class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leadingWidth: MediaQuery.of(context).size.width * 0.1,
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        title: Container(
-          width: double.infinity,
-          // height: 40,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(8)),
-          child: TextField(
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    /* Clear the search field */
-                  },
-                ),
-                hintText: 'Search...',
-                border: InputBorder.none),
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.shopping_cart, color: Colors.grey[700]),
-            onPressed: () {
-              /* Open the shopping cart */
-            },
-          ),
-        ],
-      ),
+      appBar: appBar(),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-          child: Column(
-            children: [
-              AlignedGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 4,
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                crossAxisSpacing: 8,
-                itemBuilder: (context, index) {
-                  Map restaurant = restaurants[index];
-                  return ProductCardItem(
-                    id: restaurant['id'],
-                    img: restaurant['img'],
-                    title: restaurant['title'],
-                    address: restaurant['address'],
-                    rating: restaurant['rating'],
-                  );
-                },
-                itemCount: restaurants.length,
-              ),
-            ],
+        child: Container(
+          color: DesignCourseAppTheme.notWhite,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16, top: 16),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      "100 sản phẩm".text.bold.size(16).make(),
+                      GestureDetector(
+                        onTap: () {
+                          print('Ahihi');
+                        },
+                        child: Row(
+                          children: [
+                            CustomDropdownButton2(
+                              buttonDecoration: BoxDecoration(
+                                color: DesignCourseAppTheme.nearlyWhite,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                border: Border.all(
+                                  color: Vx.gray300,
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                size: 24,
+                              ),
+                              hint: 'Đơn vị tính',
+                              value: 'Giá cao tới thấp',
+                              onChanged: (String? value) {},
+                              dropdownItems: const [
+                                "Tất cả",
+                                "Mới nhất",
+                                "Cũ nhất",
+                                "Giá thấp tới cao",
+                                "Giá cao tới thấp",
+                                "Tên A-Z",
+                                "Tên Z-A",
+                              ],
+                            ),
+                            8.widthBox,
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.filter_list,
+                                  color: Vx.gray700,
+                                ),
+                                "Lọc".text.bold.color(Vx.gray700).make(),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                AlignedGridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  shrinkWrap: true,
+                  physics: const ScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    Map restaurant = restaurants[index];
+                    return ProductCardItem(
+                      id: restaurant['id'],
+                      img: restaurant['img'],
+                      title: restaurant['title'],
+                      address: restaurant['address'],
+                      rating: restaurant['rating'],
+                    );
+                  },
+                  itemCount: restaurants.length,
+                ),
+              ],
+            ),
           ),
-          // child: GridView.builder(
-          //   physics: const BouncingScrollPhysics(),
-          //   padding: const EdgeInsets.all(4.0),
-          //   itemCount: restaurants.length,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 2,
-          //     childAspectRatio: 0.501,
-          //     mainAxisSpacing: 4.0,
-          //     crossAxisSpacing: 4.0,
-          //   ),
-          //   itemBuilder: (BuildContext context, int index) {
-          //     Map restaurant = restaurants[index];
-          //     return Container(
-          //         constraints: const BoxConstraints(
-          //           maxHeight: double.infinity,
-          //         ),
-          //         // width: MediaQuery.of(context).size.width * 0.5,
-          //         decoration: BoxDecoration(
-          //           color: Colors.grey[200],
-          //           borderRadius: BorderRadius.circular(8),
-          //           boxShadow: const [
-          //             BoxShadow(
-          //               color: Colors.white,
-          //               blurRadius: 5.0,
-          //               spreadRadius: 1.0,
-          //               offset: Offset(
-          //                 2.0,
-          //                 2.0,
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         child: ProductCardItem(
-          //           img: restaurant['img'],
-          //           title: restaurant['title'],
-          //           address: restaurant['address'],
-          //           rating: restaurant['rating'],
-          //         ));
-          //   },
-          // ),
         ),
       ),
+    );
+  }
+
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      elevation: 0,
+      leadingWidth: 20,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+        onPressed: () {
+          Get.to(
+            () => const MobileScreenLayout(),
+            transition: Transition.leftToRight,
+            duration: const Duration(milliseconds: 500),
+          );
+        },
+      ),
+      backgroundColor: Colors.white,
+      iconTheme: const IconThemeData(
+        color: Colors.black,
+      ),
+      title: InkWell(
+        onTap: () {
+          Get.to(() => SearchScreen(
+                keyword: widget.keyword,
+              ));
+        },
+        child: IgnorePointer(
+          child: Container(
+            width: double.infinity,
+            // height: 40,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            child: TextFormField(
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: widget.keyword ?? 'Search...',
+                  border: InputBorder.none),
+            ),
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.shopping_cart, color: Colors.grey[700]),
+          onPressed: () {
+            /* Open the shopping cart */
+          },
+        ),
+      ],
     );
   }
 }

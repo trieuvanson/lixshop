@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
+import '../../utils/design_course_app_theme.dart';
 import '../../widgets/slide_item.dart';
 
 class HomeBannerScreen extends StatefulWidget {
@@ -54,7 +55,8 @@ class _HomeBannerScreenState extends State<HomeBannerScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: DesignCourseAppTheme.notWhite,
       child: Column(
         children: <Widget>[
           CarouselSlider(

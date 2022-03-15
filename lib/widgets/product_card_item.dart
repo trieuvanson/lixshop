@@ -49,25 +49,24 @@ class _ProductCardItemState extends State<ProductCardItem> {
         decoration: BoxDecoration(
           color: DesignCourseAppTheme.nearlyWhite,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.black.withOpacity(0.2)),
+          border: Border.all(
+            color: DesignCourseAppTheme.notWhite,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Hero(
-              tag: widget.id,
-              child: SizedBox(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
-                  child: Image.network(
-                    widget.img,
-                    width: double.infinity,
-                    height: 180,
-                    fit: BoxFit.cover,
-                  ),
+            SizedBox(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0),
+                ),
+                child: Image.network(
+                  widget.img,
+                  width: double.infinity,
+                  height: 180,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

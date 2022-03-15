@@ -124,7 +124,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'VNĐ ${widget.address}',
+                              'đ${widget.address}',
                               textAlign: TextAlign.left,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -161,6 +161,114 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               ),
                             )
                           ],
+                        ),
+                      ),
+                      10.heightBox,
+                      //Size
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child: Row(
+                                      children: [
+                                        "Chọn loại hàng ".text.bold.make(),
+                                        "(1 sản phẩm, 4 hình thức)"
+                                            .text
+                                            .italic
+                                            .make(),
+                                      ],
+                                    ),
+                                  ),
+                                  // 64.widthBox,
+                                  const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    for (var i = 0; i < 10; i++)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: DesignCourseAppTheme
+                                                  .nearlyWhite,
+                                              borderRadius:
+                                              const BorderRadius.all(
+                                                  Radius.circular(8.0)),
+                                              border: Border.all(
+                                                  color: Vx.green500)),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              splashColor: Colors.white24,
+                                              borderRadius:
+                                              const BorderRadius.all(
+                                                  Radius.circular(8.0)),
+                                              onTap: () {
+                                                print('Tap ${++i}');
+                                                setState(() {
+                                                  // categoryType = categoryTypeData;
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8,
+                                                    bottom: 8,
+                                                    left: 8,
+                                                    right: 8),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Size ${i + 1}",
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      fontSize: 14,
+                                                      letterSpacing: 0.27,
+                                                      color: Vx.green500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       InkWell(
@@ -227,114 +335,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                      ),
-                      10.heightBox,
-                      //Size
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child: Row(
-                                      children: [
-                                        "Chọn loại hàng ".text.bold.make(),
-                                        "(1 sản phẩm, 4 hình thức)"
-                                            .text
-                                            .italic
-                                            .make(),
-                                      ],
-                                    ),
-                                  ),
-                                  // 64.widthBox,
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for (var i = 0; i < 10; i++)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: DesignCourseAppTheme
-                                                  .nearlyWhite,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(8.0)),
-                                              border: Border.all(
-                                                  color: Vx.green500)),
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              splashColor: Colors.white24,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(8.0)),
-                                              onTap: () {
-                                                print('Tap ${++i}');
-                                                setState(() {
-                                                  // categoryType = categoryTypeData;
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8,
-                                                    bottom: 8,
-                                                    left: 8,
-                                                    right: 8),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Size ${i + 1}",
-                                                    textAlign: TextAlign.left,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.27,
-                                                      color: Vx.green500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ),
@@ -690,29 +690,26 @@ class _ProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: id,
-      child: AspectRatio(
-        aspectRatio: 1.2,
-        child: SizedBox(
-          // color: appColor,
-          child: Image.network(
-            img,
-            width: MediaQuery.of(context).size.width,
-            errorBuilder: (context, error, stackTrace) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 2,
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    semanticsLabel: 'Loading',
-                    valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
-                  ),
+    return AspectRatio(
+      aspectRatio: 1.2,
+      child: SizedBox(
+        // color: appColor,
+        child: Image.network(
+          img,
+          width: MediaQuery.of(context).size.width,
+          errorBuilder: (context, error, stackTrace) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
+              child: const Center(
+                child: CircularProgressIndicator(
+                  semanticsLabel: 'Loading',
+                  valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
                 ),
-              );
-            },
-            fit: BoxFit.cover,
-          ),
+              ),
+            );
+          },
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -1051,25 +1048,22 @@ class VoucherPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "null",
-      child: Material(
-        borderRadius: BorderRadius.circular(16),
-        color: DesignCourseAppTheme.nearlyWhite,
-        child: Container(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 1.5),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                const _HeaderVoucher(),
-                const Divider(),
-                const _VoucherList().expand(),
-                const Divider(),
-                const _FooterVoucher(),
-              ],
-            ),
+    return Material(
+      borderRadius: BorderRadius.circular(16),
+      color: DesignCourseAppTheme.nearlyWhite,
+      child: Container(
+        constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height / 1.5),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: [
+              const _HeaderVoucher(),
+              const Divider(),
+              const _VoucherList().expand(),
+              const Divider(),
+              const _FooterVoucher(),
+            ],
           ),
         ),
       ),
