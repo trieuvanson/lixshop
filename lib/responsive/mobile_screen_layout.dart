@@ -71,41 +71,39 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
             body: Center(
               child: homeScreenItems.elementAt(_selectedIndex),
             ),
-            bottomNavigationBar: SafeArea(
-              child: Padding(
+            bottomNavigationBar: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              child: GNav(
+                rippleColor: Colors.grey[300]!,
+                hoverColor: creamColor.withOpacity(0.1),
+                gap: 8,
+                activeColor: Vx.red600,
+                iconSize: 24,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-                child: GNav(
-                  rippleColor: Colors.grey[300]!,
-                  hoverColor: creamColor.withOpacity(0.1),
-                  gap: 8,
-                  activeColor: Vx.red600,
-                  iconSize: 24,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  duration: const Duration(milliseconds: 200),
-                  tabBackgroundColor: Colors.transparent,
-                  color: Vx.gray600,
-                  tabs: _navItems(),
-                  tabBorderRadius: 8,
-                  selectedIndex: _selectedIndex,
-                  textStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Vx.red600),
-                  onTabChange: (index) {
-                    if (!isLogin && index == 3) {
-                      setState(() {
-                        _selectedIndex = index;
-                        checkLogin();
-                      });
-                    } else {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
-                    }
-                  },
-                ),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                duration: const Duration(milliseconds: 200),
+                tabBackgroundColor: Colors.transparent,
+                color: Vx.gray600,
+                tabs: _navItems(),
+                tabBorderRadius: 8,
+                selectedIndex: _selectedIndex,
+                textStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Vx.red600),
+                onTabChange: (index) {
+                  if (!isLogin && index == 3) {
+                    setState(() {
+                      _selectedIndex = index;
+                      checkLogin();
+                    });
+                  } else {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  }
+                },
               ),
             ),
           );

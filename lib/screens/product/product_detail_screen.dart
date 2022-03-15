@@ -133,33 +133,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 color: Vx.red700,
                               ),
                             ),
-                            SizedBox(
-                              child: Row(
-                                children: <Widget>[
-                                  RatingBarIndicator(
-                                    rating: double.parse(widget.rating),
-                                    itemBuilder: (context, index) => const Icon(
-                                      Icons.star,
-                                      color: Colors.yellow,
-                                    ),
-                                    itemCount: 5,
-                                    itemSize: 20.0,
-                                    unratedColor: Colors.amber.withAlpha(50),
-                                    direction: Axis.horizontal,
-                                  ),
-                                  Text(
-                                    widget.rating,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 16,
-                                      letterSpacing: 0.27,
-                                      color: DesignCourseAppTheme.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                            // SizedBox(
+                            //   child: Row(
+                            //     children: <Widget>[
+                            //       RatingBarIndicator(
+                            //         rating: double.parse(widget.rating),
+                            //         itemBuilder: (context, index) => const Icon(
+                            //           Icons.star,
+                            //           color: Colors.yellow,
+                            //         ),
+                            //         itemCount: 5,
+                            //         itemSize: 20.0,
+                            //         unratedColor: Colors.amber.withAlpha(50),
+                            //         direction: Axis.horizontal,
+                            //       ),
+                            //       Text(
+                            //         widget.rating,
+                            //         textAlign: TextAlign.left,
+                            //         style: const TextStyle(
+                            //           fontWeight: FontWeight.w200,
+                            //           fontSize: 16,
+                            //           letterSpacing: 0.27,
+                            //           color: DesignCourseAppTheme.grey,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

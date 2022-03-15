@@ -55,7 +55,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            "Cửa hàng thứ n".text.black.make(),
+            "Nhà phân phối ABC XYZ".text.black.make(),
             const Text("Địa chỉ giao hàng",
                 style: TextStyle(
                     fontSize: 14,

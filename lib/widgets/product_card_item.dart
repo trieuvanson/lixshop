@@ -45,7 +45,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
       child: Container(
         padding: const EdgeInsets.only(bottom: 8.0),
         width: 180,
-        height: 300,
+        height: 260,
         decoration: BoxDecoration(
           color: DesignCourseAppTheme.nearlyWhite,
           borderRadius: BorderRadius.circular(8),
@@ -109,7 +109,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ],
               ),
             ),
-            Row(
+          /*  Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -176,7 +176,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   ),
                 ),
               ],
-            ),
+            ),*/
           ],
         ),
       ),

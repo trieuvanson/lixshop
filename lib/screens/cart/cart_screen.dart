@@ -115,7 +115,7 @@ class _CartCard extends StatelessWidget {
                                   color: Vx.gray500, size: 30),
                             ),
                             SizedBox(
-                              child: "Cửa hàng thứ n".text.xl2.bold.make(),
+                              child: "Nhà phân phối ABC XYZ".text.xl2.bold.make(),
                             ),
                           ],
                         ),

@@ -14,12 +14,12 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  Future<void> decodeJson() async {
-    String productss = await rootBundle.loadString('assets/json/products.json');
-    final productMap = await json.decode(productss);
-    var products = productMap.map((product) => Product.fromMap(product)).toList();
-    print(products[1].id);
-  }
+  // Future<void> decodeJson() async {
+  //   String productss = await rootBundle.loadString('assets/json/products.json');
+  //   final productMap = await json.decode(productss);
+  //   var products = productMap.map((product) => Product.fromMap(product)).toList();
+  //   print(products[1].id);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           Icons.upload,
         ),
         onPressed: () {
-          decodeJson();
+          // decodeJson();
         },
       ),
     );

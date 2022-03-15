@@ -290,8 +290,8 @@ class _BottomNavigation extends StatelessWidget {
                   child: Row(
                     children: [
                       const _PaymentItem(payment: "Tiền mặt", isSelected: true),
-                      16.widthBox,
-                      const _PaymentItem(payment: "Chuyển khoản"),
+                      // 16.widthBox,
+                      // const _PaymentItem(payment: "Chuyển khoản"),
                     ]
                   ),
                 ),
@@ -506,35 +506,31 @@ class _CheckoutItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Vx.green200,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Vx.green50.withOpacity(0.5),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child:
-                                    "Giao lần 1".text.green500.xl.bold.make()),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        child: "Cửa hàng thứ N".text.xl2.bold.make(),
-                      ),
-                    ],
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 8.0),
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Vx.green200,
+                  //       borderRadius: const BorderRadius.all(
+                  //         Radius.circular(8.0),
+                  //       ),
+                  //       boxShadow: <BoxShadow>[
+                  //         BoxShadow(
+                  //             color: Vx.green50.withOpacity(0.5),
+                  //             offset: const Offset(1.1, 1.1),
+                  //             blurRadius: 8.0),
+                  //       ],
+                  //     ),
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       child: Center(
+                  //           child:
+                  //               "Giao lần 1".text.green500.xl.bold.make()),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    child: "Nhà phân phối ABC XYZ".text.xl.bold.make(),
                   ),
                   const Icon(
                     Icons.arrow_forward_ios,

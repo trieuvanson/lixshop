@@ -42,7 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
       iconTheme: const IconThemeData(
         color: Colors.black,
       ),
-      leadingWidth: 20,
       title: Container(
         width: double.infinity,
         // height: 40,
@@ -53,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
             onSubmitted: (value) {
               if (value.trim().isNotEmpty) {
                 Get.to(
-                      () => ProductsScreen(keyword: value),
+                  () => ProductsScreen(keyword: value),
                   routeName: '/products?keyword=$value',
                   transition: Transition.downToUp,
                   duration: const Duration(milliseconds: 300),
@@ -65,13 +64,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: widget.keyword!.isNotEmpty
                     ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      widget.keyword = "";
-                    });
-                  },
-                )
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            widget.keyword = "";
+                          });
+                        },
+                      )
                     : null,
                 hintText: widget.keyword ?? 'Search...',
                 border: InputBorder.none),
@@ -107,7 +106,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (var i = 0; i < 10; i++)
-                    _MenuItem(title: "${widget.keyword} $i", onTap: () {}),
+                    _MenuItem(title: "${widget.keyword} $i", onTap: () {
+                      Get.to(
+                        () => ProductsScreen(keyword: "${widget.keyword} $i"),
+                        routeName: '/products?keyword=${widget.keyword} $i',
+                        transition: Transition.downToUp,
+                        duration: const Duration(milliseconds: 300),
+                      );
+                    }),
                 ],
               ),
             ),
@@ -170,8 +176,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: InkWell(
                           onTap: () {
                             Get.to(
-                                  () => ProductsScreen(keyword: "Tìm kiếm phổ biến ${i+1}"),
-                              routeName: '/products?keyword=Tìm kiếm phổ biến ${i+1}',
+                              () => ProductsScreen(
+                                  keyword: "Tìm kiếm phổ biến ${i + 1}"),
+                              routeName:
+                                  '/products?keyword=Tìm kiếm phổ biến ${i + 1}',
                               transition: Transition.downToUp,
                               duration: const Duration(milliseconds: 300),
                             );
@@ -183,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 color: Colors.black,
                                 size: 30,
                               ),
-                              "Tìm kiếm phổ biến ${i+1}".text.make(),
+                              "Tìm kiếm phổ biến ${i + 1}".text.make(),
                             ],
                           ),
                         ),

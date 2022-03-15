@@ -49,51 +49,51 @@ class _SlideItemState extends State<SlideItem> {
                   ),
                 ),
               ),
-              Positioned(
-                top: 6.0,
-                right: 6.0,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.star,
-                          color: Constants.ratingBG,
-                          size: 10,
-                        ),
-                        Text(
-                          " ${widget.rating} ",
-                          style: const TextStyle(
-                            fontSize: 10.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 6.0,
-                left: 6.0,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3.0)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Text(
-                      " OPEN ",
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   top: 6.0,
+              //   right: 6.0,
+              //   child: Card(
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(4.0)),
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(2.0),
+              //       child: Row(
+              //         children: <Widget>[
+              //           Icon(
+              //             Icons.star,
+              //             color: Constants.ratingBG,
+              //             size: 10,
+              //           ),
+              //           Text(
+              //             " ${widget.rating} ",
+              //             style: const TextStyle(
+              //               fontSize: 10.0,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Positioned(
+              //   top: 6.0,
+              //   left: 6.0,
+              //   child: Card(
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(3.0)),
+              //     child: const Padding(
+              //       padding: EdgeInsets.all(4.0),
+              //       child: Text(
+              //         " OPEN ",
+              //         style: TextStyle(
+              //           fontSize: 10.0,
+              //           color: Colors.green,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],
