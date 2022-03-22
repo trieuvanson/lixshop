@@ -1,17 +1,15 @@
-import 'dart:math';
-
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:velocity_x/velocity_x.dart';
-import '../../models/productlist.dart';
+
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
-import '../../widgets/product_card_item.dart';
+import '../order_history/order_history_item_detail_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String id;
@@ -72,6 +70,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   }
 
   int amount = 0;
+  int _selectedTapbar = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +85,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           child: SingleChildScrollView(
             child: Column(
               children: [
-                 _ProductImage(id: widget.id, img: widget.img),
+                _ProductImage(id: widget.id, img: widget.img),
                 Container(
                   decoration: BoxDecoration(
                     color: DesignCourseAppTheme.nearlyWhite,
@@ -170,11 +169,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                         decoration: BoxDecoration(
                           color: DesignCourseAppTheme.nearlyWhite,
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
+                              const BorderRadius.all(Radius.circular(8.0)),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                                 color:
-                                DesignCourseAppTheme.grey.withOpacity(0.2),
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
                                 offset: const Offset(1.1, 1.1),
                                 blurRadius: 8.0),
                           ],
@@ -187,7 +186,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
                                     child: Row(
@@ -223,8 +222,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                               color: DesignCourseAppTheme
                                                   .nearlyWhite,
                                               borderRadius:
-                                              const BorderRadius.all(
-                                                  Radius.circular(8.0)),
+                                                  const BorderRadius.all(
+                                                      Radius.circular(8.0)),
                                               border: Border.all(
                                                   color: Vx.green500)),
                                           child: Material(
@@ -232,8 +231,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                             child: InkWell(
                                               splashColor: Colors.white24,
                                               borderRadius:
-                                              const BorderRadius.all(
-                                                  Radius.circular(8.0)),
+                                                  const BorderRadius.all(
+                                                      Radius.circular(8.0)),
                                               onTap: () {
                                                 print('Tap ${++i}');
                                                 setState(() {
@@ -252,7 +251,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight:
-                                                      FontWeight.w600,
+                                                          FontWeight.w600,
                                                       fontSize: 14,
                                                       letterSpacing: 0.27,
                                                       color: Vx.green500,
@@ -271,73 +270,244 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            HeroDialogRoute(
-                                builder: (context) => Column(
-                                      children: [
-                                        Flexible(child: Container(), flex: 2),
-                                        const VoucherPopup(),
-                                      ],
-                                    ),
-                                fullscreenDialog: false),
-                          );
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      child: "Khuyến mãi sản phẩm".text.make(),
-                                    ),
-                                    // 64.widthBox,
-                                    const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16,
-                                    ),
-                                  ],
+                      // InkWell(
+                      //   onTap: () {
+                      //     Navigator.of(context).push(
+                      //       HeroDialogRoute(
+                      //           builder: (context) => Column(
+                      //                 children: [
+                      //                   Flexible(child: Container(), flex: 2),
+                      //                   const VoucherPopup(),
+                      //                 ],
+                      //               ),
+                      //           fullscreenDialog: false),
+                      //     );
+                      //   },
+                      //   child: Container(
+                      //     width: MediaQuery.of(context).size.width,
+                      //     decoration: BoxDecoration(
+                      //       color: DesignCourseAppTheme.nearlyWhite,
+                      //       borderRadius:
+                      //           const BorderRadius.all(Radius.circular(8.0)),
+                      //       boxShadow: <BoxShadow>[
+                      //         BoxShadow(
+                      //             color: DesignCourseAppTheme.grey
+                      //                 .withOpacity(0.2),
+                      //             offset: const Offset(1.1, 1.1),
+                      //             blurRadius: 8.0),
+                      //       ],
+                      //     ),
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.only(
+                      //           left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Row(
+                      //             mainAxisAlignment:
+                      //                 MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               SizedBox(
+                      //                 child: "Khuyến mãi sản phẩm".text.make(),
+                      //               ),
+                      //               // 64.widthBox,
+                      //               const Icon(
+                      //                 Icons.arrow_forward_ios,
+                      //                 size: 16,
+                      //               ),
+                      //             ],
+                      //           ),
+                      //           const SizedBox(
+                      //             height: 8,
+                      //           ),
+                      //           Container(
+                      //             width: MediaQuery.of(context).size.width,
+                      //             alignment: Alignment.centerLeft,
+                      //             height: 20,
+                      //             decoration: BoxDecoration(
+                      //               color: Vx.green700.withOpacity(0.4),
+                      //             ),
+                      //             child: "Đang áp dụng hình thức 1"
+                      //                 .text
+                      //                 .gray700
+                      //                 .make(),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      10.heightBox,
+                      DefaultTabController(
+                        length: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TabBar(
+                              onTap: (index) {
+                                setState(() {
+                                  _selectedTapbar = index;
+                                });
+                              },
+                              physics: const BouncingScrollPhysics(),
+                              isScrollable: true,
+                              labelColor: Vx.green500,
+                              unselectedLabelColor: Vx.gray500,
+                              labelStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                              indicator: const UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                  width: 3,
+                                  color: Vx.green500,
                                 ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.centerLeft,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    color: Vx.green700.withOpacity(0.4),
-                                  ),
-                                  child: "Đang áp dụng hình thức 1"
-                                      .text
-                                      .gray700
-                                      .make(),
-                                ),
+                              ),
+                              tabs: const [
+                                Tab(text: "Thông tin sản phẩm"),
+                                Tab(text: "Khuyến mãi"),
                               ],
                             ),
-                          ),
+                            Builder(builder: (_) {
+                              if (_selectedTapbar == 0) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: DesignCourseAppTheme.nearlyWhite,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0)),
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                          color: DesignCourseAppTheme.grey
+                                              .withOpacity(0.2),
+                                          offset: const Offset(1.1, 1.1),
+                                          blurRadius: 8.0),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0,
+                                        right: 8.0,
+                                        top: 12.0,
+                                        bottom: 12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          child: "Thông tin chi tiết"
+                                              .text
+                                              .bold
+                                              .make(),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Divider(
+                                          color: DesignCourseAppTheme.grey
+                                              .withOpacity(0.6),
+                                          height: 1,
+                                        ),
+                                        for (var i = 0; i < 4; i++)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: Text(
+                                                    'Tồn kho ${i + 1}',
+                                                    style: const TextStyle(
+                                                      color:
+                                                          DesignCourseAppTheme
+                                                              .darkerText,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      136,
+                                                  child: Text(
+                                                    "Đây là văn bản test $i",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        const _ExpandAbleDescription(),
+                                      ],
+                                    ),
+                                  ),
+                                ); //1st custom tabBarView
+                              } else if (_selectedTapbar == 1) {
+                                return Container(); //2nd tabView
+                              } else {
+                                return Container(); //3rd tabView
+                              }
+                            }),
+                          ],
                         ),
                       ),
+
+                      //Đoạn này dành cho comment
+                      // 10.heightBox,
+                      /*  Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child:
+                                        "Đoạn này là comment".text.bold.make(),
+                                  ),
+                                  Row(
+                                    children: [
+                                      "Xem tất cả".text.green600.make(),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Vx.green600,
+                                        size: 16,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),*/
+                      //Đoạn này dành cho các sản phẩm cùng loại(Bột giặt, nước giặt,...)
+                      // 10.heightBox,
                       10.heightBox,
                       //Sản phẩm tương tự (Hương chanh, hương bưởi...)
                       Container(
@@ -426,11 +596,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                 children: [
                                                   ClipRRect(
                                                     borderRadius:
-                                                        const BorderRadius
-                                                            .only(
+                                                        const BorderRadius.only(
                                                       topLeft:
-                                                          Radius.circular(
-                                                              16.0),
+                                                          Radius.circular(16.0),
                                                     ),
                                                     child: Image.network(
                                                       widget.img,
@@ -447,7 +615,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                             right: 8),
                                                     child: Text(
                                                       widget.title,
-                                                      overflow: TextOverflow.ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       maxLines: 2,
                                                       textAlign: TextAlign.left,
                                                       style: const TextStyle(
@@ -500,128 +669,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         ),
                       ),
-                      10.heightBox,
-                      //Thông tin chi tiết
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                child: "Thông tin chi tiết".text.bold.make(),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Divider(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.6),
-                                height: 1,
-                              ),
-                              for (var i = 0; i < 4; i++)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 120,
-                                        child: Text(
-                                          'Tồn kho ${i + 1}',
-                                          style: const TextStyle(
-                                            color:
-                                                DesignCourseAppTheme.darkerText,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                136,
-                                        child: Text(
-                                          "Đây là văn bản test $i",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              const _ExpandAbleDescription(),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //Đoạn này dành cho comment
-                      10.heightBox,
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child:
-                                        "Đoạn này là comment".text.bold.make(),
-                                  ),
-                                  Row(
-                                    children: [
-                                      "Xem tất cả".text.green600.make(),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Vx.green600,
-                                        size: 16,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      //Đoạn này dành cho các sản phẩm cùng loại(Bột giặt, nước giặt,...)
-                      10.heightBox,
-                      Container(
+                      /*      Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           color: DesignCourseAppTheme.nearlyWhite,
@@ -669,7 +717,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             ],
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -680,23 +728,181 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
       ),
     );
   }
+
+  Widget _tabSection(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: <Widget>[
+          const TabBar(
+            physics: BouncingScrollPhysics(),
+            isScrollable: true,
+            labelColor: Vx.green500,
+            unselectedLabelColor: Vx.gray500,
+            labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                width: 3,
+                color: Vx.green500,
+              ),
+            ),
+            tabs: [
+              Tab(text: "Thông tin sản phẩm"),
+              Tab(text: "Khuyến mãi"),
+            ],
+          ),
+          SizedBox(
+            height: 310,
+            child: TabBarView(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: DesignCourseAppTheme.nearlyWhite,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                            offset: const Offset(1.1, 1.1),
+                            blurRadius: 8.0),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            child: "Thông tin chi tiết".text.bold.make(),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Divider(
+                            color: DesignCourseAppTheme.grey.withOpacity(0.6),
+                            height: 1,
+                          ),
+                          for (var i = 0; i < 4; i++)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 120,
+                                    child: Text(
+                                      'Tồn kho ${i + 1}',
+                                      style: const TextStyle(
+                                        color: DesignCourseAppTheme.darkerText,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 136,
+                                    child: Text(
+                                      "Đây là văn bản test $i",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          const _ExpandAbleDescription(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: DesignCourseAppTheme.nearlyWhite,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 8.0),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          child: "Thông tin chi tiết".text.bold.make(),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Divider(
+                          color: DesignCourseAppTheme.grey.withOpacity(0.6),
+                          height: 1,
+                        ),
+                        for (var i = 0; i < 4; i++)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 120,
+                                  child: Text(
+                                    'Tồn kho ${i + 1}',
+                                    style: const TextStyle(
+                                      color: DesignCourseAppTheme.darkerText,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 136,
+                                  child: Text(
+                                    "Đây là văn bản test $i",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        const _ExpandAbleDescription(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ProductImage extends StatelessWidget {
   final String id;
   final String img;
 
-  const _ProductImage({Key? key, required this.id, required this.img}) : super(key: key);
+  const _ProductImage({Key? key, required this.id, required this.img})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.2,
+      aspectRatio: 1,
       child: SizedBox(
         // color: appColor,
         child: Image.network(
           img,
-          width: MediaQuery.of(context).size.width,
           errorBuilder: (context, error, stackTrace) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -720,7 +926,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
   return AppBar(
     elevation: 0.0,
     toolbarHeight: 40.0,
-    backgroundColor: DesignCourseAppTheme.nearlyWhite,
+    backgroundColor: Colors.transparent,
     title: const Text(
       'Nước rửa chén thương hiệu Lixco',
       textAlign: TextAlign.left,
@@ -783,7 +989,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
           itemHeight: 48,
           itemPadding: const EdgeInsets.only(left: 16, right: 16),
           dropdownWidth: 200,
-          dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
+          dropdownPadding: const EdgeInsets.symmetric(vertical: 0),
           dropdownDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: Colors.white,
@@ -812,7 +1018,7 @@ class _BottomNavigation extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 40,
+            height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -920,7 +1126,7 @@ class _BottomNavigation extends StatelessWidget {
                 16.widthBox,
                 Expanded(
                   child: Container(
-                    height: 36,
+                    height: 48,
                     decoration: BoxDecoration(
                       color: Vx.green500,
                       borderRadius: const BorderRadius.all(
@@ -965,19 +1171,27 @@ class _ExpandAbleDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     String abc =
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test";
+        "Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test";
     return SizedBox(
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -998,12 +1212,12 @@ class MenuItem {
 }
 
 class MenuItems {
-  static const List<MenuItem> firstItems = [home, share, settings];
+  static const List<MenuItem> firstItems = [home, share, reports];
   static const List<MenuItem> secondItems = [logout];
 
   static const home = MenuItem(text: 'Quay lại trang chủ', icon: Icons.home);
   static const share = MenuItem(text: 'Chia sẻ sản phẩm', icon: Icons.share);
-  static const settings =
+  static const reports =
       MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
   static const logout = MenuItem(text: 'Đăng xuất', icon: Icons.logout);
 
@@ -1029,7 +1243,7 @@ class MenuItems {
       case MenuItems.home:
         //Do something
         break;
-      case MenuItems.settings:
+      case MenuItems.reports:
         //Do something
         break;
       case MenuItems.share:
@@ -1052,8 +1266,8 @@ class VoucherPopup extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       color: DesignCourseAppTheme.nearlyWhite,
       child: Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height / 1.5),
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
@@ -1154,5 +1368,121 @@ class _VoucherListState extends State<_VoucherList> {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: 100, itemBuilder: (context, index) => Container());
+  }
+}
+
+class _CheckoutItem extends StatelessWidget {
+  const _CheckoutItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(16.0),
+      ),
+      child: InkWell(
+        onTap: () {
+          Get.to(
+            () => const OrderHistoryItemDetailScreen(),
+            curve: Curves.easeInToLinear,
+            transition: Transition.rightToLeft,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: "Đơn hàng #12412312".text.xl.bold.make(),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Vx.green200,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Vx.green50.withOpacity(0.5),
+                                  offset: const Offset(1.1, 1.1),
+                                  blurRadius: 8.0),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                                child: "Đang chờ xác nhận"
+                                    .text
+                                    .green500
+                                    .bold
+                                    .make()),
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Vx.green700,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              5.heightBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  "Đặt vào ngày 20/10/2020".text.gray500.make(),
+                  "9,999,999đ"
+                      .text
+                      .color(Vx.red700.withOpacity(0.8))
+                      .bold
+                      .xl
+                      .make(),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      for (var i = 0; i < 5; i++)
+                        SizedBox(
+                          width: 100,
+                          height: 130,
+                          child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(
+                                "https://picsum.photos/200",
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                color: Vx.gray500,
+                height: 1,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -11,7 +11,7 @@ class OrderHistoryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: 5,
       child: Scaffold(
         appBar: _appBar(context),
         body: TabBarView(
@@ -23,8 +23,6 @@ class OrderHistoryListScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const _CheckoutItem(),
-            const _CheckoutItem(),
             const _CheckoutItem(),
             const _CheckoutItem(),
             const _CheckoutItem(),
@@ -60,9 +58,7 @@ PreferredSizeWidget _appBar(BuildContext context) {
       ),
       tabs: [
         Tab(text: "Tất cả"),
-        Tab(text: "Chờ thanh toán"),
         Tab(text: "Chờ xác nhận"),
-        Tab(text: "Chờ lấy hàng"),
         Tab(text: "Đang giao hàng"),
         Tab(text: "Hoàn tất"),
         Tab(text: "Đã huỷ"),

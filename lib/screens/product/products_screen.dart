@@ -40,53 +40,48 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       "100 sản phẩm".text.bold.size(16).make(),
-                      GestureDetector(
-                        onTap: () {
-                          print('Ahihi');
-                        },
-                        child: Row(
-                          children: [
-                            CustomDropdownButton2(
-                              buttonDecoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.gray300,
-                                ),
+                      Row(
+                        children: [
+                          CustomDropdownButton2(
+                            buttonDecoration: BoxDecoration(
+                              color: DesignCourseAppTheme.nearlyWhite,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8.0),
                               ),
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                size: 24,
+                              border: Border.all(
+                                color: Vx.gray300,
                               ),
-                              hint: 'Đơn vị tính',
-                              value: 'Giá cao tới thấp',
-                              onChanged: (String? value) {},
-                              dropdownItems: const [
-                                "Tất cả",
-                                "Mới nhất",
-                                "Cũ nhất",
-                                "Giá thấp tới cao",
-                                "Giá cao tới thấp",
-                                "Tên A-Z",
-                                "Tên Z-A",
-                              ],
                             ),
-                            8.widthBox,
-                            Wrap(
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.filter_list,
-                                  color: Vx.gray700,
-                                ),
-                                "Lọc".text.bold.color(Vx.gray700).make(),
-                              ],
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              size: 24,
                             ),
-                          ],
-                        ),
+                            hint: 'Đơn vị tính',
+                            value: 'Giá cao tới thấp',
+                            onChanged: (String? value) {},
+                            dropdownItems: const [
+                              "Tất cả",
+                              "Mới nhất",
+                              "Cũ nhất",
+                              "Giá thấp tới cao",
+                              "Giá cao tới thấp",
+                              "Tên A-Z",
+                              "Tên Z-A",
+                            ],
+                          ),
+                          8.widthBox,
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.filter_list,
+                                color: Vx.gray700,
+                              ),
+                              "Lọc".text.bold.color(Vx.gray700).make(),
+                            ],
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -120,12 +115,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
   PreferredSizeWidget appBar() {
     return AppBar(
       elevation: 0,
-      leadingWidth: 20,
+      leadingWidth: 30,
       leading: IconButton(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-            () => const MobileScreenLayout(),
+                () => const MobileScreenLayout(),
             transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 500),
           );
@@ -160,7 +156,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         IconButton(
           icon: Icon(Icons.shopping_cart, color: Colors.grey[700]),
           onPressed: () {
-            /* Open the shopping cart */
+
           },
         ),
       ],

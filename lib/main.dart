@@ -42,10 +42,10 @@ class MyApp extends StatelessWidget {
             mobileScreenLayout: MobileScreenLayout()),
         '/login': (_) => LoginScreen(),
         '/register': (_) => RegisterScreen(),
-        "/forgot-password": (_) => ForgotPasswordScreen(),
+        "/forgot-password": (_) => const ForgotPasswordScreen(),
         "/test": (_) => const ProductsScreen(),
         "/products": (_) => const ProductsScreen(),
-        // "/product-detail": (_) => ProductDetailScreen(),
+        // "/product-detail": (_) => const ProductDetailScreen(),
       },
     );
   }

@@ -32,10 +32,18 @@ class _SearchScreenState extends State<SearchScreen> {
   PreferredSizeWidget appBar() {
     return AppBar(
       elevation: 0,
+      leadingWidth: 30,
       leading: IconButton(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
-          Get.back();
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            Get.focusScope!.unfocus();
+          } else {
+            Get.back();
+          }
         },
       ),
       backgroundColor: Colors.white,
@@ -61,7 +69,9 @@ class _SearchScreenState extends State<SearchScreen> {
             },
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(
+                  Icons.search,
+                ),
                 suffixIcon: widget.keyword!.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
@@ -106,14 +116,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (var i = 0; i < 10; i++)
-                    _MenuItem(title: "${widget.keyword} $i", onTap: () {
-                      Get.to(
-                        () => ProductsScreen(keyword: "${widget.keyword} $i"),
-                        routeName: '/products?keyword=${widget.keyword} $i',
-                        transition: Transition.downToUp,
-                        duration: const Duration(milliseconds: 300),
-                      );
-                    }),
+                    _MenuItem(
+                        title: "${widget.keyword} $i",
+                        onTap: () {
+                          Get.to(
+                            () =>
+                                ProductsScreen(keyword: "${widget.keyword} $i"),
+                            routeName: '/products?keyword=${widget.keyword} $i',
+                            transition: Transition.downToUp,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        }),
                 ],
               ),
             ),
@@ -220,20 +233,33 @@ class _MenuItem extends StatelessWidget {
     return Material(
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: onTap ?? () {},
+        onTap: onTap ?? () {
+          print(title);
+            },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              title.text.size(16).gray700.make(),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: title.text
+                      .size(16)
+                      .gray700
+                      .overflow(TextOverflow.ellipsis)
+                      .make()),
               Row(
                 children: [
                   subTitle ?? const SizedBox.shrink(),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Vx.gray500,
-                    size: 20,
+                  InkWell(
+                    onTap: () {
+                      print(title);
+                    },
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Vx.gray500,
+                      size: 20,
+                    ),
                   ),
                 ],
               ),
