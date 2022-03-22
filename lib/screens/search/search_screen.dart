@@ -7,9 +7,8 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../utils/design_course_app_theme.dart';
 
 class SearchScreen extends StatefulWidget {
-  String? keyword;
-
-  SearchScreen({Key? key, this.keyword = ""}) : super(key: key);
+   String? keyword;
+   SearchScreen({Key? key, this.keyword = ""}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lixshop/models/productlist.dart';
 import 'package:lixshop/screens/home/home_banner_screen.dart';
 import 'package:lixshop/screens/home/home_products_type_screen.dart';
 import 'package:lixshop/screens/home/products_show_card_row_item.dart';
@@ -8,6 +9,7 @@ import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:lixshop/screens/search/search_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../utils/design_course_app_theme.dart';
 import '../cart/cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           SliverPersistentHeader(
             delegate: _SliverHeaderBar(
                 expandedHeight: _offset >= 580 ? 300 : 120,
-                minHeight: _offset >= 580 ? 200 : 96),
+                minHeight: _offset >= 580 ? 150 : 96),
             pinned: true,
           ),
           SliverToBoxAdapter(
@@ -177,51 +179,38 @@ class _SearchCard extends StatelessWidget {
               Radius.circular(5.0),
             ),
           ),
-          child: InkWell(
-            // onTap: () => Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const LoginScreen(),
-            //   ),
-            // ),
-            child: AnimatedContainer(
-              duration: const Duration(seconds: 1),
-              width: 150,
-              height: 50,
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Get.to(
-                      () => SearchScreen(),
-                      routeName: '/search',
-                      transition: Transition.downToUp,
-                      duration: const Duration(milliseconds: 300),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () => Get.to(
+                  () => SearchScreen(),
+                  routeName: '/search',
+                  transition: Transition.downToUp,
+                  duration: const Duration(milliseconds: 300),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.search,
+                      color: Colors.black,
                     ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.search,
-                          color: Colors.black,
-                        ),
-                        "Search for Bột giặt, Nước giặt..."
-                            .text
-                            .gray500
-                            .size(16)
-                            .make(),
-                      ],
-                    ),
-                  ),
-                  // 64.widthBox,
-                  IconButton(
-                    onPressed: () {
-                      print('Search for camera');
-                    },
-                    icon: Container(),
-                  )
-                ],
+                    "Search for Bột giặt, Nước giặt..."
+                        .text
+                        .gray500
+                        .size(16)
+                        .make(),
+                  ],
+                ),
               ),
-            ),
+              // 64.widthBox,
+              IconButton(
+                onPressed: () {
+                  print('Search for camera');
+                },
+                icon: Container(),
+              )
+            ],
           ),
         ),
       ),
@@ -239,70 +228,99 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Material(
-      child: InkWell(
-        onTap: () {},
-        child: Stack(
-          fit: StackFit.expand,
-          overflow: Overflow.visible,
-          clipBehavior: Clip.antiAlias,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: Stack(
-                children: [
-                  const SizedBox(
-                    width: double.infinity,
-                    child: _SearchCard(),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Opacity(
-                      opacity: (1 - shrinkOffset / expandedHeight),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        // alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Vx.green700,
-                                ),
-                                5.widthBox,
-                                "Giao tới: Số 3, đường số 2, khu phố 4,..."
-                                    .text
-                                    .bold
-                                    .size(16)
-                                    .green700
-                                    .make(),
-                              ],
-                            ),
-                            // 64.widthBox,
-                            const Icon(
-                              Icons.arrow_drop_down,
-                              color: Vx.green700,
-                            ),
-                          ],
-                        ),
+      child: Stack(
+        fit: StackFit.expand,
+        overflow: Overflow.visible,
+        clipBehavior: Clip.antiAlias,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child: Stack(
+              children: [
+                const SizedBox(
+                  width: double.infinity,
+                  child: _SearchCard(),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: Opacity(
+                    opacity: (1 - shrinkOffset / expandedHeight),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      // alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: Vx.green700,
+                              ),
+                              5.widthBox,
+                              "Giao tới: Số 3, đường số 2, khu phố 4,..."
+                                  .text
+                                  .bold
+                                  .size(16)
+                                  .green700
+                                  .make(),
+                            ],
+                          ),
+                          // 64.widthBox,
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            color: Vx.green700,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  minHeight >= 200
-                      ? const Align(
+                ),
+                minHeight >= 150
+                    ? SizedBox(
+                        child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: SizedBox(
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8.0),
                             width: double.infinity,
-                            child: _SearchCard(),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: restaurants
+                                    .map((e) => Container(
+                                          height: 50,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: RaisedButton(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            color: Colors.green,
+                                            animationDuration: const Duration(
+                                                milliseconds: 500),
+                                            onPressed: () {
+                                              Get.to(
+                                                () => const ProductsScreen(),
+                                              );
+                                            },
+                                            child: Text(
+                                              e['type'],
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
                           ),
-                        )
-                      : Container(),
-                ],
-              ),
+                        ),
+                      )
+                    : Container(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
