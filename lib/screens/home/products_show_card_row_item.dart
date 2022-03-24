@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/models/product.dart';
 
 import '../../models/productlist.dart';
 import '../../utils/design_course_app_theme.dart';

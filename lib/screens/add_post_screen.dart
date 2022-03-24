@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:lixshop/repositories/category/product_category_repositories.dart';
+import 'package:lixshop/repositories/product/product_repositories.dart';
 
-import '../models/product.dart';
+import '../repositories/products_data/products_data_repositories.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -14,12 +15,13 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  // Future<void> decodeJson() async {
-  //   String productss = await rootBundle.loadString('assets/json/products.json');
-  //   final productMap = await json.decode(productss);
-  //   var products = productMap.map((product) => Product.fromMap(product)).toList();
-  //   print(products[1].id);
-  // }
+  Future<void> decodeJson() async {
+    const String mainURL = "http://192.168.0.226:65/shopee/datas/CL327";
+    final Dio dio = Dio();
+
+    final Response response = await dio.get(mainURL);
+    print(jsonDecode(response.data)['cateSanPhams'][0]['brandSanPhams']);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
           Icons.upload,
         ),
         onPressed: () {
-          // decodeJson();
+          ProductCategoryRepository().getAllCategories().then((value) =>
+              print('${value.productCates!.length}'));
         },
       ),
     );

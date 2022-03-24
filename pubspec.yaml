@@ -55,6 +55,8 @@ dependencies:
   dropdown_button2:
   expandable:
   readmore:
+  flutter_dotenv:
+  dio:
 
 
 dev_dependencies:
@@ -86,6 +88,7 @@ flutter:
     - assets/logos/
     - assets/introduction_animation/
     - assets/json/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

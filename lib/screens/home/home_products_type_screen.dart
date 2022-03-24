@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lixshop/models/models.dart';
 import 'package:lixshop/models/productlist.dart';
+import 'package:lixshop/repositories/category/product_category_repositories.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
@@ -14,7 +16,95 @@ class HomeProductsTypeScreen extends StatefulWidget {
 class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // return Container(
+    //   width: double.infinity,
+    //   decoration: const BoxDecoration(
+    //     color: DesignCourseAppTheme.nearlyWhite,
+    //     borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    //     boxShadow: <BoxShadow>[
+    //       BoxShadow(
+    //           color: DesignCourseAppTheme.notWhite,
+    //           offset: Offset(1.1, 1.1),
+    //           blurRadius: 8.0),
+    //     ],
+    //   ),
+    //   child: Padding(
+    //     padding: const EdgeInsets.only(
+    //         left: 8.0, top: 4.0, bottom: 4.0),
+    //     child: SingleChildScrollView(
+    //       scrollDirection: Axis.horizontal,
+    //       child: Row(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: List.generate(
+    //           restaurants.length,
+    //               (index) => ProductTypeCard(
+    //             imagePath: restaurants[index]['img'],
+    //             title: restaurants[index]['type'],
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
+    return FutureBuilder<ProductCateModel>(
+      future: ProductCategoryRepository().getAllCategories(),
+      builder: (context,snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.error != null &&
+              snapshot.data!.error!.isNotEmpty) {
+            return _buildErrorWidget(snapshot.data!.error);
+          }
+          return _buildCategoriesWidget(snapshot.data!);
+        } else if (snapshot.hasError) {
+          return _buildErrorWidget(snapshot.error);
+        } else {
+          return _buildLoadingWidget();
+        }
+      },
+    );
+
+  }
+
+
+  Widget _buildLoadingWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              strokeWidth: 4.0,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //display error
+  Widget _buildErrorWidget(dynamic error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Something is wrong : $error',
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoriesWidget(ProductCateModel productCateModel/*TrailersModel data*/) {
+    // List<Video>? videos = data.trailers;
+      return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
         color: DesignCourseAppTheme.nearlyWhite,
@@ -34,10 +124,10 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              restaurants.length,
+              productCateModel.productCates!.length,
                   (index) => ProductTypeCard(
-                imagePath: restaurants[index]['img'],
-                title: restaurants[index]['type'],
+                imagePath: productCateModel.productCates![index].catePath??"",
+                title: productCateModel.productCates![index].cateName??"",
               ),
             ),
           ),
@@ -45,6 +135,16 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+
 }
 
 class ProductTypeCard extends StatefulWidget {
@@ -95,15 +195,17 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
-                  child: Image.network(
-                    widget.imagePath,
-                    height: 100,
-                    fit: BoxFit.cover,
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image.network(
+                      widget.imagePath,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -111,8 +213,9 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                 padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
                 child: Center(
                   child: Text(
-                    widget.title,
+                    (widget.title[0] +  widget.title.substring(1).toLowerCase()),
                     textAlign: TextAlign.left,
+                    maxLines: 1,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
