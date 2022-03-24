@@ -1,6 +1,5 @@
-
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/models/product/products_data.dart';
+import 'package:lixshop/models/product/products_data_model.dart';
 
 class ProductBrand {
   double? brandId;
@@ -8,7 +7,7 @@ class ProductBrand {
   String? brandName;
   String? brand;
   bool? newProd;
-  bool? promotionProd;
+  bool? saleProd;
   bool? hotProd;
 
   ProductBrand({
@@ -17,22 +16,30 @@ class ProductBrand {
     this.brandName,
     this.brand,
     this.newProd,
-    this.promotionProd,
+    this.saleProd,
     this.hotProd,
   });
 
   factory ProductBrand.fromJson(Map<String, dynamic> json) => ProductBrand(
         brandId: json["brandid"] == null ? null : json["brandid"].toDouble(),
         brandCode: json["brandcode"],
-        brandName: json["brandName"],
+        brandName: json["brandname"],
         brand: json["brand"],
         newProd: json["spmoi"],
-        promotionProd:
-            json["spkm"],
+        saleProd: json["spkm"],
         hotProd: json["spbanchay"],
       );
-}
 
+  Map<String, dynamic> toJson() => {
+        "brandid": brandId,
+        "brandcode": brandCode,
+        "brandname": brandName,
+        "brand": brand,
+        "spmoi": newProd,
+        "spkm": saleProd,
+        "spbanchay": hotProd,
+      };
+}
 
 class ProductBrandModel {
   List<ProductBrand>? productBrands;
@@ -46,22 +53,18 @@ class ProductBrandModel {
   factory ProductBrandModel.fromJson(Map<String, dynamic> json) {
     ProductsData productsData = ProductsData.fromJson(json);
     List<ProductCate> productCate =
-    productsData.productCate!.map((e) => e).toList();
+        productsData.productCate!.map((e) => e).toList();
     List<ProductBrand> productBrands = [];
     for (var element in productCate) {
       for (var element in element.productBrand!) {
         productBrands.add(element);
       }
     }
-    return ProductBrandModel(
-      productBrands: productBrands,
-      error: ""
-    );
+    return ProductBrandModel(productBrands: productBrands, error: "");
   }
 
-
   factory ProductBrandModel.withError(String error) => ProductBrandModel(
-    productBrands: [],
-    error: error,
-  );
+        productBrands: [],
+        error: error,
+      );
 }

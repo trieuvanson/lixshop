@@ -25,6 +25,16 @@ class ProductCate {
             : List<ProductBrand>.from(
                 json["brandSanPhams"].map((x) => ProductBrand.fromJson(x))),
       );
+
+  Map<String, dynamic> toJson() => {
+        "catid": cateId,
+        "catcode": cateCode,
+        "catname": cateName,
+        "catpath": catePath,
+        "brandSanPhams": productBrand == null
+            ? null
+            : List<dynamic>.from(productBrand!.map((x) => x.toJson())),
+      };
 }
 
 class ProductCateModel {

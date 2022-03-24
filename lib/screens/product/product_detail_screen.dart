@@ -7,25 +7,27 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../models/models.dart';
+import '../../repositories/repositories.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 import '../order_history/order_history_item_detail_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final String id;
-  final String img;
-  final String title;
-  final String address;
-  final String rating;
+  // final String id;
+  // final String img;
+  // final String title;
+  // final String address;
+  // final String rating;
 
-  const ProductDetailScreen(
-      {Key? key,
-      required this.id,
-      required this.img,
-      required this.title,
-      required this.address,
-      required this.rating})
-      : super(key: key);
+  const ProductDetailScreen({
+    Key? key,
+    // required this.id,
+    // required this.img,
+    // required this.title,
+    // required this.address,
+    // required this.rating
+  }) : super(key: key);
 
   @override
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
@@ -81,649 +83,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         appBar: _appBar(context),
         backgroundColor: Colors.transparent,
         bottomNavigationBar: _BottomNavigation(opacity3: opacity3),
-        body: SizedBox(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _ProductImage(id: widget.id, img: widget.img),
-                Container(
-                  decoration: BoxDecoration(
-                    color: DesignCourseAppTheme.nearlyWhite,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(32.0),
-                        topRight: Radius.circular(32.0)),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                          offset: const Offset(1.1, 1.1),
-                          blurRadius: 10.0),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 16.0, left: 8, right: 8),
-                        child: Text(
-                          widget.title,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.darkerText,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 8, right: 8, bottom: 8, top: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'đ${widget.address}',
-                              textAlign: TextAlign.left,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                letterSpacing: 0.27,
-                                color: Vx.red700,
-                              ),
-                            ),
-                            // SizedBox(
-                            //   child: Row(
-                            //     children: <Widget>[
-                            //       RatingBarIndicator(
-                            //         rating: double.parse(widget.rating),
-                            //         itemBuilder: (context, index) => const Icon(
-                            //           Icons.star,
-                            //           color: Colors.yellow,
-                            //         ),
-                            //         itemCount: 5,
-                            //         itemSize: 20.0,
-                            //         unratedColor: Colors.amber.withAlpha(50),
-                            //         direction: Axis.horizontal,
-                            //       ),
-                            //       Text(
-                            //         widget.rating,
-                            //         textAlign: TextAlign.left,
-                            //         style: const TextStyle(
-                            //           fontWeight: FontWeight.w200,
-                            //           fontSize: 16,
-                            //           letterSpacing: 0.27,
-                            //           color: DesignCourseAppTheme.grey,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // )
-                          ],
-                        ),
-                      ),
-                      10.heightBox,
-                      //Size
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child: Row(
-                                      children: [
-                                        "Chọn loại hàng ".text.bold.make(),
-                                        "(1 sản phẩm, 4 hình thức)"
-                                            .text
-                                            .italic
-                                            .make(),
-                                      ],
-                                    ),
-                                  ),
-                                  // 64.widthBox,
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for (var i = 0; i < 10; i++)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: DesignCourseAppTheme
-                                                  .nearlyWhite,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(8.0)),
-                                              border: Border.all(
-                                                  color: Vx.green500)),
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              splashColor: Colors.white24,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(8.0)),
-                                              onTap: () {
-                                                print('Tap ${++i}');
-                                                setState(() {
-                                                  // categoryType = categoryTypeData;
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8,
-                                                    bottom: 8,
-                                                    left: 8,
-                                                    right: 8),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Size ${i + 1}",
-                                                    textAlign: TextAlign.left,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 14,
-                                                      letterSpacing: 0.27,
-                                                      color: Vx.green500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     Navigator.of(context).push(
-                      //       HeroDialogRoute(
-                      //           builder: (context) => Column(
-                      //                 children: [
-                      //                   Flexible(child: Container(), flex: 2),
-                      //                   const VoucherPopup(),
-                      //                 ],
-                      //               ),
-                      //           fullscreenDialog: false),
-                      //     );
-                      //   },
-                      //   child: Container(
-                      //     width: MediaQuery.of(context).size.width,
-                      //     decoration: BoxDecoration(
-                      //       color: DesignCourseAppTheme.nearlyWhite,
-                      //       borderRadius:
-                      //           const BorderRadius.all(Radius.circular(8.0)),
-                      //       boxShadow: <BoxShadow>[
-                      //         BoxShadow(
-                      //             color: DesignCourseAppTheme.grey
-                      //                 .withOpacity(0.2),
-                      //             offset: const Offset(1.1, 1.1),
-                      //             blurRadius: 8.0),
-                      //       ],
-                      //     ),
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.only(
-                      //           left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                      //       child: Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           Row(
-                      //             mainAxisAlignment:
-                      //                 MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               SizedBox(
-                      //                 child: "Khuyến mãi sản phẩm".text.make(),
-                      //               ),
-                      //               // 64.widthBox,
-                      //               const Icon(
-                      //                 Icons.arrow_forward_ios,
-                      //                 size: 16,
-                      //               ),
-                      //             ],
-                      //           ),
-                      //           const SizedBox(
-                      //             height: 8,
-                      //           ),
-                      //           Container(
-                      //             width: MediaQuery.of(context).size.width,
-                      //             alignment: Alignment.centerLeft,
-                      //             height: 20,
-                      //             decoration: BoxDecoration(
-                      //               color: Vx.green700.withOpacity(0.4),
-                      //             ),
-                      //             child: "Đang áp dụng hình thức 1"
-                      //                 .text
-                      //                 .gray700
-                      //                 .make(),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      10.heightBox,
-                      DefaultTabController(
-                        length: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TabBar(
-                              onTap: (index) {
-                                setState(() {
-                                  _selectedTapbar = index;
-                                });
-                              },
-                              physics: const BouncingScrollPhysics(),
-                              isScrollable: true,
-                              labelColor: Vx.green500,
-                              unselectedLabelColor: Vx.gray500,
-                              labelStyle: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                              indicator: const UnderlineTabIndicator(
-                                borderSide: BorderSide(
-                                  width: 3,
-                                  color: Vx.green500,
-                                ),
-                              ),
-                              tabs: const [
-                                Tab(text: "Thông tin sản phẩm"),
-                                Tab(text: "Khuyến mãi"),
-                              ],
-                            ),
-                            Builder(builder: (_) {
-                              if (_selectedTapbar == 0) {
-                                return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: DesignCourseAppTheme.nearlyWhite,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(8.0)),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: DesignCourseAppTheme.grey
-                                              .withOpacity(0.2),
-                                          offset: const Offset(1.1, 1.1),
-                                          blurRadius: 8.0),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0,
-                                        right: 8.0,
-                                        top: 12.0,
-                                        bottom: 12.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          child: "Thông tin chi tiết"
-                                              .text
-                                              .bold
-                                              .make(),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Divider(
-                                          color: DesignCourseAppTheme.grey
-                                              .withOpacity(0.6),
-                                          height: 1,
-                                        ),
-                                        for (var i = 0; i < 4; i++)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: Text(
-                                                    'Tồn kho ${i + 1}',
-                                                    style: const TextStyle(
-                                                      color:
-                                                          DesignCourseAppTheme
-                                                              .darkerText,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      136,
-                                                  child: Text(
-                                                    "Đây là văn bản test $i",
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        const _ExpandAbleDescription(),
-                                      ],
-                                    ),
-                                  ),
-                                ); //1st custom tabBarView
-                              } else if (_selectedTapbar == 1) {
-                                return Container(); //2nd tabView
-                              } else {
-                                return Container(); //3rd tabView
-                              }
-                            }),
-                          ],
-                        ),
-                      ),
-
-                      //Đoạn này dành cho comment
-                      // 10.heightBox,
-                      /*  Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child:
-                                        "Đoạn này là comment".text.bold.make(),
-                                  ),
-                                  Row(
-                                    children: [
-                                      "Xem tất cả".text.green600.make(),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Vx.green600,
-                                        size: 16,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),*/
-                      //Đoạn này dành cho các sản phẩm cùng loại(Bột giặt, nước giặt,...)
-                      // 10.heightBox,
-                      10.heightBox,
-                      //Sản phẩm tương tự (Hương chanh, hương bưởi...)
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child: "Sản phẩm tương tự".text.bold.make(),
-                                  ),
-                                  Row(
-                                    children: [
-                                      "Xem tất cả".text.green600.make(),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Vx.green600,
-                                        size: 16,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: List.generate(
-                                      6,
-                                      (index) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: Container(
-                                              width: 100,
-                                              height: 140,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color: Vx.gray700
-                                                        .withOpacity(0.2),
-                                                    width: 1),
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(16),
-                                                        topRight:
-                                                            Radius.circular(8),
-                                                        bottomLeft:
-                                                            Radius.circular(8),
-                                                        bottomRight:
-                                                            Radius.circular(8)),
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                      color:
-                                                          DesignCourseAppTheme
-                                                              .grey
-                                                              .withOpacity(0.2),
-                                                      offset: const Offset(
-                                                          1.1, 1.1),
-                                                      blurRadius: 8.0),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(16.0),
-                                                    ),
-                                                    child: Image.network(
-                                                      widget.img,
-                                                      width: double.infinity,
-                                                      height: 80,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 4.0,
-                                                            left: 4,
-                                                            right: 8),
-                                                    child: Text(
-                                                      widget.title,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 2,
-                                                      textAlign: TextAlign.left,
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Flexible(child: Container()),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 4.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 4),
-                                                          child: Text(
-                                                            widget.address,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 15,
-                                                              letterSpacing:
-                                                                  0.27,
-                                                              color: Vx.red600,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )).toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      /*      Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color:
-                                    DesignCourseAppTheme.grey.withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 8.0),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                child: "Có thể bạn cần".text.bold.make(),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              AlignedGridView.count(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 4,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                crossAxisSpacing: 8,
-                                itemBuilder: (context, index) {
-                                  Map restaurant = restaurants.filter((element) => element['id'] != widget.id).toList()[index];
-                                  return ProductCardItem(
-                                    id: restaurant['id'],
-                                    img: restaurant['img'],
-                                    title: restaurant['title'],
-                                    address: restaurant['address'],
-                                    rating: restaurant['rating'],
-                                  );
-                                },
-                                itemCount: restaurants.length-1,
-
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),*/
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        body: FutureBuilder<ProductDetailsDataModel>(
+          future: ProductDetailsRepositories().getProductDetails(5, [5]),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.error != null &&
+                  snapshot.data!.error!.isNotEmpty) {
+                return _buildErrorWidget(snapshot.data!.error);
+              }
+              return _buildCategoriesWidget(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return _buildErrorWidget(snapshot.error);
+            } else {
+              return _buildLoadingWidget();
+            }
+          },
         ),
       ),
     );
@@ -885,6 +259,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         ],
       ),
     );
+  }
+
+  Widget _buildLoadingWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              strokeWidth: 4.0,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //display error
+  Widget _buildErrorWidget(dynamic error) {
+    print('Error: $error');
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text(
+            'Có lỗi xảy ra',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoriesWidget(
+      ProductDetailsDataModel detailsDataModel /*TrailersModel data*/) {
+    return Text(detailsDataModel.data!.sizes.toString());
   }
 }
 

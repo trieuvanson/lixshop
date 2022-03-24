@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/models/productlist.dart';
 import 'package:lixshop/repositories/category/product_category_repositories.dart';
+import 'package:lixshop/repositories/products_data/products_data_repositories.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
@@ -16,38 +16,8 @@ class HomeProductsTypeScreen extends StatefulWidget {
 class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   width: double.infinity,
-    //   decoration: const BoxDecoration(
-    //     color: DesignCourseAppTheme.nearlyWhite,
-    //     borderRadius: BorderRadius.all(Radius.circular(8.0)),
-    //     boxShadow: <BoxShadow>[
-    //       BoxShadow(
-    //           color: DesignCourseAppTheme.notWhite,
-    //           offset: Offset(1.1, 1.1),
-    //           blurRadius: 8.0),
-    //     ],
-    //   ),
-    //   child: Padding(
-    //     padding: const EdgeInsets.only(
-    //         left: 8.0, top: 4.0, bottom: 4.0),
-    //     child: SingleChildScrollView(
-    //       scrollDirection: Axis.horizontal,
-    //       child: Row(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: List.generate(
-    //           restaurants.length,
-    //               (index) => ProductTypeCard(
-    //             imagePath: restaurants[index]['img'],
-    //             title: restaurants[index]['type'],
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
-    return FutureBuilder<ProductCateModel>(
-      future: ProductCategoryRepository().getAllCategories(),
+    return FutureBuilder<ProductsDataModel>(
+      future: ProductsDataRepositories().getProductsData(),
       builder: (context,snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.error != null &&
@@ -75,7 +45,7 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
             width: 25.0,
             height: 25.0,
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               strokeWidth: 4.0,
             ),
           )
@@ -89,12 +59,12 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: const <Widget>[
           Text(
-            'Something is wrong : $error',
-            style: const TextStyle(
+            'Có lỗi xảy ra',
+            style: TextStyle(
               fontSize: 20,
-              color: Colors.white,
+              color: Colors.black,
             ),
           )
         ],
@@ -102,8 +72,9 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
     );
   }
 
-  Widget _buildCategoriesWidget(ProductCateModel productCateModel/*TrailersModel data*/) {
+  Widget _buildCategoriesWidget(ProductsDataModel productsDataModel/*TrailersModel data*/) {
     // List<Video>? videos = data.trailers;
+    ProductCateModel productCateModel = ProductCategoryRepository().getAllCategories2(productsDataModel);
       return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
