@@ -16,10 +16,6 @@ class VoucherMethod {
       typeform: json["typeprom"],
       voucherMethodDetails: List<VoucherMethodDetails>.from(json["hinhThucKMDetailDTOs"]
           .map((x) => VoucherMethodDetails.fromJson(x)))
-    // json["hinhThucKMDetailDTOs"] == []
-    //     ? null
-    //     : List<VoucherMethodDetails>.from(json["hinhThucKMDetailDTOs"]
-    //         .map((x) => VoucherMethodDetails.fromJson(x))),
   );
 }
 

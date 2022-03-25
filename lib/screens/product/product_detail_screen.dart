@@ -83,7 +83,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: FutureBuilder<ProductDetailsDataModel>(
-        future: ProductDetailsDataRepository().getProductDetails(5, [5]),
+        future:
+            ProductDetailsDataRepository().getProductDetails(458, ["5", "233"]),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.error != null &&
@@ -96,7 +97,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
               opacity3: opacity3,
             );
           } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error);
+            return _buildErrorWidget(snapshot.data!.error);
           } else {
             return _buildLoadingWidget();
           }
@@ -148,10 +149,11 @@ class _BuildProductDetailWidget extends StatefulWidget {
   int selectTabIndex;
   final double opacity3;
 
-  _BuildProductDetailWidget({Key? key,
-    required this.detailsDataModel,
-    required this.selectTabIndex,
-    required this.opacity3})
+  _BuildProductDetailWidget(
+      {Key? key,
+      required this.detailsDataModel,
+      required this.selectTabIndex,
+      required this.opacity3})
       : super(key: key);
 
   @override
@@ -162,20 +164,29 @@ class _BuildProductDetailWidget extends StatefulWidget {
 class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
   int index = 0;
   var productDetails;
-  var product;
+  var products;
+  int selectProduct = 0;
 
   @override
   void initState() {
-    productDetails =
-        ProductDetailsRepository().getProductDetails(widget.detailsDataModel, 2);
-    product = productDetails.productDetails![index];
+    productDetails = ProductDetailsRepository()
+        .getProductDetails(widget.detailsDataModel, index);
+    products = productDetails.productDetails;
     super.initState();
   }
 
   void changeProductSize(int index) {
     setState(() {
       this.index = index;
-      product = productDetails.productDetails![index];
+      selectProduct = 0;
+      productDetails = ProductDetailsRepository()
+          .getProductDetails(widget.detailsDataModel, index);
+      products = productDetails.productDetails;
+    });
+  }
+  void changeProduct(int index) {
+    setState(() {
+      selectProduct = index;
     });
   }
 
@@ -185,13 +196,13 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
       resizeToAvoidBottomInset: true,
       appBar: _appBar(context),
       backgroundColor: Colors.transparent,
-      bottomNavigationBar:
-      _BottomNavigation(opacity3: widget.opacity3, productDetails: product),
+      bottomNavigationBar: _BottomNavigation(
+          opacity3: widget.opacity3, productDetails: products[selectProduct]),
       body: SizedBox(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // _ProductImage(id: widget.id, img: widget.img),
+              _ProductImage(id: products[selectProduct].code, img: products[selectProduct].pathImg??""),
               Container(
                 decoration: BoxDecoration(
                   color: DesignCourseAppTheme.nearlyWhite,
@@ -210,9 +221,9 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                   children: [
                     Padding(
                       padding:
-                      const EdgeInsets.only(top: 16.0, left: 8, right: 8),
+                          const EdgeInsets.only(top: 16.0, left: 8, right: 8),
                       child: Text(
-                        product.name ?? "",
+                        products[selectProduct].name ?? "",
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
@@ -229,7 +240,7 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            'đ${product.price ?? ""}',
+                            'đ${products[selectProduct].price ?? ""}',
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -271,14 +282,11 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                     10.heightBox,
                     //Size
                     Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: DesignCourseAppTheme.nearlyWhite,
                         borderRadius:
-                        const BorderRadius.all(Radius.circular(8.0)),
+                            const BorderRadius.all(Radius.circular(8.0)),
                         boxShadow: <BoxShadow>[
                           BoxShadow(
                               color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -321,13 +329,13 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                               child: Row(
                                 children: [
                                   for (var i = 0;
-                                  i <
-                                      widget
-                                          .detailsDataModel
-                                          .productDetailsData!
-                                          .sizes!
-                                          .length;
-                                  i++)
+                                      i <
+                                          widget
+                                              .detailsDataModel
+                                              .productDetailsData!
+                                              .sizes!
+                                              .length;
+                                      i++)
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -336,19 +344,19 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                                             color: index == i
                                                 ? Vx.green500
                                                 : DesignCourseAppTheme
-                                                .nearlyWhite,
+                                                    .nearlyWhite,
                                             borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(8.0)),
+                                                const BorderRadius.all(
+                                                    Radius.circular(8.0)),
                                             border:
-                                            Border.all(color: Vx.green500)),
+                                                Border.all(color: Vx.green500)),
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
                                             splashColor: Colors.white24,
                                             borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(8.0)),
+                                                const BorderRadius.all(
+                                                    Radius.circular(8.0)),
                                             onTap: () {
                                               changeProductSize(i);
                                             },
@@ -412,17 +420,14 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                               ),
                             ),
                             tabs: const [
-                              Tab(text: "Thông tin sản phẩm"),
                               Tab(text: "Khuyến mãi"),
+                              Tab(text: "Thông tin sản phẩm"),
                             ],
                           ),
                           Builder(builder: (_) {
-                            if (widget.selectTabIndex == 0) {
+                            if (widget.selectTabIndex == 1) {
                               return Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
+                                width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
                                   color: DesignCourseAppTheme.nearlyWhite,
                                   borderRadius: const BorderRadius.all(
@@ -443,9 +448,9 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                                       bottom: 12.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
                                         child: "Thông tin chi tiết"
@@ -467,9 +472,9 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                                               vertical: 8.0),
                                           child: Row(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                                CrossAxisAlignment.center,
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               SizedBox(
                                                 width: 120,
@@ -482,10 +487,9 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: MediaQuery
-                                                    .of(context)
-                                                    .size
-                                                    .width -
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
                                                     136,
                                                 child: Text(
                                                   "Đây là văn bản test $i",
@@ -500,7 +504,11 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                                 ),
                               ); //1st custom tabBarView
                             } else {
-                              return _buildVoucher(product); //2nd tabView
+                              return _buildVoucher(
+                                products[selectProduct],
+                                products,
+                                selectProduct,
+                              ); //2nd tabView
                             }
                           }),
                         ],
@@ -516,19 +524,195 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
     );
   }
 
-
-  Widget _buildVoucher(ProductDetail productDetail) {
-    var _voucher = VoucherMethodRepository().getVoucherMethodsByProduct(
-        product);
-    print('_voucher: ${_voucher.voucherMethods!.length}');
-    return _voucher.voucherMethods!.isNotEmpty? Column(
-      children: List.generate(_voucher.voucherMethods!.length, (index) =>
-          Text('Hình thức khuyến mãi ${_voucher.voucherMethods![index].typeform}')),
-    ) : const Text("Không có hình thức khuyến mãi nào!");
+  Widget _buildVoucher(ProductDetail productDetail,
+      List<ProductDetail> products, int selectedProduct) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var product in products)
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8.0),
+                topRight: Radius.circular(8.0),
+                bottomLeft: Radius.circular(8.0),
+                bottomRight: Radius.circular(8.0),
+              ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                    offset: const Offset(1.1, 1.1),
+                    blurRadius: 10.0),
+              ],
+            ),
+            padding:
+                const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 0),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    changeProduct(products.indexOf(product));
+                  });
+                  print(selectedProduct);
+                  print('product: ${products.indexOf(product)}');
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${product.name}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Builder(builder: (_) {
+                      var vouchers = VoucherMethodRepository()
+                          .getVoucherMethodsByProduct(product);
+                      if (!vouchers.voucherMethods!.isNotEmpty) {
+                        return Container(
+                          width: MediaQuery.of(_).size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              topRight: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                            ),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: DesignCourseAppTheme.grey
+                                      .withOpacity(0.2),
+                                  offset: const Offset(1.1, 1.1),
+                                  blurRadius: 10.0),
+                            ],
+                          ),
+                          padding: const EdgeInsets.only(
+                              top: 16, left: 16, right: 16, bottom: 16),
+                          child: const Text(
+                            'Không có hình thức khuyến mãi nào',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        );
+                      }
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (var voucher in vouchers.voucherMethods!)
+                            Container(
+                              width: MediaQuery.of(_).size.width,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8.0),
+                                  topRight: Radius.circular(8.0),
+                                  bottomLeft: Radius.circular(8.0),
+                                  bottomRight: Radius.circular(8.0),
+                                ),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: DesignCourseAppTheme.grey
+                                          .withOpacity(0.2),
+                                      offset: const Offset(1.1, 1.1),
+                                      blurRadius: 10.0),
+                                ],
+                              ),
+                              padding: const EdgeInsets.only(
+                                  top: 16, left: 16, right: 16, bottom: 16),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Hình thức ${voucher.typeform}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Builder(builder: (_) {
+                                    var voucherDetails =
+                                        VoucherMethodDetailsRepository()
+                                            .getVoucherMethodDetailsByMethod(
+                                                voucher);
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        for (var detail in voucherDetails
+                                            .voucherMethodDetails!)
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8.0),
+                                                topRight: Radius.circular(8.0),
+                                                bottomLeft:
+                                                    Radius.circular(8.0),
+                                                bottomRight:
+                                                    Radius.circular(8.0),
+                                              ),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    color: DesignCourseAppTheme
+                                                        .grey
+                                                        .withOpacity(0.2),
+                                                    offset:
+                                                        const Offset(1.1, 1.1),
+                                                    blurRadius: 10.0),
+                                              ],
+                                            ),
+                                            padding: const EdgeInsets.only(
+                                                top: 16,
+                                                left: 16,
+                                                right: 16,
+                                                bottom: 16),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '${detail.name}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${detail.value}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    })
+                  ],
+                ),
+              ),
+            ),
+          )
+      ],
+    );
   }
 }
-
-
 class _ProductImage extends StatelessWidget {
   final String id;
   final String img;
@@ -546,14 +730,8 @@ class _ProductImage extends StatelessWidget {
           img,
           errorBuilder: (context, error, stackTrace) {
             return SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 2,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2,
               child: const Center(
                 child: CircularProgressIndicator(
                   semanticsLabel: 'Loading',
@@ -617,19 +795,17 @@ PreferredSizeWidget _appBar(BuildContext context) {
           customItemsHeight: 8,
           items: [
             ...MenuItems.firstItems.map(
-                  (item) =>
-                  DropdownMenuItem<MenuItem>(
-                    value: item,
-                    child: MenuItems.buildItem(item),
-                  ),
+              (item) => DropdownMenuItem<MenuItem>(
+                value: item,
+                child: MenuItems.buildItem(item),
+              ),
             ),
             const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
             ...MenuItems.secondItems.map(
-                  (item) =>
-                  DropdownMenuItem<MenuItem>(
-                    value: item,
-                    child: MenuItems.buildItem(item),
-                  ),
+              (item) => DropdownMenuItem<MenuItem>(
+                value: item,
+                child: MenuItems.buildItem(item),
+              ),
             ),
           ],
           onChanged: (value) {
@@ -662,19 +838,14 @@ class _BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: MediaQuery
-          .of(context)
-          .viewInsets,
+      margin: MediaQuery.of(context).viewInsets,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 500),
         opacity: opacity3,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -889,7 +1060,7 @@ class MenuItems {
   static const home = MenuItem(text: 'Quay lại trang chủ', icon: Icons.home);
   static const share = MenuItem(text: 'Chia sẻ sản phẩm', icon: Icons.share);
   static const reports =
-  MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
+      MenuItem(text: 'Báo cáo sản phẩm', icon: Icons.bug_report_sharp);
   static const logout = MenuItem(text: 'Đăng xuất', icon: Icons.logout);
 
   static Widget buildItem(MenuItem item) {
@@ -912,16 +1083,16 @@ class MenuItems {
   static onChanged(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.home:
-      //Do something
+        //Do something
         break;
       case MenuItems.reports:
-      //Do something
+        //Do something
         break;
       case MenuItems.share:
-      //Do something
+        //Do something
         break;
       case MenuItems.logout:
-      //Do something
+        //Do something
         break;
     }
   }

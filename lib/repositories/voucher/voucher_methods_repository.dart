@@ -14,7 +14,6 @@ class VoucherMethodRepository {
       for (var element in productDetail.voucherMethods!) {
         voucherMethods.add(element);
       }
-
       return VoucherMethodModel(
         error: "",
         voucherMethods: voucherMethods,

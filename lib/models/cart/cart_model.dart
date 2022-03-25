@@ -2,13 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:lixshop/models/models.dart';
 
 class Cart {
-  final ProductDetail? productDetail;
-  final int? quantity;
+   ProductDetail? productDetail;
+   int? quantity;
 
-  const Cart({
-    this.productDetail,
-    this.quantity,
-  });
+   Cart({this.productDetail, this.quantity});
 
   @override
   String toString() {

@@ -33,38 +33,41 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _addToCart(AddToCart event, Emitter<CartState> emit) async {
     if (state is CartLoaded) {
       try {
-        List<Cart> carts = (state as CartLoaded).cartModel.cart;
+        //Nếu tồn tại thì cập nhật, ngược lại thêm vào
+        List<Cart> cart = (state as CartLoaded).cartModel.cart;
+        List<Cart> currentCart = cart.isNotEmpty ? cart : [];
 
-        // if (carts.isNotEmpty) {
-        //   Cart cart = carts.firstWhere((element) => element.id == event.cart.id);
-        //   if (cart != null) {
-        //     cart.quantity += event.cart.quantity;
-        //   } else {
-        //     carts.add(event.cart);
-        //   }
-        // } else {
-        //   carts.add(event.cart);
-        // }
-        //
-        // }
+        Cart? cartItem = currentCart.firstWhere(
+            (item) =>
+                item.productDetail!.code == event.cart.productDetail!.code,
+            orElse: () => Cart(productDetail: null, quantity: 0));
 
-        emit(
-          CartLoaded(
-            cartModel: CartModel(
-              cart: List.from((state as CartLoaded).cartModel.cart)
-                ..add(event.cart),
-            ),
-          ),
-        );
-      //  Kiểm tra list có sản phẩm nào chưa
-      //  Nếu chưa có thì Add => ok
+        if (cartItem.productDetail != null) {
+          cartItem.quantity = cartItem.quantity! + event.cart.quantity!;
+        } else {
+          currentCart.add(event.cart);
+        }
+
+        emit(CartLoaded(cartModel: CartModel(cart: currentCart)));
+
+        // emit(
+        //   CartLoaded(
+        //     cartModel: CartModel(
+        //       cart: List.from((state as CartLoaded).cartModel.cart)
+        //         ..add(event.cart),
+        //     ),
+        //   ),
+        // );
+        //  Kiểm tra list có sản phẩm nào chưa
+        //  Nếu chưa có thì Add => ok
         //  List có sản phẩm
-      //  Kiểm tra xem list có tồn tại sản phẩm đó không
+        //  Kiểm tra xem list có tồn tại sản phẩm đó không
         //  Nếu có kiểm tra đvt
         //  Trùng thì cộng vào
-      //  Không thì thêm vào
+        //  Không thì thêm vào
         //  Néu có tăng số lượng
         //  Chưa có thì thêm vào
+        //  Có thì tăng số lượng
       } on Exception {
         emit(CartError());
       }

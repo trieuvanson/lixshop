@@ -26,8 +26,6 @@ class ProductDetail {
       price: json["gia"],
       voucherMethods: List<VoucherMethod>.from(
           json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x)))
-    // ['hinhThucKMDTOs'] != []? List<VoucherMethod>.from(
-    //     json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x))) : [],
   );
 }
 
