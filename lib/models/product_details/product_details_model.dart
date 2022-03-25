@@ -19,14 +19,16 @@ class ProductDetail {
 
   // FromJson
   factory ProductDetail.fromJson(Map<String, dynamic> json) => ProductDetail(
-        idAgent: json["idagent"],
-        code: json["code"],
-        name: json["name"],
-        pathImg: json["pathImg"],
-        price: json["gia"],
-        voucherMethods: List<VoucherMethod>.from(
-            json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x))),
-      );
+      idAgent: json["idagent"],
+      code: json["code"],
+      name: json["name"],
+      pathImg: json["pathImg"],
+      price: json["gia"],
+      voucherMethods: List<VoucherMethod>.from(
+          json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x)))
+    // ['hinhThucKMDTOs'] != []? List<VoucherMethod>.from(
+    //     json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x))) : [],
+  );
 }
 
 class ProductDetailsModel {

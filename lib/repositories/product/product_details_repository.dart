@@ -41,15 +41,20 @@ class ProductDetailsRepository {
 //       };
 
   ProductDetailsModel getProductDetails(
-      ProductDetailsDataModel productDetailsDataModel) {
+      ProductDetailsDataModel productDetailsDataModel, int index) {
     try {
       List<ProductDetail> productDetails = [];
       ProductSizesModel productSizesModel =
-          ProductSizesRepository().getProductSizes(productDetailsDataModel);
+      ProductSizesRepository().getProductSizes(productDetailsDataModel);
       for (var element in productSizesModel.productSizes!) {
         productDetails.addAll(element.productDetails!);
       }
-      print(productDetails.length);
+      print(productSizesModel.productSizes![2].size);
+      productDetails.addAll(productSizesModel.productSizes![2].productDetails!);
+      for (var element in productDetails) {
+        print(element.name);
+        print(element.idAgent);
+      }
       return ProductDetailsModel(
         error: "",
         productDetails: productDetails,

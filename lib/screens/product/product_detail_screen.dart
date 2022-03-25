@@ -167,8 +167,7 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
   @override
   void initState() {
     productDetails =
-        ProductDetailsRepository().getProductDetails(widget.detailsDataModel);
-    print(productDetails.productDetails!.length);
+        ProductDetailsRepository().getProductDetails(widget.detailsDataModel, 2);
     product = productDetails.productDetails![index];
     super.initState();
   }
@@ -176,7 +175,6 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
   void changeProductSize(int index) {
     setState(() {
       this.index = index;
-      print(productDetails.productDetails!.length);
       product = productDetails.productDetails![index];
     });
   }

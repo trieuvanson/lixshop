@@ -13,12 +13,14 @@ class VoucherMethod {
   // from Json
 
   factory VoucherMethod.fromJson(Map<String, dynamic> json) => VoucherMethod(
-        typeform: json["typeprom"],
-        voucherMethodDetails: json["hinhThucKMDetailDTOs"] == null
-            ? null
-            : List<VoucherMethodDetails>.from(json["hinhThucKMDetailDTOs"]
-                .map((x) => VoucherMethodDetails.fromJson(x))),
-      );
+      typeform: json["typeprom"],
+      voucherMethodDetails: List<VoucherMethodDetails>.from(json["hinhThucKMDetailDTOs"]
+          .map((x) => VoucherMethodDetails.fromJson(x)))
+    // json["hinhThucKMDetailDTOs"] == []
+    //     ? null
+    //     : List<VoucherMethodDetails>.from(json["hinhThucKMDetailDTOs"]
+    //         .map((x) => VoucherMethodDetails.fromJson(x))),
+  );
 }
 
 class VoucherMethodModel {
@@ -37,10 +39,10 @@ class VoucherMethodModel {
     for(var item in productDetailsModel.productDetails!) {
       voucherMethods.addAll(item.voucherMethods!);
     }
-  return VoucherMethodModel(
-    voucherMethods: voucherMethods,
-    error: json["error"],
-  );
+    return VoucherMethodModel(
+      voucherMethods: voucherMethods,
+      error: json["error"],
+    );
   }
 
 
