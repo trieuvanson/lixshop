@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
+
 import '../screens/product/product_detail_screen.dart';
 import '../utils/design_course_app_theme.dart';
 

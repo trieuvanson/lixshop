@@ -11,32 +11,29 @@ class ProductDetailsData {
     this.productSizesList,
   });
 
-  factory ProductDetailsData.fromJson(Map<String, dynamic> json) => ProductDetailsData(
-    idBrand: json["idBrand"],
-    sizes: List<String>.from(json["sizes"].map((x) => x)),
-    productSizesList: List<ProductSizes>.from(json["sizeSanPhamDTOs"].map((x) => ProductSizes.fromJson(x))),
-  );
-
+  factory ProductDetailsData.fromJson(Map<String, dynamic> json) =>
+      ProductDetailsData(
+        idBrand: json["idBrand"],
+        sizes: List<String>.from(json["sizes"].map((x) => x)),
+        productSizesList: List<ProductSizes>.from(
+            json["sizeSanPhamDTOs"].map((x) => ProductSizes.fromJson(x))),
+      );
 }
 
 class ProductDetailsDataModel {
-  ProductDetailsData? data;
+  ProductDetailsData? productDetailsData;
   String? error;
 
   ProductDetailsDataModel({
-    this.data,
+    this.productDetailsData,
     this.error,
   });
 
-  factory ProductDetailsDataModel.fromJson(Map<String, dynamic> json) => ProductDetailsDataModel(
-    data: ProductDetailsData.fromJson(json['dt']),
-    error: ""
-  );
+  factory ProductDetailsDataModel.fromJson(Map<String, dynamic> json) =>
+      ProductDetailsDataModel(
+          productDetailsData: ProductDetailsData.fromJson(json['dt']),
+          error: "");
 
-  factory ProductDetailsDataModel.withError(String error) => ProductDetailsDataModel(
-    data: null,
-    error: error
-  );
-
+  factory ProductDetailsDataModel.withError(String error) =>
+      ProductDetailsDataModel(productDetailsData: null, error: error);
 }
-

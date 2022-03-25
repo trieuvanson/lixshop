@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/models/productlist.dart';
-import 'package:lixshop/repositories/product/product_details_repositories.dart';
+import 'package:lixshop/repositories/product/product_details_repository.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:velocity_x/velocity_x.dart';
 

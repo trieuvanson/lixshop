@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/repositories/category/product_category_repositories.dart';
+import 'package:lixshop/repositories/category/product_category_repository.dart';
 import 'package:lixshop/repositories/products_data/products_data_repositories.dart';
 
 import '../../utils/design_course_app_theme.dart';

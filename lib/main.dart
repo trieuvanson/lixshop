@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'responsive/mobile_screen_layout.dart';
@@ -29,27 +31,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Lix Shop',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color(0xFFFFC107),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => CartBloc()
+            ..add(
+              LoadCart(),
+            ),
+        ),
+      ],
+      child: GetMaterialApp(
+        title: 'Lix Shop',
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: ThemeData.light().copyWith(
+          primaryColor: const Color(0xFFFFC107),
+        ),
+        darkTheme: ThemeData.dark(),
+        initialRoute: "/",
+        // home: const LoadingScreen(),
+        routes: {
+          '/': (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout()),
+          '/login': (_) => LoginScreen(),
+          '/register': (_) => RegisterScreen(),
+          "/forgot-password": (_) => const ForgotPasswordScreen(),
+          "/test": (_) => const ProductsScreen(),
+          "/products": (_) => const ProductsScreen(),
+          // "/product-detail": (_) => const ProductDetailScreen(),
+        },
       ),
-      darkTheme: ThemeData.dark(),
-      initialRoute: "/",
-      // home: const LoadingScreen(),
-      routes: {
-        '/': (context) => const ResponsiveLayout(
-            webScreenLayout: WebScreenLayout(),
-            mobileScreenLayout: MobileScreenLayout()),
-        '/login': (_) => LoginScreen(),
-        '/register': (_) => RegisterScreen(),
-        "/forgot-password": (_) => const ForgotPasswordScreen(),
-        "/test": (_) => const ProductsScreen(),
-        "/products": (_) => const ProductsScreen(),
-        // "/product-detail": (_) => const ProductDetailScreen(),
-      },
     );
   }
 }

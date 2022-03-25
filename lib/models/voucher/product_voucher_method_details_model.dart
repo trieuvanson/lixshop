@@ -27,3 +27,14 @@ class VoucherMethodDetails {
         isRequired: json["batbuoc"],
       );
 }
+
+class VoucherMethodDetailsModel {
+  List<VoucherMethodDetails>? voucherMethodDetails;
+  String? error;
+
+
+  VoucherMethodDetailsModel({
+    this.voucherMethodDetails,
+    this.error,
+  });
+}

@@ -5,7 +5,7 @@ import 'package:lixshop/models/models.dart';
 import 'package:lixshop/repositories/repositories.dart';
 
 import '../../models/productlist.dart';
-import '../../repositories/product/product_repositories.dart';
+import '../../repositories/product/product_repository.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../widgets/product_card_item.dart';
 import '../product/product_detail_screen.dart';

@@ -21,3 +21,32 @@ class VoucherMethod {
       );
 }
 
+class VoucherMethodModel {
+
+  List<VoucherMethod>? voucherMethods;
+  String? error;
+
+  VoucherMethodModel({
+    this.voucherMethods,
+    this.error,
+  });
+
+  factory VoucherMethodModel.fromJson(Map<String, dynamic> json) {
+    ProductDetailsModel productDetailsModel = ProductDetailsModel.fromJson(json);
+    List<VoucherMethod> voucherMethods = [];
+    for(var item in productDetailsModel.productDetails!) {
+      voucherMethods.addAll(item.voucherMethods!);
+    }
+  return VoucherMethodModel(
+    voucherMethods: voucherMethods,
+    error: json["error"],
+  );
+  }
+
+
+
+
+
+}
+
+

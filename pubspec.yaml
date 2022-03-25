@@ -40,16 +40,11 @@ dependencies:
   image_picker:
   google_nav_bar:
   line_icons:
-  bottom_navy_bar:
-  scroll_to_index:
   carousel_slider:
   dots_indicator:
   google_fonts:
-  animations:
   shared_preferences:
-  get:
-  flutter_staggered_grid_view:
-  flutter_rating_bar:
+  get: ^4.0.0
   popup_menu:
   expand_widget:
   dropdown_button2:
@@ -57,7 +52,10 @@ dependencies:
   readmore:
   flutter_dotenv:
   dio:
-
+  flutter_bloc: ^8.0.1
+  animations:
+  flutter_staggered_grid_view:
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:

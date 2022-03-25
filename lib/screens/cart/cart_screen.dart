@@ -1,16 +1,15 @@
-import 'dart:math';
-
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/contains/colors.dart';
+import 'package:lixshop/blocs/cart/cart_bloc.dart';
+import 'package:lixshop/models/models.dart';
 import 'package:lixshop/screens/cart/cart_detail_screen.dart';
 import 'package:lixshop/screens/cart/checkout_card_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../contains/contains.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
@@ -62,96 +61,218 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
         ),
       ),
       bottomNavigationBar: _BottomNavigation(opacity3: opacity3),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            for (var i = 0; i < 5; i++)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: _CartCard(),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CartCard extends StatelessWidget {
-  const _CartCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.to(
-                      () => const CartDetailScreen(),
-                      curve: Curves.easeInToLinear,
-                      transition: Transition.rightToLeft,
-                    );
-                  },
-                  child: SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(Icons.store_sharp,
-                                  color: Vx.gray500, size: 30),
+      body: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          if (state is CartLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is CartLoaded) {
+            var cart = [];
+            state.cartModel.cart
+                .map((e) => {
+                      if (!cart.contains(e.productDetail?.idAgent)) {cart.add(e.productDetail?.idAgent)}
+                    })
+                .toList();
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  for (var item in cart)
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => const CartDetailScreen(),
+                                      curve: Curves.easeInToLinear,
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8.0),
+                                              child: Icon(Icons.store_sharp,
+                                                  color: Vx.gray500, size: 30),
+                                            ),
+                                            SizedBox(
+                                              child: "Nhà phân phối ABC $item"
+                                                  .text
+                                                  .xl2
+                                                  .bold
+                                                  .make(),
+                                            ),
+                                          ],
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Vx.gray800,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      "Tổng tiền".text.xl.gray500.make(),
+                                      "1,000,000đ"
+                                          .text
+                                          .color(Vx.red700.withOpacity(0.8))
+                                          .bold
+                                          .xl2
+                                          .make(),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              child: "Nhà phân phối ABC XYZ".text.xl2.bold.make(),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Vx.gray800,
-                          size: 20,
-                        ),
-                      ],
+                          ),
+
+                          for(var cart in state.cartModel.cart)
+                            _CartItem(cart: cart)
+                          //Tạo biến ở phần thân của component
+                          // for (var i = 0;
+                          //     i <
+                          //         state.cartModel
+                          //             .productQuantity(state.cartModel.cart)
+                          //             .keys
+                          //             .length;
+                          //     i++)
+                          //   _CartItem(
+                          //     product: state.cartModel
+                          //         .productQuantity(state.cartModel.cart)
+                          //         .keys
+                          //         .elementAt(i),
+                          //     quantity: state.cartModel
+                          //         .productQuantity(state.cartModel.cart)
+                          //         .values
+                          //         .elementAt(i),
+                          //   ),
+
+                          // for (var product in state.cart.productDetail)
+                          //   product.idAgent == item
+                          //       ? _CartItem(
+                          //           product: product,
+                          //         )
+                          //       : Container(),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      "Tổng tiền".text.xl.gray500.make(),
-                      "1,000,000đ"
-                          .text
-                          .color(Vx.red700.withOpacity(0.8))
-                          .bold
-                          .xl2
-                          .make(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          for (var i = 0; i < 5; i++) const _CartItem(),
-        ],
+
+                  // const Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 16.0),
+                  //   child: _CartCard(),
+                  // ),
+                ],
+              ),
+            );
+          } else {
+            return const Center(
+              child: Text("Có lỗi xảy ra"),
+            );
+          }
+        },
       ),
     );
   }
 }
+
+// class _CartCard extends StatelessWidget {
+//   const _CartCard({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: MediaQuery.of(context).size.width,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Padding(
+//             padding: const EdgeInsets.only(
+//                 left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 InkWell(
+//                   onTap: () {
+//                     Get.to(
+//                       () => const CartDetailScreen(),
+//                       curve: Curves.easeInToLinear,
+//                     );
+//                   },
+//                   child: SizedBox(
+//                     child: Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Row(
+//                           children: [
+//                             const Padding(
+//                               padding: EdgeInsets.only(right: 8.0),
+//                               child: Icon(Icons.store_sharp,
+//                                   color: Vx.gray500, size: 30),
+//                             ),
+//                             SizedBox(
+//                               child:
+//                                   "Nhà phân phối ABC XYZ".text.xl2.bold.make(),
+//                             ),
+//                           ],
+//                         ),
+//                         const Icon(
+//                           Icons.arrow_forward_ios,
+//                           color: Vx.gray800,
+//                           size: 20,
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       "Tổng tiền".text.xl.gray500.make(),
+//                       "1,000,000đ"
+//                           .text
+//                           .color(Vx.red700.withOpacity(0.8))
+//                           .bold
+//                           .xl2
+//                           .make(),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           for (var i = 0; i < 5; i++) _CartItem(),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _BottomNavigation extends StatelessWidget {
   final double opacity3;
@@ -160,94 +281,103 @@ class _BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: MediaQuery.of(context).viewInsets,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 500),
-        opacity: opacity3,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 140,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                    "9,999,999đ"
-                        .text
-                        .color(Vx.black.withOpacity(0.8))
-                        .bold
-                        .xl2
-                        .make(),
-                  ],
-                ),
-                5.heightBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                    "- 999,999đ"
-                        .text
-                        .color(Vx.green500.withOpacity(0.8))
-                        .bold
-                        .xl2
-                        .make(),
-                  ],
-                ),
-                5.heightBox,
-                const Divider(),
-                Flexible(child: Container(), flex: 1,),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            "Tạm tính".text.xl2.black.bold.make(),
-                            " (đã có VAT)"
-                                .text
-                                .color(Vx.gray800.withOpacity(0.8))
-                                .xl
-                                .make(),
-                          ],
-                        ),
-                        "9,000,000đ"
-                            .text
-                            .color(Vx.red700.withOpacity(0.8))
-                            .bold
-                            .xl2
-                            .make(),
-                      ],
-                    ),
-                    // Button thanh toán
-                    SizedBox(
-                      width: 150,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Get.to(
-                            () => const CheckoutCardScreen(),
-                          );
-                        },
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                        color: Vx.green500,
-                        child: "Đặt hàng".text.white.bold.xl.make(),
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state is CartLoaded) {
+          return Container(
+            margin: MediaQuery.of(context).viewInsets,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: opacity3,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 140,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          "Tổng ${state.cartModel.cart.length} sản phẩm"
+                              .text
+                              .xl
+                              .gray500
+                              .make(),
+                          "${state.cartModel.totalPriceVND}đ"
+                              .text
+                              .color(Vx.black.withOpacity(0.8))
+                              .bold
+                              .xl2
+                              .make(),
+                        ],
                       ),
-                    )
-                    //Cart icon
-                  ],
-                ),
-                /*  10.heightBox,
+                      5.heightBox,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          "Khuyến mãi đơn hàng".text.xl.gray500.make(),
+                          "- 999,999đ"
+                              .text
+                              .color(Vx.green500.withOpacity(0.8))
+                              .bold
+                              .xl2
+                              .make(),
+                        ],
+                      ),
+                      5.heightBox,
+                      const Divider(),
+                      Flexible(
+                        child: Container(),
+                        flex: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  "Tạm tính".text.xl2.black.bold.make(),
+                                  " (đã có VAT)"
+                                      .text
+                                      .color(Vx.gray800.withOpacity(0.8))
+                                      .xl
+                                      .make(),
+                                ],
+                              ),
+                              "9,000,000đ"
+                                  .text
+                                  .color(Vx.red700.withOpacity(0.8))
+                                  .bold
+                                  .xl2
+                                  .make(),
+                            ],
+                          ),
+                          // Button thanh toán
+                          SizedBox(
+                            width: 150,
+                            height: 50,
+                            child: RaisedButton(
+                              onPressed: () {
+                                Get.to(
+                                  () => const CheckoutCardScreen(),
+                                );
+                              },
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              color: Vx.green500,
+                              child: "Đặt hàng".text.white.bold.xl.make(),
+                            ),
+                          )
+                          //Cart icon
+                        ],
+                      ),
+                      /*  10.heightBox,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -302,20 +432,29 @@ class _BottomNavigation extends StatelessWidget {
                     )
                   ],
                 ),*/
-              ],
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+          );
+        } else {
+          return const Text("Có lỗi xảy ra");
+        }
+      },
     );
   }
 }
 
 class _CartItem extends StatelessWidget {
-  const _CartItem({Key? key}) : super(key: key);
+  final Cart cart;
+
+  const _CartItem({Key? key, required  this.cart})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(cart.productDetail!.name);
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
@@ -350,7 +489,9 @@ class _CartItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            "https://picsum.photos/200",
+                            cart.productDetail!.pathImg??"https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                            errorBuilder: (context, url, error) =>
+                                const Icon(Icons.error),
                             height: 80,
                             fit: BoxFit.cover,
                           ),
@@ -372,11 +513,10 @@ class _CartItem extends StatelessWidget {
                               child: RichText(
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                text: const TextSpan(
-                                    style: TextStyle(
+                                text: TextSpan(
+                                    style: const TextStyle(
                                         color: Colors.black, fontSize: 18),
-                                    text:
-                                        'Nước rửa chén Lix hương chanh siêu sạch sạch sạch sạchsạch sạch sạch sạch'),
+                                    text: cart.productDetail!.name.toString()),
                               ),
                             ),
                           ),
@@ -420,8 +560,8 @@ class _CartItem extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                "100,000đ/Thùng".text.xl.gray500.make(),
-                                "100,000đ"
+                                "${convertCurrencyToVND(cart.productDetail!.price!)}/Thùng".text.xl.gray500.make(),
+                                "${convertCurrencyToVND(cart.productDetail!.price! * cart.quantity!)}đ"
                                     .text
                                     .color(Vx.black.withOpacity(0.8))
                                     .bold
@@ -507,10 +647,12 @@ class _CartItem extends StatelessWidget {
                               textAlignVertical: TextAlignVertical.center,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 14.0),
+                              decoration: InputDecoration(
+                                hintText: '${cart.quantity}',
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 14.0),
                                 border: InputBorder.none,
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   color: DesignCourseAppTheme.grey,
                                 ),
                               ),
@@ -560,8 +702,8 @@ class _DetailCartItemPopup extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       color: DesignCourseAppTheme.nearlyWhite,
       child: Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height / 1.5),
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(

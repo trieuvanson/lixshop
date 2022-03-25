@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -43,9 +41,7 @@ class ProductRepositories extends BaseProductRepository {
           ProductCategoryRepository().getAllCategories2(productsDataModel);
       List<ProductBrand> productBrands = [];
       for (var element in productCateModel.productCates!) {
-        for (var element in element.productBrand!) {
-          productBrands.add(element);
-        }
+        productBrands.addAll(element.productBrand!);
       }
 
       return ProductBrandModel(productBrands: productBrands, error: "");

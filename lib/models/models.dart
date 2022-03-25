@@ -9,3 +9,5 @@ export 'category/product_category_model.dart';
 //Voucher
 export 'voucher/product_voucher_method_details_model.dart';
 export 'voucher/product_voucher_method_model.dart';
+//Cart
+export 'cart/cart_model.dart';
