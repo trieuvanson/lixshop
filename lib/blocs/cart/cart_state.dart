@@ -18,4 +18,11 @@ class CartLoaded extends CartState {
   List<Object> get props => [cartModel];
 }
 
-class CartError extends CartState {}
+class CartError extends CartState {
+  final String message;
+
+  const CartError({this.message = 'Error'});
+
+  @override
+  List<Object> get props => [message];
+}

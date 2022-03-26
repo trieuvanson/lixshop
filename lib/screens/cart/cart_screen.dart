@@ -72,7 +72,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             var cart = [];
             state.cartModel.cart
                 .map((e) => {
-                      if (!cart.contains(e.productDetail?.idAgent)) {cart.add(e.productDetail?.idAgent)}
+                      if (!cart.contains(e.productDetail?.idAgent))
+                        {cart.add(e.productDetail?.idAgent)}
                     })
                 .toList();
             return SingleChildScrollView(
@@ -150,7 +151,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                             ),
                           ),
 
-                          for(var cart in state.cartModel.cart)
+                          for (var cart in state.cartModel.cart)
                             _CartItem(cart: cart)
                           //Tạo biến ở phần thân của component
                           // for (var i = 0;
@@ -188,11 +189,13 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                 ],
               ),
             );
-          } else {
-            return const Center(
-              child: Text("Có lỗi xảy ra"),
+          }
+          if (state is CartError) {
+            return Center(
+              child: Text(state.message),
             );
           }
+          return Container();
         },
       ),
     );
@@ -449,12 +452,10 @@ class _BottomNavigation extends StatelessWidget {
 class _CartItem extends StatelessWidget {
   final Cart cart;
 
-  const _CartItem({Key? key, required  this.cart})
-      : super(key: key);
+  const _CartItem({Key? key, required this.cart}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(cart.productDetail!.name);
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
@@ -489,7 +490,8 @@ class _CartItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            cart.productDetail!.pathImg??"https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                            cart.productDetail!.pathImg ??
+                                "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
                             errorBuilder: (context, url, error) =>
                                 const Icon(Icons.error),
                             height: 80,
@@ -560,7 +562,11 @@ class _CartItem extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                "${convertCurrencyToVND(cart.productDetail!.price!)}/Thùng".text.xl.gray500.make(),
+                                "${convertCurrencyToVND(cart.productDetail!.price!)}/Thùng"
+                                    .text
+                                    .xl
+                                    .gray500
+                                    .make(),
                                 "${convertCurrencyToVND(cart.productDetail!.price! * cart.quantity!)}đ"
                                     .text
                                     .color(Vx.black.withOpacity(0.8))

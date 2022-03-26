@@ -1,4 +1,3 @@
-
 class VoucherMethodDetails {
   String? code;
   String? name;
@@ -26,12 +25,21 @@ class VoucherMethodDetails {
         wrap: json["quankem"],
         isRequired: json["batbuoc"],
       );
+
+  // toJson
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "name": name,
+        "soluong": value,
+        "soluongkm": countValue,
+        "quankem": wrap,
+        "batbuoc": isRequired,
+      };
 }
 
 class VoucherMethodDetailsModel {
   List<VoucherMethodDetails>? voucherMethodDetails;
   String? error;
-
 
   VoucherMethodDetailsModel({
     this.voucherMethodDetails,

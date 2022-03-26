@@ -27,6 +27,16 @@ class ProductDetail {
       voucherMethods: List<VoucherMethod>.from(
           json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x)))
   );
+
+  // ToJson
+  Map<String, dynamic> toJson() => {
+    "idagent": idAgent,
+    "code": code,
+    "name": name,
+    "pathImg": pathImg,
+    "gia": price,
+    "hinhThucKMDTOs": List<dynamic>.from(voucherMethods!.map((x) => x.toJson())),
+  };
 }
 
 class ProductDetailsModel {

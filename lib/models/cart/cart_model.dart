@@ -1,15 +1,31 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:lixshop/models/models.dart';
 
 class Cart {
-   ProductDetail? productDetail;
-   int? quantity;
+  ProductDetail? productDetail;
+  int? quantity;
 
-   Cart({this.productDetail, this.quantity});
+  Cart({this.productDetail, this.quantity});
 
   @override
   String toString() {
     return 'Cart{productDetail: $productDetail, quantity: $quantity}';
+  }
+
+//  fromJson
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+        productDetail: ProductDetail.fromJson(json["productDetail"]),
+        quantity: json["quantity"],
+      );
+
+//  Tojson
+  Map<String, dynamic> toJson() {
+    return {
+      'productDetail': productDetail?.toJson(),
+      'quantity': quantity,
+    };
   }
 }
 
@@ -43,6 +59,21 @@ class CartModel extends Equatable {
     return quantity;
   }
 
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {
+      "cart": cart.map((e) => e.toJson()).toList(),
+    };
+  }
+
+  //fromJson
+  factory CartModel.fromJson(String json) {
+    //Convert String to Map
+    Map<String, dynamic> map = jsonDecode(json);
+    return CartModel(
+      cart: List<Cart>.from(map["cart"].map((x) => Cart.fromJson(x))),
+    );
+  }
 
   @override
   String toString() {

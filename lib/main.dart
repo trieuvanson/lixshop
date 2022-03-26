@@ -34,10 +34,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => CartBloc()
-            ..add(
-              LoadCart(),
-            ),
+          create: (_) {
+            // final directory = await getApplicationDocumentsDirectory();
+            // final file = File('${directory.path}/cart.json');
+           return CartBloc()
+              ..add(
+                const LoadCart(carts: []),
+              );
+          }
         ),
       ],
       child: GetMaterialApp(

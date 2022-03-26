@@ -32,7 +32,7 @@ class GarnitureScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               for(var i = 0; i<10; i++)
-              const _CheckoutItem(
+              const _GarnitureItem(
                 // icon: Icons.shopping_basket,
                 // title: 'Gian hàng trưng bày',
                 // subtitle: 'Gian hàng trưng bày',
@@ -46,8 +46,8 @@ class GarnitureScreen extends StatelessWidget {
   }
 }
 
-class _CheckoutItem extends StatelessWidget {
-  const _CheckoutItem({Key? key}) : super(key: key);
+class _GarnitureItem extends StatelessWidget {
+  const _GarnitureItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

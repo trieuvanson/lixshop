@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'cart_event.dart';
 
@@ -24,9 +27,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      emit(const CartLoaded());
+      // final directory = await getApplicationDocumentsDirectory();
+      // final file = File('${directory.path}/cart.json');
+      // // RootObject rootObj= JsonConvert.DeserializeObject<RootObject>(File.ReadAllText(pathFile));
+      //
+      // final contents = await file.readAsString();
+      // CartModel cart = CartModel.fromJson(json.decode(contents));
+      emit(CartLoaded());
     } catch (e) {
-      emit(CartError());
+      emit(CartError(message: e.toString()));
     }
   }
 
@@ -36,8 +45,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         //Nếu tồn tại thì cập nhật, ngược lại thêm vào
         List<Cart> cart = (state as CartLoaded).cartModel.cart;
         List<Cart> currentCart = cart.isNotEmpty ? cart : [];
-
-        Cart? cartItem = currentCart.firstWhere(
+        var cartItem = currentCart.firstWhere(
             (item) =>
                 item.productDetail!.code == event.cart.productDetail!.code,
             orElse: () => Cart(productDetail: null, quantity: 0));
@@ -47,17 +55,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         } else {
           currentCart.add(event.cart);
         }
+        //Convert object to json and write to file
 
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/cart.json');
+        final contents = CartModel(cart: currentCart).toJson();
+        await file.writeAsString(contents.toString());
         emit(CartLoaded(cartModel: CartModel(cart: currentCart)));
 
-        // emit(
-        //   CartLoaded(
-        //     cartModel: CartModel(
-        //       cart: List.from((state as CartLoaded).cartModel.cart)
-        //         ..add(event.cart),
-        //     ),
-        //   ),
-        // );
         //  Kiểm tra list có sản phẩm nào chưa
         //  Nếu chưa có thì Add => ok
         //  List có sản phẩm
@@ -68,6 +73,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         //  Néu có tăng số lượng
         //  Chưa có thì thêm vào
         //  Có thì tăng số lượng
+
       } on Exception {
         emit(CartError());
       }
@@ -85,8 +91,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             ),
           ),
         );
-      } on Exception {
-        emit(CartError());
+      } on Exception catch (e) {
+        print('Error: $e');
+        emit(CartError(message: e.toString()));
       }
     }
   }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -9,7 +10,7 @@ import '../../models/models.dart';
 class ProductDetailsDataRepository {
   final Dio _dio = Dio();
   final String mainURL =
-      "http://192.168.0.203:8280/shopee/api/data/chitietsanpham/info?";
+      "http://192.168.0.226:65/shopee/api/data/chitietsanpham/info";
 
   Future<ProductDetailsDataModel> getProductDetails(
       int idBrand, List<String> idNPPs) async {
@@ -25,10 +26,21 @@ class ProductDetailsDataRepository {
       if (response.data['err'] == -1) {
         return ProductDetailsDataModel.withError("${response.data['msg']}");
       }
+
+      // final directory = await getApplicationDocumentsDirectory();
+      // final file = File('${directory.path}/product_details.json');
+      // await file.writeAsString(response.data.toString());
+      // final directory = await getApplicationDocumentsDirectory();
+      // final file = File('${directory.path}/product_details.json');
+      // final contents = await file.readAsString();
+      // final json = jsonDecode(contents);
+
       return ProductDetailsDataModel.fromJson(response.data);
     } on DioError catch (e) {
       return ProductDetailsDataModel.withError(
           "${e.response!.data['msg']}");
+    } catch (e) {
+      return ProductDetailsDataModel.withError(e.toString());
     }
   }
 }
