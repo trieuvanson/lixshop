@@ -4,9 +4,11 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/repositories/product/product_details_data_repository.dart';
+import 'package:lixshop/utils/hero_dialog_route.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/models.dart';
@@ -18,6 +20,7 @@ class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({
     Key? key,
   }) : super(key: key);
+
   @override
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
 }
@@ -29,6 +32,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,9 +99,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
 class BuildProductDetailWidget extends StatefulWidget {
   final ProductDetailsDataModel detailsDataModel;
-  const BuildProductDetailWidget(
-      {Key? key,
-      required this.detailsDataModel})
+
+  const BuildProductDetailWidget({Key? key, required this.detailsDataModel})
       : super(key: key);
 
   @override
@@ -111,8 +114,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   var products;
   int selectProduct = 0;
   int selectVoucher = 1;
-  List<String> emptyVoucherList = [];
   int selectTabIndex = 0;
+  String selectProductEmptyVoucher = ""; // if product empty voucher
 
   @override
   void initState() {
@@ -125,42 +128,38 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   void changeProductSize(int index) {
     setState(() {
       this.index = index;
-
       productDetails = ProductDetailsRepository()
           .getProductDetails(widget.detailsDataModel, index);
       products = productDetails.productDetails;
-      emptyVoucherList = [];
       selectVoucher = 1;
-      selectProduct = changeProduct(selectProduct);
+      selectProduct = changeProduct(selectProduct, selectProductEmptyVoucher);
     });
   }
 
-  int changeProduct(int selectVoucher) {
-    for (var item in (products as List<ProductDetail>)) {
-      for (var item2 in item.voucherMethods!) {
-        if (item2.typeformCus == selectVoucher) {
+  int changeProduct(int selVoucher, String selectProductEmptyVoucher) {
+    if (selectProductEmptyVoucher.isNotEmpty && selVoucher == -1) {
+      for (var item in (products as List<ProductDetail>)) {
+        if (item.code == selectProductEmptyVoucher) {
           return products.indexOf(item);
+        }
+      }
+    } else {
+      for (var item in (products as List<ProductDetail>)) {
+        for (var item2 in item.voucherMethods!) {
+          if (item2.typeformCus == selVoucher) {
+            return products.indexOf(item);
+          }
         }
       }
     }
     return 0;
   }
 
-  void changeVoucher(int index) {
+  void changeVoucher(int index, String selectProductEmptyVoucher) {
     setState(() {
       selectVoucher = index;
-      selectProduct = changeProduct(index);
+      selectProduct = changeProduct(index, selectProductEmptyVoucher);
     });
-  }
-
-  void checkEmptyVoucherList(ProductDetail productDetail) {
-    if (!emptyVoucherList.contains(productDetail.code)) {
-      emptyVoucherList.add(productDetail.code!);
-    } else {
-      print('Đã có trong danh sách');
-    }
-    print('Danh sách voucher: $emptyVoucherList');
-    print('emptyVoucherList: ${emptyVoucherList.length}');
   }
 
   @override
@@ -174,8 +173,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _buildImage(
-                  products[selectProduct].code,
+              _buildImage(products[selectProduct].code,
                   products[selectProduct].pathImg ?? ""),
               Container(
                 decoration: BoxDecoration(
@@ -225,33 +223,6 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                               color: Vx.red700,
                             ),
                           ),
-                          // SizedBox(
-                          //   child: Row(
-                          //     children: <Widget>[
-                          //       RatingBarIndicator(
-                          //         rating: double.parse(widget.rating),
-                          //         itemBuilder: (context, index) => const Icon(
-                          //           Icons.star,
-                          //           color: Colors.yellow,
-                          //         ),
-                          //         itemCount: 5,
-                          //         itemSize: 20.0,
-                          //         unratedColor: Colors.amber.withAlpha(50),
-                          //         direction: Axis.horizontal,
-                          //       ),
-                          //       Text(
-                          //         widget.rating,
-                          //         textAlign: TextAlign.left,
-                          //         style: const TextStyle(
-                          //           fontWeight: FontWeight.w200,
-                          //           fontSize: 16,
-                          //           letterSpacing: 0.27,
-                          //           color: DesignCourseAppTheme.grey,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // )
                         ],
                       ),
                     ),
@@ -399,8 +370,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             isScrollable: true,
             labelColor: Vx.green500,
             unselectedLabelColor: Vx.gray500,
-            labelStyle: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold),
+            labelStyle:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             indicator: const UnderlineTabIndicator(
               borderSide: BorderSide(
                 width: 3,
@@ -418,67 +389,49 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: DesignCourseAppTheme.nearlyWhite,
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: DesignCourseAppTheme.grey
-                            .withOpacity(0.2),
+                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
                         offset: const Offset(1.1, 1.1),
                         blurRadius: 8.0),
                   ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 8.0,
-                      right: 8.0,
-                      top: 12.0,
-                      bottom: 12.0),
+                      left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        child: "Thông tin chi tiết"
-                            .text
-                            .bold
-                            .make(),
+                        child: "Thông tin chi tiết".text.bold.make(),
                       ),
                       const SizedBox(
                         height: 8,
                       ),
                       Divider(
-                        color: DesignCourseAppTheme.grey
-                            .withOpacity(0.6),
+                        color: DesignCourseAppTheme.grey.withOpacity(0.6),
                         height: 1,
                       ),
                       for (var i = 0; i < 4; i++)
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0),
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 120,
                                 child: Text(
                                   'Tồn kho ${i + 1}',
                                   style: const TextStyle(
-                                    color: DesignCourseAppTheme
-                                        .darkerText,
+                                    color: DesignCourseAppTheme.darkerText,
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: MediaQuery.of(context)
-                                    .size
-                                    .width -
-                                    136,
+                                width: MediaQuery.of(context).size.width - 136,
                                 child: Text(
                                   "Đây là văn bản test $i",
                                 ),
@@ -508,9 +461,6 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       List<ProductDetail> products, int selectedProduct) {
     var emptyVoucherProducts =
         products.where((element) => element.voucherMethods!.isEmpty).toList();
-    var voucherProducts = products
-        .where((element) => element.voucherMethods!.isNotEmpty)
-        .toList();
     return Container(
       color: DesignCourseAppTheme.notWhite,
       child: Column(
@@ -518,81 +468,93 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           10.heightBox,
+          emptyVoucherProducts.isNotEmpty
+              ? Padding(
+            padding: const EdgeInsets.only(
+                bottom: 8.0, left: 12, right: 12, top: 12),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: InkWell(
+                onTap: () {
+                  // changeVoucher(-1);
+                  Navigator.of(context).push(
+                    HeroDialogRoute(
+                      builder: (context) => Center(
+                        child: _buildProductEmptyVoucherPopup(
+                            emptyVoucherProducts),
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: selectVoucher == -1
+                        ? Border.all(
+                      color: Vx.green500,
+                    )
+                        : null,
+                    borderRadius: selectVoucher == -1
+                        ? BorderRadius.circular(8.0)
+                        : BorderRadius.circular(0.0),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: DesignCourseAppTheme.notWhite
+                              .withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1)),
+                    ],
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 8),
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Không sử dụng khuyến mãi",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
+                            selectVoucher == -1
+                                ? Align(
+                              alignment: Alignment.topRight,
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.check,
+                                    color: Vx.green500,
+                                    size: 16,
+                                  ),
+                                  Text(
+                                    'Đang sử dụng',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Vx.green500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : const SizedBox(),
+                          ]),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+              : const SizedBox(),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
             child: Text("Lựa chọn hình thức khuyến mãi",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.black)),
           ),
-          emptyVoucherProducts.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 8.0, left: 12, right: 12, top: 12),
-                  child: Material(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        changeVoucher(-1);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: selectVoucher == -1
-                              ? Border.all(
-                                  color: Vx.green500,
-                                )
-                              : null,
-                          borderRadius: selectVoucher == -1
-                              ? BorderRadius.circular(8.0)
-                              : BorderRadius.circular(0.0),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: DesignCourseAppTheme.notWhite
-                                    .withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1)),
-                          ],
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16.0, horizontal: 8),
-                        child: Column(
-                          children: [
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Không sử dụng khuyến mãi"),
-                                  selectVoucher == -1
-                                      ? Align(
-                                          alignment: Alignment.topRight,
-                                          child: Row(
-                                            children: const [
-                                              Icon(
-                                                Icons.check,
-                                                color: Vx.green500,
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                'Đang sử dụng',
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Vx.green500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                ]),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox(),
           for (var product in products)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -616,7 +578,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    changeVoucher(voucher.typeformCus!);
+                                    changeVoucher(voucher.typeformCus!, "");
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -738,7 +700,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                                 .spaceBetween,
                                                         children: [
                                                           Text(
-                                                            'Ghi chú: ${detail.wrap! ? 'Quấn kèm' : ''}',
+                                                            detail.wrap!
+                                                                ? 'Ghi chú: Quấn kèm'
+                                                                : "",
                                                             //
                                                             style: const TextStyle(
                                                                 fontStyle:
@@ -867,14 +831,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             customItemsHeight: 8,
             items: [
               ...MenuItems.firstItems.map(
-                    (item) => DropdownMenuItem<MenuItem>(
+                (item) => DropdownMenuItem<MenuItem>(
                   value: item,
                   child: MenuItems.buildItem(item),
                 ),
               ),
               const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
               ...MenuItems.secondItems.map(
-                    (item) => DropdownMenuItem<MenuItem>(
+                (item) => DropdownMenuItem<MenuItem>(
                   value: item,
                   child: MenuItems.buildItem(item),
                 ),
@@ -1021,8 +985,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       padding: const EdgeInsets.all(0),
                       color: Vx.green500,
                       onPressed: () {
-                        context.read<CartBloc>().add(AddToCart(Cart(
-                            productDetail: productDetails, quantity: 1)));
+                        context.read<CartBloc>().add(AddToCart(
+                            Cart(productDetail: productDetails, quantity: 1)));
                       },
                       child: const SizedBox(
                         height: 48,
@@ -1063,6 +1027,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       ),
     );
   }
+
   Widget _buildExpandAbleDescription() {
     String abc =
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
@@ -1095,13 +1060,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
     );
   }
 
-}
-
-class VoucherPopup extends StatelessWidget {
-  const VoucherPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildProductEmptyVoucherPopup(
+      List<ProductDetail> emptyVoucherProducts) {
     return Material(
       borderRadius: BorderRadius.circular(16),
       color: DesignCourseAppTheme.nearlyWhite,
@@ -1112,24 +1072,17 @@ class VoucherPopup extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
             children: [
-              const _HeaderVoucher(),
+              _buildVoucherList(emptyVoucherProducts).expand(),
               const Divider(),
-              const _VoucherList().expand(),
-              const Divider(),
-              const _FooterVoucher(),
+              _buildFooterVoucher(context),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class _HeaderVoucher extends StatelessWidget {
-  const _HeaderVoucher({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHeaderVoucher() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
@@ -1151,13 +1104,8 @@ class _HeaderVoucher extends StatelessWidget {
       ),
     );
   }
-}
 
-class _FooterVoucher extends StatelessWidget {
-  const _FooterVoucher({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildFooterVoucher(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pop(context);
@@ -1194,19 +1142,430 @@ class _FooterVoucher extends StatelessWidget {
       ),
     );
   }
-}
 
-class _VoucherList extends StatefulWidget {
-  const _VoucherList({Key? key}) : super(key: key);
-
-  @override
-  State<_VoucherList> createState() => _VoucherListState();
-}
-
-class _VoucherListState extends State<_VoucherList> {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildVoucherList(List<ProductDetail> emptyVoucherProducts) {
     return ListView.builder(
-        itemCount: 100, itemBuilder: (context, index) => Container());
+        itemCount: emptyVoucherProducts.length,
+        itemBuilder: (context, index) {
+          ProductDetail product = emptyVoucherProducts[index];
+          return Container(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Vx.gray200.withOpacity(0.1),
+                  blurRadius: 8,
+                  spreadRadius: 2,
+                ),
+              ],
+              border: Border.all(color: Vx.gray500.withOpacity(0.1)),
+            ),
+            width: MediaQuery.of(context).size.width,
+            // height: 220-16,
+            child: Material(
+              child: InkWell(
+                onTap: () {},
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 8),
+                      child: SizedBox(
+                        height: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 130,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.network(
+                                  product.pathImg ??
+                                      "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                                  errorBuilder: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            16.widthBox,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 180,
+                                    child: RichText(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      text: TextSpan(
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18),
+                                          text: product.name.toString()),
+                                    ),
+                                  ),
+                                ),
+                                5.heightBox,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child: SizedBox(
+                                    child: "Thùng 13 bịch x 12 gói x 25g"
+                                        .text
+                                        .gray500
+                                        .make(),
+                                  ),
+                                ),
+                                5.heightBox,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child:
+                                      "${convertCurrencyToVND(product.price!)}/Thùng"
+                                          .text
+                                          .xl
+                                          .gray500
+                                          .make(),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 120,
+                            height: 42,
+                            child: Center(
+                              child: SizedBox(
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    changeVoucher(-1, product.code!);
+                                    Get.back();
+                                  },
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                  color: Vx.white,
+                                  child: "Chọn".text.gray600.bold.xl.make(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Row(
+                          //   children: [
+                          //     Padding(
+                          //       padding: const EdgeInsets.only(right: 8.0),
+                          //       child: SizedBox(
+                          //         width: 40,
+                          //         height: 40,
+                          //         child: Container(
+                          //           decoration: BoxDecoration(
+                          //               color: DesignCourseAppTheme.nearlyWhite,
+                          //               borderRadius: const BorderRadius.all(
+                          //                 Radius.circular(8.0),
+                          //               ),
+                          //               border: Border.all(
+                          //                 color: Vx.green500,
+                          //               )),
+                          //           child: const Icon(
+                          //             Icons.remove,
+                          //             color: Vx.green500,
+                          //             size: 28,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Padding(
+                          //       padding: const EdgeInsets.only(right: 8.0),
+                          //       child: Container(
+                          //         width: 48,
+                          //         height: 48,
+                          //         decoration: BoxDecoration(
+                          //             color: DesignCourseAppTheme.nearlyWhite,
+                          //             borderRadius: const BorderRadius.all(
+                          //               Radius.circular(8.0),
+                          //             ),
+                          //             border: Border.all(
+                          //               color: Vx.green500,
+                          //             )),
+                          //         child: TextFormField(
+                          //           inputFormatters: [
+                          //             FilteringTextInputFormatter.allow(
+                          //                 RegExp(r'^[+]?\d+([.]\d+)?$')),
+                          //             //  Giới hạn 3 kí tự
+                          //             LengthLimitingTextInputFormatter(3),
+                          //           ],
+                          //           textAlignVertical: TextAlignVertical.center,
+                          //           keyboardType: TextInputType.number,
+                          //           textAlign: TextAlign.center,
+                          //           decoration: InputDecoration(
+                          //             hintText: '${cart.quantity}',
+                          //             contentPadding:
+                          //                 const EdgeInsets.only(bottom: 14.0),
+                          //             border: InputBorder.none,
+                          //             hintStyle: const TextStyle(
+                          //               color: DesignCourseAppTheme.grey,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 40,
+                          //       height: 40,
+                          //       child: Container(
+                          //         decoration: BoxDecoration(
+                          //             color: DesignCourseAppTheme.nearlyWhite,
+                          //             borderRadius: const BorderRadius.all(
+                          //               Radius.circular(8.0),
+                          //             ),
+                          //             border: Border.all(
+                          //               color: Vx.green500,
+                          //             )),
+                          //         child: const Icon(
+                          //           Icons.add,
+                          //           color: Vx.green500,
+                          //           size: 28,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          //Cart icon
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
+
+// class _ProductEmptyVoucherItem extends StatelessWidget {
+//   final ProductDetail product;
+//
+//   const _ProductEmptyVoucherItem({Key? key, required this.product})
+//       : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(8),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Vx.gray200.withOpacity(0.1),
+//             blurRadius: 8,
+//             spreadRadius: 2,
+//           ),
+//         ],
+//         border: Border.all(color: Vx.gray500.withOpacity(0.1)),
+//       ),
+//       width: MediaQuery.of(context).size.width,
+//       // height: 220-16,
+//       child: Material(
+//         child: InkWell(
+//           onTap: () {},
+//           child: Column(
+//             children: [
+//               Padding(
+//                 padding:
+//                     const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
+//                 child: SizedBox(
+//                   height: 100,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.start,
+//                     children: [
+//                       SizedBox(
+//                         width: 100,
+//                         height: 130,
+//                         child: ClipRRect(
+//                           borderRadius: BorderRadius.circular(16),
+//                           child: Image.network(
+//                             product.pathImg ??
+//                                 "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+//                             errorBuilder: (context, url, error) =>
+//                                 const Icon(Icons.error),
+//                             height: 80,
+//                             fit: BoxFit.cover,
+//                           ),
+//                         ),
+//                       ),
+//                       16.widthBox,
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Flexible(
+//                             child: SizedBox(
+//                               width: MediaQuery.of(context).size.width - 180,
+//                               child: RichText(
+//                                 maxLines: 2,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 text: TextSpan(
+//                                     style: const TextStyle(
+//                                         color: Colors.black, fontSize: 18),
+//                                     text: product.name.toString()),
+//                               ),
+//                             ),
+//                           ),
+//                           5.heightBox,
+//                           SizedBox(
+//                             width: MediaQuery.of(context).size.width - 180,
+//                             child: SizedBox(
+//                               child: "Thùng 13 bịch x 12 gói x 25g"
+//                                   .text
+//                                   .gray500
+//                                   .make(),
+//                             ),
+//                           ),
+//                           5.heightBox,
+//                           SizedBox(
+//                             width: MediaQuery.of(context).size.width - 180,
+//                             child:
+//                                 "${convertCurrencyToVND(product.price!)}/Thùng"
+//                                     .text
+//                                     .xl
+//                                     .gray500
+//                                     .make(),
+//                           )
+//                         ],
+//                       )
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(bottom: 16.0),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: <Widget>[
+//                     SizedBox(
+//                       width: 120,
+//                       height: 42,
+//                       child: Center(
+//                         child: SizedBox(
+//                           child: RaisedButton(
+//                             onPressed: () {
+//                               print(product.code);
+//                             },
+//                             shape: const RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.all(
+//                                 Radius.circular(8),
+//                               ),
+//                             ),
+//                             color: Vx.white,
+//                             child: "Chọn".text.gray600.bold.xl.make(),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     // Row(
+//                     //   children: [
+//                     //     Padding(
+//                     //       padding: const EdgeInsets.only(right: 8.0),
+//                     //       child: SizedBox(
+//                     //         width: 40,
+//                     //         height: 40,
+//                     //         child: Container(
+//                     //           decoration: BoxDecoration(
+//                     //               color: DesignCourseAppTheme.nearlyWhite,
+//                     //               borderRadius: const BorderRadius.all(
+//                     //                 Radius.circular(8.0),
+//                     //               ),
+//                     //               border: Border.all(
+//                     //                 color: Vx.green500,
+//                     //               )),
+//                     //           child: const Icon(
+//                     //             Icons.remove,
+//                     //             color: Vx.green500,
+//                     //             size: 28,
+//                     //           ),
+//                     //         ),
+//                     //       ),
+//                     //     ),
+//                     //     Padding(
+//                     //       padding: const EdgeInsets.only(right: 8.0),
+//                     //       child: Container(
+//                     //         width: 48,
+//                     //         height: 48,
+//                     //         decoration: BoxDecoration(
+//                     //             color: DesignCourseAppTheme.nearlyWhite,
+//                     //             borderRadius: const BorderRadius.all(
+//                     //               Radius.circular(8.0),
+//                     //             ),
+//                     //             border: Border.all(
+//                     //               color: Vx.green500,
+//                     //             )),
+//                     //         child: TextFormField(
+//                     //           inputFormatters: [
+//                     //             FilteringTextInputFormatter.allow(
+//                     //                 RegExp(r'^[+]?\d+([.]\d+)?$')),
+//                     //             //  Giới hạn 3 kí tự
+//                     //             LengthLimitingTextInputFormatter(3),
+//                     //           ],
+//                     //           textAlignVertical: TextAlignVertical.center,
+//                     //           keyboardType: TextInputType.number,
+//                     //           textAlign: TextAlign.center,
+//                     //           decoration: InputDecoration(
+//                     //             hintText: '${cart.quantity}',
+//                     //             contentPadding:
+//                     //                 const EdgeInsets.only(bottom: 14.0),
+//                     //             border: InputBorder.none,
+//                     //             hintStyle: const TextStyle(
+//                     //               color: DesignCourseAppTheme.grey,
+//                     //             ),
+//                     //           ),
+//                     //         ),
+//                     //       ),
+//                     //     ),
+//                     //     SizedBox(
+//                     //       width: 40,
+//                     //       height: 40,
+//                     //       child: Container(
+//                     //         decoration: BoxDecoration(
+//                     //             color: DesignCourseAppTheme.nearlyWhite,
+//                     //             borderRadius: const BorderRadius.all(
+//                     //               Radius.circular(8.0),
+//                     //             ),
+//                     //             border: Border.all(
+//                     //               color: Vx.green500,
+//                     //             )),
+//                     //         child: const Icon(
+//                     //           Icons.add,
+//                     //           color: Vx.green500,
+//                     //           size: 28,
+//                     //         ),
+//                     //       ),
+//                     //     ),
+//                     //   ],
+//                     // ),
+//                     //Cart icon
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
