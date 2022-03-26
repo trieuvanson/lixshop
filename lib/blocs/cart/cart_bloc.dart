@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'cart_event.dart';
 
@@ -23,17 +24,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _loadCart(LoadCart event, Emitter<CartState> emit) async {
-    emit(CartLoading());
+    emit(const CartLoading());
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      // final directory = await getApplicationDocumentsDirectory();
-      // final file = File('${directory.path}/cart.json');
-      // // RootObject rootObj= JsonConvert.DeserializeObject<RootObject>(File.ReadAllText(pathFile));
-      //
-      // final contents = await file.readAsString();
-      // CartModel cart = CartModel.fromJson(json.decode(contents));
-      emit(CartLoaded());
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/cart.json');
+      // if (await file.exists()) {
+      //   final contents = await file.readAsString();
+      //   final json = jsonDecode(contents);
+      //   CartModel cartModel = CartModel.fromJson(json);
+      //   // print(cartModel.cart.length);
+      //   emit(CartLoaded(cartModel: cartModel));
+      // } else {
+      //   emit(const CartLoaded(cartModel: CartModel()));
+      // }
+      emit(CartLoaded(cartModel: await _readCartFromFileJson()));
     } catch (e) {
       emit(CartError(message: e.toString()));
     }
@@ -56,11 +62,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           currentCart.add(event.cart);
         }
         //Convert object to json and write to file
-
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/cart.json');
-        final contents = CartModel(cart: currentCart).toJson();
-        await file.writeAsString(contents.toString());
+        _saveCartToFileJson(currentCart);
         emit(CartLoaded(cartModel: CartModel(cart: currentCart)));
 
         //  Kiểm tra list có sản phẩm nào chưa
@@ -96,5 +98,24 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartError(message: e.toString()));
       }
     }
+  }
+
+  void _saveCartToFileJson(List<Cart> cart) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/cart.json');
+    final contents = jsonEncode(CartModel(cart: cart).toJson());
+    await file.writeAsString(contents.toString());
+  }
+
+  Future<CartModel> _readCartFromFileJson() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/cart.json');
+    if (file.existsSync()) {
+      final contents = await file.readAsString();
+      final json = jsonDecode(contents);
+      CartModel cartModel = CartModel.fromJson(json);
+      return cartModel;
+    }
+    return const CartModel();
   }
 }

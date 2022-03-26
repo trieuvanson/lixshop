@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -25,9 +26,29 @@ class _AddPostScreenState extends State<AddPostScreen> {
     //   "Authorization": authorization,
     // }));
     // print(response.data);
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/cart.json');
-
+    var testJson = {
+      "id": 1,
+      "name": "test",
+      "price": "1",
+      "image": "test",
+      "description": "test",
+      "idBrand": 1,
+    };
+    // final directory = await getApplicationDocumentsDirectory();
+    // final file = File('${directory.path}/cart.json');
+    // final file1 = File('${directory.path}/test');
+    // //encode json be
+    // // await file1.writeAsBytes(utf8.encode(jsonEncode(testJson)));
+    // // print(utf8.encode(jsonEncode(testJson)));
+    // // print(file1.path);
+    // final contents = await file1.readAsBytes();
+    // print('Contents: $contents');
+    // //
+    // var json = await file.readAsString();
+    // List<Cart> carts = (jsonDecode(json)['cart'] as List).map((e) => Cart.fromJson(e)).toList();
+    // CartModel cartModel = CartModel.fromJson(jsonDecode(json));
+    // print('cartModel: $cartModel');
+    // print('carts: ${carts[0].quantity}');
   }
 
   @override
