@@ -18,7 +18,6 @@ class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({
     Key? key,
   }) : super(key: key);
-
   @override
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
 }
@@ -26,9 +25,6 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen>
     with TickerProviderStateMixin {
   // final double infoHeight = 364.0;
-
-  //Size
-
   @override
   void initState() {
     super.initState();
@@ -173,14 +169,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       resizeToAvoidBottomInset: true,
       appBar: _appBar(context),
       backgroundColor: Colors.transparent,
-      bottomNavigationBar: _BottomNavigation(productDetails: products[selectProduct]),
+      bottomNavigationBar: _buildBottom(products[selectProduct]),
       body: SizedBox(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _ProductImage(
-                  id: products[selectProduct].code,
-                  img: products[selectProduct].pathImg ?? ""),
+              _buildImage(
+                  products[selectProduct].code,
+                  products[selectProduct].pathImg ?? ""),
               Container(
                 decoration: BoxDecoration(
                   color: DesignCourseAppTheme.nearlyWhite,
@@ -490,7 +486,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                             ],
                           ),
                         ),
-                      const _ExpandAbleDescription(),
+                      _buildExpandAbleDescription(),
                     ],
                   ),
                 ),
@@ -789,31 +785,30 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       ),
     );
   }
-}
 
-class _ProductImage extends StatelessWidget {
-  final String id;
-  final String img;
-
-  const _ProductImage({Key? key, required this.id, required this.img})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildImage(String code, String img) {
     return AspectRatio(
       aspectRatio: 1,
       child: SizedBox(
         // color: appColor,
         child: Image.network(
           img,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+              ),
+            );
+          },
           errorBuilder: (context, error, stackTrace) {
             return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 2,
               child: const Center(
-                child: CircularProgressIndicator(
-                  semanticsLabel: 'Loading',
-                  valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+                child: Icon(
+                  Icons.error,
+                  color: Colors.red,
                 ),
               ),
             );
@@ -823,97 +818,88 @@ class _ProductImage extends StatelessWidget {
       ),
     );
   }
-}
 
-PreferredSizeWidget _appBar(BuildContext context) {
-  return AppBar(
-    elevation: 0.0,
-    toolbarHeight: 40.0,
-    backgroundColor: Colors.transparent,
-    title: const Text(
-      'Nước rửa chén thương hiệu Lixco',
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.27,
-        color: DesignCourseAppTheme.darkerText,
-      ),
-    ),
-    leading: IconButton(
-      icon: const Icon(Icons.arrow_back_ios),
-      color: DesignCourseAppTheme.nearlyBlack,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ),
-    actions: <Widget>[
-      IconButton(
-        icon: const Icon(
-          Icons.favorite_border,
-          color: DesignCourseAppTheme.dark_grey,
+  PreferredSizeWidget _appBar(BuildContext context) {
+    return AppBar(
+      elevation: 0.0,
+      toolbarHeight: 40.0,
+      backgroundColor: Colors.transparent,
+      title: const Text(
+        'Nước rửa chén thương hiệu Lixco',
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.27,
+          color: DesignCourseAppTheme.darkerText,
         ),
-        onPressed: () {},
       ),
-      //share
-      IconButton(
-        icon: const Icon(
-          Icons.shopping_cart,
-          color: DesignCourseAppTheme.dark_grey,
-        ),
-        onPressed: () {},
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+        color: DesignCourseAppTheme.nearlyBlack,
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
-      DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          customButton: const Icon(
-            Icons.more_vert,
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.favorite_border,
             color: DesignCourseAppTheme.dark_grey,
-            size: 24,
           ),
-          customItemsIndexes: const [3],
-          customItemsHeight: 8,
-          items: [
-            ...MenuItems.firstItems.map(
-              (item) => DropdownMenuItem<MenuItem>(
-                value: item,
-                child: MenuItems.buildItem(item),
-              ),
-            ),
-            const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
-            ...MenuItems.secondItems.map(
-              (item) => DropdownMenuItem<MenuItem>(
-                value: item,
-                child: MenuItems.buildItem(item),
-              ),
-            ),
-          ],
-          onChanged: (value) {
-            MenuItems.onChanged(context, value as MenuItem);
-          },
-          itemHeight: 48,
-          itemPadding: const EdgeInsets.only(left: 16, right: 16),
-          dropdownWidth: 200,
-          dropdownPadding: const EdgeInsets.symmetric(vertical: 0),
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white,
-          ),
-          dropdownElevation: 8,
-          offset: const Offset(0, 8),
+          onPressed: () {},
         ),
-      ),
-    ],
-  );
-}
+        //share
+        IconButton(
+          icon: const Icon(
+            Icons.shopping_cart,
+            color: DesignCourseAppTheme.dark_grey,
+          ),
+          onPressed: () {},
+        ),
+        DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            customButton: const Icon(
+              Icons.more_vert,
+              color: DesignCourseAppTheme.dark_grey,
+              size: 24,
+            ),
+            customItemsIndexes: const [3],
+            customItemsHeight: 8,
+            items: [
+              ...MenuItems.firstItems.map(
+                    (item) => DropdownMenuItem<MenuItem>(
+                  value: item,
+                  child: MenuItems.buildItem(item),
+                ),
+              ),
+              const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
+              ...MenuItems.secondItems.map(
+                    (item) => DropdownMenuItem<MenuItem>(
+                  value: item,
+                  child: MenuItems.buildItem(item),
+                ),
+              ),
+            ],
+            onChanged: (value) {
+              MenuItems.onChanged(context, value as MenuItem);
+            },
+            itemHeight: 48,
+            itemPadding: const EdgeInsets.only(left: 16, right: 16),
+            dropdownWidth: 200,
+            dropdownPadding: const EdgeInsets.symmetric(vertical: 0),
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            dropdownElevation: 8,
+            offset: const Offset(0, 8),
+          ),
+        ),
+      ],
+    );
+  }
 
-class _BottomNavigation extends StatelessWidget {
-  final ProductDetail productDetails;
-
-  const _BottomNavigation(
-      {Key? key, required this.productDetails})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildBottom(ProductDetail productDetails) {
     return Container(
       margin: MediaQuery.of(context).viewInsets,
       child: Padding(
@@ -1077,12 +1063,7 @@ class _BottomNavigation extends StatelessWidget {
       ),
     );
   }
-}
-
-class _ExpandAbleDescription extends StatelessWidget {
-  const _ExpandAbleDescription({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildExpandAbleDescription() {
     String abc =
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
@@ -1112,5 +1093,120 @@ class _ExpandAbleDescription extends StatelessWidget {
         child: ExpandText(abc),
       ),
     );
+  }
+
+}
+
+class VoucherPopup extends StatelessWidget {
+  const VoucherPopup({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(16),
+      color: DesignCourseAppTheme.nearlyWhite,
+      child: Container(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: [
+              const _HeaderVoucher(),
+              const Divider(),
+              const _VoucherList().expand(),
+              const Divider(),
+              const _FooterVoucher(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderVoucher extends StatelessWidget {
+  const _HeaderVoucher({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          const SizedBox(
+            child: Center(
+                child: Text("Khuyến mãi của sản phẩm",
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+          ),
+          4.heightBox,
+          const SizedBox(
+            child: Text(
+              "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterVoucher extends StatelessWidget {
+  const _FooterVoucher({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: Vx.green500,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16.0),
+            ),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
+                  offset: const Offset(1.1, 1.1),
+                  blurRadius: 10.0),
+            ],
+          ),
+          child: const Center(
+            child: Text(
+              'Đóng',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                letterSpacing: 0.0,
+                color: DesignCourseAppTheme.nearlyWhite,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VoucherList extends StatefulWidget {
+  const _VoucherList({Key? key}) : super(key: key);
+
+  @override
+  State<_VoucherList> createState() => _VoucherListState();
+}
+
+class _VoucherListState extends State<_VoucherList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 100, itemBuilder: (context, index) => Container());
   }
 }
