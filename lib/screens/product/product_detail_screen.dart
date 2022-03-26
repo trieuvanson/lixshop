@@ -25,7 +25,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen>
     with TickerProviderStateMixin {
-  final double infoHeight = 364.0;
+  // final double infoHeight = 364.0;
 
   //Size
 
@@ -33,10 +33,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   void initState() {
     super.initState();
   }
-
-  int amount = 0;
-  int selectedTabbar = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,9 +46,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 snapshot.data!.error!.isNotEmpty) {
               return _buildErrorWidget(snapshot.data!.error);
             }
-            return _BuildProductDetailWidget(
+            return BuildProductDetailWidget(
               detailsDataModel: snapshot.data!,
-              selectTabIndex: selectedTabbar,
             );
           } else if (snapshot.hasError) {
             return _buildErrorWidget(snapshot.data!.error);
@@ -102,27 +97,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   }
 }
 
-class _BuildProductDetailWidget extends StatefulWidget {
+class BuildProductDetailWidget extends StatefulWidget {
   final ProductDetailsDataModel detailsDataModel;
-  int selectTabIndex;
-  _BuildProductDetailWidget(
+  const BuildProductDetailWidget(
       {Key? key,
-      required this.detailsDataModel,
-      required this.selectTabIndex})
+      required this.detailsDataModel})
       : super(key: key);
 
   @override
-  State<_BuildProductDetailWidget> createState() =>
+  State<BuildProductDetailWidget> createState() =>
       _BuildProductDetailWidgetState();
 }
 
-class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
+class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   int index = 0;
   var productDetails;
   var products;
   int selectProduct = 0;
   int selectVoucher = 1;
   List<String> emptyVoucherList = [];
+  int selectTabIndex = 0;
 
   @override
   void initState() {
@@ -203,6 +197,7 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //Name
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 16.0, left: 8, right: 8),
@@ -217,6 +212,7 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                         ),
                       ),
                     ),
+                    //Price
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 8, right: 8, bottom: 8, top: 16),
@@ -380,130 +376,134 @@ class _BuildProductDetailWidgetState extends State<_BuildProductDetailWidget> {
                       ),
                     ),
                     10.heightBox,
-                    DefaultTabController(
-                      length: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TabBar(
-                            onTap: (index) {
-                              setState(() {
-                                widget.selectTabIndex = index;
-                              });
-                            },
-                            physics: const BouncingScrollPhysics(),
-                            isScrollable: true,
-                            labelColor: Vx.green500,
-                            unselectedLabelColor: Vx.gray500,
-                            labelStyle: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                            indicator: const UnderlineTabIndicator(
-                              borderSide: BorderSide(
-                                width: 3,
-                                color: Vx.green500,
-                              ),
-                            ),
-                            tabs: const [
-                              Tab(text: "Khuyến mãi"),
-                              Tab(text: "Thông tin sản phẩm"),
-                            ],
-                          ),
-                          Builder(builder: (_) {
-                            if (widget.selectTabIndex == 1) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8.0)),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: DesignCourseAppTheme.grey
-                                            .withOpacity(0.2),
-                                        offset: const Offset(1.1, 1.1),
-                                        blurRadius: 8.0),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0,
-                                      right: 8.0,
-                                      top: 12.0,
-                                      bottom: 12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        child: "Thông tin chi tiết"
-                                            .text
-                                            .bold
-                                            .make(),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Divider(
-                                        color: DesignCourseAppTheme.grey
-                                            .withOpacity(0.6),
-                                        height: 1,
-                                      ),
-                                      for (var i = 0; i < 4; i++)
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                width: 120,
-                                                child: Text(
-                                                  'Tồn kho ${i + 1}',
-                                                  style: const TextStyle(
-                                                    color: DesignCourseAppTheme
-                                                        .darkerText,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    136,
-                                                child: Text(
-                                                  "Đây là văn bản test $i",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      const _ExpandAbleDescription(),
-                                    ],
-                                  ),
-                                ),
-                              ); //1st custom tabBarView
-                            } else {
-                              return _buildVoucher(
-                                products[selectProduct],
-                                products,
-                                selectProduct,
-                              ); //2nd tabView
-                            }
-                          }),
-                        ],
-                      ),
-                    ),
+                    _buildDefaultTab(),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultTab() {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TabBar(
+            onTap: (index) {
+              setState(() {
+                selectTabIndex = index;
+              });
+            },
+            physics: const BouncingScrollPhysics(),
+            isScrollable: true,
+            labelColor: Vx.green500,
+            unselectedLabelColor: Vx.gray500,
+            labelStyle: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold),
+            indicator: const UnderlineTabIndicator(
+              borderSide: BorderSide(
+                width: 3,
+                color: Vx.green500,
+              ),
+            ),
+            tabs: const [
+              Tab(text: "Khuyến mãi"),
+              Tab(text: "Thông tin sản phẩm"),
+            ],
+          ),
+          Builder(builder: (_) {
+            if (selectTabIndex == 1) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: DesignCourseAppTheme.nearlyWhite,
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: DesignCourseAppTheme.grey
+                            .withOpacity(0.2),
+                        offset: const Offset(1.1, 1.1),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      top: 12.0,
+                      bottom: 12.0),
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        child: "Thông tin chi tiết"
+                            .text
+                            .bold
+                            .make(),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Divider(
+                        color: DesignCourseAppTheme.grey
+                            .withOpacity(0.6),
+                        height: 1,
+                      ),
+                      for (var i = 0; i < 4; i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0),
+                          child: Row(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  'Tồn kho ${i + 1}',
+                                  style: const TextStyle(
+                                    color: DesignCourseAppTheme
+                                        .darkerText,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width -
+                                    136,
+                                child: Text(
+                                  "Đây là văn bản test $i",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      const _ExpandAbleDescription(),
+                    ],
+                  ),
+                ),
+              ); //1st custom tabBarView
+            } else {
+              return _buildVoucher(
+                products[selectProduct],
+                products,
+                selectProduct,
+              ); //2nd tabView
+            }
+          }),
+        ],
       ),
     );
   }
@@ -1081,7 +1081,6 @@ class _BottomNavigation extends StatelessWidget {
 
 class _ExpandAbleDescription extends StatelessWidget {
   const _ExpandAbleDescription({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     String abc =
