@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/models/productlist.dart';
+import 'package:lixshop/models/models.dart';
+import 'package:lixshop/repositories/category/product_category_repository.dart';
+import 'package:lixshop/repositories/products_data/products_data_repositories.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
@@ -14,7 +16,66 @@ class HomeProductsTypeScreen extends StatefulWidget {
 class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return FutureBuilder<ProductsDataModel>(
+      future: ProductsDataRepositories().getProductsData(),
+      builder: (context,snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.error != null &&
+              snapshot.data!.error!.isNotEmpty) {
+            return _buildErrorWidget(snapshot.data!.error);
+          }
+          return _buildCategoriesWidget(snapshot.data!);
+        } else if (snapshot.hasError) {
+          return _buildErrorWidget(snapshot.error);
+        } else {
+          return _buildLoadingWidget();
+        }
+      },
+    );
+
+  }
+
+
+  Widget _buildLoadingWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              strokeWidth: 4.0,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //display error
+  Widget _buildErrorWidget(dynamic error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text(
+            'Có lỗi xảy ra',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoriesWidget(ProductsDataModel productsDataModel/*TrailersModel data*/) {
+    // List<Video>? videos = data.trailers;
+    ProductCateModel productCateModel = ProductCategoryRepository().getAllCategories2(productsDataModel);
+      return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
         color: DesignCourseAppTheme.nearlyWhite,
@@ -34,10 +95,10 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              restaurants.length,
+              productCateModel.productCates!.length,
                   (index) => ProductTypeCard(
-                imagePath: restaurants[index]['img'],
-                title: restaurants[index]['type'],
+                imagePath: productCateModel.productCates![index].catePath??"",
+                title: productCateModel.productCates![index].cateName??"",
               ),
             ),
           ),
@@ -45,6 +106,16 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+
 }
 
 class ProductTypeCard extends StatefulWidget {
@@ -95,15 +166,17 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
-                  child: Image.network(
-                    widget.imagePath,
-                    height: 100,
-                    fit: BoxFit.cover,
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image.network(
+                      widget.imagePath,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -111,8 +184,9 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                 padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
                 child: Center(
                   child: Text(
-                    widget.title,
+                    (widget.title[0] +  widget.title.substring(1).toLowerCase()),
                     textAlign: TextAlign.left,
+                    maxLines: 1,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,

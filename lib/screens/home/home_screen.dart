@@ -9,6 +9,8 @@ import 'package:lixshop/screens/product/products_screen.dart';
 import 'package:lixshop/screens/search/search_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../models/models.dart';
+import '../../repositories/repositories.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../cart/cart_screen.dart';
 
@@ -30,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _scrollController.addListener(() {
       setState(() {
         _offset = _scrollController.offset;
-        print('offset: $_offset');
       });
     });
   }
@@ -72,17 +73,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 const HomeBannerScreen(),
                 10.heightBox,
-                buildRestaurantRow("", context),
+                buildProductListRow("", context),
                 const HomeProductsTypeScreen(),
                 10.heightBox,
-                buildRestaurantRow("Khuyến mãi", context),
-                const ProductShowCardRowItem(),
+                buildProductListRow("Khuyến mãi", context),
+                const ProductShowCardRowItem(isSales: true),
                 10.heightBox,
-                buildRestaurantRow("Sản phẩm bán chạy", context),
-                const ProductShowCardRowItem(),
+                buildProductListRow("Sản phẩm bán chạy", context),
+                const ProductShowCardRowItem(isHot: true,),
                 10.heightBox,
-                buildRestaurantRow("Sản phẩm mới", context),
-                const ProductShowCardRowItem(),
+                buildProductListRow("Sản phẩm mới", context),
+                const ProductShowCardRowItem(isNew: true,),
                 10.heightBox,
               ],
             ),
@@ -92,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildRestaurantRow(String title, BuildContext context) {
+  Widget buildProductListRow(String title, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Row(
@@ -107,12 +108,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           FlatButton(
             child: Text(
-              "Xem thêm (9)",
+              "Xem thêm",
               style: TextStyle(
                 color: Theme.of(context).accentColor,
               ),
             ),
-            onPressed: () {
+            onPressed:() {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -277,45 +278,22 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 minHeight >= 150
-                    ? SizedBox(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 8.0),
-                            width: double.infinity,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: restaurants
-                                    .map((e) => Container(
-                                          height: 50,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: RaisedButton(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            color: Colors.green,
-                                            animationDuration: const Duration(
-                                                milliseconds: 500),
-                                            onPressed: () {
-                                              Get.to(
-                                                () => const ProductsScreen(),
-                                              );
-                                            },
-                                            child: Text(
-                                              e['type'],
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+                    ?FutureBuilder<ProductsDataModel>(
+                  future: ProductsDataRepositories().getProductsData(),
+                  builder: (context,snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.error != null &&
+                          snapshot.data!.error!.isNotEmpty) {
+                        return _buildErrorWidget(snapshot.data!.error);
+                      }
+                      return _buildCategoriesWidget(snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return _buildErrorWidget(snapshot.error);
+                    } else {
+                      return _buildLoadingWidget();
+                    }
+                  },
+                )
                     : Container(),
               ],
             ),
@@ -334,28 +312,88 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 
-  Widget _test(BuildContext context, double shrinkOffset) {
-    return Container(
-      height: expandedHeight,
-      child: Stack(
-        children: [
-          Positioned(
-            top: expandedHeight / 2 - shrinkOffset,
-            left: MediaQuery.of(context).size.width / 4,
-            child: Opacity(
-              opacity: (1 - shrinkOffset / expandedHeight),
-              child: Card(
-                elevation: 10,
-                child: SizedBox(
-                  height: expandedHeight,
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: const FlutterLogo(),
-                ),
-              ),
+
+  Widget _buildLoadingWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              strokeWidth: 4.0,
             ),
-          ),
+          )
         ],
       ),
     );
   }
+
+  //display error
+  Widget _buildErrorWidget(dynamic error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text(
+            'Có lỗi xảy ra',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoriesWidget(ProductsDataModel productsDataModel/*TrailersModel data*/) {
+    ProductCateModel productCateModel = ProductCategoryRepository().getAllCategories2(productsDataModel);
+    // List<Video>? videos = data.trailers;
+    return SizedBox(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8.0),
+          width: double.infinity,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                productCateModel.productCates!.length,
+                    (index) => Container(
+                      height: 50,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8.0),
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(10)),
+                        color: Colors.green,
+                        animationDuration: const Duration(
+                            milliseconds: 500),
+                        onPressed: () {
+                          Get.to(
+                                () => const ProductsScreen(),
+                          );
+                        },
+                        child: Text(
+                          productCateModel.productCates![index].cateName??"",
+                          style: const TextStyle(
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+          ),
+        ),
+    );
+  }
+
+
+
 }

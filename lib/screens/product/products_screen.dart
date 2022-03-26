@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lixshop/models/models.dart';
 import 'package:lixshop/models/productlist.dart';
+import 'package:lixshop/repositories/product/product_details_repository.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -31,86 +33,93 @@ class _ProductsScreenState extends State<ProductsScreen> {
           child: Padding(
             padding:
                 const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16, top: 16),
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: SingleChildScrollView(
+              child: Container(
+                color: DesignCourseAppTheme.notWhite,
+                child: Padding(
+                  padding:
+                  const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
+                  child: Column(
                     children: [
-                      "100 sản phẩm".text.bold.size(16).make(),
-                      Row(
-                        children: [
-                          CustomDropdownButton2(
-                            buttonDecoration: BoxDecoration(
-                              color: DesignCourseAppTheme.nearlyWhite,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              border: Border.all(
-                                color: Vx.gray300,
-                              ),
-                            ),
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              size: 24,
-                            ),
-                            hint: 'Đơn vị tính',
-                            value: 'Giá cao tới thấp',
-                            onChanged: (String? value) {},
-                            dropdownItems: const [
-                              "Tất cả",
-                              "Mới nhất",
-                              "Cũ nhất",
-                              "Giá thấp tới cao",
-                              "Giá cao tới thấp",
-                              "Tên A-Z",
-                              "Tên Z-A",
-                            ],
-                          ),
-                          8.widthBox,
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.filter_list,
-                                color: Vx.gray700,
-                              ),
-                              "Lọc".text.bold.color(Vx.gray700).make(),
-                            ],
-                          ),
-                        ],
-                      )
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16, top: 16),
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            "100 sản phẩm".text.bold.size(16).make(),
+                            Row(
+                              children: [
+                                CustomDropdownButton2(
+                                  buttonDecoration: BoxDecoration(
+                                    color: DesignCourseAppTheme.nearlyWhite,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                    border: Border.all(
+                                      color: Vx.gray300,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    size: 24,
+                                  ),
+                                  hint: 'Đơn vị tính',
+                                  value: 'Giá cao tới thấp',
+                                  onChanged: (String? value) {},
+                                  dropdownItems: const [
+                                    "Tất cả",
+                                    "Mới nhất",
+                                    "Cũ nhất",
+                                    "Giá thấp tới cao",
+                                    "Giá cao tới thấp",
+                                    "Tên A-Z",
+                                    "Tên Z-A",
+                                  ],
+                                ),
+                                8.widthBox,
+                                Wrap(
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.filter_list,
+                                      color: Vx.gray700,
+                                    ),
+                                    "Lọc".text.bold.color(Vx.gray700).make(),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      AlignedGridView.count(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          Map restaurant = restaurants[index];
+                          return ProductCardItem(
+                            img: restaurant['img'],
+                            title: restaurant['title'],
+                          );
+                        },
+                        itemCount: restaurants.length,
+                      ),
                     ],
                   ),
                 ),
-                AlignedGridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    Map restaurant = restaurants[index];
-                    return ProductCardItem(
-                      id: restaurant['id'],
-                      img: restaurant['img'],
-                      title: restaurant['title'],
-                      address: restaurant['address'],
-                      rating: restaurant['rating'],
-                    );
-                  },
-                  itemCount: restaurants.length,
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
 
   PreferredSizeWidget appBar() {
     return AppBar(

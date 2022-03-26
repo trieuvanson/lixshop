@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/const.dart';
 
 class SlideItem extends StatefulWidget {
   final String img;
