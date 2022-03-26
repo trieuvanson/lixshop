@@ -56,8 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverPersistentHeader(
-            delegate: SliverHeaderBar(expandedHeight: 200),
-            pinned: true,
+            delegate: SliverHeaderBar(expandedHeight:170),
+            pinned: false,
           ),
           SliverToBoxAdapter(
             child: Container(
@@ -126,13 +126,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     title: "Chờ xác nhận",
                                     icon: Icons.check_circle_outline),
                                 _HistoryItem(
-                                    title: "Chờ lấy hàng",
+                                    title: "Đã xác nhận",
                                     icon: Icons.check_circle_outline),
                                 _HistoryItem(
                                     title: "Đang giao hàng",
                                     icon: Icons.check_circle_outline),
                                 _HistoryItem(
-                                    title: "Đánh giá đơn", icon: Icons.star),
+                                    title: "Đang giao hàng",
+                                    icon: Icons.check_circle_outline),
                               ],
                             ),
                           ],
@@ -249,7 +250,6 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset/expandedHeight);
     return Material(
       child: InkWell(
         onTap: () {},
@@ -268,44 +268,11 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                   ],
                 ),
               ),
-              child: shrinkOffset >= 100
-                  ? Stack(
-                children: [
-                  Opacity(
-                    opacity: (shrinkOffset / expandedHeight),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.shopping_cart,
-                                color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.settings,
-                                color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.message,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    child: Opacity(
-                      opacity: (shrinkOffset / expandedHeight),
-                      child: InkWell(
+              child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
                         onTap: () {
                           Get.to(
                                 () => const ProfileInformationScreen(),
@@ -314,17 +281,13 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                           );
                         },
                         child: Container(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child:
                               Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const SizedBox(
-                                    width: 80,
+                                    width: 50,
                                     child: CircleAvatar(
                                       radius: 50,
                                       backgroundImage: NetworkImage(
@@ -334,14 +297,16 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                                   ),
                                   16.widthBox,
                                   Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(
+                                        width: 200,
                                         child: Text(
-                                          "Tên người dùng",
+                                          "Cửa hàng ABC Cửa hàng ABC Cửa hang ABC cua",
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -352,8 +317,7 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                                       4.heightBox,
                                       Container(
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           color: Vx.green500,
                                         ),
                                         child: const Padding(
@@ -370,173 +334,24 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      4.heightBox,
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "Người theo dõi 123",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          8.widthBox,
-                                          const Text(
-                                            "Đang theo dõi 123",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
                                       )
                                     ],
                                   )
                                 ],
                               )
-                            ],
-                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              )
-                  : Stack(
-                      children: [
-                        Opacity(
-                          opacity: (1 - shrinkOffset / expandedHeight),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.shopping_cart,
-                                      color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.settings,
-                                      color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.message,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
+                      SizedBox(
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.shopping_cart,
+                              color: Colors.white),
                         ),
-                        Positioned(
-                          bottom: 16,
-                          child: Opacity(
-                            opacity: (1 - shrinkOffset / expandedHeight),
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(
-                                  () => const ProfileInformationScreen(),
-                                  curve: Curves.easeInToLinear,
-                                  transition: Transition.rightToLeft,
-                                );
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          width: 80,
-                                          child: CircleAvatar(
-                                            radius: 50,
-                                            backgroundImage: NetworkImage(
-                                              "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                                            ),
-                                          ),
-                                        ),
-                                        16.widthBox,
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                              child: Text(
-                                                "Tên người dùng",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            4.heightBox,
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Vx.green500,
-                                              ),
-                                              child: const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 8,
-                                                  vertical: 4,
-                                                ),
-                                                child: Text(
-                                                  "Thứ hạng",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            4.heightBox,
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Text(
-                                                  "Người theo dõi 123",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                8.widthBox,
-                                                const Text(
-                                                  "Đang theo dõi 123",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+
+
             ),
             // Positioned(
             //   top: expandedHeight / 2 - shrinkOffset,
@@ -563,35 +378,10 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  double get minExtent => 200;
+  double get minExtent => expandedHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
-
-  Widget _test(BuildContext context, double shrinkOffset) {
-    return Container(
-      height: expandedHeight,
-      child: Stack(
-        children: [
-          Positioned(
-            top: expandedHeight / 2 - shrinkOffset,
-            left: MediaQuery.of(context).size.width / 4,
-            child: Opacity(
-              opacity: (1 - shrinkOffset / expandedHeight),
-              child: Card(
-                elevation: 10,
-                child: SizedBox(
-                  height: expandedHeight,
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: const FlutterLogo(),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _HistoryItem extends StatelessWidget {
@@ -623,7 +413,7 @@ class _HistoryItem extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     color: Vx.gray500,
-                    fontSize: 12,
+                    fontSize: 10,
                   ),
                 ),
               ],
