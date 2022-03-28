@@ -1,18 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/models/productlist.dart';
-import 'package:lixshop/screens/home/home_banner_screen.dart';
-import 'package:lixshop/screens/home/home_products_type_screen.dart';
-import 'package:lixshop/screens/home/products_show_card_row_item.dart';
-import 'package:lixshop/screens/product/products_screen.dart';
-import 'package:lixshop/screens/search/search_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
-import '../../utils/design_course_app_theme.dart';
-import '../cart/cart_screen.dart';
+import '../screen.dart';
+import 'home_banner_screen.dart';
+import 'home_products_type_screen.dart';
+import 'products_show_card_row_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -73,16 +69,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 const HomeBannerScreen(),
                 10.heightBox,
-                buildProductListRow("", context),
+                buildProductTitleRow("", context),
                 const HomeProductsTypeScreen(),
                 10.heightBox,
-                buildProductListRow("Khuyến mãi", context),
+                buildProductTitleRow("Khuyến mãi", context),
                 const ProductShowCardRowItem(isSales: true),
                 10.heightBox,
-                buildProductListRow("Sản phẩm bán chạy", context),
+                buildProductTitleRow("Sản phẩm bán chạy", context),
                 const ProductShowCardRowItem(isHot: true,),
                 10.heightBox,
-                buildProductListRow("Sản phẩm mới", context),
+                buildProductTitleRow("Sản phẩm mới", context),
                 const ProductShowCardRowItem(isNew: true,),
                 10.heightBox,
               ],
@@ -93,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildProductListRow(String title, BuildContext context) {
+  Widget buildProductTitleRow(String title, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Row(
@@ -333,18 +329,18 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
 
   //display error
   Widget _buildErrorWidget(dynamic error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
-          Text(
-            'Có lỗi xảy ra',
+    return const SizedBox(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Center(
+          child: Text(
+            "Có lỗi xảy ra",
             style: TextStyle(
               fontSize: 20,
               color: Colors.black,
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

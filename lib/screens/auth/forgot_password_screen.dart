@@ -1,12 +1,10 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../contains/colors.dart';
 import '../../utils/utils.dart';
+import '../../widgets/widgets.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -236,7 +234,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 }
 
-buildImageHeader(BuildContext context) {
+_buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
     child: Image.asset('assets/images/ForgotPassword.png',

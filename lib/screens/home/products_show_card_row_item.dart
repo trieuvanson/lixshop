@@ -1,14 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/models/models.dart';
-import 'package:lixshop/repositories/repositories.dart';
 
-import '../../models/productlist.dart';
-import '../../repositories/product/product_repository.dart';
+
+import 'package:flutter/material.dart';
+
+import '../../models/models.dart';
+import '../../repositories/repositories.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../widgets/product_card_item.dart';
-import '../product/product_detail_screen.dart';
+import '../../widgets/widgets.dart';
 
 class ProductShowCardRowItem extends StatefulWidget {
   final bool? isSales;

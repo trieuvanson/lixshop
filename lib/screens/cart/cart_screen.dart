@@ -1,17 +1,17 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/blocs/cart/cart_bloc.dart';
-import 'package:lixshop/models/models.dart';
-import 'package:lixshop/screens/cart/cart_detail_screen.dart';
-import 'package:lixshop/screens/cart/checkout_card_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../blocs/cart/cart_bloc.dart';
 import '../../contains/contains.dart';
+import '../../models/models.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
+import '../screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -21,28 +21,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
-  AnimationController? animationController;
-  Animation<double>? animation;
-  double opacity3 = 0.0;
 
-  @override
-  void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: animationController!,
-        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
-    setData();
-    super.initState();
-  }
 
-  Future<void> setData() async {
-    animationController?.forward();
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      opacity3 = 1.0;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +40,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           },
         ),
       ),
-      bottomNavigationBar: _BottomNavigation(opacity3: opacity3),
+      bottomNavigationBar: const _BottomNavigation(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
@@ -152,7 +132,10 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                           ),
 
                           for (var cart in state.cartModel.cart)
-                            _CartItem(cart: cart)
+                            Builder(builder: (_) {
+                              print("CartModel: ${state.cartModel.cart}");
+                              return _CartItem(cart: cart);
+                            })
                           //Tạo biến ở phần thân của component
                           // for (var i = 0;
                           //     i <
@@ -278,9 +261,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
 // }
 
 class _BottomNavigation extends StatelessWidget {
-  final double opacity3;
 
-  const _BottomNavigation({Key? key, required this.opacity3}) : super(key: key);
+  const _BottomNavigation({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -289,154 +271,95 @@ class _BottomNavigation extends StatelessWidget {
         if (state is CartLoaded) {
           return Container(
             margin: MediaQuery.of(context).viewInsets,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 500),
-              opacity: opacity3,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 140,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          "Tổng ${state.cartModel.cart.length} sản phẩm"
-                              .text
-                              .xl
-                              .gray500
-                              .make(),
-                          "${state.cartModel.totalPriceVND}đ"
-                              .text
-                              .color(Vx.black.withOpacity(0.8))
-                              .bold
-                              .xl2
-                              .make(),
-                        ],
-                      ),
-                      5.heightBox,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                          "- 999,999đ"
-                              .text
-                              .color(Vx.green500.withOpacity(0.8))
-                              .bold
-                              .xl2
-                              .make(),
-                        ],
-                      ),
-                      5.heightBox,
-                      const Divider(),
-                      Flexible(
-                        child: Container(),
-                        flex: 1,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  "Tạm tính".text.xl2.black.bold.make(),
-                                  " (đã có VAT)"
-                                      .text
-                                      .color(Vx.gray800.withOpacity(0.8))
-                                      .xl
-                                      .make(),
-                                ],
-                              ),
-                              "9,000,000đ"
-                                  .text
-                                  .color(Vx.red700.withOpacity(0.8))
-                                  .bold
-                                  .xl2
-                                  .make(),
-                            ],
-                          ),
-                          // Button thanh toán
-                          SizedBox(
-                            width: 150,
-                            height: 50,
-                            child: RaisedButton(
-                              onPressed: () {
-                                Get.to(
-                                  () => const CheckoutCardScreen(),
-                                );
-                              },
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                              ),
-                              color: Vx.green500,
-                              child: "Đặt hàng".text.white.bold.xl.make(),
-                            ),
-                          )
-                          //Cart icon
-                        ],
-                      ),
-                      /*  10.heightBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          border: Border.all(
-                            color: Vx.green500,
-                          )),
-                      child: const Icon(
-                        Icons.add_shopping_cart,
-                        color: Vx.green500,
-                        size: 28,
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 140,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Tổng ${state.cartModel.cart.length} sản phẩm"
+                            .text
+                            .xl
+                            .gray500
+                            .make(),
+                        "${state.cartModel.totalPriceVND}đ"
+                            .text
+                            .color(Vx.black.withOpacity(0.8))
+                            .bold
+                            .xl2
+                            .make(),
+                      ],
                     ),
-                    16.widthBox,
-                    Expanded(
-                      child: Container(
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Vx.green500,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: DesignCourseAppTheme.nearlyBlue
-                                    .withOpacity(0.5),
-                                offset: const Offset(1.1, 1.1),
-                                blurRadius: 10.0),
+                    5.heightBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Khuyến mãi đơn hàng".text.xl.gray500.make(),
+                        "- 999,999đ"
+                            .text
+                            .color(Vx.green500.withOpacity(0.8))
+                            .bold
+                            .xl2
+                            .make(),
+                      ],
+                    ),
+                    5.heightBox,
+                    const Divider(),
+                    Flexible(
+                      child: Container(),
+                      flex: 1,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                "Tạm tính".text.xl2.black.bold.make(),
+                                " (đã có VAT)"
+                                    .text
+                                    .color(Vx.gray800.withOpacity(0.8))
+                                    .xl
+                                    .make(),
+                              ],
+                            ),
+                            "9,000,000đ"
+                                .text
+                                .color(Vx.red700.withOpacity(0.8))
+                                .bold
+                                .xl2
+                                .make(),
                           ],
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Thêm vào giỏ hàng',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              letterSpacing: 0.0,
-                              color: DesignCourseAppTheme.nearlyWhite,
+                        // Button thanh toán
+                        SizedBox(
+                          width: 150,
+                          height: 50,
+                          child: RaisedButton(
+                            onPressed: () {
+                              Get.to(
+                                () => const CheckoutCardScreen(),
+                              );
+                            },
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
                             ),
+                            color: Vx.green500,
+                            child: "Đặt hàng".text.white.bold.xl.make(),
                           ),
-                        ),
-                      ),
-                    )
+                        )
+                        //Cart icon
+                      ],
+                    ),
                   ],
-                ),*/
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -456,6 +379,7 @@ class _CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(cart);
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
@@ -562,7 +486,7 @@ class _CartItem extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                "${convertCurrencyToVND(cart.productDetail!.price!)}/Thùng"
+                                "${convertCurrencyToVND(cart.productDetail!.price!)}/${cart.unit}"
                                     .text
                                     .xl
                                     .gray500
@@ -610,9 +534,66 @@ class _CartItem extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
-                          child: SizedBox(
+                          child: InkWell(
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: DesignCourseAppTheme.nearlyWhite,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8.0),
+                                    ),
+                                    border: Border.all(
+                                      color: Vx.green500,
+                                    )),
+                                child: const Icon(
+                                  Icons.remove,
+                                  color: Vx.green500,
+                                  size: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
                             width: 40,
                             height: 40,
+                            decoration: BoxDecoration(
+                                color: DesignCourseAppTheme.nearlyWhite,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                border: Border.all(
+                                  color: Vx.green500,
+                                )),
+                            child: TextFormField(
+                              controller: TextEditingController(text: cart.quantity.toString()),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
+                                //  Giới hạn 3 kí tự
+                                LengthLimitingTextInputFormatter(3),
+                              ],
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 14.0),
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  color: DesignCourseAppTheme.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
                             child: Container(
                               decoration: BoxDecoration(
                                   color: DesignCourseAppTheme.nearlyWhite,
@@ -623,64 +604,10 @@ class _CartItem extends StatelessWidget {
                                     color: Vx.green500,
                                   )),
                               child: const Icon(
-                                Icons.remove,
+                                Icons.add,
                                 color: Vx.green500,
                                 size: 28,
                               ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
-                                //  Giới hạn 3 kí tự
-                                LengthLimitingTextInputFormatter(3),
-                              ],
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                hintText: '${cart.quantity}',
-                                contentPadding:
-                                    const EdgeInsets.only(bottom: 14.0),
-                                border: InputBorder.none,
-                                hintStyle: const TextStyle(
-                                  color: DesignCourseAppTheme.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: const Icon(
-                              Icons.add,
-                              color: Vx.green500,
-                              size: 28,
                             ),
                           ),
                         ),

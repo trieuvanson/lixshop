@@ -1,9 +1,10 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import 'order_history_item_detail_screen.dart';
+import '../screen.dart';
 
 class OrderHistoryListScreen extends StatelessWidget {
   const OrderHistoryListScreen({Key? key}) : super(key: key);

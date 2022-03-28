@@ -1,7 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../screens/product/product_detail_screen.dart';
+import '../screens/screen.dart';
 import '../utils/design_course_app_theme.dart';
 
 class ProductCardItem extends StatefulWidget {
@@ -25,14 +26,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(
-          () => const ProductDetailScreen(
-              // id: widget.id,
-              // img: widget.img,
-              // title: widget.title,
-              // routeName: '/product-detail1/${widget.id}',
-              ),
-        );
+        Get.to(() => const ProductDetailsScreen());
       },
       child: Container(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -56,6 +50,19 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ),
                 child: Image.network(
                   widget.img,
+                  // loadingBuilder: (context, child, loadingProgress) {
+                  //   if (loadingProgress == null)
+                  //   return  child
+                  //   else {
+                  //     Center(
+                  //       child: CircularProgressIndicator(
+                  //        valueColor: AlwaysStoppedAnimation<Color>(
+                  //          DesignCourseAppTheme.nearlyBlue,
+                  //        ),
+                  //       ),
+                  //     );
+                  //   }
+                  // },
                   width: double.infinity,
                   height: 180,
                   fit: BoxFit.cover,

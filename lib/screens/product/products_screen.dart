@@ -1,17 +1,16 @@
+
+
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/models/models.dart';
-import 'package:lixshop/models/productlist.dart';
-import 'package:lixshop/repositories/product/product_details_repository.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../models/productlist.dart';
+import '../../responsive/responsive_screen.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../widgets/product_card_item.dart';
-import '../search/search_screen.dart';
+import '../../widgets/widgets.dart';
+import '../screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   final String? keyword;

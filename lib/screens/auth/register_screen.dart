@@ -1,15 +1,17 @@
-import 'dart:ui';
+
 
 import 'package:flutter/material.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/auth/login_screen.dart';
-import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../contains/colors.dart';
+import '../../responsive/responsive_screen.dart';
 import '../../utils/utils.dart';
+import '../../widgets/widgets.dart';
+import '../screen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -63,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _passwordController.dispose();
   }
 
-  var _currencies = [
+  final _currencies = [
     "Food",
     "Transport",
     "Personal",
@@ -100,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  buildImageHeader(context),
+                  _buildImageHeader(context),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -291,7 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-buildImageHeader(BuildContext context) {
+_buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
     child: Image.asset('assets/images/register.png',

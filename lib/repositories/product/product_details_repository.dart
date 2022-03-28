@@ -9,9 +9,7 @@ class ProductDetailsRepository {
       List<ProductDetail> productDetails = [];
       ProductSizesModel productSizesModel =
       ProductSizesRepository().getProductSizes(productDetailsDataModel);
-      print(productSizesModel.productSizes![index].size);
       productDetails.addAll(productSizesModel.productSizes![index].productDetails!);
-      print('So luong: ${productDetails.length}');
       return ProductDetailsModel(
         error: "",
         productDetails: productDetails,

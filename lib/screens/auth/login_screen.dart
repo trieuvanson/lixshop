@@ -1,21 +1,18 @@
-import 'dart:ui';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
-import 'package:lixshop/screens/auth/forgot_password_screen.dart';
-import 'package:lixshop/screens/auth/register_screen.dart';
-import 'package:lixshop/screens/home/home_screen.dart';
-import 'package:lixshop/widgets/text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../contains/colors.dart';
-import '../../utils/utils.dart';
+import '../../responsive/responsive_screen.dart';
+import '../../widgets/widgets.dart';
+import '../screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -101,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
             key: _formKey,
             child: Column(
               children: [
-                buildImageHeader(context),
+                _buildImageHeader(context),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16.0,
@@ -257,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-buildImageHeader(BuildContext context) {
+_buildImageHeader(BuildContext context) {
   return SizedBox(
     // color: appColor,
     child: Image.asset('assets/images/login.png',

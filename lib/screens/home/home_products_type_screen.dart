@@ -56,18 +56,13 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
 
   //display error
   Widget _buildErrorWidget(dynamic error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
-          Text(
-            'Có lỗi xảy ra',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black,
-            ),
-          )
-        ],
+    return const Center(
+      child: Text(
+        'Có lỗi xảy ra',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+        ),
       ),
     );
   }

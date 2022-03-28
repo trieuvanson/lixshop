@@ -1,12 +1,7 @@
-import 'dart:math';
 
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/contains/colors.dart';
-import 'package:lixshop/screens/cart/checkout_card_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';

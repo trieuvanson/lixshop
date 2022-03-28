@@ -1,11 +1,11 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/screens/garniture/garniture_screen.dart';
-import 'package:lixshop/screens/order_history/order_history_list_screen.dart';
-import 'package:lixshop/screens/profile/profile_information_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
+import '../screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

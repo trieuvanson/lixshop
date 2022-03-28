@@ -6,6 +6,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:url_strategy/url_strategy.dart';
 
+import 'blocs/checkout/checkout_bloc.dart';
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
 import 'responsive/web_screen_layout.dart';
@@ -33,16 +34,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) {
-            // final directory = await getApplicationDocumentsDirectory();
-            // final file = File('${directory.path}/cart.json');
-           return CartBloc()
-              ..add(
-                const LoadCart(carts: []),
-              );
-          }
-        ),
+        BlocProvider(create: (_) {
+          // final directory = await getApplicationDocumentsDirectory();
+          // final file = File('${directory.path}/cart.json');
+          return CartBloc()
+            ..add(
+              LoadCart(),
+            );
+        }),
+        BlocProvider(create: (context) {
+          return CheckoutBloc(cartBloc: context.read<CartBloc>())
+            ..add(LoadCheckout());
+        }),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',

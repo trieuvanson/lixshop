@@ -26,21 +26,14 @@ class ProductDetailsDataRepository {
       if (response.data['err'] == -1) {
         return ProductDetailsDataModel.withError("${response.data['msg']}");
       }
-
-      // final directory = await getApplicationDocumentsDirectory();
-      // final file = File('${directory.path}/product_details.json');
-      // await file.writeAsString(response.data.toString());
-      // final directory = await getApplicationDocumentsDirectory();
-      // final file = File('${directory.path}/product_details.json');
-      // final contents = await file.readAsString();
-      // final json = jsonDecode(contents);
-
       return ProductDetailsDataModel.fromJson(response.data);
-    } on DioError catch (e) {
-      return ProductDetailsDataModel.withError(
-          "${e.response!.data['msg']}");
-    } catch (e) {
-      return ProductDetailsDataModel.withError(e.toString());
+    }  on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        return ProductDetailsDataModel.withError("${e.response!.data['msg']}");
+      } else if (e.response?.statusCode == 404) {
+        return ProductDetailsDataModel.withError("Dữ liệu không tồn tại");
+      }
+      return ProductDetailsDataModel.withError("Lỗi kết nối");
     }
   }
 }
