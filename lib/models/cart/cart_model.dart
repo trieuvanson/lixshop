@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/models/models.dart';
 
 class Cart {
@@ -13,19 +14,37 @@ class Cart {
 
   @override
   String toString() {
-    return 'Cart{productDetail: ${productDetail??""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher}';
+    return 'Cart{productDetail: ${productDetail ?? ""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher}';
   }
 
   int? getVoucherMethodFromProductDetail(
       ProductDetail productDetail, int selectVoucher) {
-    print("selectVoucher: $selectVoucher");
-    print('productDetail.voucher: ${productDetail.voucherMethods!.length}');
     return productDetail.voucherMethods
         ?.firstWhere((element) => element.typeformCus == selectVoucher,
             orElse: () => VoucherMethod(typeform: -1))
         .typeform;
   }
 
+  String? getPricesChangeValue() {
+    String value = "";
+    if (unit == "THÙNG") {
+      value = convertCurrencyToVND(
+              productDetail!.price! * productDetail!.changeValue!) +
+          "đ/THÙNG";
+    } else {
+      value = convertCurrencyToVND(productDetail!.price!) +
+          "đ/${productDetail!.unit}";
+    }
+    return value;
+  }
+
+  int? getPrices() {
+    if (unit == "THÙNG") {
+      return productDetail!.price! * quantity! * productDetail!.changeValue!;
+    } else {
+      return productDetail!.price! * quantity!;
+    }
+  }
 
 //  fromJson
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -44,6 +63,28 @@ class Cart {
       'typeformVoucher': typeformVoucher,
     };
   }
+
+
+//  Trường hợp 1. Nếu là thùng => Tính KM
+//  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
+
+
+//=> Có được số lượng để tính
+
+//so sánh
+//  => Nếu phần nguyên >=1 thì tính KM
+//          Lấy vouchers from prod detail
+//         chạy vòng lặp trong list voucher vừa lấy ra
+// lấy số lượng mua / số lượng item trong voucher// Mua 4 thùng / số lượng 1 => 4
+//  Lấy phần nguyên * số lượng km => Sp 1 = 4 * 1 = 4
+
+
+
+
+
+
+
+
 }
 
 class CartModel extends Equatable {
@@ -51,16 +92,36 @@ class CartModel extends Equatable {
 
   const CartModel({this.cart = const <Cart>[]});
 
-  // int get totalPrice => cart?.fold(0, (total, current) {
-  //   return total + current.price!;
-  // });
-  int? get totalPrice => cart.fold(0, (total, current) {
+  int? getTotalPrice() {
+    return cart.fold(0, (total, current) {
+      if (current.unit == "THÙNG") {
+        return total! +
+            current.productDetail!.price! *
+                current.quantity! *
+                current.productDetail!.changeValue!;
+      } else {
         return total! + current.productDetail!.price! * current.quantity!;
-      });
+      }
+    });
+  }
 
-  //Convert VND currency
-  String get totalPriceVND => totalPrice.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (match) => '${match[1]},');
+  // get Total price by IdAgent
+  int? totalPriceByIdAgent(int idAgent) {
+    return cart.fold(0, (total, current) {
+      if (current.productDetail!.idAgent == idAgent) {
+        if (current.unit == "THÙNG") {
+          return total! +
+              current.productDetail!.price! *
+                  current.quantity! *
+                  current.productDetail!.changeValue!;
+        } else {
+          return total! + current.productDetail!.price! * current.quantity!;
+        }
+      } else {
+        return total;
+      }
+    });
+  }
 
   //Get Cart from ProductDetail
   Cart? getCartFromProductDetail(ProductDetail productDetail) {
@@ -79,6 +140,15 @@ class CartModel extends Equatable {
     }
     print(quantity.keys.length);
     return quantity;
+  }
+
+  List<int?> get idAgents =>
+      cart.map((c) => c.productDetail!.idAgent).toList().toSet().toList();
+
+  CartModel getCartsByAgent(int idAgent) {
+    var currentCart =
+        cart.where((c) => c.productDetail!.idAgent == idAgent).toList();
+    return CartModel(cart: currentCart);
   }
 
   //toJson
@@ -103,4 +173,10 @@ class CartModel extends Equatable {
   @override
   // TODO: implement props
   List<Object?> get props => [cart];
+
+
+
+
+
+
 }

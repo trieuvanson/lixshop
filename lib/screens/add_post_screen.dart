@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
+import 'package:lixshop/repositories/checkout/checkout_repository.dart';
 
 import '../blocs/checkout/checkout_bloc.dart';
 
@@ -12,6 +15,7 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+  final CheckoutRepository _checkoutRepository = CheckoutRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       Icons.upload,
                     ),
                     onPressed: () {
-                      print((state).checkoutModel);
+                      _checkoutRepository.confirmCheckout(state.checkoutModel);
                     },
 
                   );

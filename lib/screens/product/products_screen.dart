@@ -1,5 +1,3 @@
-
-
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -36,8 +34,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
               child: Container(
                 color: DesignCourseAppTheme.notWhite,
                 child: Padding(
-                  padding:
-                  const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
+                  padding: const EdgeInsets.only(
+                      top: 8, left: 12, right: 12, bottom: 8),
                   child: Column(
                     children: [
                       Container(
@@ -119,7 +117,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
-
   PreferredSizeWidget appBar() {
     return AppBar(
       elevation: 0,
@@ -129,7 +126,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-                () => const MobileScreenLayout(),
+            () => const MobileScreenLayout(),
             transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 500),
           );
@@ -163,9 +160,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.shopping_cart, color: Colors.grey[700]),
-          onPressed: () {
-
-          },
+          onPressed: () {},
         ),
       ],
     );

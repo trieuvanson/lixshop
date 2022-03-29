@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:lixshop/blocs/auth/auth_bloc.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -35,17 +36,15 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) {
-          // final directory = await getApplicationDocumentsDirectory();
-          // final file = File('${directory.path}/cart.json');
           return CartBloc()
             ..add(
               LoadCart(),
             );
         }),
-        BlocProvider(create: (context) {
-          return CheckoutBloc(cartBloc: context.read<CartBloc>())
-            ..add(LoadCheckout());
-        }),
+        BlocProvider(
+            create: (context) =>
+                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))),
+        BlocProvider(create: (context) => AuthBloc()..add(CheckLoginEvent())),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',

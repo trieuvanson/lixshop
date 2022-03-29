@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../blocs/cart/cart_bloc.dart';
@@ -127,9 +128,15 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       productDetails = ProductDetailsRepository()
           .getProductDetails(widget.detailsDataModel, index);
       products = productDetails.productDetails;
-      _cart = Cart(quantity: 1, unit: "THÙNG");
+      reset();
       selectVoucher = 1;
       selectProduct = changeProduct(selectProduct, selectProductEmptyVoucher);
+    });
+  }
+
+  void reset() {
+    setState(() {
+      _cart = Cart(quantity: 1, unit: "THÙNG");
     });
   }
 
@@ -155,7 +162,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   void changeVoucher(int index, String selectProductEmptyVoucher) {
     setState(() {
       selectVoucher = index;
-      _cart = Cart(quantity: 1, unit: "THÙNG");
+      reset();
       selectProduct = changeProduct(index, selectProductEmptyVoucher);
     });
   }
@@ -1054,9 +1061,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                 _cart,
                               ),
                             );
-                        setState(() {
-                          _cart = Cart(quantity: 1, unit: "THÙNG");
-                        });
+                        showSnackBar("Thêm thành công", context);
                       },
                       child: const SizedBox(
                         height: 48,

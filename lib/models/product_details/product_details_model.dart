@@ -11,6 +11,7 @@ class ProductDetail {
   String? pathImg;
   List<VoucherMethod>? voucherMethods;
 
+
   ProductDetail({
     this.idAgent,
     this.code,

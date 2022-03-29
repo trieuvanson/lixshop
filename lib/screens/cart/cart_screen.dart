@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +19,6 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +35,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           },
         ),
       ),
-      bottomNavigationBar: const _BottomNavigation(),
+      bottomNavigationBar: _bottomNavigation(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
@@ -49,18 +44,13 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             );
           }
           if (state is CartLoaded) {
-            var cart = [];
-            state.cartModel.cart
-                .map((e) => {
-                      if (!cart.contains(e.productDetail?.idAgent))
-                        {cart.add(e.productDetail?.idAgent)}
-                    })
-                .toList();
+            var idAgents = state.cartModel.idAgents;
+            var cartModel = state.cartModel;
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  for (var item in cart)
+                  for (var i in idAgents)
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
@@ -76,7 +66,9 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                 InkWell(
                                   onTap: () {
                                     Get.to(
-                                      () => const CartDetailScreen(),
+                                      () => CartDetailScreen(
+                                        cartModel: cartModel.getCartsByAgent(i!),
+                                      ),
                                       curve: Curves.easeInToLinear,
                                     );
                                   },
@@ -94,7 +86,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                                   color: Vx.gray500, size: 30),
                                             ),
                                             SizedBox(
-                                              child: "Nhà phân phối ABC $item"
+                                              child: "Nhà phân phối $i"
                                                   .text
                                                   .xl2
                                                   .bold
@@ -118,7 +110,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       "Tổng tiền".text.xl.gray500.make(),
-                                      "1,000,000đ"
+                                      "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(i!)!)}đ"
                                           .text
                                           .color(Vx.red700.withOpacity(0.8))
                                           .bold
@@ -130,45 +122,12 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
-
-                          for (var cart in state.cartModel.cart)
-                            Builder(builder: (_) {
-                              print("CartModel: ${state.cartModel.cart}");
-                              return _CartItem(cart: cart);
-                            })
-                          //Tạo biến ở phần thân của component
-                          // for (var i = 0;
-                          //     i <
-                          //         state.cartModel
-                          //             .productQuantity(state.cartModel.cart)
-                          //             .keys
-                          //             .length;
-                          //     i++)
-                          //   _CartItem(
-                          //     product: state.cartModel
-                          //         .productQuantity(state.cartModel.cart)
-                          //         .keys
-                          //         .elementAt(i),
-                          //     quantity: state.cartModel
-                          //         .productQuantity(state.cartModel.cart)
-                          //         .values
-                          //         .elementAt(i),
-                          //   ),
-
-                          // for (var product in state.cart.productDetail)
-                          //   product.idAgent == item
-                          //       ? _CartItem(
-                          //           product: product,
-                          //         )
-                          //       : Container(),
+                          for (var item in cartModel.cart)
+                            if (item.productDetail!.idAgent == i)
+                              _CartItem(cart: item)
                         ],
                       ),
                     ),
-
-                  // const Padding(
-                  //   padding: EdgeInsets.symmetric(vertical: 16.0),
-                  //   child: _CartCard(),
-                  // ),
                 ],
               ),
             );
@@ -183,89 +142,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       ),
     );
   }
-}
 
-// class _CartCard extends StatelessWidget {
-//   const _CartCard({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: MediaQuery.of(context).size.width,
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.only(
-//                 left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 InkWell(
-//                   onTap: () {
-//                     Get.to(
-//                       () => const CartDetailScreen(),
-//                       curve: Curves.easeInToLinear,
-//                     );
-//                   },
-//                   child: SizedBox(
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         Row(
-//                           children: [
-//                             const Padding(
-//                               padding: EdgeInsets.only(right: 8.0),
-//                               child: Icon(Icons.store_sharp,
-//                                   color: Vx.gray500, size: 30),
-//                             ),
-//                             SizedBox(
-//                               child:
-//                                   "Nhà phân phối ABC XYZ".text.xl2.bold.make(),
-//                             ),
-//                           ],
-//                         ),
-//                         const Icon(
-//                           Icons.arrow_forward_ios,
-//                           color: Vx.gray800,
-//                           size: 20,
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       "Tổng tiền".text.xl.gray500.make(),
-//                       "1,000,000đ"
-//                           .text
-//                           .color(Vx.red700.withOpacity(0.8))
-//                           .bold
-//                           .xl2
-//                           .make(),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           for (var i = 0; i < 5; i++) _CartItem(),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class _BottomNavigation extends StatelessWidget {
-
-  const _BottomNavigation({Key? key,}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _bottomNavigation() {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {
@@ -275,7 +153,7 @@ class _BottomNavigation extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 140,
+                height: 100,
                 child: Column(
                   children: [
                     Row(
@@ -286,7 +164,7 @@ class _BottomNavigation extends StatelessWidget {
                             .xl
                             .gray500
                             .make(),
-                        "${state.cartModel.totalPriceVND}đ"
+                        "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
                             .text
                             .color(Vx.black.withOpacity(0.8))
                             .bold
@@ -294,19 +172,19 @@ class _BottomNavigation extends StatelessWidget {
                             .make(),
                       ],
                     ),
-                    5.heightBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                        "- 999,999đ"
-                            .text
-                            .color(Vx.green500.withOpacity(0.8))
-                            .bold
-                            .xl2
-                            .make(),
-                      ],
-                    ),
+                    // 5.heightBox,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     "Khuyến mãi đơn hàng".text.xl.gray500.make(),
+                    //     "- 999,999đ"
+                    //         .text
+                    //         .color(Vx.green500.withOpacity(0.8))
+                    //         .bold
+                    //         .xl2
+                    //         .make(),
+                    //   ],
+                    // ),
                     5.heightBox,
                     const Divider(),
                     Flexible(
@@ -329,7 +207,7 @@ class _BottomNavigation extends StatelessWidget {
                                     .make(),
                               ],
                             ),
-                            "9,000,000đ"
+                            "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
                                 .text
                                 .color(Vx.red700.withOpacity(0.8))
                                 .bold
@@ -372,14 +250,42 @@ class _BottomNavigation extends StatelessWidget {
   }
 }
 
-class _CartItem extends StatelessWidget {
+class _CartItem extends StatefulWidget {
   final Cart cart;
 
   const _CartItem({Key? key, required this.cart}) : super(key: key);
 
   @override
+  State<_CartItem> createState() => _CartItemState();
+}
+
+class _CartItemState extends State<_CartItem> {
+  void increment(BuildContext context) {
+    if (widget.cart.quantity! < 999) {
+      widget.cart.quantity = widget.cart.quantity! + 1;
+      context.read<CartBloc>().add(
+            UpdateCart(
+              widget.cart,
+            ),
+          );
+      setState(() {});
+    }
+  }
+
+  void decrement(BuildContext context) {
+    if (widget.cart.quantity! > 1) {
+      widget.cart.quantity = widget.cart.quantity! - 1;
+      context.read<CartBloc>().add(
+            UpdateCart(
+              widget.cart,
+            ),
+          );
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(cart);
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
@@ -414,7 +320,7 @@ class _CartItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            cart.productDetail!.pathImg ??
+                            widget.cart.productDetail!.pathImg ??
                                 "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
                             errorBuilder: (context, url, error) =>
                                 const Icon(Icons.error),
@@ -427,12 +333,6 @@ class _CartItem extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // SizedBox(
-                          //   child: "Nước rửa chén Lix Siêu"
-                          //       .text
-                          //       .xl
-                          //       .make(),
-                          // ),
                           Flexible(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width - 150,
@@ -442,7 +342,8 @@ class _CartItem extends StatelessWidget {
                                 text: TextSpan(
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 18),
-                                    text: cart.productDetail!.name.toString()),
+                                    text: widget.cart.productDetail!.name
+                                        .toString()),
                               ),
                             ),
                           ),
@@ -453,29 +354,30 @@ class _CartItem extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  child: "Thùng 13 bịch x 12 gói x 25g"
-                                      .text
-                                      .gray500
-                                      .make(),
+                                  child: widget.cart.unit == "THÙNG"
+                                      ? "Thùng ${widget.cart.productDetail!.changeValue} ${widget.cart.productDetail!.unit!.toLowerCase()} x ${widget.cart.productDetail!.wunit!}"
+                                          .text
+                                          .gray500
+                                          .make()
+                                      : null,
                                 ),
                                 SizedBox(
                                   child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          HeroDialogRoute(
-                                              builder: (context) => Column(
-                                                    children: [
-                                                      Flexible(
-                                                          child: Container(),
-                                                          flex: 2),
-                                                      const _DetailCartItemPopup(),
-                                                    ],
-                                                  ),
-                                              fullscreenDialog: false),
-                                        );
-                                      },
-                                      child:
-                                          "Chi tiết".text.green500.xl.make()),
+                                      // onTap: () {
+                                      //   Navigator.of(context).push(
+                                      //     HeroDialogRoute(
+                                      //         builder: (context) => Column(
+                                      //               children: [
+                                      //                 Flexible(
+                                      //                     child: Container(),
+                                      //                     flex: 2),
+                                      //                 const _DetailCartItemPopup(),
+                                      //               ],
+                                      //             ),
+                                      //         fullscreenDialog: false),
+                                      //   );
+                                      // },
+                                      child: "".text.green500.xl.make()),
                                 ),
                               ],
                             ),
@@ -486,12 +388,12 @@ class _CartItem extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                "${convertCurrencyToVND(cart.productDetail!.price!)}/${cart.unit}"
+                                "${widget.cart.getPricesChangeValue()}"
                                     .text
                                     .xl
                                     .gray500
                                     .make(),
-                                "${convertCurrencyToVND(cart.productDetail!.price! * cart.quantity!)}đ"
+                                "${convertCurrencyToVND(widget.cart.getPrices()!)}đ"
                                     .text
                                     .color(Vx.black.withOpacity(0.8))
                                     .bold
@@ -518,7 +420,29 @@ class _CartItem extends StatelessWidget {
                       child: Center(
                         child: SizedBox(
                           child: RaisedButton(
-                            onPressed: () {},
+                            onPressed: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title:
+                                    const Center(child: Text('Xác nhận xoá')),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Huỷ'),
+                                    child: const Text('Huỷ'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      context
+                                          .read<CartBloc>()
+                                          .add(RemoveFromCart(widget.cart));
+                                      Navigator.pop(context, 'Xác nhận');
+                                    },
+                                    child: const Text('Xác nhận'),
+                                  ),
+                                ],
+                              ),
+                            ),
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8),
@@ -535,6 +459,9 @@ class _CartItem extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: InkWell(
+                            onTap: () {
+                              decrement(context);
+                            },
                             child: SizedBox(
                               width: 30,
                               height: 30,
@@ -570,7 +497,15 @@ class _CartItem extends StatelessWidget {
                                   color: Vx.green500,
                                 )),
                             child: TextFormField(
-                              controller: TextEditingController(text: cart.quantity.toString()),
+                              onFieldSubmitted: (value) {
+                                widget.cart.quantity = int.parse(value);
+                                context.read<CartBloc>().add(
+                                      UpdateCart(widget.cart),
+                                    );
+                              },
+                              textInputAction: TextInputAction.go,
+                              controller: TextEditingController(
+                                  text: widget.cart.quantity.toString()),
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp(r'^[+]?\d+([.]\d+)?$')),
@@ -591,6 +526,7 @@ class _CartItem extends StatelessWidget {
                           ),
                         ),
                         InkWell(
+                          onTap: () => increment(context),
                           child: SizedBox(
                             width: 30,
                             height: 30,
@@ -625,117 +561,117 @@ class _CartItem extends StatelessWidget {
   }
 }
 
-//Voucher
-class _DetailCartItemPopup extends StatelessWidget {
-  const _DetailCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(16),
-      color: DesignCourseAppTheme.nearlyWhite,
-      child: Container(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            children: [
-              const _HeaderCartItemPopup(),
-              const Divider(),
-              const _DetailCartItemList().expand(),
-              const Divider(),
-              const _FooterCartItemPopup(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HeaderCartItemPopup extends StatelessWidget {
-  const _HeaderCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        children: [
-          const SizedBox(
-            child: Center(
-                child: Text("Chi tiết",
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-          ),
-          4.heightBox,
-          const SizedBox(
-            child: Text(
-              "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FooterCartItemPopup extends StatelessWidget {
-  const _FooterCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Container(
-          height: 48,
-          decoration: BoxDecoration(
-            color: Vx.green500,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
-                  offset: const Offset(1.1, 1.1),
-                  blurRadius: 10.0),
-            ],
-          ),
-          child: const Center(
-            child: Text(
-              'Đóng',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                letterSpacing: 0.0,
-                color: DesignCourseAppTheme.nearlyWhite,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DetailCartItemList extends StatefulWidget {
-  const _DetailCartItemList({Key? key}) : super(key: key);
-
-  @override
-  State<_DetailCartItemList> createState() => _DetailCartItemListState();
-}
-
-class _DetailCartItemListState extends State<_DetailCartItemList> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 100, itemBuilder: (context, index) => Container());
-  }
-}
+// //Voucher
+// class _DetailCartItemPopup extends StatelessWidget {
+//   const _DetailCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       borderRadius: BorderRadius.circular(16),
+//       color: DesignCourseAppTheme.nearlyWhite,
+//       child: Container(
+//         constraints:
+//             BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//           child: Column(
+//             children: [
+//               const _HeaderCartItemPopup(),
+//               const Divider(),
+//               const _DetailCartItemList().expand(),
+//               const Divider(),
+//               const _FooterCartItemPopup(),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class _HeaderCartItemPopup extends StatelessWidget {
+//   const _HeaderCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 16.0),
+//       child: Column(
+//         children: [
+//           const SizedBox(
+//             child: Center(
+//                 child: Text("Chi tiết",
+//                     style:
+//                         TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+//           ),
+//           4.heightBox,
+//           const SizedBox(
+//             child: Text(
+//               "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
+//               style: TextStyle(fontSize: 16),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class _FooterCartItemPopup extends StatelessWidget {
+//   const _FooterCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         Navigator.pop(context);
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.only(bottom: 8.0),
+//         child: Container(
+//           height: 48,
+//           decoration: BoxDecoration(
+//             color: Vx.green500,
+//             borderRadius: const BorderRadius.all(
+//               Radius.circular(16.0),
+//             ),
+//             boxShadow: <BoxShadow>[
+//               BoxShadow(
+//                   color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
+//                   offset: const Offset(1.1, 1.1),
+//                   blurRadius: 10.0),
+//             ],
+//           ),
+//           child: const Center(
+//             child: Text(
+//               'Đóng',
+//               textAlign: TextAlign.center,
+//               style: TextStyle(
+//                 fontWeight: FontWeight.w600,
+//                 fontSize: 18,
+//                 letterSpacing: 0.0,
+//                 color: DesignCourseAppTheme.nearlyWhite,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class _DetailCartItemList extends StatefulWidget {
+//   const _DetailCartItemList({Key? key}) : super(key: key);
+//
+//   @override
+//   State<_DetailCartItemList> createState() => _DetailCartItemListState();
+// }
+//
+// class _DetailCartItemListState extends State<_DetailCartItemList> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//         itemCount: 100, itemBuilder: (context, index) => Container());
+//   }
+// }

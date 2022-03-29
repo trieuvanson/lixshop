@@ -23,22 +23,19 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<CheckoutConfirm>(_checkoutConfirm);
     _cartSubscription = cartBloc.stream.listen(
       (state) {
-        if (state is CartLoaded) {
-        }
+        add(const CheckoutConfirm());
       },
     );
   }
 
   void _checkoutConfirm(
       CheckoutConfirm event, Emitter<CheckoutState> emit) async {
-    if (state is CheckoutLoaded) {
-      try {
-        CheckoutModel checkoutModel = (state as CheckoutLoaded).checkoutModel;
-        _saveCartToFileJson(checkoutModel);
-        emit(CheckoutLoaded(checkoutModel: checkoutModel));
-      } on Exception {
-        emit(const CheckoutError());
-      }
+    final state = _cartBloc.state;
+    if (state is CartLoaded) {
+      emit(const CheckoutLoading());
+      var cart = state.cartModel.cart;
+       _saveCartToFileJson(_getCheckouts(cart));
+      emit(CheckoutLoaded(checkoutModel: _getCheckouts(cart)));
     }
   }
 
@@ -48,6 +45,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       checkout.add(
         Checkout(
           idAgent: cart.productDetail!.idAgent,
+          price: cart.productDetail!.price,
           productCode: cart.productDetail!.code,
           quantity: cart.quantity,
           unit: cart.unit,
@@ -63,8 +61,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     final file = File('${directory.path}/checkout.json');
     final contents = jsonEncode(checkoutModel.toJson());
     await file.writeAsString(contents.toString());
-    file.readAsString().then((value) {
-      print(value);
-    });
+    final contents2 = await file.readAsString();
+    print(contents2);
   }
 }

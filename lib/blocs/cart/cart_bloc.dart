@@ -4,11 +4,9 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'cart_event.dart';
 
@@ -18,6 +16,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(const CartLoading()) {
     on<LoadCart>(_loadCart);
     on<AddToCart>(_addToCart);
+    on<UpdateCart>(_updateCart);
     on<RemoveFromCart>(_removeFromCart);
     on<RemoveAllCart>(_removeAllCart);
   }
@@ -38,8 +37,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         List<Cart> cart = (state as CartLoaded).cartModel.cart;
         var currentCartList = checkBeforeAdd(cart, event.cart);
         _saveCartToFileJson(currentCartList);
-        emit(CartLoaded(cartModel: CartModel(cart: currentCartList)));
-        print("${(await _readCartFromFileJson())}");
+
+        emit(CartLoaded(cartModel: await _readCartFromFileJson()));
+      } on Exception {
+        emit(const CartError());
+      }
+    }
+  }
+
+  void _updateCart(UpdateCart event, Emitter<CartState> emit) async {
+    if (state is CartLoaded) {
+      try {
+        //Nếu tồn tại thì cập nhật, ngược lại thêm vào
+        List<Cart> cart = (state as CartLoaded).cartModel.cart;
+        var currentCartList = checkBeforeUpdate(cart, event.cart);
+        _saveCartToFileJson(currentCartList);
+        emit(CartLoaded(cartModel: await _readCartFromFileJson()));
       } on Exception {
         emit(const CartError());
       }
@@ -49,11 +62,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _removeFromCart(RemoveFromCart event, Emitter<CartState> emit) async {
     if (state is CartLoaded) {
       try {
+        List<Cart> cart = List.from((state as CartLoaded).cartModel.cart)
+          ..remove(event.cart);
+        _saveCartToFileJson(cart);
         emit(
           CartLoaded(
             cartModel: CartModel(
-              cart: List.from((state as CartLoaded).cartModel.cart)
-                ..remove(event.cart),
+              cart: cart,
             ),
           ),
         );
@@ -69,7 +84,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         CartModel cartModel = const CartModel(cart: []);
         _saveCartToFileJson(cartModel.cart);
-        print(await _readCartFromFileJson());
         emit(
           CartLoaded(
             cartModel: cartModel,
@@ -97,83 +111,55 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     bool check = false;
 
     for (var item in carts) {
-      print('item: $item');
-      print('item: ${item.typeformVoucher}');
-      print('current: $current');
-      print("curent: ${current.typeformVoucher}");
-      print(current.typeformVoucher == item.typeformVoucher);
-      if (item.productDetail!.code == current.productDetail!.code &&
-          item.typeformVoucher == current.typeformVoucher &&
-          item.unit == current.unit) {
-        item.quantity = item.quantity! + current.quantity!;
-        check = true;
-        break;
+      if (item.typeformVoucher != -1) {
+        if (item.productDetail!.code == current.productDetail!.code &&
+            item.typeformVoucher == current.typeformVoucher &&
+            item.unit == current.unit) {
+          item.quantity = item.quantity! + current.quantity!;
+          check = true;
+          break;
+        }
+      } else {
+        if (item.productDetail!.code == current.productDetail!.code &&
+            item.unit == current.unit) {
+          item.quantity = item.quantity! + current.quantity!;
+          check = true;
+          break;
+        }
       }
     }
 
     if (!check) {
       currentCartList.add(current);
     }
-    // //
-    // //
-    // //
-    // // print('cartItem: ${cartItem.toString()}');
-    // // await Future.delayed(const Duration(seconds: 5));
-    // //
-    // //
-    // //
-    // // if (cartItem.productDetail != null) {
-    // //   //  => Nếu tồn tại:
-    // //   // =>: Kiểm tra hình thức khuyến mãi
-    // //   bool checkTypeFormVoucher = carts
-    // //       .firstWhere(
-    // //           (element) =>
-    // //       element.typeformVoucher ==
-    // //           currentCart.typeformVoucher,
-    // //       orElse: () => Cart())
-    // //       .typeformVoucher !=
-    // //       null;
-    // //   //  =>: Nếu khuyến mãi trùng với sản phẩm đã có
-    // //   if (checkTypeFormVoucher) {
-    // //     //  =>: Kiểm tra đơn vị tính
-    // //     print('Trùng mã khuyến mãi');
-    // //     bool checkUnit = carts
-    // //         .firstWhere((element) => element.unit == currentCart.unit,
-    // //         orElse: () => Cart())
-    // //         .unit !=
-    // //         null;
-    // //     // =>: Nếu đơn vị tính trùng hợp thì cập nhật số lượng
-    // //     if (checkUnit) {
-    // //       print('Trùng đơn vị');
-    // //       cartItem.quantity = currentCart.quantity!;
-    // //     } else {
-    // //       print('Không trùng đơn vị');
-    // //       // =>: không trùng thì thêm vào
-    // //       cartItem.unit = currentCart.unit;
-    // //       cartItem.quantity = currentCart.quantity!;
-    // //       currentCartList.add(current);
-    // //     }
-    // //   } else {
-    // //     print('Không trùng mã khuyến mãi');
-    // //     //  =>: Nếu khuyến mãi không trùng với sản phẩm đã có
-    // //     //  =>: Thêm vào
-    // //     // cartItem.quantity = currentCart.quantity!;
-    // //     currentCartList.add(current);
-    // //   }
-    // // } else {
-    // //   print('Không tồn tại');
-    // //   //  => Nếu không tồn tại:
-    // //   // =>: Thêm vào
-    // //   currentCartList.add(current);
-    // // }
+    return currentCartList;
+  }
+
+  List<Cart> checkBeforeUpdate(List<Cart> carts, Cart current) {
+    // print(current);
+    List<Cart> currentCartList = carts.isNotEmpty ? carts : [];
+    bool check = false;
+
+    for (var item in carts) {
+      if (item.productDetail!.code == current.productDetail!.code &&
+          item.typeformVoucher == current.typeformVoucher &&
+          item.unit == current.unit) {
+        item.quantity = current.quantity!;
+        check = true;
+        break;
+      }
+    }
+    print('check: $check');
+
+    if (!check) {
+      currentCartList.add(current);
+    }
     return currentCartList;
   }
 
   Future<CartModel> _readCartFromFileJson() async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/cart.json');
-    final contents1 = await file.readAsString();
-    print('contents1: $contents1');
     if (file.existsSync()) {
       final contents = await file.readAsString();
       final json = jsonDecode(contents);
@@ -183,53 +169,3 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return const CartModel();
   }
 }
-// List<Cart> currentCartList = cart.isNotEmpty ? cart : [];
-// Cart currentCart = event.cart;
-// var cartItem = currentCartList.firstWhere(
-//     (item) =>
-//         item.productDetail!.code == currentCart.productDetail!.code,
-//     orElse: () => Cart(productDetail: null, quantity: 0));
-// //  Kiểm tra sản phẩm tồn tại hay chưa
-// if (cartItem.productDetail != null) {
-//   //  => Nếu tồn tại:
-//   // =>: Kiểm tra hình thức khuyến mãi
-//   bool checkTypeFormVoucher = cart
-//           .firstWhere(
-//               (element) =>
-//                   element.typeformVoucher ==
-//                   currentCart.typeformVoucher,
-//               orElse: () => Cart())
-//           .typeformVoucher !=
-//       null;
-//   //  =>: Nếu khuyến mãi trùng với sản phẩm đã có
-//   if (checkTypeFormVoucher) {
-//     //  =>: Kiểm tra đơn vị tính
-//     print('Trùng mã khuyến mãi');
-//     bool checkUnit = cart
-//             .firstWhere((element) => element.unit == currentCart.unit,
-//                 orElse: () => Cart())
-//             .unit !=
-//         null;
-//     // =>: Nếu đơn vị tính trùng hợp thì cập nhật số lượng
-//     if (checkUnit) {
-//       print('Trùng đơn vị');
-//       cartItem.quantity = currentCart.quantity!;
-//     } else {
-//       print('Không trùng đơn vị');
-//       // =>: không trùng thì thêm vào
-//       currentCartList.add(event.cart);
-//     }
-//   } else {
-//     print('Không trùng mã khuyến mãi');
-//     //  =>: Nếu khuyến mãi không trùng với sản phẩm đã có
-//     //  =>: Thêm vào
-//     // cartItem.quantity = currentCart.quantity!;
-//     currentCartList.add(event.cart);
-//   }
-// } else {
-//   print('Không tồn tại');
-//   //  => Nếu không tồn tại:
-//   // =>: Thêm vào
-//   currentCartList.add(event.cart);
-// }
-// //Convert object to json and write to file
