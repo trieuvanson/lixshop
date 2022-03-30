@@ -10,7 +10,8 @@ class HomeProductsTypeScreen extends StatefulWidget {
   const HomeProductsTypeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeProductsTypeScreenState createState() => _HomeProductsTypeScreenState();
+
+   createState() => _HomeProductsTypeScreenState();
 }
 
 class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
@@ -106,15 +107,6 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
       ),
     );
   }
-
-
-
-
-
-
-
-
-
 
 }
 
