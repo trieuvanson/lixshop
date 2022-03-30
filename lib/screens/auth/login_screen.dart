@@ -81,9 +81,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoadingAuthState) {
-          modalLoading(context);
+          setState(() {
+            _loading = true;
+          });
         } else if (state is FailureAuthState) {
-          Navigator.pop(context);
+          setState(() {
+            _loading = false;
+          });
           errorMessageSnack(context, state.error);
         } else {
           Get.to(() => const MobileScreenLayout());
@@ -202,8 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
-                                authBloc.add(LoginEvent(Login(
-                                    username: email, password: password)));
+                                authBloc.add(
+                                  LoginEvent(
+                                    Login(username: email, password: password),
+                                  ),
+                                );
                               }
                             },
                             child: AnimatedContainer(

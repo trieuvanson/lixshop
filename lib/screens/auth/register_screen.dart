@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:lixshop/models/city/city_model.dart';
+import 'package:lixshop/repositories/app_repository.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../contains/colors.dart';
@@ -143,10 +145,133 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                         15.heightBox,
+                        // TextFormField(
+                        //   decoration:
+                        //       TextFormFieldCommonStyle.textFormFieldStyle(
+                        //           "Họ và tên chủ cửa hàng"),
+                        //   validator: (value) {
+                        //     if (value!.isEmpty) {
+                        //       return 'Không được để trống';
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       email = value;
+                        //     });
+                        //   },
+                        // ),
+                        FutureBuilder<CityModel>(
+                          future: AppRepository().getCity(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.error != null &&
+                                  snapshot.data!.error!.isNotEmpty) {
+                                return _buildErrorWidget(snapshot.data!.error);
+                              }
+                              return Column(
+                                children: [
+                                  FormField<String>(
+                                    builder: (FormFieldState<String> state) {
+                                      return InputDecorator(
+                                        decoration:
+                                        TextFormFieldCommonStyle.textFormFieldStyle(
+                                            "Thành phố/tỉnh"),
+                                        isEmpty: _currentSelectedValue == '',
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton<String>(
+                                            value: _currentSelectedValue,
+                                            isDense: true,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _currentSelectedValue = newValue;
+                                                state.didChange(newValue);
+                                              });
+                                            },
+                                            items: _currencies.map((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  15.heightBox,
+                                  FormField<String>(
+                                    builder: (FormFieldState<String> state) {
+                                      return InputDecorator(
+                                        decoration:
+                                        TextFormFieldCommonStyle.textFormFieldStyle(
+                                            "Quận/huyện"),
+                                        isEmpty: _currentSelectedValue == '',
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton<String>(
+                                            value: _currentSelectedValue,
+                                            isDense: true,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _currentSelectedValue = newValue;
+                                                state.didChange(newValue);
+                                              });
+                                            },
+                                            items: _currencies.map((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  15.heightBox,
+                                  FormField<String>(
+                                    builder: (FormFieldState<String> state) {
+                                      return InputDecorator(
+                                        decoration:
+                                        TextFormFieldCommonStyle.textFormFieldStyle(
+                                            "Phường/xã"),
+                                        isEmpty: _currentSelectedValue == '',
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton<String>(
+                                            value: _currentSelectedValue,
+                                            isDense: true,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _currentSelectedValue = newValue;
+                                                state.didChange(newValue);
+                                              });
+                                            },
+                                            items: _currencies.map((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  15.heightBox,
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return _buildErrorWidget(snapshot.error);
+                            } else {
+                              return _buildLoadingWidget();
+                            }
+                          },
+                        ),
+
                         TextFormField(
                           decoration:
                               TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Họ và tên chủ cửa hàng"),
+                                  "Số nhà, tên đường,..."),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Không được để trống';
@@ -159,70 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             });
                           },
                         ),
-                        15.heightBox,
-                        FormField<String>(
-                          builder: (FormFieldState<String> state) {
-                            return InputDecorator(
-                              decoration:
-                                  TextFormFieldCommonStyle.textFormFieldStyle(
-                                      "Địa chỉ"),
-                              isEmpty: _currentSelectedValue == '',
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _currentSelectedValue,
-                                  isDense: true,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _currentSelectedValue = newValue;
-                                      state.didChange(newValue);
-                                    });
-                                  },
-                                  items: _currencies.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Số điện thoại"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Không được để trống';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
-                        ),
-                        15.heightBox,
-                        TextFormField(
-                          decoration:
-                              TextFormFieldCommonStyle.textFormFieldStyle(
-                                  "Số điện thoại"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Không được để trống';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              email = value;
-                            });
-                          },
-                        ),
-                        15.heightBox,
-                        20.heightBox,
+                        35.heightBox,
                         Material(
                           color: appColor,
                           borderRadius: BorderRadius.circular(8),
@@ -291,6 +353,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+}
+Widget _buildLoadingWidget() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const <Widget>[
+        SizedBox(
+          width: 25.0,
+          height: 25.0,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            strokeWidth: 4.0,
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+//display error
+Widget _buildErrorWidget(dynamic error) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const <Widget>[
+        Text(
+          'Something is wrong',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        )
+      ],
+    ),
+  );
 }
 
 _buildImageHeader(BuildContext context) {

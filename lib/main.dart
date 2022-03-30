@@ -14,7 +14,6 @@ import 'responsive/web_screen_layout.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
-import 'screens/product/product_detail_screen.dart';
 import 'screens/product/products_screen.dart';
 
 Future<void> main() async {
@@ -35,16 +34,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) {
-          return CartBloc()
-            ..add(
-              LoadCart(),
-            );
-        }),
+        BlocProvider(create: (context) => AuthBloc()..add(CheckLoginEvent())),
+        BlocProvider(create: (_) => CartBloc()..add(LoadCart())),
         BlocProvider(
             create: (context) =>
                 CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))),
-        BlocProvider(create: (context) => AuthBloc()..add(CheckLoginEvent())),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',

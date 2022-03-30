@@ -1,10 +1,12 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../blocs/auth/auth_bloc.dart';
+import '../../responsive/mobile_screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
+import '../../utils/helpers/secure_storage.dart';
 import '../screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,195 +51,220 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: DesignCourseAppTheme.nearlyWhite,
-      body: CustomScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverPersistentHeader(
-            delegate: SliverHeaderBar(expandedHeight:170),
-            pinned: false,
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: DesignCourseAppTheme.notWhite,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                              offset: const Offset(1.1, 1.1),
-                              blurRadius: 8.0),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(
-                                  () => const OrderHistoryListScreen(),
-                                  transition: Transition.rightToLeftWithFade,
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child:
-                                        "Lịch sử nhập hàng".text.xl.bold.make(),
-                                  ),
-                                  Row(
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (await secureStorage.readToken() == null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MobileScreenLayout()));
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: DesignCourseAppTheme.nearlyWhite,
+          body: CustomScrollView(
+            scrollDirection: Axis.vertical,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverPersistentHeader(
+                delegate: SliverHeaderBar(expandedHeight: 170),
+                pinned: false,
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  color: DesignCourseAppTheme.notWhite,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, left: 8, right: 8, bottom: 8),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: DesignCourseAppTheme.grey
+                                      .withOpacity(0.2),
+                                  offset: const Offset(1.1, 1.1),
+                                  blurRadius: 8.0),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      () => const OrderHistoryListScreen(),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      "Xem tất cả"
-                                          .text
-                                          .size(16)
-                                          .green500
-                                          .make(),
-                                      const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Vx.green700,
-                                        size: 20,
+                                      SizedBox(
+                                        child: "Lịch sử nhập hàng"
+                                            .text
+                                            .xl
+                                            .bold
+                                            .make(),
+                                      ),
+                                      Row(
+                                        children: [
+                                          "Xem tất cả"
+                                              .text
+                                              .size(16)
+                                              .green500
+                                              .make(),
+                                          const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: Vx.green700,
+                                            size: 20,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            10.heightBox,
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                _HistoryItem(
-                                    title: "Chờ xác nhận",
-                                    icon: Icons.check_circle_outline),
-                                _HistoryItem(
-                                    title: "Đã xác nhận",
-                                    icon: Icons.check_circle_outline),
-                                _HistoryItem(
-                                    title: "Đang giao hàng",
-                                    icon: Icons.check_circle_outline),
-                                _HistoryItem(
-                                    title: "Đang giao hàng",
-                                    icon: Icons.check_circle_outline),
+                                ),
+                                10.heightBox,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    _HistoryItem(
+                                        title: "Đang xử lý",
+                                        icon: Icons.check_circle_outline),
+                                    _HistoryItem(
+                                        title: "Đã xác nhận",
+                                        icon: Icons.check_circle_outline),
+                                    _HistoryItem(
+                                        title: "Đang giao hàng",
+                                        icon: Icons.check_circle_outline),
+                                    _HistoryItem(
+                                        title: "Đang giao hàng",
+                                        icon: Icons.check_circle_outline),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    16.heightBox,
-                    Container(
-                      decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                              offset: const Offset(1.1, 1.1),
-                              blurRadius: 8.0),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _MenuItem(
-                              icon: Icons.add_to_home_screen,
-                              title: "Trưng bày",
-                              onTap: () {
-                                Get.to(() => const GarnitureScreen(),
-                                    transition: Transition.leftToRight);
-                              },
+                        16.heightBox,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(16.0),
                             ),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Săn thưởng"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Thông tin xuất hoá đơn"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Địa chỉ"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Quản lý tài khoản liên kết"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Quản lý bán hàng POS"),
-                          ],
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: DesignCourseAppTheme.grey
+                                      .withOpacity(0.2),
+                                  offset: const Offset(1.1, 1.1),
+                                  blurRadius: 8.0),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Trưng bày",
+                                  onTap: () {
+                                    Get.to(() => const GarnitureScreen());
+                                  },
+                                ),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Săn thưởng"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Thông tin xuất hoá đơn"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Địa chỉ"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Quản lý tài khoản liên kết"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Quản lý bán hàng POS"),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        16.heightBox,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: DesignCourseAppTheme.grey
+                                      .withOpacity(0.2),
+                                  offset: const Offset(1.1, 1.1),
+                                  blurRadius: 8.0),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Cài đặt"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Điều khoản và chính sách"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Gửi phản hồi"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Câu hỏi thường gặp"),
+                                const _MenuItem(
+                                    icon: Icons.add_to_home_screen,
+                                    title: "Liên hệ"),
+                                _MenuItem(
+                                    onTap: () {
+                                      authBloc.add(LogOutEvent());
+                                    },
+                                    icon: Icons.logout,
+                                    title: "Đăng xuất"),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    16.heightBox,
-                    Container(
-                      decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                              offset: const Offset(1.1, 1.1),
-                              blurRadius: 8.0),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Cài đặt"),
-                            _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Điều khoản và chính sách"),
-                            _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Gửi phản hồi"),
-                            _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Câu hỏi thường gặp"),
-                            _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Liên hệ"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              // SliverList(
+              //   delegate: SliverChildBuilderDelegate(
+              //     (_, index) => ListTile(
+              //       title: Text("Index: $index"),
+              //     ),
+              //   ),
+              // )
+            ],
           ),
-          // SliverList(
-          //   delegate: SliverChildBuilderDelegate(
-          //     (_, index) => ListTile(
-          //       title: Text("Index: $index"),
-          //     ),
-          //   ),
-          // )
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -269,89 +296,84 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                 ),
               ),
               child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.to(
-                                () => const ProfileInformationScreen(),
-                            curve: Curves.easeInToLinear,
-                            transition: Transition.rightToLeft,
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child:
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    width: 50,
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage: NetworkImage(
-                                        "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Get.to(
+                        () => const ProfileInformationScreen(),
+                        curve: Curves.easeInToLinear,
+                      );
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 50,
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(
+                                  "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+                                ),
+                              ),
+                            ),
+                            16.widthBox,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    "Cửa hàng ABC Cửa hàng ABC Cửa hang ABC cua",
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                4.heightBox,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Vx.green500,
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    child: Text(
+                                      "Thứ hạng",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  16.widthBox,
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        width: 200,
-                                        child: Text(
-                                          "Cửa hàng ABC Cửa hàng ABC Cửa hang ABC cua",
-                                          softWrap: true,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      4.heightBox,
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: Vx.green500,
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 4,
-                                          ),
-                                          child: Text(
-                                            "Thứ hạng",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                        ),
-                      ),
-                      SizedBox(
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.shopping_cart,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ],
+                                )
+                              ],
+                            )
+                          ],
+                        )),
                   ),
-
-
+                  SizedBox(
+                    child: IconButton(
+                      onPressed: () {},
+                      icon:
+                          const Icon(Icons.shopping_cart, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ),
             // Positioned(
             //   top: expandedHeight / 2 - shrinkOffset,

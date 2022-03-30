@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../contains/colors.dart';
@@ -40,11 +41,15 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
   bool isLogin = false;
 
   Future checkLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isLogin = (prefs.getBool('isLogin') ?? false);
+    isLogin = await secureStorage.readToken() != null;
     if (!isLogin) {
-      Get.to(() => LoginScreen());
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
     }
+    print('isLogin: $isLogin');
     setState(() {});
   }
 

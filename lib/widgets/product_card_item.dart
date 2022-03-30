@@ -31,7 +31,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
       child: Container(
         padding: const EdgeInsets.only(bottom: 8.0),
         width: 180,
-        height: 230,
+        height: 250,
         decoration: BoxDecoration(
           color: DesignCourseAppTheme.nearlyWhite,
           borderRadius: BorderRadius.circular(8),

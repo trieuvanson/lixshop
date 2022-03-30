@@ -25,11 +25,19 @@ class CheckoutLoaded extends CheckoutState {
   List<Object> get props => [checkoutModel];
 }
 
-class CheckoutError extends CheckoutState {
-  final String message;
+class CheckoutSuccess extends CheckoutState {
+  final CheckoutModel checkoutModel;
 
-  const CheckoutError({this.message = 'Error'});
+  const CheckoutSuccess({this.checkoutModel = const CheckoutModel()});
+  @override
+  List<Object> get props => [checkoutModel];
+}
+
+class CheckoutError extends CheckoutState {
+  final String error;
+
+  const CheckoutError({this.error = 'Error'});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [error];
 }

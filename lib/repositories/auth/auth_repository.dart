@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../models/models.dart';
+import '../../utils/helpers/secure_storage.dart';
 
 class AuthRepository {
   static String? mainUrl = dotenv.env['MAIN_API_URL'];
@@ -15,34 +16,28 @@ class AuthRepository {
   final Dio dio = Dio();
 
   Future<bool> hasToken() async {
-    final token = await _getTokenFromFile();
-    return token.dt != null;
+    final token = await secureStorage.readToken();
+    return token != null;
   }
 
-  // Future<ResponseDTO> login(Login login) async {
-  //   try {
-  //     final response =
-  //         await dio.post(loginUrl, data: jsonEncode(login.toJson()));
-  //     return ResponseDTO.fromJson(response.data);
-  //   } on DioError catch (e) {
-  //     print('DioError: $e');
-  //     return ResponseDTO.fromJson(e.response!.data);
-  //   }
-  // }
-
-  Future<AuthUser> currentUser() async {
-    final ResponseDTO responseDTO = await _getTokenFromFile();
-    print(responseDTO.dt!.accessToken);
-    var response = await dio.get(
-      "$mainUrl/api/data/shoplix/info",
-      options: Options(
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${responseDTO.dt!.accessToken}",
-        },
-      ),
-    );
-    return AuthUser.fromJson(response.data);
+  Future<AuthUser?> currentUser() async {
+    try {
+      final token = await secureStorage.readToken();
+      print('token: $token');
+      var response = await dio.get(
+        "$mainUrl/api/data/shoplix/info",
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${token?.accessToken?? ""}",
+          },
+        ),
+      );
+      return AuthUser.fromJson(response.data);
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<void> sendPasswordReset({required String phone}) {
@@ -54,13 +49,12 @@ class AuthRepository {
     try {
       final response =
           await dio.post(loginUrl, data: jsonEncode(login.toJson()));
-      print('${response.data}');
-      _saveTokenToFile(jsonEncode(response.data));
       return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
+      print('DioError: ${e.response!.data}');
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      print('Error: $e');
+      print('Error1: $e');
       return {} as ResponseDTO;
     }
   }
@@ -69,28 +63,28 @@ class AuthRepository {
 @override
 Future<void> signOut() async {
   try {
-    _deleteTokenFromFile();
+    await secureStorage.deleteSecureStorage();
   } on DioError catch (e) {
     print('DioError: $e');
   }
 }
 
-Future<ResponseDTO> _getTokenFromFile() async {
-  final directory = await getApplicationDocumentsDirectory();
-  final file = File('${directory.path}/token.json');
-  return ResponseDTO.fromJson(jsonDecode(await file.readAsString()));
-}
-
-Future<void> _saveTokenToFile(String jsonEncode) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final file = File('${directory.path}/token.json');
-  await file.writeAsString(jsonEncode);
-}
-
-Future<void> _deleteTokenFromFile() async {
-  final directory = await getApplicationDocumentsDirectory();
-  final file = File('${directory.path}/token.json');
-  await file.delete();
-}
+// Future<ResponseDTO> _getTokenFromFile() async {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final file = File('${directory.path}/token.json');
+//   return ResponseDTO.fromJson(jsonDecode(await file.readAsString()));
+// }
+//
+// Future<void> _saveTokenToFile(String jsonEncode) async {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final file = File('${directory.path}/token.json');
+//   await file.writeAsString(jsonEncode);
+// }
+//
+// Future<void> _deleteTokenFromFile() async {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final file = File('${directory.path}/token.json');
+//   await file.delete();
+// }
 
 final authRepository = AuthRepository();

@@ -15,12 +15,9 @@ class ProductsDataRepositories extends BaseProductsDataRepository {
   @override
   Future<ProductsDataModel> getProductsData() async {
     try {
-      var authorization = "\$2b\$10\$5THjp/hlMQZ3z78tuewOKetKL8Pl/HpVhMl0zDJnSaGvRGFl2zgqi";
 
-      final response = await _dio.get("https://api.jsonbin.io/b/623edb027caf5d6783723c76", options: Options(headers: {
-        "secret-key": authorization,
-      }));
-      return ProductsDataModel.fromJson(response.data);
+      final response = await _dio.get("$_mainURL");
+      return ProductsDataModel.fromJson(jsonDecode(response.data));
     } on DioError catch (e) {
       throw Exception(e.message);
     }

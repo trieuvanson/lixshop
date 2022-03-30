@@ -6,3 +6,4 @@ export 'category/product_category_repository.dart';
 export 'product/product_details_repository.dart';
 export 'voucher/voucher_methods_repository.dart';
 export 'voucher/voucher_method_details_repository.dart';
+export 'app_repository.dart';

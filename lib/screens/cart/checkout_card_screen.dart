@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
+import 'package:lixshop/blocs/checkout/checkout_bloc.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
+import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:lixshop/screens/home/home_screen.dart';
+import 'package:lixshop/utils/helpers/modal_loading.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
@@ -15,6 +20,8 @@ class CheckoutCardScreen extends StatefulWidget {
 
 class _CheckoutCardScreenState extends State<CheckoutCardScreen>
     with TickerProviderStateMixin {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,8 +149,10 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                       ),
                       child: Column(
                         children: [
-                          for(var idNPP in idAgents)
-                            _CheckoutItem(idNPP: idNPP!, cartModel: cartModel.getCartsByAgent(idNPP)),
+                          for (var idNPP in idAgents)
+                            _CheckoutItem(
+                                idNPP: idNPP!,
+                                cartModel: cartModel.getCartsByAgent(idNPP)),
                         ],
                       ),
                     ),
@@ -312,18 +321,69 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                     ],
                   ),
                   // Button thanh toán
-                  SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: RaisedButton(
-                      onPressed: () {},
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                  BlocListener<CheckoutBloc, CheckoutState>(
+                    listener: (context, state) {
+                      final cartBloc = BlocProvider.of<CartBloc>(context);
+                      if (state is CheckoutSuccess) {
+                        showSnackBar("Đặt hàng thành công!", context);
+                        Future.delayed(const Duration(seconds: 2), () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MobileScreenLayout()),
+                              (route) => false);
+                          cartBloc.add(RemoveAllCart());
+                        });
+                      } else if (state is CheckoutLoading) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                      } else if (state is CheckoutError) {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        showSnackBar(state.error, context);
+                      }
+                    },
+                    child: SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: RaisedButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title:
+                                const Center(child: Text('Xác nhận đặt hàng')),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'Huỷ'),
+                                child: const Text('Huỷ'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  context
+                                      .read<CheckoutBloc>()
+                                      .add(const CheckoutConfirm());
+                                  Navigator.pop(context, 'Xác nhận');
+                                },
+                                child: const Text('Xác nhận'),
+                              ),
+                            ],
+                          ),
                         ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        color: Vx.green500,
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(Vx.white),
+                              )
+                            : "Đặt hàng".text.white.bold.xl.make(),
                       ),
-                      color: Vx.green500,
-                      child: "Đặt hàng".text.white.bold.xl.make(),
                     ),
                   )
                   //CheckoutCard icon
@@ -424,7 +484,9 @@ class _BottomNavigationItem extends StatelessWidget {
 class _CheckoutItem extends StatelessWidget {
   final int idNPP;
   final CartModel cartModel;
-  const _CheckoutItem({Key? key, required this.idNPP, required this.cartModel}) : super(key: key);
+
+  const _CheckoutItem({Key? key, required this.idNPP, required this.cartModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -468,8 +530,18 @@ class _CheckoutItem extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(
-                                "https://picsum.photos/200",
+                                item.productDetail!.pathImg ?? "",
                                 height: 80,
+                                loadingBuilder: (context, child, progress) {
+                                  return progress == null
+                                      ? child
+                                      : const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                },
+                                errorBuilder: (context, url, error) {
+                                  return const Icon(Icons.error);
+                                },
                                 fit: BoxFit.cover,
                               ),
                             ),

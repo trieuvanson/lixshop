@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../blocs/cart/cart_bloc.dart';
@@ -67,7 +68,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   onTap: () {
                                     Get.to(
                                       () => CartDetailScreen(
-                                        cartModel: cartModel.getCartsByAgent(i!),
+                                        cartModel:
+                                            cartModel.getCartsByAgent(i!),
                                       ),
                                       curve: Curves.easeInToLinear,
                                     );
@@ -221,9 +223,13 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                           height: 50,
                           child: RaisedButton(
                             onPressed: () {
-                              Get.to(
-                                () => const CheckoutCardScreen(),
-                              );
+                              if (state.cartModel.cart.isEmpty) {
+                                showSnackBar("Vui lòng thêm sản phẩm vào giỏ hàng", context);
+                              } else {
+                                Get.to(
+                                  () => const CheckoutCardScreen(),
+                                );
+                              }
                             },
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(

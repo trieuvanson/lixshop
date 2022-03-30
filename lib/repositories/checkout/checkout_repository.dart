@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lixshop/models/auth/response_dto.dart';
 import 'package:lixshop/models/checkout/checkout_model.dart';
 
 class CheckoutRepository {
@@ -9,7 +10,7 @@ class CheckoutRepository {
 
   final Dio dio = Dio();
 
-  Future<void> confirmCheckout(CheckoutModel checkoutModel) async {
+  Future<ResponseDTO> confirmCheckout(CheckoutModel checkoutModel) async {
     try {
       print(jsonEncode(checkoutModel.toJson()));
 
@@ -25,15 +26,14 @@ class CheckoutRepository {
           },
         ),
       );
-      print('Thành công!');
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.data}');
+      return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
-      print('Lỗi');
-      print(e);
+      return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      print('Lỗi2');
-      print(e);
+      print('error: $e');
+      return {} as ResponseDTO;
     }
   }
 }
+
+final checkoutRepository = CheckoutRepository();

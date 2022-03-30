@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/screens/cart/cart_screen.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -854,7 +855,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 color: DesignCourseAppTheme.dark_grey,
               ),
               onPressed: () {
-                context.read<CartBloc>().add(RemoveAllCart());
+
               },
             );
           },
@@ -865,7 +866,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             Icons.shopping_cart,
             color: DesignCourseAppTheme.dark_grey,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => const CartScreen());
+          },
         ),
         DropdownButtonHideUnderline(
           child: DropdownButton2(

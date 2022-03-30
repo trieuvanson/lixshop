@@ -17,4 +17,9 @@ export 'checkout/checkout_model.dart';
 export 'auth/login_model.dart';
 export 'auth/response_dto.dart';
 export 'auth/token_response.dart';
-export '../repositories/auth/auth_user.dart';
+export '../repositories/auth/auth_user_model.dart';
+
+//city
+export 'city/city_model.dart';
+export 'city/districts_model.dart';
+export 'city/wards_model.dart';
