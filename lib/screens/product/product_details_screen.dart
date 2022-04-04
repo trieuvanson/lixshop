@@ -14,20 +14,36 @@ import '../../contains/contains.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import '../../utils/design_course_app_theme.dart';
+import '../../utils/helpers/secure_storage.dart';
 import '../../utils/hero_dialog_route.dart';
 import 'widget/menu_popup.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({Key? key}) : super(key: key);
+  final int idBrand;
+
+  const ProductDetailsScreen({Key? key, required this.idBrand})
+      : super(key: key);
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  String idDistris = "";
+
   @override
   void initState() {
+    //use future function
     super.initState();
+    getIdDistris();
+  }
+
+  // get id from future
+  Future<void> getIdDistris() async {
+    final id = await secureStorage.readKey("idDistris");
+    setState(() {
+      idDistris = id;
+    });
   }
 
   @override
@@ -35,8 +51,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: FutureBuilder<ProductDetailsDataModel>(
-        future:
-            ProductDetailsDataRepository().getProductDetails(458, ["5", "233"]),
+        future: ProductDetailsDataRepository()
+            .getProductDetails(widget.idBrand, idDistris),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.error != null &&
@@ -76,7 +92,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   //display error
   Widget _buildErrorWidget(dynamic error) {
-    print('Error: $error');
+    print(' $error');
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -716,14 +732,25 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                             CrossAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          Text(
-                                                            '${detail.name}',
-                                                            //
-                                                            style: const TextStyle(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                                fontSize: 10),
+                                                          SizedBox(
+                                                            width:
+                                                                MediaQuery.of(_)
+                                                                        .size
+                                                                        .width *
+                                                                    0.7,
+                                                            child: Text(
+                                                              '${detail.name}',
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              //
+                                                              style: const TextStyle(
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .italic,
+                                                                  fontSize: 10),
+                                                            ),
                                                           ),
                                                           Text(
                                                             'Số lượng: ${detail.countValue?.toInt()} ${detail.productVoucherUnit?.toLowerCase()}',
@@ -854,9 +881,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 Icons.favorite_border,
                 color: DesignCourseAppTheme.dark_grey,
               ),
-              onPressed: () {
-
-              },
+              onPressed: () {},
             );
           },
         ),

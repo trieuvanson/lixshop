@@ -18,7 +18,7 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   Widget build(BuildContext context) {
     return FutureBuilder<ProductsDataModel>(
       future: ProductsDataRepositories().getProductsData(),
-      builder: (context,snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.error != null &&
               snapshot.data!.error!.isNotEmpty) {
@@ -32,9 +32,7 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
         }
       },
     );
-
   }
-
 
   Widget _buildLoadingWidget() {
     return Center(
@@ -67,10 +65,12 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
     );
   }
 
-  Widget _buildCategoriesWidget(ProductsDataModel productsDataModel/*TrailersModel data*/) {
+  Widget _buildCategoriesWidget(
+      ProductsDataModel productsDataModel /*TrailersModel data*/) {
     // List<Video>? videos = data.trailers;
-    ProductCateModel productCateModel = ProductCategoryRepository().getAllCategories2(productsDataModel);
-      return Container(
+    ProductCateModel productCateModel =
+        ProductCategoryRepository().getAllCategories2(productsDataModel);
+    return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
         color: DesignCourseAppTheme.nearlyWhite,
@@ -83,17 +83,17 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 8.0, top: 4.0, bottom: 4.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 4.0, bottom: 4.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               productCateModel.productCates!.length,
-                  (index) => ProductTypeCard(
-                imagePath: productCateModel.productCates![index].catePath??"",
-                title: productCateModel.productCates![index].cateName??"",
+              (index) => ProductTypeCard(
+                imagePath: productCateModel.productCates![index].catePath ?? "",
+                title: productCateModel.productCates![index].cateName ?? "",
+                productCate: productCateModel.productCates![index],
               ),
             ),
           ),
@@ -101,24 +101,18 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
 }
 
 class ProductTypeCard extends StatefulWidget {
   final String imagePath;
   final String title;
+  final productCate;
 
   const ProductTypeCard(
-      {Key? key, required this.imagePath, required this.title})
+      {Key? key,
+      required this.imagePath,
+      required this.title,
+      this.productCate})
       : super(key: key);
 
   @override
@@ -133,9 +127,8 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const ProductsScreen(),
-            settings: const RouteSettings(
-              name: '/products',
+            builder: (context) => ProductsScreen(
+              productCate: widget.productCate,
             ),
           ),
         );
@@ -149,7 +142,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
             color: DesignCourseAppTheme.nearlyWhite,
             borderRadius: BorderRadius.circular(10),
             border:
-            Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
+                Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -179,7 +172,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                 padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
                 child: Center(
                   child: Text(
-                    (widget.title[0] +  widget.title.substring(1).toLowerCase()),
+                    (widget.title[0] + widget.title.substring(1).toLowerCase()),
                     textAlign: TextAlign.left,
                     maxLines: 1,
                     style: const TextStyle(

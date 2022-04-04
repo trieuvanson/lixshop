@@ -15,20 +15,6 @@ class ProductRepositories extends BaseProductRepository {
   Future<ProductBrandModel> getAllProducts() async {
     try {
       final response = await _dio.get(_mainURL ?? "");
-/*      // ProductsData productsData =
-      //     ProductsData.fromJson(jsonDecode(response.data));
-      // List<ProductCate> productCate =
-      //     productsData.productCate!.map((e) => e).toList();
-      // List<ProductBrand> productBrands = [];
-      //
-      // for (var element in productCate) {
-      //   for (var element in element.productBrand!) {
-      //     productBrands.add(element);
-      //   }
-      // }
-      //
-      // return productBrands;*/
-
       return ProductBrandModel.fromJson(jsonDecode(response.data));
     } catch (e) {
       return ProductBrandModel.withError(e.toString());

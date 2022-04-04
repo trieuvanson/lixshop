@@ -1,7 +1,7 @@
 import '../models.dart';
 
 class ProductsData {
-  double? idNpp;
+  String? idNpp;
   double? createDate;
   String? createUser;
   List<ProductCate>? productCate;
@@ -14,7 +14,7 @@ class ProductsData {
   });
 
   factory ProductsData.fromJson(Map<String, dynamic> json) => ProductsData(
-        idNpp: json["idnpp"].toDouble(),
+        idNpp: json["idnpp"].toInt().toString(),
         createDate: json["createDate"].toDouble(),
         createUser: json["createUser"],
         productCate: json["cateSanPhams"] == null

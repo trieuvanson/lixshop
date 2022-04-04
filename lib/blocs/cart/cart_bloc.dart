@@ -39,8 +39,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         _saveCartToFileJson(currentCartList);
 
         emit(CartLoaded(cartModel: await _readCartFromFileJson()));
-      } on Exception {
-        emit(const CartError());
+      } catch (e) {
+        print('Error: $e');
+        emit(CartError(message: e.toString()));
       }
     }
   }
@@ -53,8 +54,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         var currentCartList = checkBeforeUpdate(cart, event.cart);
         _saveCartToFileJson(currentCartList);
         emit(CartLoaded(cartModel: await _readCartFromFileJson()));
-      } on Exception {
-        emit(const CartError());
+      }catch(e){
+        print('Error: $e');
+        emit(CartError(message: e.toString()));
       }
     }
   }

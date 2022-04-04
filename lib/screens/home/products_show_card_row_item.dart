@@ -1,6 +1,6 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lixshop/screens/home/products_type_screen.dart';
 
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
@@ -11,12 +11,14 @@ class ProductShowCardRowItem extends StatefulWidget {
   final bool? isSales;
   final bool? isHot;
   final bool? isNew;
+  final String? title;
 
   const ProductShowCardRowItem({
     Key? key,
     this.isSales = false,
     this.isHot = false,
     this.isNew = false,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -24,27 +26,76 @@ class ProductShowCardRowItem extends StatefulWidget {
 }
 
 class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
+  List<ProductBrand> products = [];
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: DesignCourseAppTheme.notWhite,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-              offset: const Offset(1.1, 1.1),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: buildProductList(),
+    print(widget.title);
+    return Column(
+      children: [
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.title ?? '',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    letterSpacing: 0.27,
+                    color: DesignCourseAppTheme.darkerText,
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => ProductsTypeScreen(products: products,));
+                    },
+                    child: const Text(
+                      'Xem thêm',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                        letterSpacing: 0.27,
+                        color: DesignCourseAppTheme.nearlyBlue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: DesignCourseAppTheme.notWhite,
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                  offset: const Offset(1.1, 1.1),
+                  blurRadius: 8.0),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: buildProductList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -106,29 +157,19 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
   Widget _buildProductsWidget(ProductsDataModel productsDataModel) {
     ProductBrandModel productBrandModel =
         ProductRepositories().getProducts(productsDataModel);
-    List<ProductBrand> products = [];
 
     if (widget.isSales!) {
-      products = productBrandModel.productBrands!
-          .where((product) {
-            return product.saleProd!;
-          })
-          .take(10)
-          .toList();
+      products = productBrandModel.productBrands!.where((product) {
+        return product.saleProd!;
+      }).toList();
     } else if (widget.isHot!) {
-      products = productBrandModel.productBrands!
-          .where((product) {
-            return product.hotProd!;
-          })
-          .take(10)
-          .toList();
+      products = productBrandModel.productBrands!.where((product) {
+        return product.hotProd!;
+      }).toList();
     } else if (widget.isNew!) {
-      products = productBrandModel.productBrands!
-          .where((product) {
-            return product.newProd!;
-          })
-          .take(10)
-          .toList();
+      products = productBrandModel.productBrands!.where((product) {
+        return product.newProd!;
+      }).toList();
     }
 
     return Builder(
@@ -136,7 +177,7 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(
-            products.length,
+            10,
             (index) {
               ProductBrand product = products[index];
               return Padding(
@@ -144,6 +185,7 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
                 child: ProductCardItem(
                   img: product.brand!,
                   title: product.brandName!,
+                  idBrand: product.brandId!.toInt(),
                 ),
               );
             },

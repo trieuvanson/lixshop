@@ -10,9 +10,9 @@ import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
 class CartDetailScreen extends StatefulWidget {
-  final CartModel cartModel;
+  final int idNpp;
 
-  const CartDetailScreen({Key? key, required this.cartModel}) : super(key: key);
+  const CartDetailScreen({Key? key, required this.idNpp}) : super(key: key);
 
   @override
   State<CartDetailScreen> createState() => _CartDetailScreenState();
@@ -30,7 +30,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            "Nhà phân phối ${widget.cartModel.idAgents[0]}".text.black.make(),
+            "Nhà phân phối ${widget.idNpp}".text.black.make(),
             const Text("Địa chỉ giao hàng",
                 style: TextStyle(
                     fontSize: 14,
@@ -54,7 +54,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             if (state is CartLoaded) {
-              return _buildCartDetail(state.cartModel);
+              return _buildCartDetail(state.cartModel.getCartsByAgent(widget.idNpp));
             } else {
               return Container();
             }
@@ -71,115 +71,62 @@ class _CartDetailScreenState extends State<CartDetailScreen>
         padding: const EdgeInsets.all(8),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 110,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                  "1,000,000đ"
-                      .text
-                      .color(Vx.black.withOpacity(0.8))
-                      .bold
-                      .xl2
-                      .make(),
-                ],
-              ),
-              5.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                  "- 100,000đ"
-                      .text
-                      .color(Vx.green500.withOpacity(0.8))
-                      .bold
-                      .xl2
-                      .make(),
-                ],
-              ),
-              5.heightBox,
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      "Tạm tính".text.xl2.black.bold.make(),
-                      " (đã có VAT)"
-                          .text
-                          .color(Vx.gray800.withOpacity(0.8))
-                          .xl
-                          .make(),
-                    ],
-                  ),
-                  "900,000đ"
-                      .text
-                      .color(Vx.red700.withOpacity(0.8))
-                      .bold
-                      .xl2
-                      .make(),
-                  // Button thanh toán
-                  //Cart icon
-                ],
-              ),
-              /*  10.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        border: Border.all(
-                          color: Vx.green500,
-                        )),
-                    child: const Icon(
-                      Icons.add_shopping_cart,
-                      color: Vx.green500,
-                      size: 28,
+          height: 80,
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded) {
+                CartModel cartModel = state.cartModel.getCartsByAgent(widget.idNpp);
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Tổng ${cartModel.cart.length} sản phẩm"
+                            .text
+                            .xl
+                            .gray500
+                            .make(),
+                        "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
+                            .text
+                            .color(Vx.black.withOpacity(0.8))
+                            .bold
+                            .xl2
+                            .make(),
+                      ],
                     ),
-                  ),
-                  16.widthBox,
-                  Expanded(
-                    child: Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Vx.green500,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8.0),
+                    5.heightBox,
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            "Tạm tính".text.xl2.black.bold.make(),
+                            " (đã có VAT)"
+                                .text
+                                .color(Vx.gray800.withOpacity(0.8))
+                                .xl
+                                .make(),
+                          ],
                         ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.nearlyBlue
-                                  .withOpacity(0.5),
-                              offset: const Offset(1.1, 1.1),
-                              blurRadius: 10.0),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Thêm vào giỏ hàng',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            letterSpacing: 0.0,
-                            color: DesignCourseAppTheme.nearlyWhite,
-                          ),
-                        ),
-                      ),
+                        "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
+                            .text
+                            .color(Vx.red700.withOpacity(0.8))
+                            .bold
+                            .xl2
+                            .make(),
+                        // Button thanh toán
+                        //Cart icon
+                      ],
                     ),
-                  )
-                ],
-              ),*/
-            ],
+                  ],
+                );
+              }
+              return Center(
+                child: "Đang tải...".text.xl2.make(),
+              );
+            },
           ),
         ),
       ),
@@ -201,344 +148,17 @@ class _CartDetailScreenState extends State<CartDetailScreen>
 class _CartCard extends StatelessWidget {
   final CartModel cartModel;
 
+
   const _CartCard({Key? key, required this.cartModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(cartModel.cart.length);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
           for (var cart in cartModel.cart) _CartItem(cart: cart),
-          Container(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Vx.gray200.withOpacity(0.1),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                ),
-              ],
-              border: Border.all(color: Vx.gray500.withOpacity(0.1)),
-            ),
-            width: MediaQuery.of(context).size.width,
-// height: 220-16,
-            child: Material(
-              child: InkWell(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 16.0, left: 8, right: 8, bottom: 0),
-                      child: SizedBox(
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 130,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.network(
-                                  "https://picsum.photos/200",
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            16.widthBox,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 150,
-                                    child: RichText(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      text: const TextSpan(
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18),
-                                          text:
-                                              'Nước rửa chén Lix hương chanh siêu sạch sạch sạch sạchsạch sạch sạch sạch'),
-                                    ),
-                                  ),
-                                ),
-                                5.heightBox,
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 150,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        child: "Thùng 13 bịch x 12 gói x 25g"
-                                            .text
-                                            .gray500
-                                            .make(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                5.heightBox,
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 150,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      "100,000đ/Thùng".text.xl.gray500.make(),
-                                      "100,000đ"
-                                          .text
-                                          .color(Vx.black.withOpacity(0.8))
-                                          .bold
-                                          .xl2
-                                          .make(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(bottom: 16, left: 8, right: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                          ),
-                          16.widthBox,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 150,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    "Khuyến mãi"
-                                        .text
-                                        .color(Vx.black.withOpacity(0.8))
-                                        .bold
-                                        .make(),
-                                    "".text.xl.gray500.make(),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 150,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              250,
-                                          child: const Text(
-                                            "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(color: Vx.gray500),
-                                          ),
-                                        ),
-                                        "3 can".text.gray500.make(),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              250,
-                                          child: const Text(
-                                            "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(color: Vx.gray500),
-                                          ),
-                                        ),
-                                        "3 can".text.gray500.make(),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              250,
-                                          child: const Text(
-                                            "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(color: Vx.gray500),
-                                          ),
-                                        ),
-                                        "3 can".text.gray500.make(),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              250,
-                                          child: const Text(
-                                            "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(color: Vx.gray500),
-                                          ),
-                                        ),
-                                        "3 can".text.gray500.make(),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 120,
-                            height: 42,
-                            child: Center(
-                              child: SizedBox(
-                                child: RaisedButton(
-                                  onPressed: () {},
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                  ),
-                                  color: Vx.white,
-                                  child: "Xoá".text.gray600.bold.xl.make(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: DesignCourseAppTheme.nearlyWhite,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(8.0),
-                                        ),
-                                        border: Border.all(
-                                          color: Vx.green500,
-                                        )),
-                                    child: const Icon(
-                                      Icons.remove,
-                                      color: Vx.green500,
-                                      size: 28,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                      color: DesignCourseAppTheme.nearlyWhite,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(8.0),
-                                      ),
-                                      border: Border.all(
-                                        color: Vx.green500,
-                                      )),
-                                  child: TextFormField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'^[+]?\d+([.]\d+)?$')),
-//  Giới hạn 3 kí tự
-                                      LengthLimitingTextInputFormatter(3),
-                                    ],
-                                    textAlignVertical: TextAlignVertical.center,
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
-                                    decoration: const InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.only(bottom: 14.0),
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(
-                                        color: DesignCourseAppTheme.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 40,
-                                height: 40,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: DesignCourseAppTheme.nearlyWhite,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(8.0),
-                                      ),
-                                      border: Border.all(
-                                        color: Vx.green500,
-                                      )),
-                                  child: const Icon(
-                                    Icons.add,
-                                    color: Vx.green500,
-                                    size: 28,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-//Cart icon
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -704,8 +324,7 @@ class _CartItemState extends State<_CartItem> {
                 ),
               ),
               Padding(
-                padding:
-                const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -719,8 +338,7 @@ class _CartItemState extends State<_CartItem> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width - 150,
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               "Khuyến mãi"
                                   .text
@@ -737,13 +355,11 @@ class _CartItemState extends State<_CartItem> {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width -
-                                        250,
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
                                     child: const Text(
                                       "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
                                       overflow: TextOverflow.ellipsis,
@@ -756,13 +372,11 @@ class _CartItemState extends State<_CartItem> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width -
-                                        250,
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
                                     child: const Text(
                                       "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
                                       overflow: TextOverflow.ellipsis,
@@ -775,13 +389,11 @@ class _CartItemState extends State<_CartItem> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width -
-                                        250,
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
                                     child: const Text(
                                       "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
                                       overflow: TextOverflow.ellipsis,
@@ -794,13 +406,11 @@ class _CartItemState extends State<_CartItem> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width -
-                                        250,
+                                    width:
+                                        MediaQuery.of(context).size.width - 250,
                                     child: const Text(
                                       "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
                                       overflow: TextOverflow.ellipsis,

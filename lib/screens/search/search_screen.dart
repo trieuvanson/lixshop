@@ -37,13 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
-            Get.focusScope!.unfocus();
-          } else {
-            Get.back();
-          }
+          Get.back();
         },
       ),
       backgroundColor: Colors.white,
@@ -59,12 +53,12 @@ class _SearchScreenState extends State<SearchScreen> {
             autofocus: true,
             onSubmitted: (value) {
               if (value.trim().isNotEmpty) {
-                Get.to(
-                  () => ProductsScreen(keyword: value),
-                  routeName: '/products?keyword=$value',
-                  transition: Transition.downToUp,
-                  duration: const Duration(milliseconds: 300),
-                );
+                // Get.to(
+                //   () => ProductsScreen(keyword: value),
+                //   routeName: '/products?keyword=$value',
+                //   transition: Transition.downToUp,
+                //   duration: const Duration(milliseconds: 300),
+                // );
               }
             },
             textInputAction: TextInputAction.search,
@@ -119,13 +113,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     _MenuItem(
                         title: "${widget.keyword} $i",
                         onTap: () {
-                          Get.to(
-                            () =>
-                                ProductsScreen(keyword: "${widget.keyword} $i"),
-                            routeName: '/products?keyword=${widget.keyword} $i',
-                            transition: Transition.downToUp,
-                            duration: const Duration(milliseconds: 300),
-                          );
+                          // Get.to(
+                          //   () =>
+                          //       ProductsScreen(keyword: "${widget.keyword} $i"),
+                          //   routeName: '/products?keyword=${widget.keyword} $i',
+                          //   transition: Transition.downToUp,
+                          //   duration: const Duration(milliseconds: 300),
+                          // );
                         }),
                 ],
               ),
@@ -188,14 +182,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Material(
                         child: InkWell(
                           onTap: () {
-                            Get.to(
-                              () => ProductsScreen(
-                                  keyword: "Tìm kiếm phổ biến ${i + 1}"),
-                              routeName:
-                                  '/products?keyword=Tìm kiếm phổ biến ${i + 1}',
-                              transition: Transition.downToUp,
-                              duration: const Duration(milliseconds: 300),
-                            );
+                            // Get.to(
+                            //   () => ProductsScreen(
+                            //       keyword: "Tìm kiếm phổ biến ${i + 1}"),
+                            //   routeName:
+                            //       '/products?keyword=Tìm kiếm phổ biến ${i + 1}',
+                            //   transition: Transition.downToUp,
+                            //   duration: const Duration(milliseconds: 300),
+                            // );
                           },
                           child: Row(
                             children: [

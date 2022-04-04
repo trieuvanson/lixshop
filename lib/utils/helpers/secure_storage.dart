@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:lixshop/models/auth/token_response.dart';
+
+import '../../screens/screen.dart';
 
 class SecureStorageFrave {
   final secureStorage = const FlutterSecureStorage();
@@ -23,6 +26,19 @@ class SecureStorageFrave {
     await secureStorage.delete(key: 'token_response');
     await secureStorage.deleteAll();
   }
+
+  Future<bool> checkLogin() async {
+    return await readToken() != null;
+  }
+
+  Future<void> addKey(String key, dynamic value) async {
+    await secureStorage.write(key: key, value: (value));
+  }
+
+  Future<dynamic> readKey(String key) async {
+    return await secureStorage.read(key: key);
+  }
+
 }
 
 final secureStorage = SecureStorageFrave();

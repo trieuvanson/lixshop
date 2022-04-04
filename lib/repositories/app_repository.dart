@@ -13,8 +13,6 @@ class AppRepository {
   Future<CityModel> getCity() async {
     try {
       final response = await dio.get('$mainUrl/datas/KxQcAQ9cWEJYLw==');
-      print('response: ${jsonDecode(response.data)['cities']}');
-
       return CityModel.fromJson(jsonDecode(response.data));
     } on DioError catch (e) {
       print(e);
@@ -25,15 +23,15 @@ class AppRepository {
     }
   }
 
-  DistrictsModel getDistrictsByCity(CityModel cityModel, int idCity) {
+  DistrictsModel getDistrictsByCity(List<City> cities, int idCity) {
     try {
       DistrictsModel districtsModel = DistrictsModel();
-      for (var item in cityModel.cities!) {
+      for (var item in cities) {
         if (item.id == idCity) {
           districtsModel.districts = item.districts;
         }
       }
-      return DistrictsModel(error: "error");
+      return DistrictsModel(districts: districtsModel.districts);
     } on DioError catch (e) {
       print(e);
       return DistrictsModel(error: e.toString());
@@ -43,15 +41,15 @@ class AppRepository {
     }
   }
 
-  WardsModel getWardsByDistrict(DistrictsModel districtsModel, int idDistrict) {
+  WardsModel getWardsByDistrict(List<Districts> districts, int idDistrict) {
     try {
       WardsModel wardsModel = WardsModel();
-      for (var item in districtsModel.districts!) {
+      for (var item in districts) {
         if (item.id == idDistrict) {
           wardsModel.wards = item.wards;
         }
       }
-      return WardsModel(error: "error");
+      return WardsModel(wards: wardsModel.wards);
     } on DioError catch (e) {
       print(e);
       return WardsModel(error: e.toString());

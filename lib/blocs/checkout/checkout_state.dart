@@ -9,12 +9,8 @@ abstract class CheckoutState extends Equatable {
 
 
 class CheckoutLoading extends CheckoutState {
-  final CheckoutModel checkoutModel;
-
-  const CheckoutLoading({this.checkoutModel = const CheckoutModel()});
-
   @override
-  List<Object> get props => [checkoutModel];
+  List<Object> get props => [];
 }
 
 class CheckoutLoaded extends CheckoutState {

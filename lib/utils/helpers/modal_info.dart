@@ -12,7 +12,7 @@ void modalInfoFrave( BuildContext context, String text ){
     builder: (context) 
       => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          content: Container(
+          content: SizedBox(
             height: 250,
             child: Column(
               children: [

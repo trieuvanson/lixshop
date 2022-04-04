@@ -1,60 +1,46 @@
 import 'package:equatable/equatable.dart';
 
 class AuthUser extends Equatable {
- final String? username;
- final String? email;
- final  String? phone;
- final String? firstName;
- final  String? lastName;
- final  String? avatar;
+  final int? username;
+  final String? name;
+  final String? phone;
+  final String? address;
 
-  AuthUser({
+  const AuthUser({
     this.username,
-    this.email,
+    this.name,
     this.phone,
-    this.firstName,
-    this.lastName,
-    this.avatar,
+    this.address,
   });
 
   //Form json
 
-  factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
-        username: json["username"],
-        email: json["email"],
-        phone: json["phone"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        avatar: json["avatar"],
-      );
+  factory AuthUser.fromJson(Map<String, dynamic> json) {
+    return AuthUser(
+      username: json['id'],
+      name: json['name'],
+      phone: json['phone'],
+      address: json['stringAddress'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "email": email,
-        "phone": phone,
-        "firstName": firstName,
-        "lastName": lastName,
-        "avatar": avatar,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': username,
+      'name': name,
+      'phone': phone,
+      'address': address,
+    };
+  }
 
   //empty
-  factory AuthUser.empty() => AuthUser(
-        username: null,
-        email: null,
-        phone: null,
-        firstName: null,
-        lastName: null,
-        avatar: null,
-      );
 
   @override
   // TODO: implement props
-  List<Object?> get props => [
-        username,
-        email,
-        phone,
-        firstName,
-        lastName,
-        avatar,
+  List<Object> get props => [
+        username!,
+        name!,
+        phone!,
+        address!,
       ];
 }

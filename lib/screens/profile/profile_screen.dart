@@ -18,48 +18,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
-  int _selectedIndex = 0;
-
-  AnimationController? animationController;
-  Animation<double>? animation;
-  double opacity3 = 0.0;
-
-  @override
-  void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: animationController!,
-        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
-    setData();
-    super.initState();
-  }
-
-  Future<void> setData() async {
-    animationController?.forward();
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      opacity3 = 1.0;
-    });
-  }
-
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) async {
-        if (await secureStorage.readToken() == null) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const MobileScreenLayout()));
+        if (state is LogOutAuthState) {
+          Get.offAll(() => const LoginScreen());
+
         }
       },
       builder: (context, state) {

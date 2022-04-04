@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:lixshop/blocs/auth/auth_bloc.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
+import 'package:lixshop/blocs/guest/user_bloc.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'blocs/checkout/checkout_bloc.dart';
@@ -38,7 +39,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CartBloc()..add(LoadCart())),
         BlocProvider(
             create: (context) =>
-                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))),
+                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))..add(CheckoutEventLoaded())),
+        BlocProvider(
+            create: (context) =>
+            UserBloc()),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',
@@ -54,11 +58,9 @@ class MyApp extends StatelessWidget {
           '/': (context) => const ResponsiveLayout(
               webScreenLayout: WebScreenLayout(),
               mobileScreenLayout: MobileScreenLayout()),
-          '/login': (_) => LoginScreen(),
-          '/register': (_) => RegisterScreen(),
+          '/login': (_) => const LoginScreen(),
+          '/register': (_) => const RegisterScreen(),
           "/forgot-password": (_) => const ForgotPasswordScreen(),
-          "/test": (_) => const ProductsScreen(),
-          "/products": (_) => const ProductsScreen(),
           // "/product-detail": (_) => const ProductDetailScreen(),
         },
       ),

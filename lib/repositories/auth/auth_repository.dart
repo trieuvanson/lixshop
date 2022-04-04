@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
@@ -12,6 +10,7 @@ class AuthRepository {
   static String? mainUrl = dotenv.env['MAIN_API_URL'];
 
   var loginUrl = '$mainUrl/api/shoplix/login';
+  var registerUrl = '$mainUrl/api/shoplix/register';
 
   final Dio dio = Dio();
 
@@ -33,7 +32,9 @@ class AuthRepository {
           },
         ),
       );
-      return AuthUser.fromJson(response.data);
+      print('response: ${response.data}');
+      print(AuthUser.fromJson(response.data['dt']));
+      return AuthUser.fromJson(response.data['dt']);
     } catch (e) {
       print(e);
       return null;
@@ -58,16 +59,18 @@ class AuthRepository {
       return {} as ResponseDTO;
     }
   }
+
+
+  Future<void> signOut() async {
+    try {
+      await secureStorage.deleteSecureStorage();
+    } on DioError catch (e) {
+      print('DioError: $e');
+    }
+  }
+
 }
 
-@override
-Future<void> signOut() async {
-  try {
-    await secureStorage.deleteSecureStorage();
-  } on DioError catch (e) {
-    print('DioError: $e');
-  }
-}
 
 // Future<ResponseDTO> _getTokenFromFile() async {
 //   final directory = await getApplicationDocumentsDirectory();

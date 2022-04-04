@@ -38,21 +38,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
     }
   }
 
-  bool isLogin = false;
-
-  Future checkLogin() async {
-    isLogin = await secureStorage.readToken() != null;
-    if (!isLogin) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        ),
-      );
-    }
-    print('isLogin: $isLogin');
-    setState(() {});
-  }
-
   @override
   void initState() {
     checkFirstSeen();
@@ -96,12 +81,15 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     color: Vx.red600),
-                onTabChange: (index) {
-                  if (!isLogin && index == 3) {
-                    setState(() {
-                      _selectedIndex = index;
-                      checkLogin();
-                    });
+                onTabChange: (index) async {
+                  if (index == 3) {
+                    if (await secureStorage.checkLogin()) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    } else {
+                      Get.offAll(() => const LoginScreen());
+                    }
                   } else {
                     setState(() {
                       _selectedIndex = index;

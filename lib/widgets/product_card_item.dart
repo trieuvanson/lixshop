@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,12 +8,14 @@ class ProductCardItem extends StatefulWidget {
   final String img;
   final String title;
   final String? stickers;
+  final int idBrand;
 
   const ProductCardItem({
     Key? key,
     required this.img,
     required this.title,
     this.stickers,
+    required this.idBrand,
   }) : super(key: key);
 
   @override
@@ -26,12 +27,14 @@ class _ProductCardItemState extends State<ProductCardItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const ProductDetailsScreen());
+        Get.to(() =>  ProductDetailsScreen(
+              idBrand: widget.idBrand,
+            ));
       },
       child: Container(
         padding: const EdgeInsets.only(bottom: 8.0),
         width: 180,
-        height: 250,
+        height: 240,
         decoration: BoxDecoration(
           color: DesignCourseAppTheme.nearlyWhite,
           borderRadius: BorderRadius.circular(8),
@@ -69,9 +72,6 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ),
               ),
             ),
-            Flexible(
-              child: Container(),
-            ),
             Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 4, right: 4),
               child: Text(
@@ -86,6 +86,9 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   color: DesignCourseAppTheme.darkerText,
                 ),
               ),
+            ),
+            Flexible(
+              child: Container(),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -68,8 +69,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   onTap: () {
                                     Get.to(
                                       () => CartDetailScreen(
-                                        cartModel:
-                                            cartModel.getCartsByAgent(i!),
+                                        idNpp: i!,
                                       ),
                                       curve: Curves.easeInToLinear,
                                     );
@@ -222,12 +222,20 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                           width: 150,
                           height: 50,
                           child: RaisedButton(
-                            onPressed: () {
-                              if (state.cartModel.cart.isEmpty) {
-                                showSnackBar("Vui lòng thêm sản phẩm vào giỏ hàng", context);
+                            onPressed: () async {
+                              if (await secureStorage.checkLogin()) {
+                                if (state.cartModel.cart.isEmpty) {
+                                  showSnackBar(
+                                      "Vui lòng thêm sản phẩm vào giỏ hàng",
+                                      context);
+                                } else {
+                                  Get.to(
+                                    () => const CheckoutCardScreen(),
+                                  );
+                                }
                               } else {
                                 Get.to(
-                                  () => const CheckoutCardScreen(),
+                                  () => const LoginScreen(),
                                 );
                               }
                             },
@@ -248,9 +256,11 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
               ),
             ),
           );
-        } else {
-          return const Text("Có lỗi xảy ra");
         }
+
+        return Center(
+          child: "Đang tải...".text.xl2.make(),
+        );
       },
     );
   }

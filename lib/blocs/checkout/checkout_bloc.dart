@@ -15,24 +15,23 @@ part 'checkout_event.dart';
 part 'checkout_state.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
-  final CartBloc _cartBloc;
+  final CartBloc cartBloc;
 
-  CheckoutBloc({required CartBloc cartBloc})
-      : _cartBloc = cartBloc,
-        super(const CheckoutLoading()) {
+  CheckoutBloc({required this.cartBloc}) : super(CheckoutLoading()) {
     on<CheckoutConfirm>(_checkoutConfirm);
   }
 
   void _checkoutConfirm(
       CheckoutConfirm event, Emitter<CheckoutState> emit) async {
-    final state = _cartBloc.state;
+    final state = cartBloc.state;
     try {
       if (state is CartLoaded) {
-        emit(const CheckoutLoading());
+        emit(CheckoutLoading());
         var cart = state.cartModel.cart;
         _saveCartToFileJson(_getCheckouts(cart));
         final response =
             await checkoutRepository.confirmCheckout(_getCheckouts(cart));
+        print(response);
         if (response.err != 0) {
           emit(CheckoutError(error: response.msg!));
         } else {
@@ -40,6 +39,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         }
       }
     } catch (e) {
+      print('CheckoutBloc: $e');
       emit(const CheckoutError(error: "Có lỗi xảy ra, vui lòng thử lại!"));
     }
   }

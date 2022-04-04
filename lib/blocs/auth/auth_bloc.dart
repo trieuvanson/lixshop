@@ -20,20 +20,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
     try {
       emit(LoadingAuthState());
-      final data =
-          await authRepository.signInWithEmailAndPassword(event.login);
+      final data = await authRepository.signInWithEmailAndPassword(event.login);
       await Future.delayed(const Duration(seconds: 1));
 
       if (data.err != 0) {
         emit(FailureAuthState(data.msg));
-      } else  {
+      } else {
         await secureStorage.deleteSecureStorage();
         await secureStorage.persistenceToken(data.dt!);
         final user = await authRepository.currentUser();
-        // Lấy phường xã từ token
-
-
-        print('token: ${data.dt!.accessToken}');
         emit(SuccessAuthState(user!, data.dt!.accessToken!));
       }
     } catch (e) {
@@ -44,22 +39,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onCheckLogin(
       CheckLoginEvent event, Emitter<AuthState> emit) async {
     try {
-      emit(LoadingAuthState());
-      final user = await authRepository.currentUser();
-      await Future.delayed(const Duration(seconds: 1));
-      if (user != null) {
-        final token = await secureStorage.readToken();
-        emit(SuccessAuthState(user, token?.accessToken??''));
+      if (await secureStorage.checkLogin()) {
+        final user = await authRepository.currentUser();
+        if (user != null) {
+          print(user.address);
+          final token = await secureStorage.readToken();
+          emit(SuccessAuthState(user, token?.accessToken ?? ''));
+        } else {
+          emit(LogOutAuthState());
+        }
       } else {
         emit(LogOutAuthState());
       }
     } catch (e) {
+      print('error: $e');
       emit(LogOutAuthState());
     }
   }
 
   Future<void> _onLogOut(LogOutEvent event, Emitter<AuthState> emit) async {
-    await secureStorage.deleteSecureStorage();
-    emit(LogOutAuthState());
+    try {
+      emit(LoadingAuthState());
+      await authRepository.signOut();
+      emit(LogOutAuthState());
+    } catch (e) {
+      emit(LogOutAuthState());
+    }
     // emit(const AuthState());
-  }}
+  }
+}

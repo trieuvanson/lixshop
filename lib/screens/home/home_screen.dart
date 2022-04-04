@@ -1,6 +1,8 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/blocs/auth/auth_bloc.dart';
+import 'package:lixshop/blocs/auth/auth_bloc.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/models.dart';
@@ -69,17 +71,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 const HomeBannerScreen(),
                 10.heightBox,
-                buildProductTitleRow("", context),
+                // buildProductTitleRow("", context),
                 const HomeProductsTypeScreen(),
                 10.heightBox,
-                buildProductTitleRow("Khuyến mãi", context),
-                const ProductShowCardRowItem(isSales: true),
+                const ProductShowCardRowItem(
+                    isSales: true, title: "Sản phẩm khuyến mãi"),
                 10.heightBox,
-                buildProductTitleRow("Sản phẩm bán chạy", context),
-                const ProductShowCardRowItem(isHot: true,),
+                const ProductShowCardRowItem(
+                    isHot: true, title: "Sản phẩm nổi bật"),
                 10.heightBox,
-                buildProductTitleRow("Sản phẩm mới", context),
-                const ProductShowCardRowItem(isNew: true,),
+                const ProductShowCardRowItem(
+                    isNew: true, title: "Sản phẩm mới"),
                 10.heightBox,
               ],
             ),
@@ -109,17 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 color: Theme.of(context).accentColor,
               ),
             ),
-            onPressed:() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return const ProductsScreen();
-                  },
-                  settings: const RouteSettings(name: '/products'),
-                ),
-              );
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -183,7 +175,6 @@ class _SearchCard extends StatelessWidget {
                 onTap: () => Get.to(
                   () => SearchScreen(),
                   routeName: '/search',
-                  transition: Transition.downToUp,
                   duration: const Duration(milliseconds: 300),
                 ),
                 child: Row(
@@ -238,58 +229,73 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                   width: double.infinity,
                   child: _SearchCard(),
                 ),
-                Positioned(
-                  bottom: 0,
-                  child: Opacity(
-                    opacity: (1 - shrinkOffset / expandedHeight),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      // alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on_outlined,
-                                color: Vx.green700,
-                              ),
-                              5.widthBox,
-                              "Giao tới: Số 3, đường số 2, khu phố 4,..."
-                                  .text
-                                  .bold
-                                  .size(16)
-                                  .green700
-                                  .make(),
-                            ],
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (state is SuccessAuthState) {
+                      return Positioned(
+                        bottom: 0,
+                        child: Opacity(
+                          opacity: (1 - shrinkOffset / expandedHeight),
+                          child: Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            // alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on_outlined,
+                                      color: Vx.green700,
+                                    ),
+                                    5.widthBox,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: "Giao tới: ${state.user.address}"
+                                          .text
+                                          .maxLines(1)
+                                          .overflow(TextOverflow.ellipsis)
+                                          .bold
+                                          .size(16)
+                                          .green700
+                                          .make(),
+                                    ),
+                                  ],
+                                ),
+
+                                // 64.widthBox,
+                                const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Vx.green700,
+                                ),
+                              ],
+                            ),
                           ),
-                          // 64.widthBox,
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            color: Vx.green700,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
                 minHeight >= 150
-                    ?FutureBuilder<ProductsDataModel>(
-                  future: ProductsDataRepositories().getProductsData(),
-                  builder: (context,snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.error != null &&
-                          snapshot.data!.error!.isNotEmpty) {
-                        return _buildErrorWidget(snapshot.data!.error);
-                      }
-                      return _buildCategoriesWidget(snapshot.data!);
-                    } else if (snapshot.hasError) {
-                      return _buildErrorWidget(snapshot.error);
-                    } else {
-                      return _buildLoadingWidget();
-                    }
-                  },
-                )
+                    ? FutureBuilder<ProductsDataModel>(
+                        future: ProductsDataRepositories().getProductsData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data!.error != null &&
+                                snapshot.data!.error!.isNotEmpty) {
+                              return _buildErrorWidget(snapshot.data!.error);
+                            }
+                            return _buildCategoriesWidget(snapshot.data!);
+                          } else if (snapshot.hasError) {
+                            return _buildErrorWidget(snapshot.error);
+                          } else {
+                            return _buildLoadingWidget();
+                          }
+                        },
+                      )
                     : Container(),
               ],
             ),
@@ -307,7 +313,6 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
-
 
   Widget _buildLoadingWidget() {
     return Center(
@@ -345,8 +350,10 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _buildCategoriesWidget(ProductsDataModel productsDataModel/*TrailersModel data*/) {
-    ProductCateModel productCateModel = ProductCategoryRepository().getAllCategories2(productsDataModel);
+  Widget _buildCategoriesWidget(
+      ProductsDataModel productsDataModel /*TrailersModel data*/) {
+    ProductCateModel productCateModel =
+        ProductCategoryRepository().getAllCategories2(productsDataModel);
     // List<Video>? videos = data.trailers;
     return SizedBox(
       child: Align(
@@ -359,37 +366,29 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
             child: Row(
               children: List.generate(
                 productCateModel.productCates!.length,
-                    (index) => Container(
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8.0),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(10)),
-                        color: Colors.green,
-                        animationDuration: const Duration(
-                            milliseconds: 500),
-                        onPressed: () {
-                          Get.to(
-                                () => const ProductsScreen(),
-                          );
-                        },
-                        child: Text(
-                          productCateModel.productCates![index].cateName??"",
-                          style: const TextStyle(
-                              color: Colors.white),
-                        ),
-                      ),
+                (index) => Container(
+                  height: 50,
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.green,
+                    animationDuration: const Duration(milliseconds: 500),
+                    onPressed: () {
+                      Get.to(() => ProductsScreen(
+                          productCate: productCateModel.productCates![index]));
+                    },
+                    child: Text(
+                      productCateModel.productCates![index].cateName ?? "",
+                      style: const TextStyle(color: Colors.white),
                     ),
+                  ),
                 ),
               ),
             ),
           ),
         ),
+      ),
     );
   }
-
-
-
 }

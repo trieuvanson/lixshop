@@ -15,26 +15,28 @@ class ProductCate {
     this.productBrand,
   });
 
+
+
   factory ProductCate.fromJson(Map<String, dynamic> json) => ProductCate(
-        cateId: json["catid"] == null ? null : json["catid"].toDouble(),
-        cateCode: json["catcode"],
-        cateName: json["catname"],
-        catePath: json["catpath"],
-        productBrand: json["brandSanPhams"] == null
-            ? []
-            : List<ProductBrand>.from(
-                json["brandSanPhams"].map((x) => ProductBrand.fromJson(x))),
-      );
+      cateId: json["catid"] == null ? null : json["catid"].toDouble(),
+      cateCode: json["catcode"],
+      cateName: json["catname"],
+      catePath: json["catpath"],
+      productBrand: json["brandSanPhams"] == null
+      ? []
+          : List<ProductBrand>.from(
+  json["brandSanPhams"].map((x) => ProductBrand.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "catid": cateId,
-        "catcode": cateCode,
-        "catname": cateName,
-        "catpath": catePath,
-        "brandSanPhams": productBrand == null
-            ? null
-            : List<dynamic>.from(productBrand!.map((x) => x.toJson())),
-      };
+    "catid": cateId,
+    "catcode": cateCode,
+    "catname": cateName,
+    "catpath": catePath,
+    "brandSanPhams": productBrand == null
+        ? null
+        : List<dynamic>.from(productBrand!.map((x) => x.toJson())),
+  };
 }
 
 class ProductCateModel {
@@ -52,6 +54,15 @@ class ProductCateModel {
         productsData.productCate!.map((e) => e).toList();
     return ProductCateModel(productCates: productCate, error: "");
   }
+
+
+  //tojson
+  Map<String, dynamic> toJson() => {
+        "productCate": productCates == null
+            ? null
+            : List<dynamic>.from(productCates!.map((x) => x.toJson())),
+        "error": error,
+      };
 
   factory ProductCateModel.withError(String error) =>
       ProductCateModel(productCates: [], error: error);

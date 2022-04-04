@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:lixshop/blocs/checkout/checkout_bloc.dart';
+import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:lixshop/screens/cart/cart_detail_screen.dart';
 import 'package:lixshop/screens/home/home_screen.dart';
 import 'package:lixshop/utils/helpers/modal_loading.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../blocs/auth/auth_bloc.dart';
 import '../../utils/design_course_app_theme.dart';
 
 class CheckoutCardScreen extends StatefulWidget {
@@ -106,13 +110,33 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                     ),
                                   ],
                                 ),
-                                10.heightBox,
-                                "Tên người nhận".text.xl.bold.make(),
-                                5.heightBox,
-                                "Số điện thoại".text.xl.make(),
-                                5.heightBox,
-                                "Địa chỉ".text.xl.make(),
-                                10.heightBox,
+                                BlocBuilder<AuthBloc, AuthState>(
+                                  builder: (context, state) {
+                                    if (state is SuccessAuthState) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          10.heightBox,
+                                          "${state.user.name}"
+                                              .text
+                                              .xl
+                                              .bold
+                                              .make(),
+                                          5.heightBox,
+                                          "${state.user.phone}".text.xl.make(),
+                                          5.heightBox,
+                                          "${state.user.address}"
+                                              .text
+                                              .xl
+                                              .make(),
+                                          10.heightBox,
+                                        ],
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -199,8 +223,12 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                                    "9,999,999đ"
+                                    "Tổng ${cartModel.cart.length} sản phẩm"
+                                        .text
+                                        .xl
+                                        .gray500
+                                        .make(),
+                                    "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
                                         .text
                                         .color(Vx.black.withOpacity(0.8))
                                         .bold
@@ -223,31 +251,13 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                   ],
                                 ),
                                 5.heightBox,
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    "Khuyến mãi đơn hàng"
-                                        .text
-                                        .xl
-                                        .gray500
-                                        .make(),
-                                    "- 999,999đ"
-                                        .text
-                                        .color(Vx.green500.withOpacity(0.8))
-                                        .bold
-                                        .xl2
-                                        .make(),
-                                  ],
-                                ),
-                                5.heightBox,
                                 const Divider(),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     "TỔNG TIỀN".text.xl.gray500.make(),
-                                    "9,000,000đ"
+                                    "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
                                         .text
                                         .color(Vx.red700.withOpacity(0.8))
                                         .bold
@@ -280,116 +290,112 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 80,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   physics: const BouncingScrollPhysics(),
-              //   child: Row(
-              //     children: [
-              //       const _PaymentItem(payment: "Tiền mặt", isSelected: true),
-              //       // 16.widthBox,
-              //       // const _PaymentItem(payment: "Chuyển khoản"),
-              //     ]
-              //   ),
-              // ),
-              // 5.heightBox,
-              // const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          "Tạm tính".text.xl2.black.bold.make(),
-                          " (đã có VAT)"
-                              .text
-                              .color(Vx.gray800.withOpacity(0.8))
-                              .xl
-                              .make(),
-                        ],
-                      ),
-                      "9,000,000đ"
-                          .text
-                          .color(Vx.red700.withOpacity(0.8))
-                          .bold
-                          .xl2
-                          .make(),
-                    ],
-                  ),
-                  // Button thanh toán
-                  BlocListener<CheckoutBloc, CheckoutState>(
-                    listener: (context, state) {
-                      final cartBloc = BlocProvider.of<CartBloc>(context);
-                      if (state is CheckoutSuccess) {
-                        showSnackBar("Đặt hàng thành công!", context);
-                        Future.delayed(const Duration(seconds: 2), () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MobileScreenLayout()),
-                              (route) => false);
-                          cartBloc.add(RemoveAllCart());
-                        });
-                      } else if (state is CheckoutLoading) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                      } else if (state is CheckoutError) {
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        showSnackBar(state.error, context);
-                      }
-                    },
-                    child: SizedBox(
-                      width: 150,
-                      height: 50,
-                      child: RaisedButton(
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title:
-                                const Center(child: Text('Xác nhận đặt hàng')),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'Huỷ'),
-                                child: const Text('Huỷ'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  context
-                                      .read<CheckoutBloc>()
-                                      .add(const CheckoutConfirm());
-                                  Navigator.pop(context, 'Xác nhận');
-                                },
-                                child: const Text('Xác nhận'),
-                              ),
-                            ],
-                          ),
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                "Tạm tính".text.xl2.black.bold.make(),
+                                " (đã có VAT)"
+                                    .text
+                                    .color(Vx.gray800.withOpacity(0.8))
+                                    .xl
+                                    .make(),
+                              ],
+                            ),
+                            "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
+                                .text
+                                .color(Vx.red700.withOpacity(0.8))
+                                .bold
+                                .xl2
+                                .make(),
+                          ],
                         ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
+                        // Button thanh toán
+                        BlocListener<CheckoutBloc, CheckoutState>(
+                          listener: (context, state) {
+                            final cartBloc = BlocProvider.of<CartBloc>(context);
+                            if (state is CheckoutSuccess) {
+                              showSnackBar("Đặt hàng thành công!", context);
+                              Future.delayed(const Duration(seconds: 2), () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MobileScreenLayout()),
+                                    (route) => false);
+                                cartBloc.add(RemoveAllCart());
+                              });
+                            } else if (state is CheckoutLoading) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                            } else if (state is CheckoutError) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              showSnackBar(state.error, context);
+                            }
+                          },
+                          child: SizedBox(
+                            width: 150,
+                            height: 50,
+                            child: RaisedButton(
+                              onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Center(
+                                      child: Text('Xác nhận đặt hàng')),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'Huỷ'),
+                                      child: const Text('Huỷ'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        context
+                                            .read<CheckoutBloc>()
+                                            .add(const CheckoutConfirm());
+                                        Navigator.pop(context, 'Xác nhận');
+                                      },
+                                      child: const Text('Xác nhận'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              color: Vx.green500,
+                              child: _isLoading
+                                  ? const CircularProgressIndicator(
+                                      valueColor:
+                                          AlwaysStoppedAnimation(Vx.white),
+                                    )
+                                  : "Đặt hàng".text.white.bold.xl.make(),
+                            ),
                           ),
-                        ),
-                        color: Vx.green500,
-                        child: _isLoading
-                            ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(Vx.white),
-                              )
-                            : "Đặt hàng".text.white.bold.xl.make(),
-                      ),
+                        )
+                        //CheckoutCard icon
+                      ],
                     ),
-                  )
-                  //CheckoutCard icon
-                ],
-              ),
-            ],
+                  ],
+                );
+              }
+              return Container();
+            },
           ),
         ),
       ),
@@ -495,7 +501,9 @@ class _CheckoutItem extends StatelessWidget {
         Radius.circular(16.0),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.to(() => CartDetailScreen(idNpp: idNPP));
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -556,7 +564,7 @@ class _CheckoutItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   "Giá sau ưu đãi".text.xl.gray500.make(),
-                  "9,999,999đ"
+                  "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
                       .text
                       .color(Vx.red700.withOpacity(0.8))
                       .bold

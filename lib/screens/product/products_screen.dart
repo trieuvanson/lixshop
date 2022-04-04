@@ -2,6 +2,8 @@ import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/models/category/product_category_model.dart';
+import 'package:lixshop/models/models.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
@@ -12,8 +14,9 @@ import '../screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   final String? keyword;
+  final ProductCate productCate;
 
-  const ProductsScreen({Key? key, this.keyword = ""}) : super(key: key);
+  const ProductsScreen({Key? key, this.keyword = "", required this.productCate}) : super(key: key);
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -29,7 +32,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           color: DesignCourseAppTheme.notWhite,
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
+                const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
             child: SingleChildScrollView(
               child: Container(
                 color: DesignCourseAppTheme.notWhite,
@@ -44,7 +47,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            "100 sản phẩm".text.bold.size(16).make(),
+                            "${widget.productCate.productBrand!.length} sản phẩm".text.bold.size(16).make(),
                             Row(
                               children: [
                                 CustomDropdownButton2(
@@ -98,13 +101,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
-                          Map restaurant = restaurants[index];
+                          ProductBrand productBrand = widget.productCate.productBrand![index];
                           return ProductCardItem(
-                            img: restaurant['img'],
-                            title: restaurant['title'],
+                            img: productBrand.brand!,
+                            title: productBrand.brandName!,
+                            idBrand: productBrand.brandId!.toInt(),
                           );
                         },
-                        itemCount: restaurants.length,
+                        itemCount: widget.productCate.productBrand!.length,
                       ),
                     ],
                   ),

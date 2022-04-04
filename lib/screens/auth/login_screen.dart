@@ -80,6 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        print(state);
+
         if (state is LoadingAuthState) {
           setState(() {
             _loading = true;
@@ -89,8 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
             _loading = false;
           });
           errorMessageSnack(context, state.error);
+        } else if (state is SuccessAuthState) {
+          setState(() {
+            _loading = false;
+          });
+          Get.to(
+            () => const MobileScreenLayout(),
+          );
         } else {
-          Get.to(() => const MobileScreenLayout());
+          setState(() {
+          _loading = false;
+        });
         }
       },
       child: Scaffold(
