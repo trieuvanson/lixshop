@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/blocs/cart/cart_bloc.dart';
-import 'package:lixshop/blocs/checkout/checkout_bloc.dart';
 import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:lixshop/screens/cart/cart_detail_screen.dart';
-import 'package:lixshop/screens/home/home_screen.dart';
-import 'package:lixshop/utils/helpers/modal_loading.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../blocs/auth/auth_bloc.dart';
+import '../../core/core.dart';
 import '../../utils/design_course_app_theme.dart';
 
 class CheckoutCardScreen extends StatefulWidget {

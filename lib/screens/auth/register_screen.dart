@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/blocs/guest/user_bloc.dart';
-import 'package:lixshop/blocs/guest/user_bloc.dart';
-import 'package:lixshop/models/city/city_model.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/repositories/app_repository.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../contains/colors.dart';
+import '../../core/core.dart';
 import '../../responsive/responsive_screen.dart';
 import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';

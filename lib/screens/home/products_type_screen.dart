@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
+import 'package:lixshop/models1/models.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
@@ -12,10 +13,10 @@ import '../../widgets/widgets.dart';
 import '../screen.dart';
 
 class ProductsTypeScreen extends StatefulWidget {
+  final List<ProductOutsideBrand> products;
 
-  final List<ProductBrand> products;
-
-  const ProductsTypeScreen({Key? key, required this.products}) : super(key: key);
+  const ProductsTypeScreen({Key? key, required this.products})
+      : super(key: key);
 
   @override
   State<ProductsTypeScreen> createState() => _ProductsTypeScreenState();
@@ -31,7 +32,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
           color: DesignCourseAppTheme.notWhite,
           child: Padding(
             padding:
-            const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
+                const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
             child: SingleChildScrollView(
               child: Container(
                 color: DesignCourseAppTheme.notWhite,
@@ -76,7 +77,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-                () => const MobileScreenLayout(),
+            () => const MobileScreenLayout(),
             transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 500),
           );

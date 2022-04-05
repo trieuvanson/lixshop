@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/core/core.dart';
+import 'package:lixshop/models1/models.dart';
+import 'package:lixshop/models1/products_outside_screen/result_data_model.dart';
 import 'package:lixshop/screens/home/products_type_screen.dart';
 
 import '../../models/models.dart';
@@ -26,11 +30,10 @@ class ProductShowCardRowItem extends StatefulWidget {
 }
 
 class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
-  List<ProductBrand> products = [];
+  List<ProductOutsideBrand> products = [];
 
   @override
   Widget build(BuildContext context) {
-    print(widget.title);
     return Column(
       children: [
         Padding(
@@ -57,7 +60,9 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(() => ProductsTypeScreen(products: products,));
+                      Get.to(() => ProductsTypeScreen(
+                            products: products,
+                          ));
                     },
                     child: const Text(
                       'Xem thêm',
@@ -100,19 +105,14 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
   }
 
   Widget buildProductList() {
-    return FutureBuilder<ProductsDataModel>(
-      future: ProductsDataRepositories().getProductsData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.error != null &&
-              snapshot.data!.error!.isNotEmpty) {
-            return _buildErrorWidget(snapshot.data!.error);
-          }
-          return _buildProductsWidget(snapshot.data!);
-        } else if (snapshot.hasError) {
-          return _buildErrorWidget(snapshot.error);
-        } else {
+    return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+      builder: (context, state) {
+        if (state.isLoading) {
           return _buildLoadingWidget();
+        } else if (state.isError) {
+          return _buildErrorWidget("Có lỗi xảy ra");
+        } else {
+          return _buildProductsWidget(state.resultDataModel!);
         }
       },
     );
@@ -154,22 +154,18 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
     );
   }
 
-  Widget _buildProductsWidget(ProductsDataModel productsDataModel) {
-    ProductBrandModel productBrandModel =
-        ProductRepositories().getProducts(productsDataModel);
-
+  Widget _buildProductsWidget(ResultDataModel resultDataModel) {
+    List<ProductOutsideBrand> productsOutside =
+        ProductOutsideBrand.getProductOutsideBrandList(resultDataModel);
     if (widget.isSales!) {
-      products = productBrandModel.productBrands!.where((product) {
-        return product.saleProd!;
-      }).toList();
+      products =
+          productsOutside.where((product) => product.saleProd!).toList();
     } else if (widget.isHot!) {
-      products = productBrandModel.productBrands!.where((product) {
-        return product.hotProd!;
-      }).toList();
+      products =
+          productsOutside.where((product) => product.hotProd!).toList();
     } else if (widget.isNew!) {
-      products = productBrandModel.productBrands!.where((product) {
-        return product.newProd!;
-      }).toList();
+      products =
+          productsOutside.where((product) => product.newProd!).toList();
     }
 
     return Builder(
@@ -179,7 +175,7 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
           children: List.generate(
             10,
             (index) {
-              ProductBrand product = products[index];
+              ProductOutsideBrand product = products[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0, bottom: 8),
                 child: ProductCardItem(

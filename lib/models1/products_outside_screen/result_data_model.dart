@@ -13,22 +13,24 @@ class ResultDataModel {
     this.productOutsideCategory,
   });
 
-  factory ResultDataModel.fromJson(Map<String, dynamic> json) => ResultDataModel(
-    idNpp: json["idnpp"].toInt().toString(),
-    createDate: json["createDate"].toDouble(),
-    createUser: json["createUser"],
-    productOutsideCategory: json["cateSanPhams"] == null
-        ? null
-        : List<ProductOutsideCategory>.from(
-        json["cateSanPhams"].map((x) => ProductOutsideCategory.fromJson(x))),
-  );
+  factory ResultDataModel.fromJson(Map<String, dynamic> json) =>
+      ResultDataModel(
+        idNpp: json["idnpp"].toInt().toString(),
+        createDate: json["createDate"].toDouble(),
+        createUser: json["createUser"],
+        productOutsideCategory: json["cateSanPhams"] == null
+            ? null
+            : List<ProductOutsideCategory>.from(json["cateSanPhams"]
+                .map((x) => ProductOutsideCategory.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "idnpp": idNpp,
-    "createDate": createDate,
-    "createUser": createUser,
-    "cateSanPhams": productOutsideCategory == null
-        ? null
-        : List<dynamic>.from(productOutsideCategory!.map((x) => x.toJson())),
-  };
+        "idnpp": idNpp,
+        "createDate": createDate,
+        "createUser": createUser,
+        "cateSanPhams": productOutsideCategory == null
+            ? null
+            : List<dynamic>.from(
+                productOutsideCategory!.map((x) => x.toJson())),
+      };
 }

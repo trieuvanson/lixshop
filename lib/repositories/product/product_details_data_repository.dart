@@ -14,11 +14,12 @@ class ProductDetailsDataRepository {
       "http://192.168.0.226:65/shopee/api/data/chitietsanpham/info";
 
   Future<ProductDetailsDataModel> getProductDetails(
-      int idBrand, String idNPPs) async {
+      int idBrand) async {
     try {
       var authorization = await secureStorage.readToken();
+      print(await secureStorage.readKey("idDistris"));
       final Response response = await _dio.get(mainURL,
-          queryParameters: Params(idBrand: idBrand, idNPPs: idNPPs).toJson(),
+          queryParameters: Params(idBrand: idBrand, idNPPs: "5").toJson(),
           options: Options(headers: {
             "Authorization": "Bearer ${authorization!.accessToken}",
           }));
@@ -32,6 +33,9 @@ class ProductDetailsDataRepository {
       } else if (e.response?.statusCode == 404) {
         return ProductDetailsDataModel.withError(e.response!.data);
       }
+      return ProductDetailsDataModel.withError("Lỗi kết nối");
+    } catch (e) {
+      print(e);
       return ProductDetailsDataModel.withError("Lỗi kết nối");
     }
   }

@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/blocs/auth/auth_bloc.dart';
-import 'package:lixshop/blocs/auth/auth_bloc.dart';
+import 'package:lixshop/models/productlist.dart';
+import 'package:lixshop/models1/models.dart';
+import 'package:page_indicator/page_indicator.dart';
+import '../../core/core.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import '../screen.dart';
-import 'home_banner_screen.dart';
-import 'home_products_type_screen.dart';
+import 'widget/home_banner.dart';
+import 'home_products_type.dart';
 import 'products_show_card_row_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,18 +24,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   double _offset = 0;
 
   @override
   void initState() {
-    super.initState();
     _scrollController.addListener(() {
       setState(() {
         _offset = _scrollController.offset;
       });
     });
+    super.initState();
   }
 
   @override
@@ -72,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 const HomeBannerScreen(),
                 10.heightBox,
                 // buildProductTitleRow("", context),
-                const HomeProductsTypeScreen(),
+                const HomeProductsType(),
                 10.heightBox,
                 const ProductShowCardRowItem(
                     isSales: true, title: "Sản phẩm khuyến mãi"),
@@ -279,20 +282,16 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                     return Container();
                   },
                 ),
-                minHeight >= 150
-                    ? FutureBuilder<ProductsDataModel>(
-                        future: ProductsDataRepositories().getProductsData(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data!.error != null &&
-                                snapshot.data!.error!.isNotEmpty) {
-                              return _buildErrorWidget(snapshot.data!.error);
-                            }
-                            return _buildCategoriesWidget(snapshot.data!);
-                          } else if (snapshot.hasError) {
-                            return _buildErrorWidget(snapshot.error);
-                          } else {
+                minHeight == 150
+                    ? BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+                        builder: (context, state) {
+                          if (state.isLoading) {
                             return _buildLoadingWidget();
+                          } else if (state.isError) {
+                            return Container();
+                          } else {
+                            return _buildCategoriesWidget(
+                                state.resultDataModel!);
                           }
                         },
                       )
@@ -332,28 +331,10 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
     );
   }
 
-  //display error
-  Widget _buildErrorWidget(dynamic error) {
-    return const SizedBox(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Center(
-          child: Text(
-            "Có lỗi xảy ra",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildCategoriesWidget(
-      ProductsDataModel productsDataModel /*TrailersModel data*/) {
-    ProductCateModel productCateModel =
-        ProductCategoryRepository().getAllCategories2(productsDataModel);
+      ResultDataModel resultDataModel /*TrailersModel data*/) {
+    List<ProductOutsideCategory> categories =
+        resultDataModel.productOutsideCategory!;
     // List<Video>? videos = data.trailers;
     return SizedBox(
       child: Align(
@@ -365,7 +346,7 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.generate(
-                productCateModel.productCates!.length,
+                categories.length,
                 (index) => Container(
                   height: 50,
                   margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -375,11 +356,10 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                     color: Colors.green,
                     animationDuration: const Duration(milliseconds: 500),
                     onPressed: () {
-                      Get.to(() => ProductsScreen(
-                          productCate: productCateModel.productCates![index]));
+                      Get.to(() => ProductsScreen(category: categories[index]));
                     },
                     child: Text(
-                      productCateModel.productCates![index].cateName ?? "",
+                      categories[index].cateName ?? "",
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),

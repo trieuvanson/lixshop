@@ -27,7 +27,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() =>  ProductDetailsScreen(
+        Get.to(() => ProductDetailsScreen(
               idBrand: widget.idBrand,
             ));
       },
@@ -53,19 +53,26 @@ class _ProductCardItemState extends State<ProductCardItem> {
                 ),
                 child: Image.network(
                   widget.img,
-                  // loadingBuilder: (context, child, loadingProgress) {
-                  //   if (loadingProgress == null)
-                  //   return  child
-                  //   else {
-                  //     Center(
-                  //       child: CircularProgressIndicator(
-                  //        valueColor: AlwaysStoppedAnimation<Color>(
-                  //          DesignCourseAppTheme.nearlyBlue,
-                  //        ),
-                  //       ),
-                  //     );
-                  //   }
-                  // },
+                  errorBuilder: (context, url, error) => const SizedBox(
+                    height: 180,
+                    child: Center(
+                      child: Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                  loadingBuilder: (context, child, progress) => progress == null? child : const SizedBox(
+                    height: 180,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
                   width: double.infinity,
                   height: 180,
                   fit: BoxFit.cover,

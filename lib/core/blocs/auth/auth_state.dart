@@ -13,7 +13,7 @@ class SuccessAuthState extends AuthState {
   SuccessAuthState(this.user, this.token);
 }
 
-class LogOutAuthState extends AuthState {}
+class LogoutAuthState extends AuthState {}
 
 class FailureAuthState extends AuthState {
   final error;

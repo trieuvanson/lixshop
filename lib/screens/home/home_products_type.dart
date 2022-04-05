@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lixshop/core/core.dart';
 import 'package:lixshop/models/models.dart';
+import 'package:lixshop/models1/models.dart';
 import 'package:lixshop/repositories/category/product_category_repository.dart';
 import 'package:lixshop/repositories/products_data/products_data_repositories.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
 
-class HomeProductsTypeScreen extends StatefulWidget {
-  const HomeProductsTypeScreen({Key? key}) : super(key: key);
+class HomeProductsType extends StatefulWidget {
+  const HomeProductsType({Key? key}) : super(key: key);
 
   @override
-  _HomeProductsTypeScreenState createState() => _HomeProductsTypeScreenState();
+  _HomeProductsTypeState createState() => _HomeProductsTypeState();
 }
 
-class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
+class _HomeProductsTypeState extends State<HomeProductsType> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProductsDataModel>(
-      future: ProductsDataRepositories().getProductsData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.error != null &&
-              snapshot.data!.error!.isNotEmpty) {
-            return _buildErrorWidget(snapshot.data!.error);
-          }
-          return _buildCategoriesWidget(snapshot.data!);
-        } else if (snapshot.hasError) {
-          return _buildErrorWidget(snapshot.error);
-        } else {
+    return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+      builder: (context, state) {
+        if (state.isLoading) {
           return _buildLoadingWidget();
+        } else if (state.isError) {
+          return const Center(
+            child: Text("Có lỗi xảy ra!"),
+          );
+        } else {
+          return _buildCategoriesWidget(state.resultDataModel!);
         }
       },
     );
@@ -66,10 +66,10 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
   }
 
   Widget _buildCategoriesWidget(
-      ProductsDataModel productsDataModel /*TrailersModel data*/) {
+      ResultDataModel resultDataModel /*TrailersModel data*/) {
     // List<Video>? videos = data.trailers;
-    ProductCateModel productCateModel =
-        ProductCategoryRepository().getAllCategories2(productsDataModel);
+    List<ProductOutsideCategory> categories =
+        resultDataModel.productOutsideCategory!;
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -89,11 +89,11 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              productCateModel.productCates!.length,
+              categories.length,
               (index) => ProductTypeCard(
-                imagePath: productCateModel.productCates![index].catePath ?? "",
-                title: productCateModel.productCates![index].cateName ?? "",
-                productCate: productCateModel.productCates![index],
+                imagePath: categories[index].catePath ?? "",
+                title: categories[index].cateName ?? "",
+                category: categories[index],
               ),
             ),
           ),
@@ -106,13 +106,10 @@ class _HomeProductsTypeScreenState extends State<HomeProductsTypeScreen> {
 class ProductTypeCard extends StatefulWidget {
   final String imagePath;
   final String title;
-  final productCate;
+  final category;
 
   const ProductTypeCard(
-      {Key? key,
-      required this.imagePath,
-      required this.title,
-      this.productCate})
+      {Key? key, required this.imagePath, required this.title, this.category})
       : super(key: key);
 
   @override
@@ -128,7 +125,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
           context,
           MaterialPageRoute(
             builder: (context) => ProductsScreen(
-              productCate: widget.productCate,
+              category: widget.category,
             ),
           ),
         );
@@ -136,7 +133,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
       child: Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: Container(
-          width: MediaQuery.of(context).size.width / 4,
+          width: 180,
           height: 130,
           decoration: BoxDecoration(
             color: DesignCourseAppTheme.nearlyWhite,
@@ -163,6 +160,26 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                     child: Image.network(
                       widget.imagePath,
                       height: 100,
+                      errorBuilder: (context, url, error) => const SizedBox(
+                        height: 100,
+                        child: Center(
+                          child: Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      loadingBuilder: (context, child, progress) => progress == null? child : const SizedBox(
+                        height: 180,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -172,7 +189,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                 padding: const EdgeInsets.only(top: 4.0, left: 4, right: 8),
                 child: Center(
                   child: Text(
-                    (widget.title[0] + widget.title.substring(1).toLowerCase()),
+                    widget.title,
                     textAlign: TextAlign.left,
                     maxLines: 1,
                     style: const TextStyle(

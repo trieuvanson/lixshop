@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/category/product_category_model.dart';
 import 'package:lixshop/models/models.dart';
+import 'package:lixshop/models1/models.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
@@ -14,9 +15,9 @@ import '../screen.dart';
 
 class ProductsScreen extends StatefulWidget {
   final String? keyword;
-  final ProductCate productCate;
+  final ProductOutsideCategory category;
 
-  const ProductsScreen({Key? key, this.keyword = "", required this.productCate}) : super(key: key);
+  const ProductsScreen({Key? key, this.keyword = "", required this.category}) : super(key: key);
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -47,7 +48,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            "${widget.productCate.productBrand!.length} sản phẩm".text.bold.size(16).make(),
+                            "${widget.category.productBrand!.length} sản phẩm".text.bold.size(16).make(),
                             Row(
                               children: [
                                 CustomDropdownButton2(
@@ -101,14 +102,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
-                          ProductBrand productBrand = widget.productCate.productBrand![index];
+                          ProductOutsideBrand productBrand = widget.category.productBrand![index];
                           return ProductCardItem(
                             img: productBrand.brand!,
                             title: productBrand.brandName!,
                             idBrand: productBrand.brandId!.toInt(),
                           );
                         },
-                        itemCount: widget.productCate.productBrand!.length,
+                        itemCount: widget.category.productBrand!.length,
                       ),
                     ],
                   ),

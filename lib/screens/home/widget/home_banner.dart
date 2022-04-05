@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../models/productlist.dart';
-import '../../utils/design_course_app_theme.dart';
-import '../../widgets/slide_item.dart';
+import '../../../models/productlist.dart';
+import '../../../utils/design_course_app_theme.dart';
+import 'slide_item.dart';
 
 class HomeBannerScreen extends StatefulWidget {
   const HomeBannerScreen({Key? key}) : super(key: key);

@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../blocs/auth/auth_bloc.dart';
-import '../../responsive/mobile_screen_layout.dart';
+import '../../core/core.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../utils/helpers/secure_storage.dart';
 import '../screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,217 +19,216 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-
-    return BlocConsumer<AuthBloc, AuthState>(
+    final bottomNavigationCubit = BlocProvider.of<NavigationCubit>(context);
+    authBloc.add(CheckLoginEvent());
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        if (state is LogOutAuthState) {
-          Get.offAll(() => const LoginScreen());
-
+        if (state is LogoutAuthState) {
+          bottomNavigationCubit.changeNavigation(0);
+          Get.to(() => const LoginScreen());
         }
       },
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: DesignCourseAppTheme.nearlyWhite,
-          body: CustomScrollView(
-            scrollDirection: Axis.vertical,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverPersistentHeader(
-                delegate: SliverHeaderBar(expandedHeight: 170),
-                pinned: false,
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  color: DesignCourseAppTheme.notWhite,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 8, left: 8, right: 8, bottom: 8),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(16.0),
-                            ),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
-                            ],
+      child: Scaffold(
+        backgroundColor: DesignCourseAppTheme.nearlyWhite,
+        body: CustomScrollView(
+          scrollDirection: Axis.vertical,
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverPersistentHeader(
+              delegate: SliverHeaderBar(expandedHeight: 170),
+              pinned: false,
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                color: DesignCourseAppTheme.notWhite,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 8, left: 8, right: 8, bottom: 8),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16.0),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(
-                                      () => const OrderHistoryListScreen(),
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        child: "Lịch sử nhập hàng"
-                                            .text
-                                            .xl
-                                            .bold
-                                            .make(),
-                                      ),
-                                      Row(
-                                        children: [
-                                          "Xem tất cả"
-                                              .text
-                                              .size(16)
-                                              .green500
-                                              .make(),
-                                          const Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Vx.green700,
-                                            size: 20,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                10.heightBox,
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(
+                                    () => const OrderHistoryListScreen(),
+                                  );
+                                },
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    _HistoryItem(
-                                        title: "Đang xử lý",
-                                        icon: Icons.check_circle_outline),
-                                    _HistoryItem(
-                                        title: "Đã xác nhận",
-                                        icon: Icons.check_circle_outline),
-                                    _HistoryItem(
-                                        title: "Đang giao hàng",
-                                        icon: Icons.check_circle_outline),
-                                    _HistoryItem(
-                                        title: "Đang giao hàng",
-                                        icon: Icons.check_circle_outline),
+                                  children: [
+                                    SizedBox(
+                                      child: "Lịch sử nhập hàng"
+                                          .text
+                                          .xl
+                                          .bold
+                                          .make(),
+                                    ),
+                                    Row(
+                                      children: [
+                                        "Xem tất cả"
+                                            .text
+                                            .size(16)
+                                            .green500
+                                            .make(),
+                                        const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Vx.green700,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        16.heightBox,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(16.0),
-                            ),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
+                              ),
+                              10.heightBox,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  _HistoryItem(
+                                      title: "Đang xử lý",
+                                      icon: Icons.check_circle_outline),
+                                  _HistoryItem(
+                                      title: "Đã xác nhận",
+                                      icon: Icons.check_circle_outline),
+                                  _HistoryItem(
+                                      title: "Đang giao hàng",
+                                      icon: Icons.check_circle_outline),
+                                  _HistoryItem(
+                                      title: "Đang giao hàng",
+                                      icon: Icons.check_circle_outline),
+                                ],
+                              ),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _MenuItem(
+                        ),
+                      ),
+                      16.heightBox,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _MenuItem(
+                                icon: Icons.add_to_home_screen,
+                                title: "Trưng bày",
+                                onTap: () {
+                                  Get.to(() => const GarnitureScreen());
+                                },
+                              ),
+                              const _MenuItem(
                                   icon: Icons.add_to_home_screen,
-                                  title: "Trưng bày",
-                                  onTap: () {
-                                    Get.to(() => const GarnitureScreen());
-                                  },
-                                ),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Săn thưởng"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Thông tin xuất hoá đơn"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Địa chỉ"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Quản lý tài khoản liên kết"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Quản lý bán hàng POS"),
-                              ],
-                            ),
-                          ),
-                        ),
-                        16.heightBox,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(16.0),
-                            ),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(1.1, 1.1),
-                                  blurRadius: 8.0),
+                                  title: "Săn thưởng"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Thông tin xuất hoá đơn"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Địa chỉ"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Quản lý tài khoản liên kết"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Quản lý bán hàng POS"),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Cài đặt"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Điều khoản và chính sách"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Gửi phản hồi"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Câu hỏi thường gặp"),
-                                const _MenuItem(
-                                    icon: Icons.add_to_home_screen,
-                                    title: "Liên hệ"),
-                                _MenuItem(
-                                    onTap: () {
-                                      authBloc.add(LogOutEvent());
-                                    },
-                                    icon: Icons.logout,
-                                    title: "Đăng xuất"),
-                              ],
-                            ),
+                        ),
+                      ),
+                      16.heightBox,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                    DesignCourseAppTheme.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 8.0),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Cài đặt"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Điều khoản và chính sách"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Gửi phản hồi"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Câu hỏi thường gặp"),
+                              const _MenuItem(
+                                  icon: Icons.add_to_home_screen,
+                                  title: "Liên hệ"),
+                              _MenuItem(
+                                  onTap: () {
+                                    authBloc.add(AuthLogoutEvent());
+                                  },
+                                  icon: Icons.logout,
+                                  title: "Đăng xuất"),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              // SliverList(
-              //   delegate: SliverChildBuilderDelegate(
-              //     (_, index) => ListTile(
-              //       title: Text("Index: $index"),
-              //     ),
-              //   ),
-              // )
-            ],
-          ),
-        );
-      },
+            ),
+            // SliverList(
+            //   delegate: SliverChildBuilderDelegate(
+            //     (_, index) => ListTile(
+            //       title: Text("Index: $index"),
+            //     ),
+            //   ),
+            // )
+          ],
+        ),
+      ),
     );
   }
 }

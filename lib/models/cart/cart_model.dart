@@ -1,6 +1,6 @@
-import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/models/models.dart';
 
@@ -180,3 +180,70 @@ class CartModel extends Equatable {
 
 
 }
+
+// @HiveType(typeId: 1)
+// class CartHive {
+//   @HiveField(0)
+//   ProductDetail? productDetail;
+//   @HiveField(1)
+//   int? quantity;
+//   @HiveField(2)
+//   String? unit;
+//   @HiveField(3)
+//   int? typeformVoucher;
+//
+//
+//   CartHive({this.productDetail, this.quantity, this.unit, this.typeformVoucher});
+//
+//   int? getVoucherMethodFromProductDetail(
+//       ProductDetail productDetail, int selectVoucher) {
+//     return productDetail.voucherMethods
+//         ?.firstWhere((element) => element.typeformCus == selectVoucher,
+//         orElse: () => VoucherMethod(typeform: -1))
+//         .typeform;
+//   }
+//   String? getPricesChangeValue() {
+//     String value = "";
+//     if (unit == "THÙNG") {
+//       value = convertCurrencyToVND(
+//           productDetail!.price! * productDetail!.changeValue!) +
+//           "đ/THÙNG";
+//     } else {
+//       value = convertCurrencyToVND(productDetail!.price!) +
+//           "đ/${productDetail!.unit}";
+//     }
+//     return value;
+//   }
+//
+//   int? getPrices() {
+//     if (unit == "THÙNG") {
+//       return productDetail!.price! * quantity! * productDetail!.changeValue!;
+//     } else {
+//       return productDetail!.price! * quantity!;
+//     }
+//   }
+//
+//   //toJson
+//   Map<String, dynamic> toJson() {
+//     return {
+//       "productDetail": productDetail?.toJson(),
+//       "quantity": quantity,
+//       "unit": unit,
+//       "typeformVoucher": typeformVoucher,
+//     };
+//   }
+//
+//   //fromJson
+//   factory CartHive.fromJson(Map<String, dynamic> json) {
+//     return CartHive(
+//       productDetail: json["productDetail"] == null
+//           ? null
+//           : ProductDetail.fromJson(json["productDetail"]),
+//       quantity: json["quantity"],
+//       unit: json["unit"],
+//       typeformVoucher: json["typeformVoucher"],
+//     );
+//   }
+//
+//
+// }

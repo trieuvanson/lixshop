@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lixshop/core/core.dart';
+import 'package:lixshop/core/core.dart';
 import 'package:lixshop/repositories/app_repository.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:lixshop/repositories/product_outside_repositories/result_data_repository.dart';
@@ -14,8 +17,7 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   bool _stop = false;
   final dio = Dio();
-
-
+  final list = [];
   void ddos() async {
     int i = 0;
     while (!_stop) {
@@ -42,18 +44,39 @@ class _AddPostScreenState extends State<AddPostScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                  );
+                } else if (state.isError) {
+                  return const Text(
+                    'Something went wrong!',
+                    style: TextStyle(color: Colors.red),
+                  );
+                } else
+                if (state.resultDataModel!.productOutsideCategory != null) {
+                  list.addAll(state.resultDataModel!.productOutsideCategory!);
+                  return Column(
+                    children: [
+                      for(var item in state.resultDataModel!
+                          .productOutsideCategory!)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(item.cateName!),
+                        ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            ),
             IconButton(
               icon: const Icon(
                 Icons.upload,
               ),
-              onPressed: () async {
-                final res = await resultDataRepository.getResultData();
-                print('res: ${res.productOutsideCategory!.length}');
-
-                // for (int i = 0; i < 30; i++) {
-                //   ddos();
-                // }
-              },
+              onPressed: () async {},
             ),
             IconButton(
               icon: const Icon(

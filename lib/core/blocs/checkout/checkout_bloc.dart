@@ -4,11 +4,11 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lixshop/blocs/cart/cart_bloc.dart';
 import 'package:lixshop/repositories/checkout/checkout_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../models/models.dart';
+import '../../../models/models.dart';
+import '../cart/cart_bloc.dart';
 
 part 'checkout_event.dart';
 
@@ -68,5 +68,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     await file.writeAsString(contents.toString());
     final contents2 = await file.readAsString();
     print(contents2);
+  }
+
+  dispose() {
+    cartBloc.close();
+    super.close();
   }
 }

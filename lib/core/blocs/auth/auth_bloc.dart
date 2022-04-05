@@ -4,7 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:lixshop/repositories/auth/auth_repository.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
-import '../../models/models.dart';
+import '../../../models/models.dart';
+
 
 part 'auth_event.dart';
 
@@ -12,12 +13,14 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(const AuthState()) {
-    on<LoginEvent>(_onLogin);
+    on<AuthLoggedEvent>(_onLogin);
     on<CheckLoginEvent>(_onCheckLogin);
-    on<LogOutEvent>(_onLogOut);
+    on<AuthLogoutEvent>(_onLogOut);
+
   }
 
-  Future<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
+
+  Future<void> _onLogin(AuthLoggedEvent event, Emitter<AuthState> emit) async {
     try {
       emit(LoadingAuthState());
       final data = await authRepository.signInWithEmailAndPassword(event.login);
@@ -46,24 +49,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final token = await secureStorage.readToken();
           emit(SuccessAuthState(user, token?.accessToken ?? ''));
         } else {
-          emit(LogOutAuthState());
+          emit(LogoutAuthState());
         }
       } else {
-        emit(LogOutAuthState());
+        emit(LogoutAuthState());
       }
     } catch (e) {
       print('error: $e');
-      emit(LogOutAuthState());
+      emit(LogoutAuthState());
     }
   }
 
-  Future<void> _onLogOut(LogOutEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onLogOut(AuthLogoutEvent event, Emitter<AuthState> emit) async {
     try {
       emit(LoadingAuthState());
       await authRepository.signOut();
-      emit(LogOutAuthState());
+      emit(LogoutAuthState());
     } catch (e) {
-      emit(LogOutAuthState());
+      emit(LogoutAuthState());
     }
     // emit(const AuthState());
   }

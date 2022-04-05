@@ -26,9 +26,10 @@ class ProductsDataRepositories extends BaseProductsDataRepository {
             "$mainProdUrl$link",
           ),
       ]);
+
       ProductsDataModel productsDataModel =
-          _getProductCateFromResponse(responses);
-      await secureStorage.addKey("idDistris", productsDataModel.data!.idNpp);
+          await _getProductCateFromResponse(responses);
+
       return productsDataModel;
     } on DioError catch (e) {
       throw Exception(e.message);
@@ -38,7 +39,8 @@ class ProductsDataRepositories extends BaseProductsDataRepository {
     }
   }
 
-  ProductsDataModel _getProductCateFromResponse(List<dynamic> responses) {
+  Future<ProductsDataModel> _getProductCateFromResponse(
+      List<dynamic> responses) async {
     List<ProductCate> productCatesMain = [];
     List<String> idNpps = [];
 
@@ -70,6 +72,9 @@ class ProductsDataRepositories extends BaseProductsDataRepository {
         }
       }
     }
+    await secureStorage.addKey("idDistris", idNpps.join(","));
+    print(await secureStorage.readKey("idDistris"));
+
     ProductsDataModel productsDataModel = ProductsDataModel(
       data: ProductsData(
         idNpp: idNpps.join(","),

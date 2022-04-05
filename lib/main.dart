@@ -3,19 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:lixshop/blocs/auth/auth_bloc.dart';
-import 'package:lixshop/blocs/cart/cart_bloc.dart';
-import 'package:lixshop/blocs/guest/user_bloc.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-import 'blocs/checkout/checkout_bloc.dart';
+import '../../core/core.dart';
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
 import 'responsive/web_screen_layout.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
-import 'screens/product/products_screen.dart';
+import 'app_bloc_observer.dart';
 
 Future<void> main() async {
   setPathUrlStrategy();
@@ -23,8 +20,12 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await dotenv.load(fileName: ".env");
-
-  runApp(const MyApp());
+  BlocOverrides.runZoned(
+    () {
+      runApp(const MyApp());
+    },
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -39,10 +40,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CartBloc()..add(LoadCart())),
         BlocProvider(
             create: (context) =>
-                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))..add(CheckoutEventLoaded())),
-        BlocProvider(
-            create: (context) =>
-            UserBloc()),
+                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))
+                  ..add(CheckoutEventLoaded())),
+        BlocProvider(create: (context) => UserBloc()),
+        BlocProvider<NavigationCubit>(
+          create: (context) => NavigationCubit(),
+        ),
+        BlocProvider<ResultOutsideCubit>(
+          create: (context) => ResultOutsideCubit()..getProductOutside(),
+        ),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',

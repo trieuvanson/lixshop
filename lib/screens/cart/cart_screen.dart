@@ -6,7 +6,7 @@ import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../blocs/cart/cart_bloc.dart';
+import '../../core/core.dart';
 import '../../contains/contains.dart';
 import '../../models/models.dart';
 import '../../utils/design_course_app_theme.dart';
@@ -146,6 +146,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
   }
 
   Widget _bottomNavigation() {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {
@@ -222,8 +224,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                           width: 150,
                           height: 50,
                           child: RaisedButton(
-                            onPressed: () async {
-                              if (await secureStorage.checkLogin()) {
+                            onPressed: () {
+                              if (authBloc.state is AuthLoggedEvent) {
                                 if (state.cartModel.cart.isEmpty) {
                                   showSnackBar(
                                       "Vui lòng thêm sản phẩm vào giỏ hàng",
@@ -258,9 +260,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           );
         }
 
-        return Center(
-          child: "Đang tải...".text.xl2.make(),
-        );
+        return Container();
       },
     );
   }
@@ -276,7 +276,7 @@ class _CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<_CartItem> {
-  void increment(BuildContext context) {
+  void increment() {
     if (widget.cart.quantity! < 999) {
       widget.cart.quantity = widget.cart.quantity! + 1;
       context.read<CartBloc>().add(
@@ -288,7 +288,7 @@ class _CartItemState extends State<_CartItem> {
     }
   }
 
-  void decrement(BuildContext context) {
+  void decrement() {
     if (widget.cart.quantity! > 1) {
       widget.cart.quantity = widget.cart.quantity! - 1;
       context.read<CartBloc>().add(
@@ -476,7 +476,7 @@ class _CartItemState extends State<_CartItem> {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: InkWell(
                             onTap: () {
-                              decrement(context);
+                              decrement();
                             },
                             child: SizedBox(
                               width: 30,
@@ -542,7 +542,7 @@ class _CartItemState extends State<_CartItem> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => increment(context),
+                          onTap: () => increment(),
                           child: SizedBox(
                             width: 30,
                             height: 30,

@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
-import '../blocs/auth/auth_bloc.dart';
-import '../utils/helpers/modal_loading.dart';
-import '../utils/helpers/modal_success.dart';
+import '../../core/core.dart';
 import '../widgets/BottomNavigationFrave.dart';
 import '../widgets/widgets.dart';
 
@@ -128,7 +126,7 @@ class ProfileClientPage extends StatelessWidget {
                   icon: Icons.power_settings_new_sharp,
                   colorIcon: 0xffF02849,
                   onPressed: () {
-                    authBloc.add(LogOutEvent());
+                    authBloc.add(AuthLogoutEvent());
                   },
                 ),
               ],

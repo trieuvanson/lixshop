@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,9 +37,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         //Nếu tồn tại thì cập nhật, ngược lại thêm vào
         List<Cart> cart = (state as CartLoaded).cartModel.cart;
         var currentCartList = checkBeforeAdd(cart, event.cart);
+        print('Aihihi');
         _saveCartToFileJson(currentCartList);
 
-        emit(CartLoaded(cartModel: await _readCartFromFileJson()));
+        emit(CartLoaded(cartModel: CartModel(cart: [...currentCartList])));
       } catch (e) {
         print('Error: $e');
         emit(CartError(message: e.toString()));
@@ -49,12 +51,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _updateCart(UpdateCart event, Emitter<CartState> emit) async {
     if (state is CartLoaded) {
       try {
-        //Nếu tồn tại thì cập nhật, ngược lại thêm vào
+        //Tăng bớt số lượng
         List<Cart> cart = (state as CartLoaded).cartModel.cart;
         var currentCartList = checkBeforeUpdate(cart, event.cart);
         _saveCartToFileJson(currentCartList);
         emit(CartLoaded(cartModel: await _readCartFromFileJson()));
-      }catch(e){
+      } catch (e) {
         print('Error: $e');
         emit(CartError(message: e.toString()));
       }
@@ -103,6 +105,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _saveCartToFileJson(List<Cart> cart) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/cart.json');
+    print('Save to file: ${file.path}');
     final contents = jsonEncode(CartModel(cart: cart).toJson());
     await file.writeAsString(contents.toString());
   }
@@ -111,7 +114,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // print(current);
     List<Cart> currentCartList = carts.isNotEmpty ? carts : [];
     bool check = false;
-
     for (var item in carts) {
       if (item.typeformVoucher != -1) {
         if (item.productDetail!.code == current.productDetail!.code &&

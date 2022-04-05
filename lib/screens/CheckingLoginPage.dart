@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:lixshop/screens/auth/login_screen.dart';
 
-import '../blocs/auth/auth_bloc.dart';
+import '../../core/core.dart';
 
 
 class CheckingLoginPage extends StatefulWidget {
@@ -55,7 +55,7 @@ class _CheckingLoginPageState extends State<CheckingLoginPage> with TickerProvid
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckingLoginPage()));
         
         }
-        if ( state is LogOutAuthState ){
+        if ( state is LogoutAuthState ){
 
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
          

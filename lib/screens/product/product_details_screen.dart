@@ -9,7 +9,7 @@ import 'package:lixshop/screens/cart/cart_screen.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../blocs/cart/cart_bloc.dart';
+import '../../core/core.dart';
 import '../../contains/contains.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
@@ -29,21 +29,10 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  String idDistris = "";
 
   @override
   void initState() {
-    //use future function
     super.initState();
-    getIdDistris();
-  }
-
-  // get id from future
-  Future<void> getIdDistris() async {
-    final id = await secureStorage.readKey("idDistris");
-    setState(() {
-      idDistris = id;
-    });
   }
 
   @override
@@ -52,7 +41,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       color: DesignCourseAppTheme.nearlyWhite,
       child: FutureBuilder<ProductDetailsDataModel>(
         future: ProductDetailsDataRepository()
-            .getProductDetails(widget.idBrand, idDistris),
+            .getProductDetails(widget.idBrand),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.error != null &&

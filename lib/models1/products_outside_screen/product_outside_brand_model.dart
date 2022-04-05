@@ -1,3 +1,5 @@
+import 'package:lixshop/models1/models.dart';
+
 class ProductOutsideBrand {
   double? brandId;
   String? brandCode;
@@ -16,6 +18,15 @@ class ProductOutsideBrand {
     this.saleProd,
     this.hotProd,
   });
+
+
+  static List<ProductOutsideBrand> getProductOutsideBrandList(ResultDataModel resultDataModel) {
+    List<ProductOutsideBrand> productOutsideBrandList = [];
+    for (var element in resultDataModel.productOutsideCategory!) {
+      productOutsideBrandList.addAll(element.productBrand!);
+    }
+    return productOutsideBrandList;
+  }
 
   factory ProductOutsideBrand.fromJson(Map<String, dynamic> json) =>
       ProductOutsideBrand(

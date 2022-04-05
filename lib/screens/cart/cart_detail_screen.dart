@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../blocs/cart/cart_bloc.dart';
 import '../../contains/contains.dart';
+import '../../core/core.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
 
@@ -54,7 +54,8 @@ class _CartDetailScreenState extends State<CartDetailScreen>
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             if (state is CartLoaded) {
-              return _buildCartDetail(state.cartModel.getCartsByAgent(widget.idNpp));
+              return _buildCartDetail(
+                  state.cartModel.getCartsByAgent(widget.idNpp));
             } else {
               return Container();
             }
@@ -75,7 +76,8 @@ class _CartDetailScreenState extends State<CartDetailScreen>
           child: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoaded) {
-                CartModel cartModel = state.cartModel.getCartsByAgent(widget.idNpp);
+                CartModel cartModel =
+                    state.cartModel.getCartsByAgent(widget.idNpp);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -147,7 +149,6 @@ class _CartDetailScreenState extends State<CartDetailScreen>
 
 class _CartCard extends StatelessWidget {
   final CartModel cartModel;
-
 
   const _CartCard({Key? key, required this.cartModel}) : super(key: key);
 
