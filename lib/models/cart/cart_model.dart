@@ -1,6 +1,5 @@
 
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
 import 'package:lixshop/contains/contains.dart';
 import 'package:lixshop/models/models.dart';
 

@@ -5,6 +5,7 @@ import 'package:lixshop/models/models.dart';
 import 'package:lixshop/models1/models.dart';
 import 'package:lixshop/repositories/category/product_category_repository.dart';
 import 'package:lixshop/repositories/products_data/products_data_repositories.dart';
+import 'package:lixshop/widgets/widgets_loader.dart';
 
 import '../../utils/design_course_app_theme.dart';
 import '../product/products_screen.dart';
@@ -24,12 +25,12 @@ class _HomeProductsTypeState extends State<HomeProductsType> {
         if (state.isLoading) {
           return _buildLoadingWidget();
         } else if (state.isError) {
-          return const Center(
-            child: Text("Có lỗi xảy ra!"),
-          );
-        } else {
+          return loadingWidget(context);
+        } else if (state.isSuccess) {
+          print(state.isSuccess);
           return _buildCategoriesWidget(state.resultDataModel!);
         }
+        return Container();
       },
     );
   }
@@ -48,19 +49,6 @@ class _HomeProductsTypeState extends State<HomeProductsType> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  //display error
-  Widget _buildErrorWidget(dynamic error) {
-    return const Center(
-      child: Text(
-        'Có lỗi xảy ra',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
-        ),
       ),
     );
   }
@@ -170,16 +158,19 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                           ),
                         ),
                       ),
-                      loadingBuilder: (context, child, progress) => progress == null? child : const SizedBox(
-                        height: 180,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
+                      loadingBuilder: (context, child, progress) =>
+                          progress == null
+                              ? child
+                              : const SizedBox(
+                                  height: 180,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -60,9 +60,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_html:
   page_indicator:
-  hive:
-  hive_flutter:
-
+  shimmer:
 
 dev_dependencies:
   flutter_test:

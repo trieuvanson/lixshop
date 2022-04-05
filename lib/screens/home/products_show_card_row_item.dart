@@ -5,6 +5,7 @@ import 'package:lixshop/core/core.dart';
 import 'package:lixshop/models1/models.dart';
 import 'package:lixshop/models1/products_outside_screen/result_data_model.dart';
 import 'package:lixshop/screens/home/products_type_screen.dart';
+import 'package:lixshop/widgets/widgets_loader.dart';
 
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
@@ -108,12 +109,13 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
     return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return _buildLoadingWidget();
+          return loadingWidget(context);
         } else if (state.isError) {
-          return _buildErrorWidget("Có lỗi xảy ra");
-        } else {
+          return loadingWidget(context);
+        } else if (state.isSuccess) {
           return _buildProductsWidget(state.resultDataModel!);
         }
+        return Container();
       },
     );
   }
@@ -158,36 +160,28 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
     List<ProductOutsideBrand> productsOutside =
         ProductOutsideBrand.getProductOutsideBrandList(resultDataModel);
     if (widget.isSales!) {
-      products =
-          productsOutside.where((product) => product.saleProd!).toList();
+      products = productsOutside.where((product) => product.saleProd!).toList();
     } else if (widget.isHot!) {
-      products =
-          productsOutside.where((product) => product.hotProd!).toList();
+      products = productsOutside.where((product) => product.hotProd!).toList();
     } else if (widget.isNew!) {
-      products =
-          productsOutside.where((product) => product.newProd!).toList();
+      products = productsOutside.where((product) => product.newProd!).toList();
     }
-
-    return Builder(
-      builder: (BuildContext context) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(
-            10,
-            (index) {
-              ProductOutsideBrand product = products[index];
-              return Padding(
-                padding: const EdgeInsets.only(right: 8.0, bottom: 8),
-                child: ProductCardItem(
-                  img: product.brand!,
-                  title: product.brandName!,
-                  idBrand: product.brandId!.toInt(),
-                ),
-              );
-            },
-          ),
-        );
-      },
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(
+        10,
+        (index) {
+          ProductOutsideBrand product = products[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0, bottom: 8),
+            child: ProductCardItem(
+              img: product.brand!,
+              title: product.brandName!,
+              idBrand: product.brandId!.toInt(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

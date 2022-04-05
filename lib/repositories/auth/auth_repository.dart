@@ -28,13 +28,16 @@ class AuthRepository {
         options: Options(
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer ${token?.accessToken?? ""}",
+            "Authorization": "Bearer ${token?.accessToken ?? ""}",
           },
         ),
       );
-      print('response: ${response.data}');
-      print(AuthUser.fromJson(response.data['dt']));
       return AuthUser.fromJson(response.data['dt']);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        await secureStorage.deleteSecureStorage();
+        return null;
+      }
     } catch (e) {
       print(e);
       return null;
@@ -60,7 +63,6 @@ class AuthRepository {
     }
   }
 
-
   Future<void> signOut() async {
     try {
       await secureStorage.deleteSecureStorage();
@@ -68,9 +70,7 @@ class AuthRepository {
       print('DioError: $e');
     }
   }
-
 }
-
 
 // Future<ResponseDTO> _getTokenFromFile() async {
 //   final directory = await getApplicationDocumentsDirectory();

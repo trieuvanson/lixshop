@@ -2,20 +2,22 @@ part of 'product_categories_outside_cubit.dart';
 
 class CategoryDataOutsideState extends Equatable {
   final bool isLoading;
-  final List<ProductOutsideCategory>? categories;
   final bool isError;
+  final bool isSuccess;
+  final List<ProductOutsideCategory>? categories;
 
   const CategoryDataOutsideState({
     this.isLoading = false,
-    this.categories = const [],
     this.isError = false,
+    this.isSuccess = false,
+    this.categories = const [],
   });
 
-  const CategoryDataOutsideState.loading() : this(isLoading: true);
+  const CategoryDataOutsideState.loading() : this(isLoading: true, isError: false, isSuccess: false);
 
-  const CategoryDataOutsideState.error() : this(isError: true);
+  const CategoryDataOutsideState.error() : this(isError: true, isLoading: false, isSuccess: false);
 
-  const CategoryDataOutsideState.loaded(final list) : this(categories: list);
+  const CategoryDataOutsideState.loaded(final list) : this(categories: list, isLoading: false, isError: false, isSuccess: true);
 
   //copyWith
   CategoryDataOutsideState copyWith({

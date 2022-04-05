@@ -11,13 +11,17 @@ class ResultOutsideCubit extends Cubit<ResultOutsideState> {
     emit(state.copyWith(isLoading: true));
     try {
       final resultDataModel = await resultDataRepository.getResultData();
-      emit(state.copyWith(
-        isLoading: false,
-        resultDataModel: resultDataModel,
-      ));
-
+      if (resultDataModel.productOutsideCategory!.isEmpty) {
+        emit(state.copyWith(isLoading: false, isError: true));
+      } else {
+        emit(state.copyWith(
+          isLoading: false,
+          isSuccess: true,
+          resultDataModel: resultDataModel,
+        ));
+      }
     } catch (e) {
-      emit(state.copyWith(isLoading: false, isError: true));
+      emit(state.copyWith(isLoading: false, isError: true, isSuccess: false));
     }
   }
 }

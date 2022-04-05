@@ -289,10 +289,12 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                             return _buildLoadingWidget();
                           } else if (state.isError) {
                             return Container();
-                          } else {
+                          } else if (state.resultDataModel!
+                              .productOutsideCategory!.isNotEmpty) {
                             return _buildCategoriesWidget(
                                 state.resultDataModel!);
                           }
+                          return Container();
                         },
                       )
                     : Container(),

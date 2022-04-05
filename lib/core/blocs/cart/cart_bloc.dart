@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:path_provider/path_provider.dart';
