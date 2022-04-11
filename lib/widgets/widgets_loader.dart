@@ -16,7 +16,7 @@ Widget loadingWidget(BuildContext context) {
                   padding: const EdgeInsets.only(right: 8.0, bottom: 8),
                   child: Container(
                     width: 150.0,
-                    height: 200.0,
+                    height: 180.0,
                     color: Colors.black,
                     child: Column(
                       children: [

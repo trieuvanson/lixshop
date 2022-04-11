@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/models1/models.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
@@ -50,9 +49,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
                         itemBuilder: (context, index) {
                           var product = widget.products[index];
                           return ProductCardItem(
-                            img: product.brand!,
-                            title: product.brandName!,
-                            idBrand: product.brandId!.toInt(),
+                            product: product,
                           );
                         },
                         itemCount: widget.products.length,

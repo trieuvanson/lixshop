@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:lixshop/models1/models.dart';
-
+import '../../constants/env.dart';
+import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
 import '../auth/user_repository.dart';
 
-class ResultDataRepository {
-  static final String? baseUrl = dotenv.env['MAIN_API_URL'];
+class ResultOutsideDataRepository {
   static final _dio = Dio();
 
   /*
@@ -29,6 +27,7 @@ class ResultDataRepository {
             "$baseUrl/datas/$link",
           ),
       ]);
+      print(distLinks);
       ResultDataModel productsDataModel =
           _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", productsDataModel.idNpp);
@@ -110,4 +109,4 @@ class ResultDataRepository {
   }
 }
 
-final resultDataRepository = ResultDataRepository();
+final resultDataRepository = ResultOutsideDataRepository();

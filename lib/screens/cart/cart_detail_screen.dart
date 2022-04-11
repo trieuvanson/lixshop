@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../contains/contains.dart';
+import '../../constants/contains.dart';
 import '../../core/core.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../utils/hero_dialog_route.dart';
 
 class CartDetailScreen extends StatefulWidget {
   final int idNpp;

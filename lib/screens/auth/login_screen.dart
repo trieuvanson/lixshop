@@ -5,7 +5,7 @@ import 'package:lixshop/models/auth/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../contains/colors.dart';
+import '../../constants/colors.dart';
 import '../../core/core.dart';
 import '../../responsive/responsive_screen.dart';
 import '../../utils/helpers/error_message.dart';

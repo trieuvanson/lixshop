@@ -1,20 +1,13 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/models/productlist.dart';
-import 'package:lixshop/models1/models.dart';
-import 'package:page_indicator/page_indicator.dart';
-import '../../core/core.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../core/core.dart';
 import '../../models/models.dart';
-import '../../repositories/repositories.dart';
 import '../screen.dart';
-import 'widget/home_banner.dart';
-import 'home_products_type.dart';
-import 'products_show_card_row_item.dart';
+import 'widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

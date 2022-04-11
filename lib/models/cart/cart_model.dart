@@ -1,7 +1,8 @@
 
 import 'package:equatable/equatable.dart';
-import 'package:lixshop/contains/contains.dart';
-import 'package:lixshop/models/models.dart';
+
+import '../../constants/contains.dart';
+import '../models.dart';
 
 class Cart {
   ProductDetail? productDetail;

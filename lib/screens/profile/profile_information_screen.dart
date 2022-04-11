@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../contains/colors.dart';
+import '../../constants/colors.dart';
 import '../../widgets/widgets.dart';
 
 class ProfileInformationScreen extends StatefulWidget {

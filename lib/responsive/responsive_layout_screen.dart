@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../contains/dimensions.dart';
 
+import '../constants/dimensions.dart';
 class ResponsiveLayout extends StatefulWidget {
   final Widget webScreenLayout;
   final Widget mobileScreenLayout;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/contains/contains.dart';
+import '../../constants/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/responsive/mobile_screen_layout.dart';
 import 'package:lixshop/screens/cart/cart_detail_screen.dart';

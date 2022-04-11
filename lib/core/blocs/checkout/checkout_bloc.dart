@@ -4,10 +4,10 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lixshop/repositories/checkout/checkout_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
 import '../cart/cart_bloc.dart';
 
 part 'checkout_event.dart';

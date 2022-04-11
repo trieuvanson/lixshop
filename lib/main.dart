@@ -1,8 +1,11 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
@@ -22,7 +25,15 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   BlocOverrides.runZoned(
     () {
-      runApp(const MyApp());
+      runApp(
+        DevicePreview(
+          enabled: !kReleaseMode,
+          tools: const [
+            ...DevicePreview.defaultTools,
+          ],
+          builder: (context) => const MyApp(),
+        ),
+      );
     },
     blocObserver: AppBlocObserver(),
   );
@@ -40,8 +51,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CartBloc()..add(LoadCart())),
         BlocProvider(
             create: (context) =>
-                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))
-                  ..add(CheckoutEventLoaded())),
+                CheckoutBloc(cartBloc: BlocProvider.of<CartBloc>(context))),
         BlocProvider(create: (context) => UserBloc()),
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(),
@@ -49,6 +59,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<ResultOutsideCubit>(
           create: (context) => ResultOutsideCubit()..getProductOutside(),
         ),
+        BlocProvider<ResultDetailsDataCubit>(create: (context) => ResultDetailsDataCubit()),
+
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',

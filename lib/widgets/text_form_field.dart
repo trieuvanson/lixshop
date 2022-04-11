@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../contains/colors.dart';
+import '../../constants/colors.dart';
 
 class TextFormFieldCommonStyle {
   static InputDecoration textFormFieldStyle(String? label) {

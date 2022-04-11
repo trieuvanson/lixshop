@@ -61,6 +61,7 @@ dependencies:
   flutter_html:
   page_indicator:
   shimmer:
+  device_preview:
 
 dev_dependencies:
   flutter_test:

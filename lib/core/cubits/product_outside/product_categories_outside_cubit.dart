@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lixshop/models1/models.dart';
+
+import '../../../models/models.dart';
 
 part 'product_categories_outside_state.dart';
 

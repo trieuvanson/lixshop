@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:lixshop/models1/models.dart';
 
+import '../models/models.dart';
 import '../repositories/auth/user_repository.dart';
 import '../utils/helpers/secure_storage.dart';
 

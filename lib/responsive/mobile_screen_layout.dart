@@ -6,7 +6,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../contains/colors.dart';
+import '../constants/colors.dart';
 import '../core/core.dart';
 import '../core/cubits/bottom_navigation/navigation_state.dart';
 import '../screens/auth/login_screen.dart';

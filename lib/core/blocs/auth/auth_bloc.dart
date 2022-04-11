@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:lixshop/repositories/auth/auth_repository.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
 import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
 
 
 part 'auth_event.dart';

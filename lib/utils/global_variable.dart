@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lixshop/screens/CheckingLoginPage.dart';
 import 'package:lixshop/screens/profile/profile_screen.dart';
 import 'package:lixshop/screens/screen.dart';
+import 'package:lixshop/screens/test/test_screen.dart';
 
 import '../screens/add_post_screen.dart';
 import '../screens/comments_screen.dart';
@@ -18,6 +19,8 @@ List<Widget> homeScreenItems = [
   // const ProductDetailsScreen(),
   // CheckingLoginPage(),
   // const ProfileClientPage(),
+  const TestScreen(),
+
   const AddPostScreen(),
   const ProfileScreen(),
 ];

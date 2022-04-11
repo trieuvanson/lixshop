@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/repositories/auth/auth_repository.dart';
-import 'package:lixshop/repositories/auth/user_repository.dart';
+
+import '../../../repositories/repositories.dart';
 
 part 'user_event.dart';
 

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/models/models.dart';
 
 import '../screens/screen.dart';
 import '../utils/design_course_app_theme.dart';
 
 class ProductCardItem extends StatefulWidget {
-  final String img;
-  final String title;
+  final product;
   final String? stickers;
-  final int idBrand;
 
   const ProductCardItem({
     Key? key,
-    required this.img,
-    required this.title,
     this.stickers,
-    required this.idBrand,
+    required this.product,
   }) : super(key: key);
 
   @override
@@ -28,7 +25,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
     return InkWell(
       onTap: () {
         Get.to(() => ProductDetailsScreen(
-              idBrand: widget.idBrand,
+              idBrand: widget.product.brandId.toInt(),
             ));
       },
       child: Container(
@@ -52,7 +49,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
                   topRight: Radius.circular(8.0),
                 ),
                 child: Image.network(
-                  widget.img,
+                  widget.product.brand,
                   errorBuilder: (context, url, error) => const SizedBox(
                     height: 180,
                     child: Center(
@@ -63,16 +60,18 @@ class _ProductCardItemState extends State<ProductCardItem> {
                       ),
                     ),
                   ),
-                  loadingBuilder: (context, child, progress) => progress == null? child : const SizedBox(
-                    height: 180,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.black,
+                  loadingBuilder: (context, child, progress) => progress == null
+                      ? child
+                      : const SizedBox(
+                          height: 180,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.black,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   width: double.infinity,
                   height: 180,
                   fit: BoxFit.cover,
@@ -82,7 +81,7 @@ class _ProductCardItemState extends State<ProductCardItem> {
             Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 4, right: 4),
               child: Text(
-                widget.title,
+                widget.product.brandName,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,

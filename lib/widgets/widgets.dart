@@ -1,6 +1,5 @@
 export 'expand_collapse_card.dart';
 export 'product_card_item.dart';
-export '../screens/home/widget/slide_item.dart';
 export 'text_field_input.dart';
 export 'text_form_field.dart';
 export 'text_frave.dart';

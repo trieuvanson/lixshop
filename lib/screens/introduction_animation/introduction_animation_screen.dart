@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:lixshop/contains/colors.dart';
 import 'package:lixshop/screens/auth/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../constants/colors.dart';
 import '../../responsive/mobile_screen_layout.dart';
 import '../../responsive/responsive_layout_screen.dart';
 import '../../responsive/web_screen_layout.dart';

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:lixshop/models1/models.dart';
-import 'package:lixshop/repositories/product_outside_repositories/result_data_repository.dart';
+import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
 
 part 'result_data_outside_state.dart';
 
@@ -11,6 +11,7 @@ class ResultOutsideCubit extends Cubit<ResultOutsideState> {
     emit(state.copyWith(isLoading: true));
     try {
       final resultDataModel = await resultDataRepository.getResultData();
+      print(resultDataModel.productOutsideCategory!.length);
       if (resultDataModel.productOutsideCategory!.isEmpty) {
         emit(state.copyWith(isLoading: false, isError: true));
       } else {
@@ -21,6 +22,7 @@ class ResultOutsideCubit extends Cubit<ResultOutsideState> {
         ));
       }
     } catch (e) {
+      print('error: $e');
       emit(state.copyWith(isLoading: false, isError: true, isSuccess: false));
     }
   }

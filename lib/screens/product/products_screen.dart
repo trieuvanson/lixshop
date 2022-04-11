@@ -2,9 +2,7 @@ import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/models/category/product_category_model.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/models1/models.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../models/productlist.dart';
@@ -17,7 +15,8 @@ class ProductsScreen extends StatefulWidget {
   final String? keyword;
   final ProductOutsideCategory category;
 
-  const ProductsScreen({Key? key, this.keyword = "", required this.category}) : super(key: key);
+  const ProductsScreen({Key? key, this.keyword = "", required this.category})
+      : super(key: key);
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -48,7 +47,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            "${widget.category.productBrand!.length} sản phẩm".text.bold.size(16).make(),
+                            "${widget.category.productBrand!.length} sản phẩm"
+                                .text
+                                .bold
+                                .size(16)
+                                .make(),
                             Row(
                               children: [
                                 CustomDropdownButton2(
@@ -102,11 +105,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         itemBuilder: (context, index) {
-                          ProductOutsideBrand productBrand = widget.category.productBrand![index];
+                          ProductOutsideBrand product =
+                              widget.category.productBrand![index];
                           return ProductCardItem(
-                            img: productBrand.brand!,
-                            title: productBrand.brandName!,
-                            idBrand: productBrand.brandId!.toInt(),
+                            product: product,
                           );
                         },
                         itemCount: widget.category.productBrand!.length,

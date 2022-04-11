@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:lixshop/screens/cart/cart_screen.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../constants/contains.dart';
+import '../../controllers/controllers.dart';
 import '../../core/core.dart';
-import '../../contains/contains.dart';
 import '../../models/models.dart';
-import '../../repositories/repositories.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../utils/helpers/secure_storage.dart';
 import '../../utils/hero_dialog_route.dart';
 import 'widget/menu_popup.dart';
 
@@ -29,36 +29,32 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-
   @override
   void initState() {
+    BlocProvider.of<ResultDetailsDataCubit>(context)
+        .getProductOutside(widget.idBrand);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: DesignCourseAppTheme.nearlyWhite,
-      child: FutureBuilder<ProductDetailsDataModel>(
-        future: ProductDetailsDataRepository()
-            .getProductDetails(widget.idBrand),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.error != null &&
-                snapshot.data!.error!.isNotEmpty) {
-              return _buildErrorWidget(snapshot.data!.error);
+        color: DesignCourseAppTheme.nearlyWhite,
+        child: BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
+          builder: (context, state) {
+            print('state: $state');
+            if (state.isLoading) {
+              return _buildLoadingWidget();
+            } else if (state.isError) {
+              return _buildErrorWidget("Lỗi");
+            } else if (state.isSuccess) {
+              return BuildProductDetailWidget(
+                resultDetailsDataModel: state.resultDetailsDataModel!,
+              );
             }
-            return BuildProductDetailWidget(
-              detailsDataModel: snapshot.data!,
-            );
-          } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error);
-          } else {
-            return _buildLoadingWidget();
-          }
-        },
-      ),
-    );
+            return Container();
+          },
+        ));
   }
 
   Widget _buildLoadingWidget() {
@@ -100,9 +96,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 }
 
 class BuildProductDetailWidget extends StatefulWidget {
-  final ProductDetailsDataModel detailsDataModel;
+  final ResultDetailsDataModel resultDetailsDataModel;
 
-  const BuildProductDetailWidget({Key? key, required this.detailsDataModel})
+  const BuildProductDetailWidget(
+      {Key? key, required this.resultDetailsDataModel})
       : super(key: key);
 
   @override
@@ -112,7 +109,6 @@ class BuildProductDetailWidget extends StatefulWidget {
 
 class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   int index = 0;
-  var productDetails;
   var products;
   int selectProduct = 0;
   int selectVoucher = 1;
@@ -122,18 +118,16 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   @override
   void initState() {
-    productDetails = ProductDetailsRepository()
-        .getProductDetails(widget.detailsDataModel, index);
-    products = productDetails.productDetails;
+    products = productDetailsDataController.getProductDetails(
+        widget.resultDetailsDataModel, widget.resultDetailsDataModel.sizes!.first);
     super.initState();
   }
 
-  void changeProductSize(int index) {
+  void changeProductSize(String size, int index) {
     setState(() {
       this.index = index;
-      productDetails = ProductDetailsRepository()
-          .getProductDetails(widget.detailsDataModel, index);
-      products = productDetails.productDetails;
+      products = productDetailsDataController.getProductDetails(
+          widget.resultDetailsDataModel, size);
       reset();
       selectVoucher = 1;
       selectProduct = changeProduct(selectProduct, selectProductEmptyVoucher);
@@ -324,10 +318,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                 children: [
                                   for (var i = 0;
                                       i <
-                                          widget
-                                              .detailsDataModel
-                                              .productDetailsData!
-                                              .sizes!
+                                          widget.resultDetailsDataModel.sizes!
                                               .length;
                                       i++)
                                     Padding(
@@ -352,7 +343,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                 const BorderRadius.all(
                                                     Radius.circular(8.0)),
                                             onTap: () {
-                                              changeProductSize(i);
+                                              changeProductSize(widget.resultDetailsDataModel.sizes![i],i);
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -362,9 +353,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                   right: 8),
                                               child: Center(
                                                 child: Text(
-                                                  widget
-                                                      .detailsDataModel
-                                                      .productDetailsData!
+                                                  widget.resultDetailsDataModel
                                                       .sizes![i],
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
@@ -606,8 +595,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Builder(builder: (_) {
-                var vouchers = VoucherMethodRepository()
-                    .getVoucherMethodsByProduct(product);
+                var vouchers = voucherMethodController
+                    .getVoucherMethodsByProduct(productDetail);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -615,7 +604,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                     Builder(builder: (_) {
                       return Column(
                         children: [
-                          for (var voucher in vouchers.voucherMethods!)
+                          for (var voucher in vouchers)
                             Padding(
                               padding: const EdgeInsets.only(
                                   bottom: 8.0, left: 4, right: 4, top: 4),
@@ -690,7 +679,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                             ]),
                                         Builder(builder: (_) {
                                           var voucherDetails =
-                                              VoucherMethodDetailsRepository()
+                                              voucherMethodDetailsController
                                                   .getVoucherMethodDetailsByMethod(
                                                       voucher);
                                           return Column(
@@ -699,8 +688,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              for (var detail in voucherDetails
-                                                  .voucherMethodDetails!)
+                                              for (var detail in voucherDetails)
                                                 Container(
                                                   width: MediaQuery.of(_)
                                                       .size

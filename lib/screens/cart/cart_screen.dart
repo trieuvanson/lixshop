@@ -7,7 +7,7 @@ import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../core/core.dart';
-import '../../contains/contains.dart';
+import '../../constants/contains.dart';
 import '../../models/models.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
@@ -225,7 +225,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                           height: 50,
                           child: RaisedButton(
                             onPressed: () {
-                              if (authBloc.state is AuthLoggedEvent) {
+                              if (authBloc.state is SuccessAuthState) {
                                 if (state.cartModel.cart.isEmpty) {
                                   showSnackBar(
                                       "Vui lòng thêm sản phẩm vào giỏ hàng",
