@@ -34,7 +34,6 @@ class CheckoutRepository {
     } on DioError catch (e) {
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      print('Ahhii');
       print('error: $e');
       return {} as ResponseDTO;
     }

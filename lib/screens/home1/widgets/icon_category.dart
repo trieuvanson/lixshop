@@ -21,23 +21,18 @@ class IconCategory extends StatelessWidget {
               width: 100.0,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(10.0),
                 boxShadow: const [
                   BoxShadow(
                       color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.5)
                 ],
                 image: DecorationImage(
-                  image: AssetImage(imageUrl ?? 'assets/images/cm1.jpeg'),
+                  image: NetworkImage(imageUrl ?? 'assets/images/cm1.jpeg'),
+                  onError: (context, error) {
+                  },
                   fit: BoxFit.cover,
                 ),
               ),
-              // child: Center(
-              //   child: Image.asset(
-              //     imageUrl ?? 'assets/images/image_1.png',
-              //     height: 50.0,
-              //     width: 50.0,
-              //   ),
-              // ),
             ),
             const Spacer(),
             Text(

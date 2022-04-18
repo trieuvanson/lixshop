@@ -13,6 +13,36 @@ class ResultOutsideState extends Equatable {
     this.resultDataModel,
   });
 
+
+  //loading
+  factory ResultOutsideState.loading() {
+    return const ResultOutsideState(
+      isLoading: true,
+      isError: false,
+      isSuccess: false,
+      resultDataModel: null,
+    );
+  }
+
+  //loaded
+  factory ResultOutsideState.loaded(ResultDataModel resultDataModel) {
+    return ResultOutsideState(
+      isLoading: false,
+      isError: false,
+      isSuccess: true,
+      resultDataModel: resultDataModel,
+    );
+  }
+
+  //error
+  factory ResultOutsideState.error() {
+    return const ResultOutsideState(
+      isLoading: false,
+      isError: true,
+      isSuccess: false,
+      resultDataModel: null,
+    );
+  }
   //copy with
   ResultOutsideState copyWith({
     bool? isLoading,

@@ -6,7 +6,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
 import '../../core/core.dart';
-import '../../responsive/responsive_screen.dart';
+import '../../responsive/screen_layout.dart';
 import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';
 import '../screen.dart';
@@ -138,7 +138,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FlatButton(
                     child: const Text('OK'),
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
+                          (route) => false);
                     },
                   ),
                 ],
@@ -146,7 +150,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             },
           );
           setState(() {});
-
         }
       },
       child: Scaffold(
@@ -160,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const MobileScreenLayout(),
+                builder: (context) => const ScreenLayout(),
                 settings: const RouteSettings(name: '/'),
               ));
             },

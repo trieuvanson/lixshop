@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../core/core.dart';
 import '../../constants/contains.dart';
+import '../../core/core.dart';
 import '../../models/models.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../utils/hero_dialog_route.dart';
 import '../screen.dart';
 
 class CartScreen extends StatefulWidget {
@@ -147,7 +145,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
 
   Widget _bottomNavigation() {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-
+    final size = MediaQuery.of(context).size;
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {
@@ -157,17 +155,18 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(8),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 100,
+                height: 120,
                 child: Column(
                   children: [
+                    const Spacer(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         "Tổng ${state.cartModel.cart.length} sản phẩm"
                             .text
                             .xl
                             .gray500
                             .make(),
+                        const Spacer(),
                         "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
                             .text
                             .color(Vx.black.withOpacity(0.8))
@@ -176,41 +175,14 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                             .make(),
                       ],
                     ),
-                    // 5.heightBox,
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                    //     "- 999,999đ"
-                    //         .text
-                    //         .color(Vx.green500.withOpacity(0.8))
-                    //         .bold
-                    //         .xl2
-                    //         .make(),
-                    //   ],
-                    // ),
                     5.heightBox,
                     const Divider(),
-                    Flexible(
-                      child: Container(),
-                      flex: 1,
-                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                "Tạm tính".text.xl2.black.bold.make(),
-                                " (đã có VAT)"
-                                    .text
-                                    .color(Vx.gray800.withOpacity(0.8))
-                                    .xl
-                                    .make(),
-                              ],
-                            ),
+                            "Tạm tính".text.xl2.black.bold.make(),
                             "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
                                 .text
                                 .color(Vx.red700.withOpacity(0.8))
@@ -219,6 +191,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                 .make(),
                           ],
                         ),
+                        const Spacer(),
                         // Button thanh toán
                         SizedBox(
                           width: 150,

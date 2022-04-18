@@ -138,7 +138,6 @@ class CartModel extends Equatable {
         quantity[c] += 1;
       }
     }
-    print(quantity.keys.length);
     return quantity;
   }
 

@@ -5,13 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
-import 'responsive/mobile_screen_layout.dart';
-import 'responsive/responsive_layout_screen.dart';
-import 'responsive/web_screen_layout.dart';
+import 'constants/contains.dart';
+import 'responsive/screen_layout.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
@@ -31,7 +32,7 @@ Future<void> main() async {
           tools: const [
             ...DevicePreview.defaultTools,
           ],
-          builder: (context) => const MyApp(),
+          builder: (context) => const LixShop(),
         ),
       );
     },
@@ -39,8 +40,8 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class LixShop extends StatelessWidget {
+  const LixShop({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -59,23 +60,28 @@ class MyApp extends StatelessWidget {
         BlocProvider<ResultOutsideCubit>(
           create: (context) => ResultOutsideCubit()..getProductOutside(),
         ),
-        BlocProvider<ResultDetailsDataCubit>(create: (context) => ResultDetailsDataCubit()),
-
+        BlocProvider<ResultDetailsDataCubit>(
+            create: (context) => ResultDetailsDataCubit()),
+        BlocProvider<FilterCubit>(create: (context) => FilterCubit()),
       ],
       child: GetMaterialApp(
         title: 'Lix Shop',
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
-        theme: ThemeData.light().copyWith(
-          primaryColor: const Color(0xFFFFC107),
+        theme: ThemeData(
+          primaryColor: kPrimaryColor,
+          primarySwatch: MaterialColor(kPrimaryColor.value, kPrimaryColorMap),
+          textTheme: Theme.of(context).textTheme.apply(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                bodyColor: kTextColor,
+              ),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         darkTheme: ThemeData.dark(),
         initialRoute: "/",
         // home: const LoadingScreen(),
         routes: {
-          '/': (context) => const ResponsiveLayout(
-              webScreenLayout: WebScreenLayout(),
-              mobileScreenLayout: MobileScreenLayout()),
+          '/': (context) => const ScreenLayout(),
           '/login': (_) => const LoginScreen(),
           '/register': (_) => const RegisterScreen(),
           "/forgot-password": (_) => const ForgotPasswordScreen(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:lixshop/responsive/screen_layout.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
 import '../../core/core.dart';
@@ -22,7 +22,7 @@ class ProfileClientPage extends StatelessWidget {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const MobileScreenLayout()));
+                    builder: (context) => const ScreenLayout()));
         }
 
         // print('ProfileClientPage: ${state.toString()}');

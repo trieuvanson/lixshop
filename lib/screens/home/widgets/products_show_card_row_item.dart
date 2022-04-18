@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/core/core.dart';
 import 'package:lixshop/screens/home/products_type_screen.dart';
-import 'package:lixshop/widgets/widgets_loader.dart';
+import 'package:lixshop/screens/home1/widgets/product_card.dart';
 
 import '../../../controllers/controllers.dart';
 import '../../../models/models.dart';
@@ -11,17 +11,13 @@ import '../../../utils/design_course_app_theme.dart';
 import '../../../widgets/widgets.dart';
 
 class ProductShowCardRowItem extends StatefulWidget {
-  final bool? isSales;
-  final bool? isHot;
-  final bool? isNew;
+  final ProductCardType type;
   final String? title;
 
   const ProductShowCardRowItem({
     Key? key,
-    this.isSales = false,
-    this.isHot = false,
-    this.isNew = false,
     this.title,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -107,9 +103,9 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
     return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return loadingWidget(context);
+          return Container();
         } else if (state.isError) {
-          return loadingWidget(context);
+          return Container();
         } else if (state.isSuccess) {
           return _buildProductsWidget(state.resultDataModel!);
         }
@@ -139,7 +135,8 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
   Widget _buildProductsWidget(ResultDataModel resultDataModel) {
     List<ProductOutsideBrand> productsOutside = productOutsideBrandController
         .getProductOutsideBrandList(resultDataModel);
-    products = productOutsideBrandController.filterProductsBrand(list: productsOutside, isSale: widget.isSales!, isHot: widget.isHot!, isNew: widget.isNew!);
+    products = productOutsideBrandController.filterProductsBrand(
+        list: productsOutside, type: widget.type);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(

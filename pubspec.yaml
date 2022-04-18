@@ -44,7 +44,7 @@ dependencies:
   dots_indicator:
   google_fonts:
   shared_preferences:
-  get: ^4.0.0
+  get:
   popup_menu:
   expand_widget:
   dropdown_button2:
@@ -92,6 +92,7 @@ flutter:
     - assets/logos/
     - assets/introduction_animation/
     - assets/json/
+    - assets/icons/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

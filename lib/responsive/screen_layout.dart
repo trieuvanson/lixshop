@@ -13,15 +13,15 @@ import '../screens/auth/login_screen.dart';
 import '../screens/introduction_animation/introduction_animation_screen.dart';
 import '../utils/global_variable.dart';
 
-class MobileScreenLayout extends StatefulWidget {
-  const MobileScreenLayout({Key? key}) : super(key: key);
+class ScreenLayout extends StatefulWidget {
+  const ScreenLayout({Key? key}) : super(key: key);
 
   @override
-  State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
+  State<ScreenLayout> createState() => _ScreenLayoutState();
 }
 
-class _MobileScreenLayoutState extends State<MobileScreenLayout>
-    with TickerProviderStateMixin<MobileScreenLayout> {
+class _ScreenLayoutState extends State<ScreenLayout>
+    with TickerProviderStateMixin<ScreenLayout> {
   bool? checkFirstTime = false;
 
   Future checkFirstSeen() async {
@@ -96,7 +96,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout>
                 BlocProvider.of<NavigationCubit>(context)
                     .changeNavigation(index);
               }
-              print(state.index);
             },
           ),
         );

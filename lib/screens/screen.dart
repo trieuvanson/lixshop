@@ -17,7 +17,7 @@ export 'orders_history/orders_history_item_detail_screen.dart';
 export 'orders_history/orders_history_list_screen.dart';
 //Product
 export 'product/product_details_screen.dart';
-export 'product/products_screen.dart';
+export 'search/search_results.dart';
 //Profile
 export 'profile/profile_screen.dart';
 export 'profile/profile_information_screen.dart';

@@ -7,7 +7,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
 import '../../core/core.dart';
-import '../../responsive/responsive_screen.dart';
+import '../../responsive/screen_layout.dart';
 import '../../utils/helpers/error_message.dart';
 import '../../widgets/widgets.dart';
 import '../screen.dart';
@@ -52,9 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isLogin', true);
       setState(() {});
-      print("isLogin: ${prefs.getBool('isLogin')}");
       Get.to(
-        () => const MobileScreenLayout(),
+        () => const ScreenLayout(),
         routeName: "/register",
       );
       print('email: $_loading');
@@ -79,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     return WillPopScope(
       onWillPop: () {
-        Get.to(() => const MobileScreenLayout());
+        Get.to(() => const ScreenLayout());
         return Future.value(false);
       },
       child: BlocListener<AuthBloc, AuthState>(
@@ -98,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _loading = false;
             });
             Get.to(
-              () => const MobileScreenLayout(),
+              () => const ScreenLayout(),
             );
           } else {
             setState(() {
@@ -117,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
               icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const MobileScreenLayout(),
+                  builder: (context) => const ScreenLayout(),
                   settings: const RouteSettings(name: '/'),
                 ));
               },
@@ -218,16 +217,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: appColor,
                             borderRadius: BorderRadius.circular(8),
                             child: InkWell(
-                              onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  authBloc.add(
-                                    AuthLoggedEvent(
-                                      Login(
-                                          username: email, password: password),
-                                    ),
-                                  );
-                                }
-                              },
+                              onTap: _loading
+                                  ? () {}
+                                  : () {
+                                      if (_formKey.currentState!.validate()) {
+                                        authBloc.add(
+                                          AuthLoggedEvent(
+                                            Login(
+                                                username: email,
+                                                password: password),
+                                          ),
+                                        );
+                                      }
+                                    },
                               child: AnimatedContainer(
                                 duration: const Duration(seconds: 1),
                                 width: MediaQuery.of(context).size.width,

@@ -153,7 +153,6 @@ class _CartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(cartModel.cart.length);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(

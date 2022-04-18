@@ -6,7 +6,6 @@ import 'package:lixshop/utils/helpers/secure_storage.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 
-
 part 'auth_event.dart';
 
 part 'auth_state.dart';
@@ -16,16 +15,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoggedEvent>(_onLogin);
     on<CheckLoginEvent>(_onCheckLogin);
     on<AuthLogoutEvent>(_onLogOut);
-
   }
-
 
   Future<void> _onLogin(AuthLoggedEvent event, Emitter<AuthState> emit) async {
     try {
       emit(LoadingAuthState());
       final data = await authRepository.signInWithEmailAndPassword(event.login);
-      await Future.delayed(const Duration(seconds: 1));
-
       if (data.err != 0) {
         emit(FailureAuthState(data.msg));
       } else {

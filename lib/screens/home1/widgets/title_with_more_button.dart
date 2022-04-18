@@ -15,7 +15,7 @@ class TitleWithMoreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         children: [
           TitleWithCustomUnderLiner(
@@ -38,7 +38,7 @@ class TitleWithMoreButton extends StatelessWidget {
               ),
             ),
             child: const Text(
-              'Xem thêm',
+              'Thêm',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -55,7 +55,7 @@ class TitleWithCustomUnderLiner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 32,
       child: Stack(
         children: [
@@ -74,7 +74,6 @@ class TitleWithCustomUnderLiner extends StatelessWidget {
             left: 0,
             bottom: 0,
             child: Container(
-              margin: const EdgeInsets.only(left: kDefaultPadding / 4),
               height: 4,
               color: kPrimaryColor.withOpacity(0.3),
             ),

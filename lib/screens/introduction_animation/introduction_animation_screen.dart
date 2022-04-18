@@ -5,9 +5,7 @@ import 'package:lixshop/screens/auth/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/colors.dart';
-import '../../responsive/mobile_screen_layout.dart';
-import '../../responsive/responsive_layout_screen.dart';
-import '../../responsive/web_screen_layout.dart';
+import '../../responsive/screen_layout.dart';
 import 'components/care_view.dart';
 import 'components/center_next_button.dart';
 import 'components/mood_diary_vew.dart';
@@ -84,12 +82,8 @@ class _IntroductionAnimationScreenState
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isFirstTime', true);
       setState(() {});
-      print("isFirstTime: ${prefs.getBool('isFirstTime')}");
       Get.to(
-        () => const ResponsiveLayout(
-          webScreenLayout: WebScreenLayout(),
-          mobileScreenLayout: MobileScreenLayout(),
-        ),
+        () => const ScreenLayout(),
         routeName: "",
         transition: Transition.rightToLeft,
       );
@@ -140,7 +134,6 @@ class _IntroductionAnimationScreenState
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isFirstTime', true);
     setState(() {});
-    print("isFirstTime: ${prefs.getBool('isFirstTime')}");
     Get.to(
       () => RegisterScreen(),
       routeName: "/register",

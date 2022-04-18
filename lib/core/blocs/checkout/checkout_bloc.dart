@@ -39,7 +39,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         }
       }
     } catch (e) {
-      print('CheckoutBloc: $e');
       emit(const CheckoutError(error: "Có lỗi xảy ra, vui lòng thử lại!"));
     }
   }

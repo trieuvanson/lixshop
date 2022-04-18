@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/screens/home1/widgets/product_card.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../core/core.dart';
@@ -71,13 +71,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 const HomeProductsType(),
                 10.heightBox,
                 const ProductShowCardRowItem(
-                    isSales: true, title: "Sản phẩm khuyến mãi"),
+                    type: ProductCardType.isSale, title: "Sản phẩm khuyến mãi"),
                 10.heightBox,
                 const ProductShowCardRowItem(
-                    isHot: true, title: "Sản phẩm nổi bật"),
+                    type: ProductCardType.isHot, title: "Sản phẩm nổi bật"),
                 10.heightBox,
                 const ProductShowCardRowItem(
-                    isNew: true, title: "Sản phẩm mới"),
+                    type: ProductCardType.isNew, title: "Sản phẩm mới"),
                 10.heightBox,
               ],
             ),
@@ -169,7 +169,7 @@ class _SearchCard extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () => Get.to(
-                  () => SearchScreen(),
+                  () => const SearchScreen(),
                   routeName: '/search',
                   duration: const Duration(milliseconds: 300),
                 ),
@@ -190,7 +190,6 @@ class _SearchCard extends StatelessWidget {
               // 64.widthBox,
               IconButton(
                 onPressed: () {
-                  print('Search for camera');
                 },
                 icon: Container(),
               )
@@ -351,7 +350,7 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
                     color: Colors.green,
                     animationDuration: const Duration(milliseconds: 500),
                     onPressed: () {
-                      Get.to(() => ProductsScreen(category: categories[index]));
+                      // Get.to(() => ProductsScreen(category: categories[index]));
                     },
                     child: Text(
                       categories[index].cateName ?? "",

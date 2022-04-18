@@ -172,7 +172,6 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       setState(() {
         _cart.quantity = _cart.quantity! + 1;
       });
-      print('increaseQuantity: ${_cart.quantity}');
     }
   }
 
@@ -181,7 +180,6 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       setState(() {
         _cart.quantity = _cart.quantity! - 1;
       });
-      print('_cart.quantity: ${_cart.quantity}');
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:lixshop/screens/home1/widgets/product_card.dart';
 
 import '../../models/models.dart';
 
@@ -12,22 +13,24 @@ class ProductOutsideBrandController {
   }
 
   List<ProductOutsideBrand> filterProductsBrand(
-      {required bool isHot,
-      required bool isNew,
-      required bool isSale,
+      {required ProductCardType type,
       required List<ProductOutsideBrand> list}) {
     List<ProductOutsideBrand> productOutsideBrandList = [];
-    if (isHot) {
-      productOutsideBrandList =
-          list.where((element) => element.isHot!).toList();
-    } else if (isNew) {
-      productOutsideBrandList =
-          list.where((element) => element.isNew!).toList();
-    } else if (isSale) {
-      productOutsideBrandList =
-          list.where((element) => element.isSale!).toList();
-    } else {
-      return [];
+    switch (type) {
+      case ProductCardType.isNew:
+        productOutsideBrandList =
+            list.where((element) => element.isNew!).toList();
+        break;
+      case ProductCardType.isSale:
+        productOutsideBrandList =
+            list.where((element) => element.isSale!).toList();
+        break;
+      case ProductCardType.isHot:
+        productOutsideBrandList =
+            list.where((element) => element.isHot!).toList();
+        break;
+      default:
+        return [];
     }
     return productOutsideBrandList;
   }

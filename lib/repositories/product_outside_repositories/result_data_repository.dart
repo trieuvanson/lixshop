@@ -20,21 +20,28 @@ class ResultOutsideDataRepository {
     try {
       List<String> distLinks = await secureStorage.checkLogin()
           ? await userRepository.loadLocation()
-          : ["DCtbW1k="];
+          : /*["DCtbW1k="]*/ ["https://api.jsonbin.io/b/62539d70d8a4cc06909eccc9"];
+      // var responses = await Future.wait([
+      //   for (var link in distLinks)
+      //     _dio.get(
+      //       "$baseUrl/datas/$link",
+      //     ),
+      // ]);
       var responses = await Future.wait([
         for (var link in distLinks)
           _dio.get(
-            "$baseUrl/datas/$link",
+            link,
           ),
       ]);
-      print(distLinks);
       ResultDataModel productsDataModel =
           _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", productsDataModel.idNpp);
       return productsDataModel;
     } on DioError catch (e) {
+      print('getResultData error 1 : $e');
       return ResultDataModel();
     } catch (err) {
+      print('getResultData error 2: $err');
       return ResultDataModel();
     }
   }
@@ -61,9 +68,10 @@ class ResultOutsideDataRepository {
     //(vòng lặp 1)
     // duyệt từng response
     for (var response in responses) {
+      // ResultDataModel resultDataModel = ResultDataModel.fromJson(
+      //     json.decode(response.data)); // chuyển json thành model (Dành cho link chính)
       ResultDataModel resultDataModel = ResultDataModel.fromJson(
-          json.decode(response.data)); // chuyển json thành model
-
+          response.data); // chuyển json thành model
       idDist.add(resultDataModel.idNpp!); // thêm id nhà phân phối vào danh sách
 
       //(vòng lặp 2)

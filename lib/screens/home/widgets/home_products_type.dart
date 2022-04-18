@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/core/core.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/widgets/widgets_loader.dart';
 
 import '../../../utils/design_course_app_theme.dart';
-import '../../product/products_screen.dart';
+import '../../search/search_results.dart';
 
 class HomeProductsType extends StatefulWidget {
   const HomeProductsType({Key? key}) : super(key: key);
@@ -22,9 +21,8 @@ class _HomeProductsTypeState extends State<HomeProductsType> {
         if (state.isLoading) {
           return _buildLoadingWidget();
         } else if (state.isError) {
-          return loadingWidget(context);
+          return Container();
         } else if (state.isSuccess) {
-          print(state.isSuccess);
           return _buildCategoriesWidget(state.resultDataModel!);
         }
         return Container();
@@ -103,8 +101,8 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductsScreen(
-              category: widget.category,
+            builder: (context) => SearchResults(
+              // category: widget.category,
             ),
           ),
         );

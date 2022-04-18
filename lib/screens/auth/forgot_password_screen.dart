@@ -30,7 +30,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         _loading = true;
       });
-      print('email: $_loading');
       await Future.delayed(
         const Duration(seconds: 5),
       );
@@ -43,7 +42,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         _loading = false;
       });
-      print('email: $_loading');
     }
   }
 

@@ -1,45 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:lixshop/screens/screen.dart';
 
 import '../constants.dart';
-import '../controller/controllers.dart';
 
-class AppBarHeaderSliver extends StatelessWidget {
-  final double valueCurrentScroll;
-
-  const AppBarHeaderSliver({Key? key, required this.valueCurrentScroll})
+class AppBarHeaderSliver extends StatefulWidget {
+  const AppBarHeaderSliver({Key? key})
       : super(key: key);
+
+  @override
+  State<AppBarHeaderSliver> createState() => _AppBarHeaderSliverState();
+}
+
+class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
+
 
   @override
   Widget build(BuildContext context) {
     final padding = MediaQuery.of(context).padding;
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return SliverAppBar(
       elevation: 0,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
-      expandedHeight: appBarHeaderController.pinnedAppBar(valueCurrentScroll)
-          ? size.height * 0.1
-          : size.height * 0.25 - 27,
-      stretch: true,
-      pinned: appBarHeaderController.pinnedAppBar(valueCurrentScroll),
-      collapsedHeight: appBarHeaderController.pinnedAppBar(valueCurrentScroll)
-          ? size.height * 0.1
-          : size.height * 0.25 - 27,
+      expandedHeight: size.height * 0.25 - 27,
+      collapsedHeight: size.height * 0.25 - 27,
       flexibleSpace: FlexibleSpaceBar(
-        collapseMode: CollapseMode.pin,
-        stretchModes: const [StretchMode.zoomBackground],
-        background: appBarHeaderController.pinnedAppBar(valueCurrentScroll)
-            ? Container(
-                padding: EdgeInsets.only(top: padding.top),
-                child: Stack(
-                  children: const [
-                    _SearchBar(),
-                  ],
-                ),
-              )
-            : Stack(
-                fit: StackFit.passthrough,
+        background: Stack(
+                fit: StackFit.expand,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(
@@ -59,8 +48,7 @@ class AppBarHeaderSliver extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: appBarHeaderController.getPositionHeight(
-                        valueCurrentScroll, padding.top),
+                    top: padding.top,
                     left: kDefaultPadding,
                     right: kDefaultPadding,
                     child: Container(
@@ -77,13 +65,11 @@ class AppBarHeaderSliver extends StatelessWidget {
                                     ),
                           ),
                           InkWell(
-                            onTap: () {
-                              print('click');
-                            },
+                            onTap: () {},
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: size.width * 0.8,
+                                  width: size.width * 0.8 - 100,
                                   child: Text(
                                     "Giao tới: 87 Đường số 6, Phường 10, Gò Vấp, Hồ Chí Minh",
                                     maxLines: 1,
@@ -110,7 +96,7 @@ class AppBarHeaderSliver extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const _SearchBar(),
+                  const _SearchBar(bottom: 20),
                   // Positioned(
                   //     left: 10,
                   //     top: padding.top,
@@ -128,17 +114,20 @@ class AppBarHeaderSliver extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({Key? key}) : super(key: key);
+  final double bottom;
+
+  const _SearchBar({Key? key, required this.bottom}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Positioned(
-      bottom: 20,
+      bottom: bottom,
       right: 0,
       left: 0,
       child: InkWell(
         onTap: () {
+          Get.off(() => SearchScreen());
         },
         child: Container(
           width: size.width,
@@ -164,10 +153,11 @@ class _SearchBar extends StatelessWidget {
                 child: TextField(
                   onChanged: (value) {},
                   onTap: () {
+                    Get.to(() => SearchScreen());
                   },
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: 'Search',
+                    hintText: 'Tìm kiếm',
                     hintStyle: TextStyle(color: kPrimaryColor.withOpacity(0.5)),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,

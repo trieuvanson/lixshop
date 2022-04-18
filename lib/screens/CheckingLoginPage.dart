@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/responsive/mobile_screen_layout.dart';
+import 'package:lixshop/responsive/screen_layout.dart';
 import 'package:lixshop/screens/auth/login_screen.dart';
 
 import '../../core/core.dart';
@@ -48,8 +48,6 @@ class _CheckingLoginPageState extends State<CheckingLoginPage> with TickerProvid
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-        print('CheckingLoginPage: ${state.toString()}');
-
         if( state is LoadingAuthState ){
 
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckingLoginPage()));
@@ -60,7 +58,7 @@ class _CheckingLoginPageState extends State<CheckingLoginPage> with TickerProvid
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
          
         } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MobileScreenLayout()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ScreenLayout()));
         }
       },
       child: Scaffold(

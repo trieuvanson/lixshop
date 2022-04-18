@@ -7,23 +7,20 @@ part 'result_data_outside_state.dart';
 
 class ResultOutsideCubit extends Cubit<ResultOutsideState> {
   ResultOutsideCubit() : super(const ResultOutsideState());
+
   void getProductOutside() async {
-    emit(state.copyWith(isLoading: true));
+    emit(ResultOutsideState.loading());
+    //delay
     try {
       final resultDataModel = await resultDataRepository.getResultData();
-      print(resultDataModel.productOutsideCategory!.length);
       if (resultDataModel.productOutsideCategory!.isEmpty) {
         emit(state.copyWith(isLoading: false, isError: true));
       } else {
-        emit(state.copyWith(
-          isLoading: false,
-          isSuccess: true,
-          resultDataModel: resultDataModel,
-        ));
+        emit(ResultOutsideState.loaded(resultDataModel));
       }
     } catch (e) {
       print('error: $e');
-      emit(state.copyWith(isLoading: false, isError: true, isSuccess: false));
+      emit(ResultOutsideState.error());
     }
   }
 }

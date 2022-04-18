@@ -40,8 +40,8 @@ class AuthRepository {
       }
     } catch (e) {
       print(e);
-      return null;
     }
+    return null;
   }
 
   Future<void> sendPasswordReset({required String phone}) {
@@ -55,10 +55,8 @@ class AuthRepository {
           await dio.post(loginUrl, data: jsonEncode(login.toJson()));
       return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
-      print('DioError: ${e.response!.data}');
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      print('Error1: $e');
       return {} as ResponseDTO;
     }
   }
