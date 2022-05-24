@@ -115,6 +115,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   int selectTabIndex = 0;
   String selectProductEmptyVoucher = ""; // if product empty voucher
   var _cart = Cart(quantity: 1, unit: "THÙNG");
+  final productDetailsDataController = ProductDetailsDataController();
 
   @override
   void initState() {
@@ -495,6 +496,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       List<ProductDetail> products, int selectedProduct) {
     var emptyVoucherProducts =
         products.where((element) => element.voucherMethods!.isEmpty).toList();
+    final voucherMethodController = VoucherMethodController();
+    final voucherMethodDetailsController = VoucherMethodDetailsController();
     return Container(
       color: DesignCourseAppTheme.notWhite,
       child: Column(

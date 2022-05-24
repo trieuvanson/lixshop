@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/auth/login_model.dart';
+import 'package:lixshop/screens/auth/send_forgot_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -195,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                       builder: (context) =>
-                                          const ForgotPasswordScreen(),
+                                          const SendForgotCodeScreen(),
                                       settings: const RouteSettings(
                                           name: '/forgot-password'),
                                     ));

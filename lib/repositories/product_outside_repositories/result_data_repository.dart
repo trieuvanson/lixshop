@@ -29,14 +29,12 @@ class ResultOutsideDataRepository {
       // ]);
       var responses = await Future.wait([
         for (var link in distLinks)
-          _dio.get(
-            link,
-          ),
+          _dio.get(link),
       ]);
-      ResultDataModel productsDataModel =
+      ResultDataModel resultDataModel =
           _getProductCateFromResponse(responses);
-      await secureStorage.addKey("idDist", productsDataModel.idNpp);
-      return productsDataModel;
+      await secureStorage.addKey("idDist", resultDataModel.idNpp);
+      return resultDataModel;
     } on DioError catch (e) {
       print('getResultData error 1 : $e');
       return ResultDataModel();

@@ -35,5 +35,3 @@ class ProductOutsideBrandController {
     return productOutsideBrandList;
   }
 }
-
-final productOutsideBrandController = ProductOutsideBrandController();

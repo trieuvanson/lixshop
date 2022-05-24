@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart'
-    as transitions;
+as transitions;
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/core/core.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
@@ -26,8 +26,10 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
-   List<ProductOutsideCategory> categories = [];
+  List<ProductOutsideCategory> categories = [];
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final searchController = SearchController();
 
   @override
   void initState() {
@@ -36,7 +38,6 @@ class _SearchResultsState extends State<SearchResults> {
     super.initState();
   }
 
-  @override
   @override
   void dispose() {
     setState(() {
@@ -48,8 +49,6 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   Widget build(BuildContext context) {
     final filterBloc = BlocProvider.of<FilterCubit>(context);
-    final resultDataBloc = BlocProvider.of<ResultOutsideCubit>(context);
-    final padding = MediaQuery.of(context).padding;
     return Scaffold(
       key: scaffoldKey,
       endDrawer: ClipRRect(
@@ -76,7 +75,7 @@ class _SearchResultsState extends State<SearchResults> {
             color: DesignCourseAppTheme.notWhite,
             child: Padding(
               padding:
-                  const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
+              const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
               child: SingleChildScrollView(
                 child: Container(
                   color: DesignCourseAppTheme.notWhite,
@@ -159,14 +158,14 @@ class _SearchResultsState extends State<SearchResults> {
                         // ),
 
                         //tab bar categories
-                           BlocBuilder<FilterCubit, FilterState>(
+                        BlocBuilder<FilterCubit, FilterState>(
                           builder: (context, state) {
                             if (state.keyword!.isNotEmpty &&
                                 state.categoryFilters!.isNotEmpty) {
                               var productCategories = searchController.searchAndFilter(
-                                          keyword: state.keyword!, categories: categories, filter: state.categoryFilters!);
+                                  keyword: state.keyword!, categories: categories, filter: state.categoryFilters!);
                               var products =
-                                  searchController.getByCategories(productCategories);
+                              searchController.getByCategories(productCategories);
                               return AlignedGridView.count(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 12,
@@ -205,7 +204,7 @@ class _SearchResultsState extends State<SearchResults> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-            () => const ScreenLayout(),
+                () => const ScreenLayout(),
             duration: const Duration(milliseconds: 500),
           );
         },
@@ -226,8 +225,8 @@ class _SearchResultsState extends State<SearchResults> {
               readOnly: true,
               onTap: () {
                 Get.to(() => const SearchScreen(
-                    // keyword: widget.keyword,
-                    ));
+                  // keyword: widget.keyword,
+                ));
               },
               decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search, color: kPrimaryColor),

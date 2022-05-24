@@ -14,4 +14,3 @@ class VoucherMethodDetailsController {
   }
 }
 
-final voucherMethodDetailsController = VoucherMethodDetailsController();

@@ -69,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                     filterCubit.setKeyword(value);
                     Get.to(
-                      () => const SearchResults(),
+                          () => const SearchResults(),
                       routeName: '/products?keyword=$value',
                       transition: getx.Transition.downToUp,
                       duration: const Duration(milliseconds: 300),
@@ -81,15 +81,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
                     suffixIcon: state.keyword!.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(
-                              Icons.clear,
-                              color: kPrimaryColor,
-                            ),
-                            onPressed: () {
-                              filterCubit.setKeyword('');
-                              print(state.keyword);
-                            },
-                          )
+                      icon: const Icon(
+                        Icons.clear,
+                        color: kPrimaryColor,
+                      ),
+                      onPressed: () {
+                        filterCubit.setKeyword('');
+                        print(state.keyword);
+                      },
+                    )
                         : null,
                     border: InputBorder.none),
               ));
@@ -213,7 +213,7 @@ class SearchItem extends StatelessWidget {
                   filterCubit.setKeyword(search);
 
                   Get.to(
-                    () => const SearchResults(),
+                        () => const SearchResults(),
                     routeName: '/products?keyword=$search',
                     transition: getx.Transition.downToUp,
                     duration: const Duration(milliseconds: 300),

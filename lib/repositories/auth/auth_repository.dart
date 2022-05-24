@@ -11,6 +11,9 @@ class AuthRepository {
 
   var loginUrl = '$mainUrl/api/shoplix/login';
   var registerUrl = '$mainUrl/api/shoplix/register';
+  var sendOtpUrl = '$mainUrl/api/shoplix/get-reset-password-otp';
+  var checkOTPAndResetPassword =
+      '$mainUrl/api/shoplix/check-reset-password-otp-and-reset-password';
 
   final Dio dio = Dio();
 
@@ -44,9 +47,41 @@ class AuthRepository {
     return null;
   }
 
-  Future<void> sendPasswordReset({required String phone}) {
-    // TODO: implement sendPasswordReset
-    throw UnimplementedError();
+  Future<ResponseDTO> sendForgotPasswordOTP({required String phone}) async {
+    try {
+      final response = await dio.post(sendOtpUrl,
+          data: jsonEncode({'phone': phone}));
+      return ResponseDTO.fromJson(response.data);
+    } on DioError catch (e) {
+      print(e);
+      return ResponseDTO.fromJson(e.response!.data);
+    } catch (e) {
+      print('sendPasswordReset: $e');
+      return {} as ResponseDTO;
+    }
+  }
+
+  Future<ResponseDTO> checkForgotPasswordOTPAndResetPassword(
+      {required String phone,
+      required String otp,
+      required String password}) async {
+    try {
+      var data = jsonEncode({
+        'phone': phone,
+        'otp': otp,
+        'password': password,
+      });
+      final response = await dio.post(checkOTPAndResetPassword,
+          data: data,
+          options: Options(headers: {"Content-Type": "application/json"}));
+      return ResponseDTO.fromJson(response.data);
+    } on DioError catch (e) {
+      print(e);
+      return ResponseDTO.fromJson(e.response!.data);
+    } catch (e) {
+      print('sendPasswordReset: $e');
+      return {} as ResponseDTO;
+    }
   }
 
   Future<ResponseDTO> signInWithEmailAndPassword(Login login) async {

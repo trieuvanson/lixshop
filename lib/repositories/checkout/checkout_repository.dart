@@ -7,7 +7,7 @@ import 'package:lixshop/models/checkout/checkout_model.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
 class CheckoutRepository {
-  static String? mainUrl = dotenv.env['MAIN_API_URL'];
+  static String? mainUrl = "http://localhost:8081/shopee";
 
   final Dio dio = Dio();
 

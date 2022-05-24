@@ -52,7 +52,7 @@ class _HomeProductsTypeState extends State<HomeProductsType> {
       ResultDataModel resultDataModel /*TrailersModel data*/) {
     // List<Video>? videos = data.trailers;
     List<ProductOutsideCategory> categories =
-        resultDataModel.productOutsideCategory!;
+    resultDataModel.productOutsideCategory!;
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -73,7 +73,7 @@ class _HomeProductsTypeState extends State<HomeProductsType> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
               categories.length,
-              (index) => ProductTypeCard(
+                  (index) => ProductTypeCard(
                 category: categories[index],
               ),
             ),
@@ -116,7 +116,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
             color: DesignCourseAppTheme.nearlyWhite,
             borderRadius: BorderRadius.circular(10),
             border:
-                Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
+            Border.all(color: DesignCourseAppTheme.grey.withOpacity(0.2)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -148,18 +148,18 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
                         ),
                       ),
                       loadingBuilder: (context, child, progress) =>
-                          progress == null
-                              ? child
-                              : const SizedBox(
-                                  height: 180,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                      progress == null
+                          ? child
+                          : const SizedBox(
+                        height: 180,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),

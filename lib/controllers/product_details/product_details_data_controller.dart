@@ -20,4 +20,3 @@ class ProductDetailsDataController {
   }
 }
 
-final productDetailsDataController = ProductDetailsDataController();

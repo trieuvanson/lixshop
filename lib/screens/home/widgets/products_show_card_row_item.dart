@@ -26,7 +26,7 @@ class ProductShowCardRowItem extends StatefulWidget {
 
 class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
   List<ProductOutsideBrand> products = [];
-
+  final productOutsideBrandController = ProductOutsideBrandController();
   @override
   Widget build(BuildContext context) {
     return Column(

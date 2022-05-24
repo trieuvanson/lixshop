@@ -17,6 +17,7 @@ import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'app_bloc_observer.dart';
+import 'screens/auth/send_forgot_code_screen.dart';
 
 Future<void> main() async {
   setPathUrlStrategy();
@@ -84,7 +85,7 @@ class LixShop extends StatelessWidget {
           '/': (context) => const ScreenLayout(),
           '/login': (_) => const LoginScreen(),
           '/register': (_) => const RegisterScreen(),
-          "/forgot-password": (_) => const ForgotPasswordScreen(),
+          "/forgot-password": (_) => const SendForgotCodeScreen(),
           // "/product-detail": (_) => const ProductDetailScreen(),
         },
       ),

@@ -23,10 +23,13 @@ class ProductTypeItemRow extends StatefulWidget {
 
 class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
   var products;
+  final productOutsideBrandController = ProductOutsideBrandController();
+
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+      buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         return Column(
           children: [

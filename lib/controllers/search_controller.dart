@@ -1,5 +1,6 @@
-import 'package:lixshop/models/filters/category_filter.dart';
 import 'package:lixshop/models/models.dart';
+
+import '../models/filters/category_filter.dart';
 
 class SearchController {
   List<ProductOutsideCategory> searchAndFilter({
@@ -7,23 +8,41 @@ class SearchController {
     required List<CategoryFilter> filter,
     required List<ProductOutsideCategory> categories,
   }) {
-    List<ProductOutsideCategory> result = categories;
-    bool checkAll = filter.where((element) => !element.isSelected!).length == filter.length;
-    print('checkAll: $checkAll');
-    print(categories.length);
+    List<ProductOutsideCategory> result = [];
+    bool checkAll =
+        filter.where((element) => !element.isSelected!).length == filter.length;
     if (!checkAll) {
       for (CategoryFilter categoryFilter in filter) {
         if (categoryFilter.isSelected!) {
-          result.removeWhere((element) => element.cateId != categoryFilter.id);
+          for (ProductOutsideCategory category in categories) {
+            if (category.cateId == categoryFilter.id) {
+              result.add(category);
+            }
+          }
         }
       }
-
     }
     if (result.isNotEmpty) {
-      for (var rs  in result) {
+      for (var rs in result) {
         rs.productBrand!.removeWhere((element) =>
-        (element.brandName!.toLowerCase().contains(keyword.toLowerCase()) ==
-            false));
+            (element.brandName!.toLowerCase().contains(keyword.toLowerCase()) ==
+                false));
+      }
+    }
+
+    return result;
+  }
+
+  List<ProductOutsideCategory> search(
+      {required String keyword,
+      required List<ProductOutsideCategory> categories}) {
+    List<ProductOutsideCategory> result = [];
+    for (var rs in categories) {
+      for (var element in rs.productBrand!) {
+        print(element.brandName);
+        if (element.brandName!.toLowerCase().contains(keyword.toLowerCase())) {
+          result.add(rs);
+        }
       }
     }
 
@@ -39,5 +58,3 @@ class SearchController {
     return list;
   }
 }
-
-final searchController = SearchController();
