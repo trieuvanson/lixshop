@@ -18,4 +18,8 @@ class FilterCubit extends Cubit<FilterState> {
   void setCategory(List<CategoryFilter> categoryFilters) {
     emit(state.copyWith(categoryFilters: categoryFilters));
   }
+
+  void init() {
+    emit(FilterState.initial());
+  }
 }

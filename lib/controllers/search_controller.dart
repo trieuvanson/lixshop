@@ -22,30 +22,28 @@ class SearchController {
         }
       }
     }
-    if (result.isNotEmpty) {
-      for (var rs in result) {
-        rs.productBrand!.removeWhere((element) =>
-            (element.brandName!.toLowerCase().contains(keyword.toLowerCase()) ==
-                false));
-      }
+    for (var rs in result) {
+      rs.productBrand!.removeWhere((element) =>
+          (element.brandName!.toLowerCase().contains(keyword.toLowerCase()) ==
+              false));
     }
 
     return result;
   }
 
-  List<ProductOutsideCategory> search(
+  List<ProductOutsideBrand> search(
       {required String keyword,
       required List<ProductOutsideCategory> categories}) {
-    List<ProductOutsideCategory> result = [];
+    List<ProductOutsideBrand> result = [];
+    int count = 0;
     for (var rs in categories) {
       for (var element in rs.productBrand!) {
-        print(element.brandName);
         if (element.brandName!.toLowerCase().contains(keyword.toLowerCase())) {
-          result.add(rs);
+          count++;
+          result.add(element);
         }
       }
     }
-
     return result;
   }
 
@@ -58,3 +56,5 @@ class SearchController {
     return list;
   }
 }
+
+final searchController = SearchController();

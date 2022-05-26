@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/screens/home1/widgets/category_items_loader.dart';
+import 'package:lixshop/utils/utils.dart';
 
 import '../../../core/core.dart';
-import '../constants.dart';
+import '../constants/constants.dart';
+import 'category_items_loader.dart';
 import 'icon_category.dart';
 
 class SliverCategoriesBar extends StatelessWidget {
@@ -28,13 +29,21 @@ class SliverCategoriesBar extends StatelessWidget {
 
 class _HeaderSliver extends SliverPersistentHeaderDelegate {
   final EdgeInsets padding;
+
   _HeaderSliver({required this.padding});
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     bool visible = shrinkOffset > 0;
-    return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+    return BlocConsumer<ResultOutsideCubit, ResultOutsideState>(
+      listener: (context, state) {
+        if (state.isError) {
+          showSnackBar("Lỗi hệ thống, vui lòng thử lại sau!", context, duration: 3000);
+        }
+      },
+      listenWhen: (previous, current) => previous != current,
+      buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         if (state.isLoading) {
           return const CategoryItemsLoader(
@@ -57,10 +66,7 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
                     children: [
                       for (var item in state
                           .resultDataModel!.productOutsideCategory!) ...[
-                        IconCategory(
-                          title: item.cateName!,
-                          imageUrl: item.catePath!,
-                        ),
+                        IconCategory(item: item),
                       ]
                     ],
                   ),

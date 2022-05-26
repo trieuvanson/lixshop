@@ -4,8 +4,8 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../../models/productlist.dart';
 import '../../../utils/design_course_app_theme.dart';
-import '../../home/widgets/widgets.dart';
-import '../constants.dart';
+import 'slide_item.dart';
+import '../constants/constants.dart';
 
 class SliverHeaderBanner extends StatefulWidget {
   const SliverHeaderBanner({Key? key}) : super(key: key);

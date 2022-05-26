@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/core/core.dart';
-import 'package:lixshop/core/core.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:lixshop/repositories/app_repository.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:lixshop/repositories/product_outside_repositories/result_data_repository.dart';
+import 'package:lixshop/repositories/repositories.dart';
+
+import '../models/models.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -45,6 +45,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,15 +53,23 @@ class _AddPostScreenState extends State<AddPostScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            FutureBuilder(
+                future: resultDataRepository.getResultData(),
+                builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
+                  ResultDataModel? resultDataModel = snapshot.data;
+                  print('resultDataModel: ${resultDataModel?.productOutsideCategory?.length}');
+                  return snapshot.hasData
+                      ? Text(snapshot.data.toString())
+                      : const Text('Loading');
+                }),
             BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
               builder: (context, state) {
                 if (state.isLoading) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (state.isError) {
-                  return Text("Error");
-                } else if (state.isSuccess) {
-                }
-                return Text("");
+                  return const Text("Error");
+                } else if (state.isSuccess) {}
+                return const Text("");
               },
             ),
             IconButton(
@@ -88,19 +97,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   return const FlutterLogo(size: 100);
                 },
                 networkSourceMatcher(domains: ["data:image/"]):
-                networkImageRender(
+                    networkImageRender(
                   headers: {"Custom-Header": "some-value"},
                   altWidget: (alt) => Text(alt ?? ""),
-                  loadingWidget: () => Text("Loading..."),
+                  loadingWidget: () => const Text("Loading..."),
                 ),
                 // On relative paths starting with /wiki, prefix with a base url
-                    (attr, _) =>
-                attr["src"] != null && attr["src"]!.startsWith("/wiki"):
-                networkImageRender(
-                    mapUrl: (url) => "https://upload.wikimedia.org" + url!),
+                (attr, _) =>
+                        attr["src"] != null && attr["src"]!.startsWith("/wiki"):
+                    networkImageRender(
+                        mapUrl: (url) => "https://upload.wikimedia.org" + url!),
                 // Custom placeholder image for broken links
                 networkSourceMatcher():
-                networkImageRender(altWidget: (_) => FlutterLogo()),
+                    networkImageRender(altWidget: (_) => const FlutterLogo()),
               },
               onLinkTap: (url, _, __, ___) {
                 print("Opening $url...");

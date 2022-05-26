@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/core/core.dart';
-import 'package:lixshop/screens/home/products_type_screen.dart';
-import 'package:lixshop/screens/home1/widgets/product_card.dart';
-
 import '../../../controllers/controllers.dart';
 import '../../../models/models.dart';
 import '../../../utils/design_course_app_theme.dart';
 import '../../../widgets/widgets.dart';
+import '../../home/widgets/product_card.dart';
+import '../products_type_screen.dart';
 
 class ProductShowCardRowItem extends StatefulWidget {
   final ProductCardType type;

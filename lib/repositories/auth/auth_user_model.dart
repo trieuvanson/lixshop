@@ -29,7 +29,7 @@ class AuthUser extends Equatable {
       'id': username,
       'name': name,
       'phone': phone,
-      'address': address,
+      'stringAddress': address,
     };
   }
 

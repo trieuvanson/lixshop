@@ -137,6 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            controller: _emailController,
                             decoration:
                                 TextFormFieldCommonStyle.textFormFieldStyle(
                                     "Số điện thoại"),

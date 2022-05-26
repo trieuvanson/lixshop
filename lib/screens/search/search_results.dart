@@ -1,33 +1,30 @@
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart'
-as transitions;
+    as transitions;
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/core/core.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../controllers/search_controller.dart';
-import '../../models/filters/category_filter.dart';
-import '../../models/models.dart';
 import '../../responsive/screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../../widgets/widgets.dart';
 import '../screen.dart';
 
 class SearchResults extends StatefulWidget {
-  const SearchResults({Key? key}) : super(key: key);
+  final String keyword;
+
+  const SearchResults({Key? key, required this.keyword}) : super(key: key);
 
   @override
   State<SearchResults> createState() => _SearchResultsState();
 }
 
 class _SearchResultsState extends State<SearchResults> {
-  List<ProductOutsideCategory> categories = [];
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
 
   final searchController = SearchController();
 
@@ -40,15 +37,14 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   void dispose() {
-    setState(() {
-      BlocProvider.of<ResultOutsideCubit>(context).close();
-    });
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final filterBloc = BlocProvider.of<FilterCubit>(context);
+    final size = MediaQuery.of(context).size;
+    int index = size.width > 1024 ? 4 : 2;
     return Scaffold(
       key: scaffoldKey,
       endDrawer: ClipRRect(
@@ -58,139 +54,176 @@ class _SearchResultsState extends State<SearchResults> {
         child: _drawer(context, filterBloc),
       ),
       appBar: appBar(),
-      body: BlocListener<ResultOutsideCubit, ResultOutsideState>(
-        listener: (context, state) {
+      body: BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+        builder: (context, state) {
           if (state.isSuccess) {
-            print('Rerender');
-            categories = state.resultDataModel!.productOutsideCategory!;
-            List<CategoryFilter> categoryFilters = state
-                .resultDataModel!.productOutsideCategory!
-                .map((e) => CategoryFilter(id: e.cateId!, name: e.cateName!))
-                .toList();
-            filterBloc.setCategory([...categoryFilters]);
-          }
-        },
-        child: SingleChildScrollView(
-          child: Container(
-            color: DesignCourseAppTheme.notWhite,
-            child: Padding(
-              padding:
-              const EdgeInsets.only(top: 8, left: 4, right: 4, bottom: 8),
-              child: SingleChildScrollView(
-                child: Container(
-                  color: DesignCourseAppTheme.notWhite,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 8, left: 12, right: 12, bottom: 8),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 16, top: 16),
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              "${213} sản phẩm".text.bold.size(16).make(),
-                              const Spacer(),
-                              CustomDropdownButton2(
-                                dropdownWidth: 100,
-                                buttonWidth: 120,
-                                buttonDecoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                  border: Border.all(
-                                    color: Vx.gray300,
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 24,
-                                ),
-                                hint: 'Đơn vị tính',
-                                value: 'Tất cả',
-                                onChanged: (String? value) {},
-                                dropdownItems: const [
-                                  "Tất cả",
-                                  "Tên A-Z",
-                                  "Tên Z-A",
+            return SingleChildScrollView(
+              child: Container(
+                color: DesignCourseAppTheme.notWhite,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 8, left: 8, right: 8, bottom: 8),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      color: DesignCourseAppTheme.notWhite,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8, left: 8, right: 8, bottom: 8),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(bottom: 16, top: 16),
+                              width: double.infinity,
+                              child: Row(
+                                children: [
+                                  "Kết quả tìm kiếm".text.bold.size(16).make(),
+                                  // const Spacer(),
+                                  // CustomDropdownButton2(
+                                  //   dropdownWidth: 100,
+                                  //   buttonWidth: 120,
+                                  //   buttonDecoration: BoxDecoration(
+                                  //     color: DesignCourseAppTheme.nearlyWhite,
+                                  //     borderRadius: const BorderRadius.all(
+                                  //       Radius.circular(8.0),
+                                  //     ),
+                                  //     border: Border.all(
+                                  //       color: Vx.gray300,
+                                  //     ),
+                                  //   ),
+                                  //   icon: const Icon(
+                                  //     Icons.arrow_drop_down,
+                                  //     size: 24,
+                                  //   ),
+                                  //   hint: 'Đơn vị tính',
+                                  //   value: 'Tất cả',
+                                  //   onChanged: (String? value) {},
+                                  //   dropdownItems: const [
+                                  //     "Tất cả",
+                                  //     "Tên A-Z",
+                                  //     "Tên Z-A",
+                                  //   ],
+                                  // ),
+                                  // 8.widthBox,
+                                  // InkWell(
+                                  //   onTap: () {
+                                  //     scaffoldKey.currentState?.openEndDrawer();
+                                  //   },
+                                  //   child: Wrap(
+                                  //     alignment: WrapAlignment.center,
+                                  //     crossAxisAlignment:
+                                  //         WrapCrossAlignment.center,
+                                  //     children: [
+                                  //       const Icon(
+                                  //         Icons.filter_list,
+                                  //         color: Vx.gray700,
+                                  //       ),
+                                  //       "Lọc"
+                                  //           .text
+                                  //           .bold
+                                  //           .color(Vx.gray700)
+                                  //           .make(),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  //create a tabbar with catogries
                                 ],
                               ),
-                              8.widthBox,
-                              InkWell(
-                                onTap: () {
-                                  scaffoldKey.currentState?.openEndDrawer();
-                                },
-                                child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.filter_list,
-                                      color: Vx.gray700,
-                                    ),
-                                    "Lọc".text.bold.color(Vx.gray700).make(),
-                                  ],
+                            ),
+                            Builder(builder: (context) {
+                              if (widget.keyword.isNotEmpty) {
+                                var products = searchController.search(
+                                    keyword: widget.keyword,
+                                    categories: state.resultDataModel!
+                                        .productOutsideCategory!);
+                                return GridView.builder(
+                                  controller: _scrollController,
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: index,
+                                    mainAxisExtent: size.height * 0.4,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    var product = products[index];
+                                    return Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              image: const NetworkImage(
+                                                "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                                              ),
+                                              onError: (context, error) {},
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Container(
+                                            width: size.width,
+                                            height: size.height * 0.08,
+                                            color: kBackgroundColor
+                                                .withOpacity(0.8),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Spacer(),
+                                                  Text(
+                                                    product.brandName!,
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  const Spacer(),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  itemCount: products.length,
+                                );
+                              }
+                              return Container(
+                                child: const Center(
+                                  child: Text("Không tìm thấy sản phẩm"),
                                 ),
-                              ),
-                              //create a tabbar with catogries
-                            ],
-                          ),
-                        ),
-
-                        // BlocBuilder<FilterCubit, FilterState>(
-                        //   builder: (context, state) {
-                        //     if (state.keyword!.isNotEmpty &&
-                        //         state.categoryFilters!.isNotEmpty) {
-                        //       var productCategories = searchController.searchByKeyword(
-                        //           state.keyword!, categories);
-                        //       var products = searchController.getByCategories(productCategories);
-                        //       final size = MediaQuery.of(context).size;
-                        //
-                        //       return Container(
-                        //         width: 200,
-                        //         height: 200,
-                        //         color: Colors.red,
-                        //       );
-                        //     }
-                        //     return Container();
-                        //   },
-                        // ),
-
-                        //tab bar categories
-                        BlocBuilder<FilterCubit, FilterState>(
-                          builder: (context, state) {
-                            if (state.keyword!.isNotEmpty &&
-                                state.categoryFilters!.isNotEmpty) {
-                              var productCategories = searchController.searchAndFilter(
-                                  keyword: state.keyword!, categories: categories, filter: state.categoryFilters!);
-                              var products =
-                              searchController.getByCategories(productCategories);
-                              return AlignedGridView.count(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 12,
-                                crossAxisSpacing: 12,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return ProductCardItem(
-                                    product: products[index],
-                                  );
-                                },
-                                itemCount: products.length,
                               );
-                            }
-                            return Container();
-                          },
+                            }),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
@@ -204,7 +237,7 @@ class _SearchResultsState extends State<SearchResults> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-                () => const ScreenLayout(),
+            () => const ScreenLayout(),
             duration: const Duration(milliseconds: 500),
           );
         },
@@ -218,22 +251,20 @@ class _SearchResultsState extends State<SearchResults> {
         // height: 40,
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(8)),
-        child: BlocBuilder<FilterCubit, FilterState>(
-          builder: (context, state) {
-            return TextField(
-              onChanged: (value) {},
-              readOnly: true,
-              onTap: () {
-                Get.to(() => const SearchScreen(
-                  // keyword: widget.keyword,
-                ));
-              },
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
-                  hintText: state.keyword ?? 'Search...',
-                  border: InputBorder.none),
-            );
+        child: TextField(
+          onChanged: (value) {},
+          readOnly: true,
+          onTap: () {
+            Get.to(
+                () => const SearchScreen(
+                    // keyword: widget.keyword,
+                    ),
+                arguments: widget.keyword);
           },
+          decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
+              hintText: widget.keyword,
+              border: InputBorder.none),
         ),
       ),
       actions: <Widget>[
@@ -248,7 +279,7 @@ class _SearchResultsState extends State<SearchResults> {
     );
   }
 
-  Widget _drawer(BuildContext context, FilterCubit  filterBloc) {
+  Widget _drawer(BuildContext context, FilterCubit filterBloc) {
     final padding = MediaQuery.of(context).padding;
     return Drawer(
       elevation: 0,

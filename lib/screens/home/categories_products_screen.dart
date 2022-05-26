@@ -1,24 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/models/models.dart';
-import 'package:lixshop/screens/cart/cart_screen.dart';
 
 import '../../responsive/screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
+import '../cart/cart_screen.dart';
+import 'constants/constants.dart';
 
-class ProductsTypeScreen extends StatefulWidget {
+class CategoryProductScreen extends StatefulWidget {
+  final category;
   final List<ProductOutsideBrand> products;
 
-  const ProductsTypeScreen({Key? key, required this.products})
+  const CategoryProductScreen({Key? key, required this.products, this.category})
       : super(key: key);
 
   @override
-  State<ProductsTypeScreen> createState() => _ProductsTypeScreenState();
+  _CategoryProductScreenState createState() => _CategoryProductScreenState();
 }
 
-class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
+class _CategoryProductScreenState extends State<CategoryProductScreen> {
   var _currentProducts;
   final ScrollController _scrollController = ScrollController();
   late int _currentMaxItem;
@@ -47,7 +47,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
               _scrollController.position.maxScrollExtent &&
           _currentProducts.length != widget.products.length) {
         //show SnackBar indicator
-        setState(()  {
+        setState(() {
           _isLoading = true;
           int length = widget.products.length - (widget.products.length % 10);
           if (_isLoading) {
@@ -85,7 +85,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     final size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(widget.category),
       body: Container(
         padding: const EdgeInsets.symmetric(
             horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
@@ -154,9 +154,17 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(final category) {
     return AppBar(
       elevation: 0,
+      title: Text(
+        category.cateName,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontSize: 15,
+        ),
+      ),
       leadingWidth: 30,
       leading: IconButton(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -164,7 +172,6 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
         onPressed: () {
           Get.to(
             () => const ScreenLayout(),
-            transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 500),
           );
         },
@@ -179,7 +186,6 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
           onPressed: () {
             Get.to(
               () => const CartScreen(),
-              transition: Transition.rightToLeft,
               duration: const Duration(milliseconds: 500),
             );
           },

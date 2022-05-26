@@ -4,7 +4,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../../models/productlist.dart';
 import '../../../utils/design_course_app_theme.dart';
-import 'slide_item.dart';
+import '../../home/widgets/slide_item.dart';
 
 class HomeBannerScreen extends StatefulWidget {
   const HomeBannerScreen({Key? key}) : super(key: key);

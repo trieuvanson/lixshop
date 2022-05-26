@@ -1,34 +1,29 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../screen.dart';
+import 'constants/order_status.dart';
 
 class OrderHistoryListScreen extends StatelessWidget {
   const OrderHistoryListScreen({Key? key}) : super(key: key);
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: orderStatus.length,
       child: Scaffold(
         appBar: _appBar(context),
         body: TabBarView(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (var i = 0; i < 100; i++) const _CheckoutItem(),
-                ],
-              ),
-            ),
-            const _CheckoutItem(),
-            const _CheckoutItem(),
-            const _CheckoutItem(),
-            const _CheckoutItem(),
-          ],
+          children: List<Widget>.generate(orderStatus.length, (i)
+          => Tab(
+              child: Text(orderStatus[i], style: GoogleFonts.getFont('Roboto', fontSize: 17))
+          )
+          ),
         ),
       ),
     );
@@ -45,25 +40,19 @@ PreferredSizeWidget _appBar(BuildContext context) {
         },
       ),
     ],
-    bottom: const TabBar(
-      physics: BouncingScrollPhysics(),
+    bottom: TabBar(
+      physics: const BouncingScrollPhysics(),
       isScrollable: true,
       labelColor: Vx.green500,
       unselectedLabelColor: Vx.gray500,
-      labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      indicator: UnderlineTabIndicator(
+      labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      indicator: const UnderlineTabIndicator(
         borderSide: BorderSide(
           width: 3,
           color: Vx.green500,
         ),
       ),
-      tabs: [
-        Tab(text: "Tất cả"),
-        Tab(text: "Chờ xác nhận"),
-        Tab(text: "Đang giao hàng"),
-        Tab(text: "Hoàn tất"),
-        Tab(text: "Đã huỷ"),
-      ],
+      tabs: orderStatus.map((e) => Tab(text: e)).toList(),
     ),
     title: "Danh sách đơn hàng".text.black.make(),
     titleSpacing: 0.0,

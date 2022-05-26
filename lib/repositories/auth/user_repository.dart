@@ -33,9 +33,13 @@ class UserRepository {
     try {
       TokenResponse? tokenResponse = await secureStorage.readToken();
 
-      final response = await dio.get('$mainUrl/api/data/agentlix/agentlixs', options: Options(headers: {
-        'Authorization': 'Bearer ${tokenResponse?.accessToken??""}',
-      }));
+      final response = await dio.get('$mainUrl/api/data/agentlix/agentlixs',
+          options: Options(headers: {
+            'Authorization': 'Bearer ${tokenResponse?.accessToken ?? ""}',
+          }));
+      if (response.data['err'] != 0) {
+        throw Exception(response.data['msg']);
+      }
       return (response.data['dt'] as List<dynamic>)
           .map((e) => e as String)
           .toList();
@@ -47,10 +51,6 @@ class UserRepository {
       return [];
     }
   }
-
-
-
-
 }
 
 final userRepository = UserRepository();

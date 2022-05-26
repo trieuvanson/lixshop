@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import "package:get/get_navigation/src/routes/transitions_type.dart" as getx;
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/core/core.dart';
-import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:lixshop/screens/search/data/popular_keyword.dart';
 import 'package:lixshop/screens/search/search_results.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../controllers/search_controller.dart';
 import '../../utils/design_course_app_theme.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -19,26 +18,36 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late final  filterCubit;
+  late TextEditingController keywordController;
+  String keyword = "";
+
   @override
   initState() {
-    filterCubit = BlocProvider.of<FilterCubit>(context);
+    keywordController = TextEditingController();
     super.initState();
   }
 
+  @override
+  void dispose() {
+    keywordController.clear();
+    keywordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: appBar(filterCubit),
-        body: keyWordSearchIsEmpty(),
+        appBar: appBar(),
+        body: keyword.isNotEmpty
+            ? keyWordSearchNotEmpty()
+            : keyWordSearchIsEmpty(),
       ),
     );
   }
 
-  PreferredSizeWidget appBar(final filterCubit) {
+  PreferredSizeWidget appBar() {
     return AppBar(
       elevation: 0,
       leadingWidth: 30,
@@ -53,99 +62,111 @@ class _SearchScreenState extends State<SearchScreen> {
       iconTheme: const IconThemeData(
         color: Colors.black,
       ),
-      title: BlocBuilder<FilterCubit, FilterState>(
-        builder: (context, state) {
-          return Container(
-              width: double.infinity,
-              // height: 40,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
-              child: TextField(
-                autofocus: true,
-                controller: TextEditingController(text: state.keyword),
-                onSubmitted: (value) {
-                  if (value.trim().isNotEmpty) {
-                    print(state.keyword);
-
-                    filterCubit.setKeyword(value);
-                    Get.to(
-                          () => const SearchResults(),
-                      routeName: '/products?keyword=$value',
-                      transition: getx.Transition.downToUp,
-                      duration: const Duration(milliseconds: 300),
-                    );
-                  }
-                },
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
-                    suffixIcon: state.keyword!.isNotEmpty
-                        ? IconButton(
-                      icon: const Icon(
-                        Icons.clear,
-                        color: kPrimaryColor,
-                      ),
-                      onPressed: () {
-                        filterCubit.setKeyword('');
-                        print(state.keyword);
-                      },
-                    )
-                        : null,
-                    border: InputBorder.none),
-              ));
-        },
-      ),
+      title: Container(
+          width: double.infinity,
+          // height: 40,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          child: TextFormField(
+            controller: keywordController,
+            autofocus: true,
+            onFieldSubmitted: (value) {
+              keyword = value;
+              setState(() {});
+              if (value.trim().isNotEmpty) {
+                Get.to(
+                  () => SearchResults(keyword: value),
+                  routeName: '/products?keyword=$value',
+                  duration: const Duration(milliseconds: 300),
+                );
+              }
+            },
+            onChanged: (value) {
+              keyword = value;
+              setState(() {});
+            },
+            selectionControls: materialTextSelectionControls,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search, color: kPrimaryColor),
+                suffixIcon: keyword.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(
+                          Icons.clear,
+                          color: kPrimaryColor,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            keywordController.clear();
+                            keyword = "";
+                          });
+                        },
+                      )
+                    : null,
+                border: InputBorder.none),
+          )),
     );
   }
 
-  // Widget keyWordSearchNotEmpty() {
-  //   return SingleChildScrollView(
-  //     child: Column(
-  //       children: [
-  //         Container(
-  //           decoration: BoxDecoration(
-  //             color: DesignCourseAppTheme.nearlyWhite,
-  //             borderRadius: const BorderRadius.all(
-  //               Radius.circular(16.0),
-  //             ),
-  //             boxShadow: <BoxShadow>[
-  //               BoxShadow(
-  //                   color: DesignCourseAppTheme.grey.withOpacity(0.2),
-  //                   offset: const Offset(1.1, 1.1),
-  //                   blurRadius: 8.0),
-  //             ],
-  //           ),
-  //           child: Padding(
-  //             padding: const EdgeInsets.symmetric(vertical: 8.0),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 for (var i = 0; i < 10; i++)
-  //                   _MenuItem(
-  //                       title: "${widget.keyword} $i",
-  //                       onTap: () {
-  //                         // Get.to(
-  //                         //   () =>
-  //                         //       ProductsScreen(keyword: "${widget.keyword} $i"),
-  //                         //   routeName: '/products?keyword=${widget.keyword} $i',
-  //                         //   transition: Transition.downToUp,
-  //                         //   duration: const Duration(milliseconds: 300),
-  //                         // );
-  //                       }),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget keyWordSearchNotEmpty() {
+    return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
+      builder: (context, state) {
+        if (state.isSuccess) {
+          var products = searchController.search(
+              keyword: keyword,
+              categories: state.resultDataModel!.productOutsideCategory!);
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: DesignCourseAppTheme.nearlyWhite,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(16.0),
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 8.0),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var i = 0; i < products.length; i++)
+                          _MenuItem(
+                              title: "${products[i].brandName}",
+                              onTap: () {
+                                print('${products[i].brandCode}');
+                                // Get.to(
+                                //   () =>
+                                //       ProductsScreen(keyword: "${widget.keyword} $i"),
+                                //   routeName: '/products?keyword=${widget.keyword} $i',
+                                //   transition: Transition.downToUp,
+                                //   duration: const Duration(milliseconds: 300),
+                                // );
+                              }),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
 
   Widget keyWordSearchIsEmpty() {
-    final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height,
         margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -184,7 +205,6 @@ class SearchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final filterCubit = BlocProvider.of<FilterCubit>(context);
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -210,12 +230,9 @@ class SearchItem extends StatelessWidget {
             child: Material(
               child: InkWell(
                 onTap: () {
-                  filterCubit.setKeyword(search);
-
                   Get.to(
-                        () => const SearchResults(),
+                    () => SearchResults(keyword: search!),
                     routeName: '/products?keyword=$search',
-                    transition: getx.Transition.downToUp,
                     duration: const Duration(milliseconds: 300),
                   );
                 },
@@ -252,14 +269,8 @@ class SearchRowTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            child: title.text.xl2.bold.make(),
-          ),
-          Container()
-        ],
+      child: SizedBox(
+        child: title.text.xl2.bold.make(),
       ),
     );
   }
@@ -284,6 +295,27 @@ class _MenuItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              //image
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                        offset: const Offset(1.1, 1.1),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.search,
+                  color: DesignCourseAppTheme.nearlyBlue,
+                  size: 30,
+                ),
+              ),
+              Spacer(),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: title.text

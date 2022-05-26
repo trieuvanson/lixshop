@@ -102,6 +102,7 @@ class _ProductTypeCardState extends State<ProductTypeCard> {
           context,
           MaterialPageRoute(
             builder: (context) => SearchResults(
+              keyword: widget.category.name!,
               // category: widget.category,
             ),
           ),

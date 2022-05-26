@@ -1,6 +1,5 @@
-import 'package:lixshop/screens/home1/widgets/product_card.dart';
-
 import '../../models/models.dart';
+import '../../screens/home/widgets/product_card.dart';
 
 class ProductOutsideBrandController {
   List<ProductOutsideBrand> getProductOutsideBrandList(
@@ -34,4 +33,19 @@ class ProductOutsideBrandController {
     }
     return productOutsideBrandList;
   }
+
+  List<ProductOutsideBrand> getByCategory(
+      {required List<ProductOutsideBrand> list,
+      required String category}) {
+    List<ProductOutsideBrand> productOutsideBrandList = [];
+    for (var element in list) {
+      if (element.brand == category) {
+        productOutsideBrandList.add(element);
+      }
+    }
+    return productOutsideBrandList;
+  }
+
+
+
 }

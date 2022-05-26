@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../constants.dart';
+import '../constants/constants.dart';
 
 enum ProductLoaderType {
   loading,

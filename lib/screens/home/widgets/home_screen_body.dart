@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lixshop/screens/home1/widgets/product_type_item_row.dart';
-import '../constants.dart';
+import '../constants/constants.dart';
 import 'app_bar_header.dart';
 import 'product_card.dart';
+import 'product_type_item_row.dart';
 import 'sliver_categories_bar.dart';
 import 'sliver_header_banner.dart';
 import 'widgets.dart';
@@ -17,8 +17,6 @@ class HomeScreenBody extends StatefulWidget {
 class _HomeScreenBodyState extends State<HomeScreenBody> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
     return const CustomScrollView(
       physics: BouncingScrollPhysics(),
       slivers: [

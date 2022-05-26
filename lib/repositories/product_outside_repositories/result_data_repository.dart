@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import '../../constants/env.dart';
+
 import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
-import '../auth/user_repository.dart';
 
 class ResultOutsideDataRepository {
   static final _dio = Dio();
@@ -18,21 +17,29 @@ class ResultOutsideDataRepository {
    * */
   Future<ResultDataModel> getResultData() async {
     try {
+      //delay
+      await Future.delayed(const Duration(seconds: 1));
       List<String> distLinks = await secureStorage.checkLogin()
-          ? await userRepository.loadLocation()
-          : /*["DCtbW1k="]*/ ["https://api.jsonbin.io/b/62539d70d8a4cc06909eccc9"];
+          ? [
+              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
+              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
+              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
+            ]
+          : /*["DCtbW1k="]*/ [
+              "https://api.jsonbin.io/b/62539d70d8a4cc06909eccc9"
+            ];
       // var responses = await Future.wait([
       //   for (var link in distLinks)
       //     _dio.get(
       //       "$baseUrl/datas/$link",
       //     ),
       // ]);
+      print(distLinks);
       var responses = await Future.wait([
-        for (var link in distLinks)
-          _dio.get(link),
+        //delay
+        for (var link in distLinks) _dio.get(link),
       ]);
-      ResultDataModel resultDataModel =
-          _getProductCateFromResponse(responses);
+      ResultDataModel resultDataModel = _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", resultDataModel.idNpp);
       return resultDataModel;
     } on DioError catch (e) {
@@ -68,8 +75,12 @@ class ResultOutsideDataRepository {
     for (var response in responses) {
       // ResultDataModel resultDataModel = ResultDataModel.fromJson(
       //     json.decode(response.data)); // chuyển json thành model (Dành cho link chính)
-      ResultDataModel resultDataModel = ResultDataModel.fromJson(
-          response.data); // chuyển json thành model
+      ResultDataModel resultDataModel; // chuyển json thành model
+      try {
+        resultDataModel = ResultDataModel.fromJson(jsonDecode(response.data));
+      } catch (e) {
+        resultDataModel = ResultDataModel.fromJson((response.data));
+      }
       idDist.add(resultDataModel.idNpp!); // thêm id nhà phân phối vào danh sách
 
       //(vòng lặp 2)

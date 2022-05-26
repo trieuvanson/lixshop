@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lixshop/models/models.dart';
 
-import '../constants.dart';
+import '../constants/constants.dart';
 
 enum ProductCardType {
   isNew,

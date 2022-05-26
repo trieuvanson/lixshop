@@ -10,14 +10,17 @@ pickImage(ImageSource source) async {
   return null;
 }
 
-showSnackBar(String content, BuildContext context) {
+showSnackBar(String content, BuildContext context, {int? duration}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    duration: const Duration(milliseconds: 300),
+    duration: Duration(milliseconds: duration ?? 300),
     content: Text(content),
   ));
 }
 
-_showSnackBar({required String content, required int seconds, required BuildContext context}) {
+_showSnackBar(
+    {required String content,
+    required int seconds,
+    required BuildContext context}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     duration: Duration(seconds: seconds),
     content: Text(content),

@@ -18,9 +18,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogin(AuthLoggedEvent event, Emitter<AuthState> emit) async {
+    print('_onLogin');
     try {
       emit(LoadingAuthState());
       final data = await authRepository.signInWithEmailAndPassword(event.login);
+      print(data.msg);
       if (data.err != 0) {
         emit(FailureAuthState(data.msg));
       } else {
