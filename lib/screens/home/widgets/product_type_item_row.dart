@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../controllers/controllers.dart';
 import '../../../core/core.dart';
 import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
 import '../products_type_screen.dart';
 import 'product_card.dart';
 import 'product_items_loader.dart';
@@ -25,9 +26,52 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
   var products;
   final productOutsideBrandController = ProductOutsideBrandController();
 
-
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: resultDataOutsideRepository.getResultData(),
+      builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
+        ResultDataModel? resultDataModel = snapshot.data;
+        return snapshot.hasData
+            ? resultDataModel!.productOutsideCategory!.isNotEmpty
+                ? Column(
+                    children: [
+                      TitleWithMoreButton(
+                          title: widget.title,
+                          onPressed: () => {
+                                Get.to(() =>
+                                    ProductsTypeScreen(products: products))
+                              }),
+                      Builder(builder: (_) {
+                        List<ProductOutsideBrand> subProducts =
+                            productOutsideBrandController
+                                .getProductOutsideBrandList(resultDataModel);
+                        products =
+                            productOutsideBrandController.filterProductsBrand(
+                                list: subProducts, type: widget.type);
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (final product in products.take(10))
+                                ProductCard(
+                                  product: product,
+                                ),
+                            ],
+                          ),
+                        );
+                      })
+                    ],
+                  )
+                : const ProductItemsLoader(
+                    type: ProductLoaderType.error,
+                  )
+            : const ProductItemsLoader(
+                type: ProductLoaderType.loading,
+              );
+      },
+    );
+
     return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
@@ -35,7 +79,7 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
           children: [
             TitleWithMoreButton(
                 title: widget.title,
-                onPressed: state.isLoading
+                onPressed: (state.isLoading || state.isError)
                     ? () {}
                     : () =>
                         {Get.to(() => ProductsTypeScreen(products: products))}),

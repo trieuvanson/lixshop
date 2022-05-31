@@ -5,7 +5,7 @@ import 'package:lixshop/screens/auth/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/colors.dart';
-import '../../responsive/screen_layout.dart';
+import '../../screen_layout.dart';
 import 'components/care_view.dart';
 import 'components/center_next_button.dart';
 import 'components/mood_diary_vew.dart';

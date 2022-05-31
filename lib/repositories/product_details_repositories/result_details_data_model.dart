@@ -4,8 +4,8 @@ import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
 
 class ResultDetailsDataRepository {
-  // final String detailsUrl = '$baseUrl/api/data/chitietsanpham/info';
-  final String detailsUrl = 'https://api.jsonbin.io/b/6253c7b4d8a4cc06909edfed';
+  final String detailsUrl = '$baseUrl/api/data/chitietsanpham/info';
+  // final String detailsUrl = 'https://api.jsonbin.io/b/6253c7b4d8a4cc06909edfed';
   static final _dio = Dio();
 
   Future<ResultDetailsDataModel> getResultDetailsData(int idBrand) async {

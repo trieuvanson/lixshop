@@ -54,7 +54,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FutureBuilder(
-                future: resultDataRepository.getResultData(),
+                future: resultDataOutsideRepository.getResultData(),
                 builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
                   ResultDataModel? resultDataModel = snapshot.data;
                   print('resultDataModel: ${resultDataModel?.productOutsideCategory?.length}');

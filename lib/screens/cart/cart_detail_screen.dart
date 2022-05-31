@@ -34,7 +34,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: Vx.green500))
+                    color: Vx.green500)),
           ],
         ),
         leading: IconButton(
@@ -71,7 +71,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
         padding: const EdgeInsets.all(8),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 80,
+          height: 120,
           child: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
               if (state is CartLoaded) {
@@ -80,6 +80,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -96,7 +97,6 @@ class _CartDetailScreenState extends State<CartDetailScreen>
                             .make(),
                       ],
                     ),
-                    5.heightBox,
                     const Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,6 +111,7 @@ class _CartDetailScreenState extends State<CartDetailScreen>
                                 .make(),
                           ],
                         ),
+                        const Spacer(),
                         "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
                             .text
                             .color(Vx.red700.withOpacity(0.8))
@@ -224,7 +225,7 @@ class _CartItemState extends State<_CartItem> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                 child: SizedBox(
-                  height: 100,
+                  height: 140,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/responsive/screen_layout.dart';
+import 'package:lixshop/screen_layout.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
 import '../../core/core.dart';

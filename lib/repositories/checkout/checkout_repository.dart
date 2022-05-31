@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lixshop/constants/env.dart';
 import 'package:lixshop/models/auth/response_dto.dart';
 import 'package:lixshop/models/checkout/checkout_model.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
 class CheckoutRepository {
-  static String? mainUrl = "http://localhost:8081/shopee";
 
   final Dio dio = Dio();
 
@@ -21,7 +21,7 @@ class CheckoutRepository {
 
 
       var response = await dio.post(
-        "$mainUrl/api/data/donhang/save",
+        "$baseUrl/api/data/donhang/save",
         data: jsonEncode(checkoutModel.toJson()),
         options: Options(
           headers: {

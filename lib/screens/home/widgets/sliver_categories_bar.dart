@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lixshop/utils/utils.dart';
 
 import '../../../core/core.dart';
+import '../../../models/models.dart';
+import '../../../repositories/repositories.dart';
 import '../constants/constants.dart';
 import 'category_items_loader.dart';
 import 'icon_category.dart';
@@ -36,49 +38,84 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     bool visible = shrinkOffset > 0;
-    return BlocConsumer<ResultOutsideCubit, ResultOutsideState>(
-      listener: (context, state) {
-        if (state.isError) {
-          showSnackBar("Lỗi hệ thống, vui lòng thử lại sau!", context, duration: 3000);
-        }
-      },
-      listenWhen: (previous, current) => previous != current,
-      buildWhen: (previous, current) => previous != current,
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const CategoryItemsLoader(
-            type: CategoryLoaderType.loading,
-          );
-        } else if (state.isError) {
-          return const CategoryItemsLoader(
-            type: CategoryLoaderType.error,
-          );
-        } else if (state.isSuccess) {
-          return Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: padding.top),
-                color: kBackgroundColor,
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+    return FutureBuilder(
+      future: resultDataOutsideRepository.getResultData(),
+      builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
+        ResultDataModel? resultDataModel = snapshot.data;
+        return snapshot.hasData
+              ? resultDataModel!.productOutsideCategory!.isNotEmpty
+                ? Stack(
                     children: [
-                      for (var item in state
-                          .resultDataModel!.productOutsideCategory!) ...[
-                        IconCategory(item: item),
-                      ]
+                      Container(
+                        padding: EdgeInsets.only(top: padding.top),
+                        color: kBackgroundColor,
+                        width: double.infinity,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (var item in resultDataModel
+                                  .productOutsideCategory!) ...[
+                                IconCategory(item: item),
+                              ]
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        }
-
-        return Container();
+                  )
+                : const CategoryItemsLoader(
+                    type: CategoryLoaderType.error,
+                  )
+            : const CategoryItemsLoader(
+                type: CategoryLoaderType.loading,
+              );
       },
     );
+    // return BlocConsumer<ResultOutsideCubit, ResultOutsideState>(
+    //   listener: (context, state) {
+    //     if (state.isError) {
+    //       showSnackBar("Lỗi hệ thống, vui lòng thử lại sau!", context,
+    //           duration: 3000);
+    //     }
+    //   },
+    //   listenWhen: (previous, current) => previous != current,
+    //   buildWhen: (previous, current) => previous != current,
+    //   builder: (context, state) {
+    //     if (state.isLoading) {
+    //       return const CategoryItemsLoader(
+    //         type: CategoryLoaderType.loading,
+    //       );
+    //     } else if (state.isError) {
+    //       return const CategoryItemsLoader(
+    //         type: CategoryLoaderType.error,
+    //       );
+    //     } else if (state.isSuccess) {
+    //       return Stack(
+    //         children: [
+    //           Container(
+    //             padding: EdgeInsets.only(top: padding.top),
+    //             color: kBackgroundColor,
+    //             width: double.infinity,
+    //             child: SingleChildScrollView(
+    //               scrollDirection: Axis.horizontal,
+    //               child: Row(
+    //                 children: [
+    //                   for (var item in state
+    //                       .resultDataModel!.productOutsideCategory!) ...[
+    //                     IconCategory(item: item),
+    //                   ]
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ],
+    //       );
+    //     }
+    //
+    //     return Container();
+    //   },
+    // );
   }
 
   @override

@@ -12,7 +12,7 @@ import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
 import 'constants/contains.dart';
-import 'responsive/screen_layout.dart';
+import 'screen_layout.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';

@@ -14,8 +14,8 @@ class AppBarHeaderSliver extends StatefulWidget {
 }
 
 class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
-  String address = '';
-  String name = '';
+  String address = '...';
+  String name = 'Khách';
 
   @override
   void initState() {
@@ -78,6 +78,7 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                     ),
                     InkWell(
@@ -94,9 +95,9 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
                                   .textTheme
                                   .subtitle2
                                   ?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11),
                             ),
                           ),
                           const Spacer(),

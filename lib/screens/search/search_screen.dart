@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/core/core.dart';
+import 'package:lixshop/screens/product/product_details_screen.dart';
 import 'package:lixshop/screens/search/data/popular_keyword.dart';
 import 'package:lixshop/screens/search/search_results.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -138,9 +139,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         for (var i = 0; i < products.length; i++)
                           _MenuItem(
+                            image: products[i].brand!,
                               title: "${products[i].brandName}",
                               onTap: () {
-                                print('${products[i].brandCode}');
+                                Get.to(() => ProductDetailsScreen(
+                                    idBrand: products[i].brandId!.toInt()));
                                 // Get.to(
                                 //   () =>
                                 //       ProductsScreen(keyword: "${widget.keyword} $i"),
@@ -277,11 +280,17 @@ class SearchRowTitle extends StatelessWidget {
 }
 
 class _MenuItem extends StatelessWidget {
+  final String image;
   final String title;
   final Widget? subTitle;
   final GestureTapCallback? onTap;
 
-  const _MenuItem({Key? key, required this.title, this.subTitle, this.onTap})
+  const _MenuItem(
+      {Key? key,
+      required this.title,
+      this.subTitle,
+      this.onTap,
+      required this.image})
       : super(key: key);
 
   @override
@@ -302,6 +311,10 @@ class _MenuItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                    image: NetworkImage(image),
+                    fit: BoxFit.cover,
+                  ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -315,7 +328,7 @@ class _MenuItem extends StatelessWidget {
                   size: 30,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: title.text

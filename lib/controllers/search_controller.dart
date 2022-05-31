@@ -1,6 +1,7 @@
 import 'package:lixshop/models/models.dart';
 
 import '../models/filters/category_filter.dart';
+import '../utils/convert/vi_to_en/vietnamese_parser_engine.dart';
 
 class SearchController {
   List<ProductOutsideCategory> searchAndFilter({
@@ -35,11 +36,11 @@ class SearchController {
       {required String keyword,
       required List<ProductOutsideCategory> categories}) {
     List<ProductOutsideBrand> result = [];
-    int count = 0;
     for (var rs in categories) {
       for (var element in rs.productBrand!) {
-        if (element.brandName!.toLowerCase().contains(keyword.toLowerCase())) {
-          count++;
+        if (vietnameseParserEngine
+            .unsigned(element.brandName!.toLowerCase())
+            .contains(vietnameseParserEngine.unsigned(keyword.toLowerCase()))) {
           result.add(element);
         }
       }

@@ -9,7 +9,7 @@ import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../controllers/search_controller.dart';
-import '../../responsive/screen_layout.dart';
+import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../screen.dart';
 
@@ -149,57 +149,64 @@ class _SearchResultsState extends State<SearchResults> {
                                   ),
                                   itemBuilder: (context, index) {
                                     var product = products[index];
-                                    return Stack(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: const NetworkImage(
-                                                "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(() => ProductDetailsScreen(
+                                          idBrand: product.brandId?.toInt() ?? 0,
+                                        ));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                  product.brand!,
+                                                ),
+                                                onError: (context, error) {},
+                                                fit: BoxFit.fill,
                                               ),
-                                              onError: (context, error) {},
-                                              fit: BoxFit.fill,
                                             ),
                                           ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: Container(
-                                            width: size.width,
-                                            height: size.height * 0.08,
-                                            color: kBackgroundColor
-                                                .withOpacity(0.8),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Spacer(),
-                                                  Text(
-                                                    product.brandName!,
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              width: size.width,
+                                              height: size.height * 0.08,
+                                              color: kBackgroundColor
+                                                  .withOpacity(0.8),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Spacer(),
+                                                    Text(
+                                                      product.brandName!,
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  const Spacer(),
-                                                ],
+                                                    const Spacer(),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     );
                                   },
                                   itemCount: products.length,

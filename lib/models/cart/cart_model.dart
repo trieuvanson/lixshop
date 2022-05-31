@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 import '../../constants/contains.dart';
@@ -9,8 +8,9 @@ class Cart {
   int? quantity;
   String? unit;
   int? typeformVoucher;
+  int? brandId;
 
-  Cart({this.productDetail, this.quantity, this.unit, this.typeformVoucher});
+  Cart({this.productDetail, this.quantity, this.unit, this.typeformVoucher, this.brandId});
 
   @override
   String toString() {
@@ -52,6 +52,7 @@ class Cart {
         quantity: json["quantity"],
         unit: json["unit"],
         typeformVoucher: json["typeformVoucher"],
+        brandId: json["brandId"],
       );
 
 //  Tojson
@@ -61,13 +62,12 @@ class Cart {
       'quantity': quantity,
       'unit': unit,
       'typeformVoucher': typeformVoucher,
+      'brandId': brandId,
     };
   }
 
-
 //  Trường hợp 1. Nếu là thùng => Tính KM
 //  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
-
 
 //=> Có được số lượng để tính
 
@@ -77,13 +77,6 @@ class Cart {
 //         chạy vòng lặp trong list voucher vừa lấy ra
 // lấy số lượng mua / số lượng item trong voucher// Mua 4 thùng / số lượng 1 => 4
 //  Lấy phần nguyên * số lượng km => Sp 1 = 4 * 1 = 4
-
-
-
-
-
-
-
 
 }
 
@@ -172,12 +165,6 @@ class CartModel extends Equatable {
   @override
   // TODO: implement props
   List<Object?> get props => [cart];
-
-
-
-
-
-
 }
 
 // @HiveType(typeId: 1)

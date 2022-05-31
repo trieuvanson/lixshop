@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:lixshop/repositories/repositories.dart';
 
 import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
@@ -20,13 +21,9 @@ class ResultOutsideDataRepository {
       //delay
       await Future.delayed(const Duration(seconds: 1));
       List<String> distLinks = await secureStorage.checkLogin()
-          ? [
-              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
-              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
-              "http://192.168.0.248:8081/shopee/datas/DCtbW1k=",
-            ]
+          ? await userRepository.loadLocation()
           : /*["DCtbW1k="]*/ [
-              "https://api.jsonbin.io/b/62539d70d8a4cc06909eccc9"
+              "DCtbW1k="
             ];
       // var responses = await Future.wait([
       //   for (var link in distLinks)
@@ -34,10 +31,9 @@ class ResultOutsideDataRepository {
       //       "$baseUrl/datas/$link",
       //     ),
       // ]);
-      print(distLinks);
       var responses = await Future.wait([
         //delay
-        for (var link in distLinks) _dio.get(link),
+        for (var link in distLinks) _dio.get("http://192.168.0.248:8081/shopee/datas/$link"),
       ]);
       ResultDataModel resultDataModel = _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", resultDataModel.idNpp);
@@ -126,4 +122,4 @@ class ResultOutsideDataRepository {
   }
 }
 
-final resultDataRepository = ResultOutsideDataRepository();
+final resultDataOutsideRepository = ResultOutsideDataRepository();

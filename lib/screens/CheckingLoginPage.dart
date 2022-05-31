@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/responsive/screen_layout.dart';
+import 'package:lixshop/screen_layout.dart';
 import 'package:lixshop/screens/auth/login_screen.dart';
 
 import '../../core/core.dart';
@@ -15,7 +15,7 @@ class CheckingLoginPage extends StatefulWidget {
 class _CheckingLoginPageState extends State<CheckingLoginPage> with TickerProviderStateMixin {
 
   late AnimationController _animationController;
-  
+
   late Animation<double> _scaleAnimation;
 
   @override
@@ -51,12 +51,12 @@ class _CheckingLoginPageState extends State<CheckingLoginPage> with TickerProvid
         if( state is LoadingAuthState ){
 
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckingLoginPage()));
-        
+
         }
         if ( state is LogoutAuthState ){
 
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
-         
+
         } else {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ScreenLayout()));
         }

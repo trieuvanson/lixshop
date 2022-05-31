@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../constants/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
-import 'package:lixshop/responsive/screen_layout.dart';
+import 'package:lixshop/screen_layout.dart';
 import 'package:lixshop/screens/cart/cart_detail_screen.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';

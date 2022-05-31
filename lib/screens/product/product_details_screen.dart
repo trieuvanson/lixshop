@@ -836,7 +836,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       toolbarHeight: 40.0,
       backgroundColor: Colors.transparent,
       title: const Text(
-        'Nước rửa chén thương hiệu Lixco',
+        'Chi tiết sản phẩm',
         textAlign: TextAlign.left,
         style: TextStyle(
           fontWeight: FontWeight.w600,
@@ -1059,6 +1059,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       color: Vx.green500,
                       onPressed: () {
                         _cart.productDetail = productDetail;
+                        _cart.brandId = widget.resultDetailsDataModel.idBrand;
                         _cart.typeformVoucher =
                             _cart.getVoucherMethodFromProductDetail(
                                 productDetail, selectVoucher);

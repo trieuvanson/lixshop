@@ -6,7 +6,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
 import '../../core/core.dart';
-import '../../responsive/screen_layout.dart';
+import '../../screen_layout.dart';
 import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';
 import '../screen.dart';

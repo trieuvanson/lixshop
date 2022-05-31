@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
 
-import '../../responsive/screen_layout.dart';
+import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../widgets/widgets.dart';
 
