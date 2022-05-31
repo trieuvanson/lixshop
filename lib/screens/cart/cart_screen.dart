@@ -151,7 +151,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  for (var i in idAgents)
+                  for (var agent in idAgents)
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
@@ -168,7 +168,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                   onTap: () {
                                     Get.to(
                                       () => CartDetailScreen(
-                                        idNpp: i!,
+                                        idNpp: agent!,
                                       ),
                                       curve: Curves.easeInToLinear,
                                     );
@@ -187,7 +187,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                                   color: Vx.gray500, size: 30),
                                             ),
                                             SizedBox(
-                                              child: "Nhà phân phối $i"
+                                              child: "Nhà phân phối $agent"
                                                   .text
                                                   .xl2
                                                   .bold
@@ -211,7 +211,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       "Tổng tiền".text.xl.gray500.make(),
-                                      "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(i!)!)}đ"
+                                      "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(agent!)!)}đ"
                                           .text
                                           .color(Vx.red700.withOpacity(0.8))
                                           .bold
@@ -224,7 +224,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                             ),
                           ),
                           for (var item in cartModel.cart)
-                            if (item.productDetail!.idAgent == i)
+                            if (item.productDetail!.idAgent == agent)
                               _CartItem(cart: item)
                         ],
                       ),

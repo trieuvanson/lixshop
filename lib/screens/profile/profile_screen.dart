@@ -68,7 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                               GestureDetector(
                                 onTap: () {
                                   Get.to(
-                                    () => const OrderHistoryListScreen(),
+                                    () => const OrderHistoryListScreen(
+                                        tabIndex: 0),
                                   );
                                 },
                                 child: Row(
@@ -104,18 +105,34 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   _HistoryItem(
-                                      title: "Đang xử lý",
+                                      onTap: () => Get.to(
+                                            () => const OrderHistoryListScreen(
+                                                tabIndex: 1),
+                                          ),
+                                      title: "Chờ xác nhận",
                                       icon: Icons.check_circle_outline),
                                   _HistoryItem(
-                                      title: "Đã xác nhận",
-                                      icon: Icons.check_circle_outline),
-                                  _HistoryItem(
+                                      onTap: () => Get.to(
+                                            () => const OrderHistoryListScreen(
+                                            tabIndex: 2),
+                                      ),
                                       title: "Đang giao hàng",
                                       icon: Icons.check_circle_outline),
                                   _HistoryItem(
-                                      title: "Đang giao hàng",
+                                      onTap: () => Get.to(
+                                            () => const OrderHistoryListScreen(
+                                            tabIndex: 3),
+                                      ),
+                                      title: "Hoàn tất",
+                                      icon: Icons.check_circle_outline),
+                                  _HistoryItem(
+                                      onTap: () => Get.to(
+                                            () => const OrderHistoryListScreen(
+                                            tabIndex: 4),
+                                      ),
+                                      title: "Đã huỷ",
                                       icon: Icons.check_circle_outline),
                                 ],
                               ),

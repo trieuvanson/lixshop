@@ -2,11 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:lixshop/controllers/order/order_controller.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:lixshop/repositories/app_repository.dart';
 import 'package:lixshop/repositories/repositories.dart';
 
 import '../models/models.dart';
+import '../models/order/order.dart';
+import '../repositories/order/order_repository.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -45,7 +48,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,24 +56,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FutureBuilder(
-                future: resultDataOutsideRepository.getResultData(),
-                builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
-                  ResultDataModel? resultDataModel = snapshot.data;
-                  print('resultDataModel: ${resultDataModel?.productOutsideCategory?.length}');
+                future: orderRepository.getOrdersByUser(),
+                builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
                   return snapshot.hasData
                       ? Text(snapshot.data.toString())
-                      : const Text('Loading');
+                      : const Text('load');
                 }),
-            BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const CircularProgressIndicator();
-                } else if (state.isError) {
-                  return const Text("Error");
-                } else if (state.isSuccess) {}
-                return const Text("");
-              },
-            ),
+            // BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
+            //   builder: (context, state) {
+            //     if (state.isLoading) {
+            //       return const CircularProgressIndicator();
+            //     } else if (state.isError) {
+            //       return const Text("Error");
+            //     } else if (state.isSuccess) {}
+            //     return const Text("");
+            //   },
+            // ),
             IconButton(
               icon: const Icon(
                 Icons.upload,

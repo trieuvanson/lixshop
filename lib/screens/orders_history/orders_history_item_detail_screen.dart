@@ -1,14 +1,18 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lixshop/constants/contains.dart';
+import 'package:lixshop/models/order/order.dart';
+import 'package:lixshop/models/order/order_detail.dart';
+import 'package:lixshop/screens/orders_history/constants/order_status.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
-import '../../utils/hero_dialog_route.dart';
 
 class OrderHistoryItemDetailScreen extends StatefulWidget {
-  const OrderHistoryItemDetailScreen({Key? key}) : super(key: key);
+  final Order order;
+
+  const OrderHistoryItemDetailScreen({Key? key, required this.order})
+      : super(key: key);
 
   @override
   State<OrderHistoryItemDetailScreen> createState() =>
@@ -49,9 +53,9 @@ class _OrderHistoryItemDetailScreenState
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: _CartCard(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: _CartCard(order: widget.order),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
@@ -73,7 +77,7 @@ class _OrderHistoryItemDetailScreenState
                   child: InkWell(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -91,8 +95,12 @@ class _OrderHistoryItemDetailScreenState
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              "Tổng 10 sản phẩm".text.xl.gray500.make(),
-                              "1,000,000đ"
+                              "Tổng ${widget.order.donHangDetailDTO2s!.length} sản phẩm"
+                                  .text
+                                  .xl
+                                  .gray500
+                                  .make(),
+                              "${widget.order.tienhangDH}đ"
                                   .text
                                   .color(Vx.black.withOpacity(0.8))
                                   .bold
@@ -104,8 +112,8 @@ class _OrderHistoryItemDetailScreenState
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              "Khuyến mãi đơn hàng".text.xl.gray500.make(),
-                              "- 100,000đ"
+                              "Tạm tính".text.xl.gray500.make(),
+                              "${widget.order.tienhangDH}đ"
                                   .text
                                   .color(Vx.green500.withOpacity(0.8))
                                   .bold
@@ -120,7 +128,7 @@ class _OrderHistoryItemDetailScreenState
                             children: <Widget>[
                               Row(
                                 children: [
-                                  "Tạm tính".text.xl2.black.bold.make(),
+                                  "Tổng tiền".text.xl2.black.bold.make(),
                                   " (đã có VAT)"
                                       .text
                                       .color(Vx.gray800.withOpacity(0.8))
@@ -128,7 +136,7 @@ class _OrderHistoryItemDetailScreenState
                                       .make(),
                                 ],
                               ),
-                              "900,000đ"
+                              "${widget.order.tongtienDH}đ"
                                   .text
                                   .color(Vx.red700.withOpacity(0.8))
                                   .bold
@@ -155,44 +163,51 @@ class _OrderHistoryItemDetailScreenState
     return AppBar(
       backgroundColor: Colors.white,
       titleSpacing: 0.0,
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              "Đơn hàng #12412312".text.size(16).black.make(),
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Vx.green200,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Vx.green50.withOpacity(0.5),
-                          offset: const Offset(1.1, 1.1),
-                          blurRadius: 8.0),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                        child: "Đang chờ xác nhận".text.green500.sm.make()),
-                  ),
-                ),
-              ),
+              "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
+              const Text("Địa chỉ giao hàng",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Vx.green500))
             ],
           ),
-          const Text("Địa chỉ giao hàng",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Vx.green500))
+          Container(
+            margin: const EdgeInsets.only(right: 8.0, top: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Vx.green200,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Vx.green50.withOpacity(0.5),
+                      offset: const Offset(1.1, 1.1),
+                      blurRadius: 8.0),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: "${orderStatusMapReverse[widget.order.status]}"
+                      .text
+                      .green500
+                      .size(10)
+                      .bold
+                      .sm
+                      .make(),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       leading: IconButton(
@@ -209,7 +224,9 @@ class _OrderHistoryItemDetailScreenState
 }
 
 class _CartCard extends StatelessWidget {
-  const _CartCard({Key? key}) : super(key: key);
+  final Order order;
+
+  const _CartCard({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +235,8 @@ class _CartCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var i = 0; i < 5; i++) const _CartItem(),
+          for (var item in order.donHangDetailDTO2s!)
+            _CartItem(orderDetail: item),
         ],
       ),
     );
@@ -237,33 +255,23 @@ class _BottomNavigation extends StatelessWidget {
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 500),
         opacity: opacity3,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            width: 150,
-            height: 50,
-            child: RaisedButton(
-              onPressed: () {
-
-              },
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
+        child: SizedBox(
+          width: 150,
+          height: 50,
+          child: RaisedButton(
+            onPressed: () {},
+            color: Vx.green500,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //Icon ban
+                const Icon(
+                  Icons.block,
+                  color: Colors.white,
                 ),
-              ),
-              color: Vx.green500,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Icon ban
-                  const Icon(
-                    Icons.block,
-                    color: Colors.white,
-                  ),
-                  8.widthBox,
-                  "Huỷ đơn hàng".text.white.bold.xl.make(),
-                ],
-              ),
+                8.widthBox,
+                "Huỷ đơn hàng".text.white.bold.xl.make(),
+              ],
             ),
           ),
         ),
@@ -273,12 +281,15 @@ class _BottomNavigation extends StatelessWidget {
 }
 
 class _CartItem extends StatelessWidget {
-  const _CartItem({Key? key}) : super(key: key);
+  final OrderDetail orderDetail;
+
+  const _CartItem({Key? key, required this.orderDetail}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
@@ -299,93 +310,101 @@ class _CartItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 16.0, left: 8, right: 8, bottom: 0),
+                    top: 16.0, left: 4, right: 4, bottom: 0),
                 child: SizedBox(
-                  height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 100,
-                        height: 130,
+                        width: size.width * 0.3,
+                        height: 140,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            "https://picsum.photos/200",
+                            orderDetail.productImage!,
                             height: 80,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       16.widthBox,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: SizedBox(
+                      SizedBox(
+                        width: size.width * 0.6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
                               width: MediaQuery.of(context).size.width - 150,
                               child: RichText(
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                text: const TextSpan(
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 18),
-                                    text:
-                                        'Nước rửa chén Lix hương chanh siêu sạch sạch sạch sạchsạch sạch sạch sạch'),
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                  text: orderDetail.productName! +
+                                      " x${orderDetail.quantityDetail?.toInt()}",
+                                ),
                               ),
                             ),
-                          ),
-                          5.heightBox,
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 150,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  child: "Thùng 13 bịch x 12 gói x 25g"
+                            5.heightBox,
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 150,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    child: "Thùng 13 bịch x 12 gói x 25g"
+                                        .text
+                                        .size(10)
+                                        .gray500
+                                        .make(),
+                                  ),
+                                  // SizedBox(
+                                  //   child: GestureDetector(
+                                  //       onTap: () {
+                                  //         Navigator.of(context).push(
+                                  //           HeroDialogRoute(
+                                  //               builder: (context) => Column(
+                                  //                     children: [
+                                  //                       Flexible(
+                                  //                           child: Container(),
+                                  //                           flex: 2),
+                                  //                       const _DetailCartItemPopup(),
+                                  //                     ],
+                                  //                   ),
+                                  //               fullscreenDialog: false),
+                                  //         );
+                                  //       },
+                                  //       child:
+                                  //           "Chi tiết".text.green500.xl.make()),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                            5.heightBox,
+                            SizedBox(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  "100,000đ/Thùng"
                                       .text
+                                      .xl
+                                      .size(10)
                                       .gray500
                                       .make(),
-                                ),
-                                SizedBox(
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          HeroDialogRoute(
-                                              builder: (context) => Column(
-                                                    children: [
-                                                      Flexible(
-                                                          child: Container(),
-                                                          flex: 2),
-                                                      const _DetailCartItemPopup(),
-                                                    ],
-                                                  ),
-                                              fullscreenDialog: false),
-                                        );
-                                      },
-                                      child:
-                                          "Chi tiết".text.green500.xl.make()),
-                                ),
-                              ],
+                                  "${convertCurrencyToVND(orderDetail.totalDetail!.toInt())}đ"
+                                      .text
+                                      .color(Vx.black.withOpacity(0.8))
+                                      .bold
+                                      .xl2
+                                      .make(),
+                                ],
+                              ),
                             ),
-                          ),
-                          5.heightBox,
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 150,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                "100,000đ/Thùng".text.xl.gray500.make(),
-                                "100,000đ"
-                                    .text
-                                    .color(Vx.black.withOpacity(0.8))
-                                    .bold
-                                    .xl2
-                                    .make(),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -396,10 +415,6 @@ class _CartItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      width: 100,
-                    ),
-                    16.widthBox,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -418,78 +433,35 @@ class _CartItem extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width - 150,
+                          width: size.width * 0.9,
                           child: Column(
-                            children: [
-                              Row(
+                            children: List.generate(
+                                orderDetail.donHangDetailKmDTO2s!.length,
+                                (index) {
+                              var item =
+                                  orderDetail.donHangDetailKmDTO2s![index];
+                              return Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
+                                    width: size.width * 0.6,
+                                    child: Text(
+                                      item.nameProductDetailKm!,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
+                                      style: const TextStyle(
+                                          color: Vx.gray500, fontSize: 12),
                                     ),
                                   ),
-                                  "3 can".text.gray500.make(),
+                                  "${item.quantityDetailKm!.toInt()} ${item.unitDetailKm}"
+                                      .text
+                                      .size(12)
+                                      .gray500
+                                      .make(),
                                 ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
-                              ),
-                            ],
+                              );
+                            }),
                           ),
                         ),
                       ],
@@ -497,112 +469,38 @@ class _CartItem extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 120,
-                      height: 42,
-                      child: Center(
-                        child: SizedBox(
-                          child: RaisedButton(
-                            onPressed: () {},
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            color: Vx.white,
-                            child: "Xoá".text.gray600.bold.xl.make(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                  border: Border.all(
-                                    color: Vx.green500,
-                                  )),
-                              child: const Icon(
-                                Icons.remove,
-                                color: Vx.green500,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
-                                //  Giới hạn 3 kí tự
-                                LengthLimitingTextInputFormatter(3),
-                              ],
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 14.0),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: DesignCourseAppTheme.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: const Icon(
-                              Icons.add,
-                              color: Vx.green500,
-                              size: 28,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    //Cart icon
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 16.0, left: 4, right: 4),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: <Widget>[
+              //       const SizedBox(
+              //         width: 120,
+              //         height: 42,
+              //         child: SizedBox(
+              //           child: Text("Số lượng",
+              //               style: TextStyle(
+              //                   fontSize: 16, fontWeight: FontWeight.w600)),
+              //         ),
+              //       ),
+              //       Row(
+              //         children: [
+              //           Padding(
+              //             padding: const EdgeInsets.only(right: 8.0),
+              //             child: Container(
+              //               child: Text("x" + orderDetail.quantityDetail!.toInt().toString(),
+              //                   style: const TextStyle(
+              //                       fontSize: 18,
+              //                       color: Vx.black)),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       //Cart icon
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -621,8 +519,8 @@ class _DetailCartItemPopup extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       color: DesignCourseAppTheme.nearlyWhite,
       child: Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height / 1.5),
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(

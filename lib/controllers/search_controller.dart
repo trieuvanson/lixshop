@@ -32,6 +32,10 @@ class SearchController {
     return result;
   }
 
+
+
+
+
   List<ProductOutsideBrand> search(
       {required String keyword,
       required List<ProductOutsideCategory> categories}) {

@@ -1,76 +1,132 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:lixshop/controllers/order/order_controller.dart';
+import 'package:lixshop/repositories/order/order_repository.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../models/order/order.dart';
 import '../screen.dart';
 import 'constants/order_status.dart';
 
-class OrderHistoryListScreen extends StatelessWidget {
-  const OrderHistoryListScreen({Key? key}) : super(key: key);
+class OrderHistoryListScreen extends StatefulWidget {
+  final int tabIndex;
 
+  const OrderHistoryListScreen({Key? key, required this.tabIndex})
+      : super(key: key);
 
+  @override
+  State<OrderHistoryListScreen> createState() => _OrderHistoryListScreenState();
+}
 
+class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: orderStatus.length, vsync: this);
+    _tabController.index = widget.tabIndex;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: orderStatus.length,
-      child: Scaffold(
-        appBar: _appBar(context),
-        body: TabBarView(
-          children: List<Widget>.generate(orderStatus.length, (i)
-          => Tab(
-              child: Text(orderStatus[i], style: GoogleFonts.getFont('Roboto', fontSize: 17))
-          )
+        length: orderStatus.length,
+        child: Scaffold(
+          appBar: _appBar(context),
+          body: TabBarView(
+              controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: orderStatus
+                  .map(
+                    (status) => Tab(
+                        child: TabBarPage(
+                            tabIndex: _tabController.index, status: status)),
+                  )
+                  .toList()),
+        ));
+  }
+
+  PreferredSizeWidget _appBar(BuildContext context) {
+    return AppBar(
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search, color: Vx.black),
+          onPressed: () {
+            // showSearch(context: context, delegate: OrderHistorySearchDelegate());
+          },
+        ),
+      ],
+      bottom: TabBar(
+        physics: const BouncingScrollPhysics(),
+        controller: _tabController,
+        isScrollable: true,
+        labelColor: Vx.green500,
+        unselectedLabelColor: Vx.gray500,
+        labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        indicator: const UnderlineTabIndicator(
+          borderSide: BorderSide(
+            width: 3,
+            color: Vx.green500,
           ),
         ),
+        tabs: orderStatus
+            .map(
+              (status) => Tab(text: status),
+            )
+            .toList(),
       ),
+      title: "Danh sách đơn hàng".text.black.make(),
+      titleSpacing: 0.0,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      backgroundColor: Colors.white,
     );
   }
 }
 
-PreferredSizeWidget _appBar(BuildContext context) {
-  return AppBar(
-    actions: [
-      IconButton(
-        icon: const Icon(Icons.search, color: Vx.black),
-        onPressed: () {
-          // showSearch(context: context, delegate: OrderHistorySearchDelegate());
-        },
-      ),
-    ],
-    bottom: TabBar(
-      physics: const BouncingScrollPhysics(),
-      isScrollable: true,
-      labelColor: Vx.green500,
-      unselectedLabelColor: Vx.gray500,
-      labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      indicator: const UnderlineTabIndicator(
-        borderSide: BorderSide(
-          width: 3,
-          color: Vx.green500,
-        ),
-      ),
-      tabs: orderStatus.map((e) => Tab(text: e)).toList(),
-    ),
-    title: "Danh sách đơn hàng".text.black.make(),
-    titleSpacing: 0.0,
-    leading: IconButton(
-      icon: const Icon(
-        Icons.arrow_back_ios,
-        color: Colors.black,
-      ),
-      onPressed: () {
-        Navigator.pop(context);
+class TabBarPage extends StatelessWidget {
+  final String status;
+  final int tabIndex;
+
+  const TabBarPage({Key? key, required this.status, required this.tabIndex})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: orderRepository.getOrdersByUser(),
+      builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        List<Order> orders = orderController.filterByStatus(
+            snapshot.data!, orderStatusMap[status]!);
+        return orders.isNotEmpty
+            ? ListView(
+                children: List<Widget>.generate(
+                  orders.length,
+                  (index) => CheckoutItem(order: orders[index]),
+                ),
+              )
+            : const Center(child: Text("Không có dữ liệu"));
       },
-    ),
-    backgroundColor: Colors.white,
-  );
+    );
+  }
 }
 
-class _CheckoutItem extends StatelessWidget {
-  const _CheckoutItem({Key? key}) : super(key: key);
+class CheckoutItem extends StatelessWidget {
+  final Order order;
+
+  const CheckoutItem({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +137,13 @@ class _CheckoutItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Get.to(
-            () => const OrderHistoryItemDetailScreen(),
+            () => OrderHistoryItemDetailScreen(order: order),
             curve: Curves.easeInToLinear,
             transition: Transition.rightToLeft,
           );
         },
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -95,7 +151,7 @@ class _CheckoutItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    child: "Đơn hàng #12412312".text.xl.bold.make(),
+                    child: "Đơn hàng #${order.idDH}".text.xl.bold.make(),
                   ),
                   Row(
                     children: [
@@ -103,13 +159,14 @@ class _CheckoutItem extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Vx.green200,
+                            color: orderColorMap[order.status]!,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(8.0),
                             ),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Vx.green50.withOpacity(0.5),
+                                  color: orderColorMap[order.status]!
+                                      .withOpacity(0.5),
                                   offset: const Offset(1.1, 1.1),
                                   blurRadius: 8.0),
                             ],
@@ -117,9 +174,10 @@ class _CheckoutItem extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
-                                child: "Đang chờ xác nhận"
+                                child: orderStatusMapReverse[order.status]!
                                     .text
-                                    .green500
+                                    .size(10)
+                                    .color(orderColorTextMap[order.status]!)
                                     .bold
                                     .make()),
                           ),
@@ -138,8 +196,8 @@ class _CheckoutItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  "Đặt vào ngày 20/10/2020".text.gray500.make(),
-                  "9,999,999đ"
+                  "Thời gian ${order.dateDH}".text.gray500.make(),
+                  "${order.tongtienDH}đ"
                       .text
                       .color(Vx.red700.withOpacity(0.8))
                       .bold
@@ -154,7 +212,7 @@ class _CheckoutItem extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      for (var i = 0; i < 5; i++)
+                      for (var i in order.donHangDetailDTO2s!)
                         SizedBox(
                           width: 100,
                           height: 130,
@@ -162,7 +220,7 @@ class _CheckoutItem extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(
-                                "https://picsum.photos/200",
+                                i.productImage!,
                                 height: 80,
                                 fit: BoxFit.cover,
                               ),
