@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lixshop/screens/auth/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -135,7 +134,7 @@ class _IntroductionAnimationScreenState
     prefs.setBool('isFirstTime', true);
     setState(() {});
     Get.to(
-      () => RegisterScreen(),
+      () => const RegisterScreen(),
       routeName: "/register",
       transition: Transition.rightToLeft,
     );

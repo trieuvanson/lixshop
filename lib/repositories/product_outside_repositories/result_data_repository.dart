@@ -23,7 +23,7 @@ class ResultOutsideDataRepository {
       List<String> distLinks = await secureStorage.checkLogin()
           ? await userRepository.loadLocation()
           : /*["DCtbW1k="]*/ [
-              "DCtbW1k="
+
             ];
       // var responses = await Future.wait([
       //   for (var link in distLinks)

@@ -65,7 +65,7 @@ class _CenterNextButtonState extends State<CenterNextButton> {
       setState(() {
       });
       Get.to(
-            () => LoginScreen(),
+            () => const LoginScreen(),
         routeName: "/login",
         transition: Transition.rightToLeft,
       );

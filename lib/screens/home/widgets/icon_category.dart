@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/products_outside_data/product_outside_category_model.dart';
 import 'package:lixshop/screens/home/categories_products_screen.dart';
 
 import '../../../controllers/controllers.dart';
-import '../../../core/core.dart';
 import '../../../models/models.dart';
-import 'product_items_loader.dart';
 
 class IconCategory extends StatefulWidget {
   final ProductOutsideCategory item;

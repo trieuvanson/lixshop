@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lixshop/utils/utils.dart';
 
-import '../../../core/core.dart';
 import '../../../models/models.dart';
 import '../../../repositories/repositories.dart';
 import '../constants/constants.dart';
@@ -127,6 +124,5 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  // TODO: implement maxExtent
   double get maxExtent => 146 + padding.top;
 }

@@ -34,6 +34,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         print('Aihihi');
         cartController.saveCartToFileJson(currentCartList);
 
+        print(await cartController.readCartFromFileJson());
+
         emit(CartLoaded(cartModel: CartModel(cart: [...currentCartList])));
       } catch (e) {
         print('Error: $e');

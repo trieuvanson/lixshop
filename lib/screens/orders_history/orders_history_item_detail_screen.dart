@@ -172,9 +172,9 @@ class _OrderHistoryItemDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
-              const Text("Địa chỉ giao hàng",
-                  style: TextStyle(
-                      fontSize: 12,
+              Text("${widget.order.agentLixName}",
+                  style: const TextStyle(
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Vx.green500))
             ],
@@ -341,8 +341,19 @@ class _CartItem extends StatelessWidget {
                                 text: TextSpan(
                                   style: const TextStyle(
                                       color: Colors.black, fontSize: 16),
-                                  text: orderDetail.productName! +
-                                      " x${orderDetail.quantityDetail?.toInt()}",
+                                  children: [
+                                    TextSpan(
+                                      text: orderDetail.productName!,
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          " x${orderDetail.quantityDetail?.toInt()}",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Vx.red700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -451,11 +462,17 @@ class _CartItem extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: const TextStyle(
-                                          color: Vx.gray500, fontSize: 12),
+                                        color: Vx.gray500,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                      ),
                                     ),
                                   ),
                                   "${item.quantityDetailKm!.toInt()} ${item.unitDetailKm}"
                                       .text
+                                      .italic
+                                      .bold
                                       .size(12)
                                       .gray500
                                       .make(),

@@ -212,10 +212,8 @@ class _SearchResultsState extends State<SearchResults> {
                                   itemCount: products.length,
                                 );
                               }
-                              return Container(
-                                child: const Center(
-                                  child: Text("Không tìm thấy sản phẩm"),
-                                ),
+                              return const Center(
+                                child: Text("Không tìm thấy sản phẩm"),
                               );
                             }),
                           ],

@@ -8,6 +8,7 @@ class Order {
   String? tienhangDH;
   String? tongtienDH;
   String? status;
+  String? agentLixName;
   List<OrderDetail>? donHangDetailDTO2s;
 
   Order(
@@ -16,6 +17,7 @@ class Order {
       this.tienhangDH,
       this.tongtienDH,
       this.status,
+      this.agentLixName,
       this.donHangDetailDTO2s});
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -24,6 +26,7 @@ class Order {
         tienhangDH: json['tienhangDH'],
         tongtienDH: json['tongtienDH'],
         status: json['status'],
+        agentLixName: json['agentLixName'],
         donHangDetailDTO2s: List<OrderDetail>.from(
             json["donHangDetailDTO2s"].map((x) => OrderDetail.fromJson(x))),
       );

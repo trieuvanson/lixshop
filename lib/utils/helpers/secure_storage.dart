@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
 import 'package:lixshop/models/auth/token_response.dart';
 
-import '../../screens/screen.dart';
 
 class SecureStorageFrave {
   final secureStorage = const FlutterSecureStorage();

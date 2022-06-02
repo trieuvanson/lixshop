@@ -262,9 +262,7 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
       child: InkWell(
         onTap: () {},
         child: Stack(
-          fit: StackFit.expand,
-          overflow: Overflow.visible,
-          clipBehavior: Clip.antiAlias,
+          clipBehavior: Clip.none, fit: StackFit.expand,
           children: [
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),

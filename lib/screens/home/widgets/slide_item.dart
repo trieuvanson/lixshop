@@ -25,8 +25,7 @@ class _SlideItemState extends State<SlideItem> {
       child: Column(
         children: <Widget>[
           Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
+            clipBehavior: Clip.none, children: <Widget>[
               Container(
                 constraints: const BoxConstraints(
                     minHeight: 300),

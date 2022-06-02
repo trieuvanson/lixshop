@@ -39,8 +39,10 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
                       TitleWithMoreButton(
                           title: widget.title,
                           onPressed: () => {
-                                Get.to(() =>
-                                    ProductsTypeScreen(products: products))
+                                Get.to(() => ProductsTypeScreen(
+                                      products: products,
+                                      title: widget.title,
+                                    ))
                               }),
                       Builder(builder: (_) {
                         List<ProductOutsideBrand> subProducts =
@@ -81,8 +83,12 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
                 title: widget.title,
                 onPressed: (state.isLoading || state.isError)
                     ? () {}
-                    : () =>
-                        {Get.to(() => ProductsTypeScreen(products: products))}),
+                    : () => {
+                          Get.to(() => ProductsTypeScreen(
+                                products: products,
+                                title: widget.title,
+                              ))
+                        }),
             Builder(builder: (_) {
               if (state.isLoading) {
                 return const ProductItemsLoader(

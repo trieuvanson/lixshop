@@ -11,8 +11,9 @@ import '../screen.dart';
 
 class ProductsTypeScreen extends StatefulWidget {
   final List<ProductOutsideBrand> products;
+  final String title;
 
-  const ProductsTypeScreen({Key? key, required this.products})
+  const ProductsTypeScreen({Key? key, required this.products, required this.title})
       : super(key: key);
 
   @override
@@ -83,7 +84,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
     return Scaffold(
       appBar: appBar(),
@@ -97,7 +98,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
           physics: const ScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: index,
-            mainAxisExtent: size.height * 0.4,
+            mainAxisExtent: size.height * 0.35,
             mainAxisSpacing: kDefaultPadding / 2,
             crossAxisSpacing: kDefaultPadding / 2,
           ),
@@ -166,6 +167,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     return AppBar(
       elevation: 0,
       leadingWidth: 30,
+      title: Text(widget.title, style: const TextStyle(fontSize: 18, color: Colors.black)),
       leading: IconButton(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),

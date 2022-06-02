@@ -120,7 +120,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   @override
   void initState() {
     products = productDetailsDataController.getProductDetails(
-        widget.resultDetailsDataModel, widget.resultDetailsDataModel.sizes!.first);
+        widget.resultDetailsDataModel,
+        widget.resultDetailsDataModel.sizes!.first);
     super.initState();
   }
 
@@ -342,7 +343,10 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                 const BorderRadius.all(
                                                     Radius.circular(8.0)),
                                             onTap: () {
-                                              changeProductSize(widget.resultDetailsDataModel.sizes![i],i);
+                                              changeProductSize(
+                                                  widget.resultDetailsDataModel
+                                                      .sizes![i],
+                                                  i);
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -857,7 +861,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             return IconButton(
               icon: const Icon(
                 Icons.favorite_border,
-                color: DesignCourseAppTheme.dark_grey,
+                color: DesignCourseAppTheme.darkGrey,
               ),
               onPressed: () {},
             );
@@ -867,7 +871,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         IconButton(
           icon: const Icon(
             Icons.shopping_cart,
-            color: DesignCourseAppTheme.dark_grey,
+            color: DesignCourseAppTheme.darkGrey,
           ),
           onPressed: () {
             Get.to(() => const CartScreen());
@@ -877,7 +881,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
           child: DropdownButton2(
             customButton: const Icon(
               Icons.more_vert,
-              color: DesignCourseAppTheme.dark_grey,
+              color: DesignCourseAppTheme.darkGrey,
               size: 24,
             ),
             customItemsIndexes: const [3],
@@ -1037,7 +1041,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                   size: 18,
                   color: Vx.green500,
                 ),
-                buttonWidth: 80,
+                buttonWidth: 120,
                 hint: 'Đơn vị tính',
                 value: _cart.unit,
                 onChanged: (String? value) {
@@ -1078,7 +1082,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 18,
+                              fontSize: 16,
                               letterSpacing: 0.0,
                               color: DesignCourseAppTheme.nearlyWhite,
                             ),
@@ -1118,7 +1122,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+          "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test";
     return SizedBox(
       child: Card(
@@ -1150,7 +1154,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
     );
   }
 
-  Widget _buildHeaderVoucher() {
+  Widget buildHeaderVoucher() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(

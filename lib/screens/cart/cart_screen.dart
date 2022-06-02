@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/controllers/cart/cart_controller.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -234,8 +233,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             );
           }
           if (state is CartError) {
-            return Center(
-              child: Text(state.message),
+            return const Center(
+              child: Text("Error", style: TextStyle(color: Vx.red500)),
             );
           }
           return const Center(
@@ -407,9 +406,7 @@ class _CartItemState extends State<_CartItem> {
       // height: 220-16,
       child: Material(
         child: InkWell(
-          onTap: () {
-            Get.to(() => ProductDetailsScreen(idBrand: widget.cart.brandId!));
-          },
+          onTap: () {},
           child: Column(
             children: [
               Padding(

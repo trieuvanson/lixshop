@@ -18,9 +18,6 @@ final categories = [
     "title": "SỮA TẮM",
   },
   {
-    "title": "TINH DẦU",
-  },
-  {
     "title": "NƯỚC LÀM MỀM VẢI",
   },
   {
