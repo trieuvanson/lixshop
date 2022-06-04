@@ -42,7 +42,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         color: DesignCourseAppTheme.nearlyWhite,
         child: BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
           builder: (context, state) {
-            print('state: $state');
             if (state.isLoading) {
               return _buildLoadingWidget();
             } else if (state.isError) {
@@ -77,7 +76,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   //display error
   Widget _buildErrorWidget(dynamic error) {
-    print(' $error');
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -108,17 +106,21 @@ class BuildProductDetailWidget extends StatefulWidget {
 }
 
 class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
+  late TextEditingController quantityController;
   int index = 0;
-  var products;
+  late List<ProductDetail> products;
   int selectProduct = 0;
   int selectVoucher = 1;
   int selectTabIndex = 0;
   String selectProductEmptyVoucher = ""; // if product empty voucher
-  var _cart = Cart(quantity: 1, unit: "THÙNG");
+  var _cart = Cart(
+      quantity: 1, unit: "THÙNG", typeformVoucherCustom: 1, typeformVoucher: 1);
   final productDetailsDataController = ProductDetailsDataController();
+  int quantity = 1;
 
   @override
   void initState() {
+    quantityController = TextEditingController(text: quantity.toString());
     products = productDetailsDataController.getProductDetails(
         widget.resultDetailsDataModel,
         widget.resultDetailsDataModel.sizes!.first);
@@ -138,7 +140,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   void reset() {
     setState(() {
-      _cart = Cart(quantity: 1, unit: "THÙNG");
+      _cart.quantity = 1;
     });
   }
 
@@ -161,9 +163,11 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
     return 0;
   }
 
-  void changeVoucher(int index, String selectProductEmptyVoucher) {
+  void changeVoucher(
+      int index, String selectProductEmptyVoucher, int typeFormVoucherCustom) {
     setState(() {
       selectVoucher = index;
+      _cart.typeformVoucherCustom = typeFormVoucherCustom;
       reset();
       selectProduct = changeProduct(index, selectProductEmptyVoucher);
     });
@@ -172,7 +176,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   void increaseQuantity() {
     if (_cart.quantity! <= 999) {
       setState(() {
-        _cart.quantity = _cart.quantity! + 1;
+        quantity++;
+        _cart.quantity = quantity;
+        quantityController.text = quantity.toString();
       });
     }
   }
@@ -180,7 +186,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   void decreaseQuantity() {
     if (_cart.quantity! > 1) {
       setState(() {
-        _cart.quantity = _cart.quantity! - 1;
+        quantity--;
+        _cart.quantity = quantity;
+        quantityController.text = quantity.toString();
       });
     }
   }
@@ -204,6 +212,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   }
 
   @override
+  void dispose() {
+    quantityController.clear();
+    quantityController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
@@ -214,7 +230,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _buildImage(products[selectProduct].code,
+              _buildImage(products[selectProduct].code!,
                   products[selectProduct].pathImg ?? ""),
               Container(
                 decoration: BoxDecoration(
@@ -255,7 +271,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            'đ${convertCurrencyToVND(products[selectProduct].price)}',
+                            _cart.unit != "THÙNG"
+                                ? 'đ${convertCurrencyToVND(products[selectProduct].price!)}'
+                                : 'đ${convertCurrencyToVND(products[selectProduct].price! * products[selectProduct].changeValue!)}',
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -500,8 +518,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       List<ProductDetail> products, int selectedProduct) {
     var emptyVoucherProducts =
         products.where((element) => element.voucherMethods!.isEmpty).toList();
-    final voucherMethodController = VoucherMethodController();
-    final voucherMethodDetailsController = VoucherMethodDetailsController();
+    final voucherMethodController = VoucherController();
     return Container(
       color: DesignCourseAppTheme.notWhite,
       child: Column(
@@ -558,7 +575,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
+                                          color: Colors.red)),
                                   selectVoucher == -1
                                       ? Align(
                                           alignment: Alignment.topRight,
@@ -600,8 +617,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Builder(builder: (_) {
-                var vouchers = voucherMethodController
-                    .getVoucherMethodsByProduct(productDetail);
+                var vouchers =
+                    voucherMethodController.getVoucherMethodsByProduct(product);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -619,7 +636,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    changeVoucher(voucher.typeformCus!, "");
+                                    changeVoucher(voucher.typeformCus!, "",
+                                        voucher.typeformCus!);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -683,10 +701,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                   : const SizedBox(),
                                             ]),
                                         Builder(builder: (_) {
-                                          var voucherDetails =
-                                              voucherMethodDetailsController
-                                                  .getVoucherMethodDetailsByMethod(
-                                                      voucher);
+                                          var voucherDetails = voucherController
+                                              .getVoucherMethodDetailsByMethod(
+                                                  voucher);
                                           return Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -976,10 +993,16 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       child: TextFormField(
                         onChanged: (value) {
                           _cart.quantity = int.parse(value);
+                          setState(() {});
                           // print();
                         },
-                        controller: TextEditingController(
-                            text: _cart.quantity.toString()),
+                        controller: quantityController,
+                        onFieldSubmitted: (value) {
+                          quantity = int.parse(value);
+                          _cart.quantity = quantity;
+                          setState(() {});
+                          // print();
+                        },
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                               RegExp(r'^[+]?\d+([.]\d+)?$')),
@@ -1049,7 +1072,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                     _cart = Cart(quantity: 1, unit: value);
                   });
                 },
-                dropdownItems: [productDetail.unit!, "THÙNG"],
+                dropdownItems: [productDetail.unit??"", "THÙNG"],
                 dropdownWidth: 200,
               ),
               16.widthBox,
@@ -1067,12 +1090,19 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                         _cart.typeformVoucher =
                             _cart.getVoucherMethodFromProductDetail(
                                 productDetail, selectVoucher);
+                        _cart.voucherMethod =
+                            _cart.getVoucherMethodFromProductDetailVoucher(
+                                productDetail, selectVoucher);
+                        print(
+                            'cart: ${_cart.typeformVoucher} ${_cart.typeformVoucherCustom} ${_cart.unit}');
                         context.read<CartBloc>().add(
                               AddToCart(
                                 _cart,
                               ),
                             );
+                        _cart.quantity = quantity;
                         showSnackBar("Thêm thành công", context);
+                        setState(() {});
                       },
                       child: const SizedBox(
                         height: 48,
@@ -1122,7 +1152,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test "
         "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-          "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
+        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
         "Đây là văn bản test";
     return SizedBox(
       child: Card(
@@ -1323,7 +1353,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                               child: SizedBox(
                                 child: RaisedButton(
                                   onPressed: () {
-                                    changeVoucher(-1, product.code!);
+                                    changeVoucher(-1, product.code!, -1);
                                     Get.back();
                                   },
                                   shape: const RoundedRectangleBorder(

@@ -1,6 +1,7 @@
 import '../models.dart';
 class ProductDetail {
   int? idAgent;
+  String? nameAgent;
   String? code;
   String? name;
   String? unit;
@@ -13,6 +14,7 @@ class ProductDetail {
 
   ProductDetail({
     this.idAgent,
+    this.nameAgent,
     this.code,
     this.name,
     this.unit,
@@ -26,6 +28,7 @@ class ProductDetail {
   // FromJson
   factory ProductDetail.fromJson(Map<String, dynamic> json) => ProductDetail(
       idAgent: json["idagent"],
+      nameAgent: json["nameAgent"],
       code: json["code"],
       name: json["name"],
       unit: json["unit"],
@@ -40,6 +43,7 @@ class ProductDetail {
   // ToJson
   Map<String, dynamic> toJson() => {
     "idagent": idAgent,
+    "nameAgent": nameAgent,
     "code": code,
     "name": name,
     "unit": unit,

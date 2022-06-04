@@ -22,21 +22,14 @@ class ResultOutsideDataRepository {
       await Future.delayed(const Duration(seconds: 1));
       List<String> distLinks = await secureStorage.checkLogin()
           ? await userRepository.loadLocation()
-          : /*["DCtbW1k="]*/ [
-
-            ];
-      // var responses = await Future.wait([
-      //   for (var link in distLinks)
-      //     _dio.get(
-      //       "$baseUrl/datas/$link",
-      //     ),
-      // ]);
+          : /*["DCtbW1k="]*/ [];
       var responses = await Future.wait([
-        //delay
-        for (var link in distLinks) _dio.get("http://192.168.0.248:8081/shopee/datas/$link"),
+        for (var link in distLinks)
+          _dio.get("http://192.168.0.248:8081/shopee/datas/$link"),
       ]);
       ResultDataModel resultDataModel = _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", resultDataModel.idNpp);
+      await secureStorage.addKey("idAndNameDist", resultDataModel.idAndNameNpp);
       return resultDataModel;
     } on DioError catch (e) {
       print('getResultData error 1 : $e');
@@ -65,7 +58,8 @@ class ResultOutsideDataRepository {
     //Khởi tạo danh sách danh mục sản phẩm ban đầu
     List<ProductOutsideCategory> productCatesMain = [];
     List<String> idDist = []; // tạo 1 danh sách id của nhà phân phối
-
+    List<dynamic> idAndNameDist =
+        []; // tạo 1 danh sách id và tên của nhà phân phối
     //(vòng lặp 1)
     // duyệt từng response
     for (var response in responses) {
@@ -78,6 +72,9 @@ class ResultOutsideDataRepository {
         resultDataModel = ResultDataModel.fromJson((response.data));
       }
       idDist.add(resultDataModel.idNpp!); // thêm id nhà phân phối vào danh sách
+      idAndNameDist.add({
+        resultDataModel.idNpp: resultDataModel.nppName
+      }); // thêm id và tên nhà phân phối vào danh sách
 
       //(vòng lặp 2)
       // Đi vào vòng lặp của từng danh mục sản phẩm
@@ -116,6 +113,7 @@ class ResultOutsideDataRepository {
     }
     ResultDataModel resultDataModel = ResultDataModel(
       idNpp: idDist.join(","),
+      idAndNameNpp: idAndNameDist.isNotEmpty ? jsonEncode(idAndNameDist) : null,
       productOutsideCategory: productCatesMain,
     );
     return resultDataModel;

@@ -1,11 +1,15 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
+import 'package:lixshop/models/cart_hive/cart_hive.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
@@ -23,23 +27,26 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await dotenv.load(fileName: ".env");
+  await Hive.initFlutter();
+  Hive.registerAdapter(CartHiveAdapter());
+  await Hive.openBox<CartHive>('cart');
   BlocOverrides.runZoned(
-    () {
-      // runApp(
-      //   DevicePreview(
-      //     enabled: !kReleaseMode,
-      //     tools: const [
-      //       ...DevicePreview.defaultTools,
-      //     ],
-      //     builder: (context) => const LixShop(),
-      //   ),
-      // );
-      runApp(
-        const LixShop(),
-      );
-    },
-    blocObserver: AppBlocObserver(),
-  );
+      () {
+        runApp(
+          DevicePreview(
+            enabled: !kReleaseMode,
+            tools: const [
+              ...DevicePreview.defaultTools,
+            ],
+            builder: (context) => const LixShop(),
+          ),
+        );
+        // runApp(
+        //   const LixShop(),
+        // );
+      },
+      blocObserver: AppBlocObserver(),
+    );
 }
 
 class LixShop extends StatelessWidget {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lixshop/controllers/controllers.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
+import 'package:lixshop/models/voucher/voucher_details_dto.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/contains.dart';
@@ -30,11 +32,13 @@ class _CartDetailScreenState extends State<CartDetailScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             "Nhà phân phối ${widget.idNpp}".text.black.make(),
-            const Text("Địa chỉ giao hàng",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Vx.green500)),
+            const Text(
+              "Địa chỉ giao hàng",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Vx.green500),
+            ),
           ],
         ),
         leading: IconButton(
@@ -201,6 +205,9 @@ class _CartItemState extends State<_CartItem> {
 
   @override
   Widget build(BuildContext context) {
+    var voucher = voucherController.filterVoucherDetailsByCart(
+        widget.cart, widget.cart.voucherMethod!);
+    var size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
@@ -323,112 +330,73 @@ class _CartItemState extends State<_CartItem> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 100,
-                    ),
-                    16.widthBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              voucher.isNotEmpty
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              "Khuyến mãi"
-                                  .text
-                                  .color(Vx.black.withOpacity(0.8))
-                                  .bold
-                                  .make(),
-                              "".text.xl.gray500.make(),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 150,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    "Khuyến mãi"
+                                        .text
+                                        .color(Vx.black.withOpacity(0.8))
+                                        .bold
+                                        .make(),
+                                    "".text.xl.gray500.make(),
+                                  ],
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 250,
-                                    child: const Text(
-                                      "NRC Lix chanh 1,2kgNRC Lix chanh 1,2kgNRC Lix chanh 1,2kg",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Vx.gray500),
-                                    ),
-                                  ),
-                                  "3 can".text.gray500.make(),
-                                ],
+                              SizedBox(
+                                width: size.width * 0.9,
+                                child: Column(
+                                  children:
+                                      List.generate(voucher.length, (index) {
+                                    var item = voucher[index];
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.6,
+                                          child: Text(
+                                            item.voucherDetailName!,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              color: Vx.gray500,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ),
+                                        "${voucher[index].quantity}"
+                                            .text
+                                            .italic
+                                            .bold
+                                            .size(12)
+                                            .gray500
+                                            .make(),
+                                      ],
+                                    );
+                                  }),
+                                ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     )
-                  ],
-                ),
-              ),
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Row(
@@ -573,7 +541,7 @@ class _CartItemState extends State<_CartItem> {
                     //Cart icon
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),

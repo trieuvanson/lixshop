@@ -8,13 +8,22 @@ class Cart {
   int? quantity;
   String? unit;
   int? typeformVoucher;
+  int? typeformVoucherCustom;
   int? brandId;
+  VoucherMethod? voucherMethod;
 
-  Cart({this.productDetail, this.quantity, this.unit, this.typeformVoucher, this.brandId});
+  Cart(
+      {this.productDetail,
+      this.quantity,
+      this.unit,
+      this.typeformVoucher,
+      this.typeformVoucherCustom,
+      this.brandId,
+      this.voucherMethod});
 
   @override
   String toString() {
-    return 'Cart{productDetail: ${productDetail ?? ""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher}';
+    return 'Cart{productDetail: ${productDetail ?? ""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher, typeformVoucherCustom: $typeformVoucherCustom, brandId: $brandId, voucherMethod: $voucherMethod}';
   }
 
   int? getVoucherMethodFromProductDetail(
@@ -23,6 +32,13 @@ class Cart {
         ?.firstWhere((element) => element.typeformCus == selectVoucher,
             orElse: () => VoucherMethod(typeform: -1))
         .typeform;
+  }
+
+  VoucherMethod? getVoucherMethodFromProductDetailVoucher(
+      ProductDetail productDetail, int selectVoucher) {
+    return productDetail.voucherMethods?.firstWhere(
+        (element) => element.typeformCus == selectVoucher,
+        orElse: () => VoucherMethod(typeform: -1));
   }
 
   String? getPricesChangeValue() {
@@ -52,7 +68,9 @@ class Cart {
         quantity: json["quantity"],
         unit: json["unit"],
         typeformVoucher: json["typeformVoucher"],
+        typeformVoucherCustom: json["typeformVoucherCustom"],
         brandId: json["brandId"],
+        voucherMethod: VoucherMethod.fromJson(json["voucherMethod"]),
       );
 
 //  Tojson
@@ -62,12 +80,23 @@ class Cart {
       'quantity': quantity,
       'unit': unit,
       'typeformVoucher': typeformVoucher,
+      'typeformVoucherCustom': typeformVoucherCustom,
       'brandId': brandId,
+      'voucherMethod': voucherMethod?.toJson(),
     };
   }
 
+  @override
+  int get hashCode =>
+      productDetail.hashCode ^
+      quantity.hashCode ^
+      unit.hashCode ^
+      typeformVoucher.hashCode ^
+      brandId.hashCode ^
+      voucherMethod.hashCode;
+
 //  Trường hợp 1. Nếu là thùng => Tính KM
-//  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
+  //  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
 
 //=> Có được số lượng để tính
 
@@ -166,70 +195,3 @@ class CartModel extends Equatable {
   // TODO: implement props
   List<Object?> get props => [cart];
 }
-
-// @HiveType(typeId: 1)
-// class CartHive {
-//   @HiveField(0)
-//   ProductDetail? productDetail;
-//   @HiveField(1)
-//   int? quantity;
-//   @HiveField(2)
-//   String? unit;
-//   @HiveField(3)
-//   int? typeformVoucher;
-//
-//
-//   CartHive({this.productDetail, this.quantity, this.unit, this.typeformVoucher});
-//
-//   int? getVoucherMethodFromProductDetail(
-//       ProductDetail productDetail, int selectVoucher) {
-//     return productDetail.voucherMethods
-//         ?.firstWhere((element) => element.typeformCus == selectVoucher,
-//         orElse: () => VoucherMethod(typeform: -1))
-//         .typeform;
-//   }
-//   String? getPricesChangeValue() {
-//     String value = "";
-//     if (unit == "THÙNG") {
-//       value = convertCurrencyToVND(
-//           productDetail!.price! * productDetail!.changeValue!) +
-//           "đ/THÙNG";
-//     } else {
-//       value = convertCurrencyToVND(productDetail!.price!) +
-//           "đ/${productDetail!.unit}";
-//     }
-//     return value;
-//   }
-//
-//   int? getPrices() {
-//     if (unit == "THÙNG") {
-//       return productDetail!.price! * quantity! * productDetail!.changeValue!;
-//     } else {
-//       return productDetail!.price! * quantity!;
-//     }
-//   }
-//
-//   //toJson
-//   Map<String, dynamic> toJson() {
-//     return {
-//       "productDetail": productDetail?.toJson(),
-//       "quantity": quantity,
-//       "unit": unit,
-//       "typeformVoucher": typeformVoucher,
-//     };
-//   }
-//
-//   //fromJson
-//   factory CartHive.fromJson(Map<String, dynamic> json) {
-//     return CartHive(
-//       productDetail: json["productDetail"] == null
-//           ? null
-//           : ProductDetail.fromJson(json["productDetail"]),
-//       quantity: json["quantity"],
-//       unit: json["unit"],
-//       typeformVoucher: json["typeformVoucher"],
-//     );
-//   }
-//
-//
-// }

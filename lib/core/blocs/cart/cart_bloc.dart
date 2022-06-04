@@ -5,6 +5,7 @@ import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/models/models.dart';
 
 part 'cart_event.dart';
+
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
@@ -29,13 +30,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (state is CartLoaded) {
       try {
         //Nếu tồn tại thì cập nhật, ngược lại thêm vào
-        List<Cart> cart = (state as CartLoaded).cartModel.cart;
+        List<Cart> cart = (await cartController.readCartFromFileJson()).cart;
         var currentCartList = checkBeforeAdd(cart, event.cart);
-        print('Aihihi');
         cartController.saveCartToFileJson(currentCartList);
-
-        print(await cartController.readCartFromFileJson());
-
         emit(CartLoaded(cartModel: CartModel(cart: [...currentCartList])));
       } catch (e) {
         print('Error: $e');
@@ -51,7 +48,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         List<Cart> cart = (state as CartLoaded).cartModel.cart;
         var currentCartList = checkBeforeUpdate(cart, event.cart);
         cartController.saveCartToFileJson(currentCartList);
-        emit(CartLoaded(cartModel: await cartController.readCartFromFileJson()));
+        emit(
+            CartLoaded(cartModel: await cartController.readCartFromFileJson()));
       } catch (e) {
         print('Error: $e');
         emit(CartError(message: e.toString()));
@@ -83,7 +81,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (state is CartLoaded) {
       try {
         CartModel cartModel = const CartModel(cart: []);
-        cartController.saveCartToFileJson(cartModel.cart);
+        cartController.saveCartToFileJson([]);
         emit(
           CartLoaded(
             cartModel: cartModel,
@@ -98,34 +96,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   //extension ...
 
-
-
   List<Cart> checkBeforeAdd(List<Cart> carts, Cart current) {
     // print(current);
     List<Cart> currentCartList = carts.isNotEmpty ? carts : [];
-    bool check = false;
+    bool check = true;
+
     for (var item in carts) {
-      if (item.typeformVoucher != -1) {
-        if (item.productDetail!.code == current.productDetail!.code &&
-            item.typeformVoucher == current.typeformVoucher &&
-            item.unit == current.unit) {
-          item.quantity = item.quantity! + current.quantity!;
-          check = true;
-          break;
-        }
-      } else {
-        if (item.productDetail!.code == current.productDetail!.code &&
-            item.unit == current.unit) {
-          item.quantity = item.quantity! + current.quantity!;
-          check = true;
-          break;
-        }
+      if (item.typeformVoucherCustom == current.typeformVoucherCustom &&
+          item.typeformVoucher == current.typeformVoucher &&
+          item.productDetail!.code!.contains(current.productDetail!.code!) &&
+          item.unit!.contains(current.unit!)) {
+        check = false;
+        item.quantity = item.quantity! + current.quantity!;
+        break;
       }
     }
 
-    if (!check) {
+    if (check) {
       currentCartList.add(current);
     }
+    print('currentCartList:${currentCartList.length}');
+
     return currentCartList;
   }
 

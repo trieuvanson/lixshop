@@ -336,7 +336,7 @@ class _CartItem extends StatelessWidget {
                             SizedBox(
                               width: MediaQuery.of(context).size.width - 150,
                               child: RichText(
-                                maxLines: 2,
+                                maxLines: 5,
                                 overflow: TextOverflow.ellipsis,
                                 text: TextSpan(
                                   style: const TextStyle(
@@ -421,71 +421,75 @@ class _CartItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              orderDetail.donHangDetailKmDTO2s!.isNotEmpty
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              "Khuyến mãi"
-                                  .text
-                                  .color(Vx.black.withOpacity(0.8))
-                                  .bold
-                                  .make(),
-                              "".text.xl.gray500.make(),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    "Khuyến mãi"
+                                        .text
+                                        .color(Vx.black.withOpacity(0.8))
+                                        .bold
+                                        .make(),
+                                    "".text.xl.gray500.make(),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.9,
+                                child: Column(
+                                  children: List.generate(
+                                      orderDetail.donHangDetailKmDTO2s!.length,
+                                      (index) {
+                                    var item = orderDetail
+                                        .donHangDetailKmDTO2s![index];
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.6,
+                                          child: Text(
+                                            item.nameProductDetailKm!,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              color: Vx.gray500,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        ),
+                                        "${item.quantityDetailKm!.toInt()} ${item.unitDetailKm}"
+                                            .text
+                                            .italic
+                                            .bold
+                                            .size(12)
+                                            .gray500
+                                            .make(),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.9,
-                          child: Column(
-                            children: List.generate(
-                                orderDetail.donHangDetailKmDTO2s!.length,
-                                (index) {
-                              var item =
-                                  orderDetail.donHangDetailKmDTO2s![index];
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: size.width * 0.6,
-                                    child: Text(
-                                      item.nameProductDetailKm!,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                        color: Vx.gray500,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ),
-                                  "${item.quantityDetailKm!.toInt()} ${item.unitDetailKm}"
-                                      .text
-                                      .italic
-                                      .bold
-                                      .size(12)
-                                      .gray500
-                                      .make(),
-                                ],
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
+                          )
+                        ],
+                      ),
                     )
-                  ],
-                ),
-              ),
+                  : Container(),
               // Padding(
               //   padding: const EdgeInsets.only(bottom: 16.0, left: 4, right: 4),
               //   child: Row(

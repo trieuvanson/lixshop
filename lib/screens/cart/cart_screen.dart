@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/controllers/cart/cart_controller.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -35,6 +36,35 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.black,
+            ),
+            //show tooltip
+            tooltip: "Xoá tất cả",
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Center(child: Text('Xác nhận xoá')),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Huỷ'),
+                    child: const Text('Huỷ'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<CartBloc>().add(RemoveAllCart());
+                      Navigator.pop(context, 'Xác nhận');
+                    },
+                    child: const Text('Xác nhận'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: _bottomNavigation(),
       body: BlocBuilder<CartBloc, CartState>(
@@ -186,11 +216,12 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                                   color: Vx.gray500, size: 30),
                                             ),
                                             SizedBox(
-                                              child: "Nhà phân phối $agent"
-                                                  .text
-                                                  .xl2
-                                                  .bold
-                                                  .make(),
+                                              child:
+                                                  "Nhà phân phối $agent"
+                                                      .text
+                                                      .xl2
+                                                      .bold
+                                                      .make(),
                                             ),
                                           ],
                                         ),
