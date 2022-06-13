@@ -96,7 +96,7 @@ class Cart {
       voucherMethod.hashCode;
 
 //  Trường hợp 1. Nếu là thùng => Tính KM
-  //  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
+//  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue
 
 //=> Có được số lượng để tính
 

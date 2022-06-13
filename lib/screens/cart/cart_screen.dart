@@ -55,7 +55,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.read<CartBloc>().add(RemoveAllCart());
+                      BlocProvider.of<CartBloc>(context).add(RemoveAllCart());
                       Navigator.pop(context, 'Xác nhận');
                     },
                     child: const Text('Xác nhận'),
@@ -69,105 +69,6 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       bottomNavigationBar: _bottomNavigation(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          // return FutureBuilder(
-          //     future: cartController.readCartFromFileJson(),
-          //     builder: (context, AsyncSnapshot<CartModel> snapshot) {
-          //       if (snapshot.hasData) {
-          //         var idAgents = snapshot.data!.idAgents;
-          //         CartModel? cartModel = snapshot.data;
-          //         print(cartModel!.cart[0].brandId);
-          //         return SingleChildScrollView(
-          //           physics: const BouncingScrollPhysics(),
-          //           child: Column(
-          //             children: [
-          //               for (var i in idAgents)
-          //                 SizedBox(
-          //                   width: MediaQuery.of(context).size.width,
-          //                   child: Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Padding(
-          //                         padding: const EdgeInsets.only(
-          //                             left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
-          //                         child: Column(
-          //                           crossAxisAlignment: CrossAxisAlignment.start,
-          //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                           children: [
-          //                             InkWell(
-          //                               onTap: () {
-          //                                 Get.to(
-          //                                       () => CartDetailScreen(
-          //                                     idNpp: i!,
-          //                                   ),
-          //                                   curve: Curves.easeInToLinear,
-          //                                 );
-          //                               },
-          //                               child: SizedBox(
-          //                                 child: Row(
-          //                                   mainAxisAlignment:
-          //                                   MainAxisAlignment.spaceBetween,
-          //                                   children: [
-          //                                     Row(
-          //                                       children: [
-          //                                         const Padding(
-          //                                           padding:
-          //                                           EdgeInsets.only(right: 8.0),
-          //                                           child: Icon(Icons.store_sharp,
-          //                                               color: Vx.gray500, size: 30),
-          //                                         ),
-          //                                         SizedBox(
-          //                                           child: "Nhà phân phối $i"
-          //                                               .text
-          //                                               .xl2
-          //                                               .bold
-          //                                               .make(),
-          //                                         ),
-          //                                       ],
-          //                                     ),
-          //                                     const Icon(
-          //                                       Icons.arrow_forward_ios,
-          //                                       color: Vx.gray800,
-          //                                       size: 20,
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                             Padding(
-          //                               padding: const EdgeInsets.all(8.0),
-          //                               child: Row(
-          //                                 mainAxisAlignment:
-          //                                 MainAxisAlignment.spaceBetween,
-          //                                 children: [
-          //                                   "Tổng tiền".text.xl.gray500.make(),
-          //                                   "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(i!)!)}đ"
-          //                                       .text
-          //                                       .color(Vx.red700.withOpacity(0.8))
-          //                                       .bold
-          //                                       .xl2
-          //                                       .make(),
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           ],
-          //                         ),
-          //                       ),
-          //                       for (var item in cartModel.cart)
-          //                         if (item.productDetail!.idAgent == i)
-          //                           _CartItem(cart: item)
-          //                     ],
-          //                   ),
-          //                 ),
-          //             ],
-          //           ),
-          //         );
-          //       } else {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       }
-          //       return Container();
-          //     });
           if (state is CartLoading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -181,84 +82,104 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   for (var agent in idAgents)
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 12.0, bottom: 0.0),
+                    FutureBuilder(
+                        future: cartController.agentName(agent!),
+                        builder: (context, snapshot) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.to(
-                                      () => CartDetailScreen(
-                                        idNpp: agent!,
-                                      ),
-                                      curve: Curves.easeInToLinear,
-                                    );
-                                  },
-                                  child: SizedBox(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 8.0),
-                                              child: Icon(Icons.store_sharp,
-                                                  color: Vx.gray500, size: 30),
-                                            ),
-                                            SizedBox(
-                                              child:
-                                                  "Nhà phân phối $agent"
-                                                      .text
-                                                      .xl2
-                                                      .bold
-                                                      .make(),
-                                            ),
-                                          ],
-                                        ),
-                                        const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Vx.gray800,
-                                          size: 20,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0,
+                                      right: 8.0,
+                                      top: 12.0,
+                                      bottom: 0.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      "Tổng tiền".text.xl.gray500.make(),
-                                      "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(agent!)!)}đ"
-                                          .text
-                                          .color(Vx.red700.withOpacity(0.8))
-                                          .bold
-                                          .xl2
-                                          .make(),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(
+                                            () => CartDetailScreen(
+                                              type: CartDetailType.card,
+                                              idNpp: agent,
+                                            ),
+                                            curve: Curves.easeInToLinear,
+                                          );
+                                        },
+                                        child: SizedBox(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 8.0),
+                                                    child: Icon(
+                                                        Icons.store_sharp,
+                                                        color: Vx.gray500,
+                                                        size: 30),
+                                                  ),
+                                                  snapshot.hasData
+                                                      ? SizedBox(
+                                                          width:
+                                                              size.width * 0.8,
+                                                          child:
+                                                              "${snapshot.data}"
+                                                                  .text
+                                                                  .xl
+                                                                  .maxLines(2)
+                                                                  .bold
+                                                                  .make(),
+                                                        )
+                                                      : Container(),
+                                                ],
+                                              ),
+                                              const Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Vx.gray800,
+                                                size: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            "Tổng tiền".text.xl.gray500.make(),
+                                            "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(
+                                              agent,
+                                            )!)}đ"
+                                                .text
+                                                .color(
+                                                    Vx.red700.withOpacity(0.8))
+                                                .bold
+                                                .xl2
+                                                .make(),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
+                                for (var item in cartModel.cart)
+                                  if (item.productDetail!.idAgent == agent)
+                                    _CartItem(cart: item)
                               ],
                             ),
-                          ),
-                          for (var item in cartModel.cart)
-                            if (item.productDetail!.idAgent == agent)
-                              _CartItem(cart: item)
-                        ],
-                      ),
-                    ),
+                          );
+                        }),
                 ],
               ),
             );
@@ -382,26 +303,18 @@ class _CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<_CartItem> {
-  void increment() {
+  increment() async {
     if (widget.cart.quantity! < 999) {
       widget.cart.quantity = widget.cart.quantity! + 1;
-      context.read<CartBloc>().add(
-            UpdateCart(
-              widget.cart,
-            ),
-          );
+      BlocProvider.of<CartBloc>(context).add(UpdateCart(widget.cart));
       setState(() {});
     }
   }
 
-  void decrement() {
+  decrement() async {
     if (widget.cart.quantity! > 1) {
       widget.cart.quantity = widget.cart.quantity! - 1;
-      context.read<CartBloc>().add(
-            UpdateCart(
-              widget.cart,
-            ),
-          );
+      BlocProvider.of<CartBloc>(context).add(UpdateCart(widget.cart));
       setState(() {});
     }
   }
@@ -421,7 +334,6 @@ class _CartItemState extends State<_CartItem> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
@@ -457,6 +369,8 @@ class _CartItemState extends State<_CartItem> {
                             widget.cart.productDetail!.pathImg ??
                                 "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
                             errorBuilder: (context, url, error) =>
+                                const Icon(Icons.error),
+                            loadingBuilder: (context, url, loading) =>
                                 const Icon(Icons.error),
                             height: 80,
                             fit: BoxFit.cover,
@@ -588,14 +502,78 @@ class _CartItemState extends State<_CartItem> {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              decrement();
-                            },
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: InkWell(
+                              onTap: () => decrement(),
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: DesignCourseAppTheme.nearlyWhite,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0),
+                                      ),
+                                      border: Border.all(
+                                        color: Vx.green500,
+                                      )),
+                                  child: const Icon(
+                                    Icons.remove,
+                                    color: Vx.green500,
+                                    size: 28,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: DesignCourseAppTheme.nearlyWhite,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                  border: Border.all(
+                                    color: Vx.green500,
+                                  )),
+                              child: TextFormField(
+                                onFieldSubmitted: (value) {
+                                  widget.cart.quantity = int.parse(value);
+                                  BlocProvider.of<CartBloc>(context)
+                                      .add(UpdateCart(widget.cart));
+                                },
+                                textInputAction: TextInputAction.go,
+                                controller: TextEditingController(
+                                    text: widget.cart.quantity.toString()),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^[+]?\d+([.]\d+)?$')),
+                                  //  Giới hạn 3 kí tự
+                                  LengthLimitingTextInputFormatter(3),
+                                ],
+                                textAlignVertical: TextAlignVertical.center,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(bottom: 14.0),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                    color: DesignCourseAppTheme.grey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () => increment(),
                             child: SizedBox(
                               width: 30,
                               height: 30,
@@ -609,79 +587,15 @@ class _CartItemState extends State<_CartItem> {
                                       color: Vx.green500,
                                     )),
                                 child: const Icon(
-                                  Icons.remove,
+                                  Icons.add,
                                   color: Vx.green500,
                                   size: 28,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: TextFormField(
-                              onFieldSubmitted: (value) {
-                                widget.cart.quantity = int.parse(value);
-                                context.read<CartBloc>().add(
-                                      UpdateCart(widget.cart),
-                                    );
-                              },
-                              textInputAction: TextInputAction.go,
-                              controller: TextEditingController(
-                                  text: widget.cart.quantity.toString()),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
-                                //  Giới hạn 3 kí tự
-                                LengthLimitingTextInputFormatter(3),
-                              ],
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 14.0),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: DesignCourseAppTheme.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => increment(),
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                  border: Border.all(
-                                    color: Vx.green500,
-                                  )),
-                              child: const Icon(
-                                Icons.add,
-                                color: Vx.green500,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     //Cart icon
                   ],

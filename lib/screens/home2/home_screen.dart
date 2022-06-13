@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../../core/core.dart';
 import '../../models/models.dart';
 import '../home/widgets/product_card.dart';
@@ -189,8 +188,7 @@ class _SearchCard extends StatelessWidget {
               ),
               // 64.widthBox,
               IconButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 icon: Container(),
               )
             ],

@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lixshop/controllers/cart/cart_controller.dart';
 import 'package:lixshop/controllers/controllers.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
-import 'package:lixshop/models/voucher/voucher_details_dto.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/contains.dart';
 import '../../core/core.dart';
 import '../../utils/design_course_app_theme.dart';
 
+enum CartDetailType {
+  card,
+  checkout,
+}
+
 class CartDetailScreen extends StatefulWidget {
+  final CartDetailType type;
   final int idNpp;
 
-  const CartDetailScreen({Key? key, required this.idNpp}) : super(key: key);
+  const CartDetailScreen({Key? key, required this.idNpp, required this.type})
+      : super(key: key);
 
   @override
   State<CartDetailScreen> createState() => _CartDetailScreenState();
@@ -27,19 +34,35 @@ class _CartDetailScreenState extends State<CartDetailScreen>
       appBar: AppBar(
         backgroundColor: Colors.white,
         titleSpacing: 0.0,
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            "Nhà phân phối ${widget.idNpp}".text.black.make(),
-            const Text(
-              "Địa chỉ giao hàng",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Vx.green500),
-            ),
-          ],
+        title: FutureBuilder(
+          future: cartController.agentName(widget.idNpp),
+          builder: (context, snapshot) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                snapshot.hasData
+                    ? Text(
+                        snapshot.data.toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Vx.gray700,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                        ),
+                      )
+                    : "".text.make(),
+                // const Text(
+                //   "Địa chỉ giao hàng",
+                //   style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w400,
+                //       color: Vx.green500),
+                // ),
+              ],
+            );
+          },
         ),
         leading: IconButton(
           icon: const Icon(
@@ -143,8 +166,8 @@ class _CartDetailScreenState extends State<CartDetailScreen>
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: _CartCard(cartModel: cartModel),
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: _CartCard(cartModel: cartModel, type: widget.type),
         ),
       ],
     );
@@ -153,8 +176,10 @@ class _CartDetailScreenState extends State<CartDetailScreen>
 
 class _CartCard extends StatelessWidget {
   final CartModel cartModel;
+  final CartDetailType type;
 
-  const _CartCard({Key? key, required this.cartModel}) : super(key: key);
+  const _CartCard({Key? key, required this.cartModel, required this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +187,7 @@ class _CartCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          for (var cart in cartModel.cart) _CartItem(cart: cart),
+          for (var cart in cartModel.cart) _CartItem(cart: cart, type: type),
         ],
       ),
     );
@@ -171,34 +196,28 @@ class _CartCard extends StatelessWidget {
 
 class _CartItem extends StatefulWidget {
   final Cart cart;
+  final CartDetailType type;
 
-  const _CartItem({Key? key, required this.cart}) : super(key: key);
+  const _CartItem({Key? key, required this.cart, required this.type})
+      : super(key: key);
 
   @override
   State<_CartItem> createState() => _CartItemState();
 }
 
 class _CartItemState extends State<_CartItem> {
-  void increment(BuildContext context) {
+  increment(BuildContext context) async {
     if (widget.cart.quantity! < 999) {
       widget.cart.quantity = widget.cart.quantity! + 1;
-      context.read<CartBloc>().add(
-            UpdateCart(
-              widget.cart,
-            ),
-          );
+      BlocProvider.of<CartBloc>(context).add(UpdateCart(widget.cart));
       setState(() {});
     }
   }
 
-  void decrement(BuildContext context) {
+  decrement(BuildContext context) async {
     if (widget.cart.quantity! > 1) {
       widget.cart.quantity = widget.cart.quantity! - 1;
-      context.read<CartBloc>().add(
-            UpdateCart(
-              widget.cart,
-            ),
-          );
+      BlocProvider.of<CartBloc>(context).add(UpdateCart(widget.cart));
       setState(() {});
     }
   }
@@ -209,7 +228,6 @@ class _CartItemState extends State<_CartItem> {
         widget.cart, widget.cart.voucherMethod!);
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
@@ -358,37 +376,39 @@ class _CartItemState extends State<_CartItem> {
                               SizedBox(
                                 width: size.width * 0.9,
                                 child: Column(
-                                  children:
-                                      List.generate(voucher.length, (index) {
-                                    var item = voucher[index];
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: size.width * 0.6,
-                                          child: Text(
-                                            item.voucherDetailName!,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              color: Vx.gray500,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
+                                  children: List.generate(
+                                    voucher.length,
+                                    (index) {
+                                      var item = voucher[index];
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: size.width * 0.6,
+                                            child: Text(
+                                              item.voucherDetailName!,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                color: Vx.gray500,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        "${voucher[index].quantity}"
-                                            .text
-                                            .italic
-                                            .bold
-                                            .size(12)
-                                            .gray500
-                                            .make(),
-                                      ],
-                                    );
-                                  }),
+                                          "${voucher[index].quantity}"
+                                              .text
+                                              .italic
+                                              .bold
+                                              .size(12)
+                                              .gray500
+                                              .make(),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -397,151 +417,160 @@ class _CartItemState extends State<_CartItem> {
                       ),
                     )
                   : Container(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 120,
-                      height: 42,
-                      child: Center(
-                        child: SizedBox(
-                          child: RaisedButton(
-                            onPressed: () => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title:
-                                    const Center(child: Text('Xác nhận xoá')),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Huỷ'),
-                                    child: const Text('Huỷ'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      context
-                                          .read<CartBloc>()
-                                          .add(RemoveFromCart(widget.cart));
-                                      Navigator.pop(context, 'Xác nhận');
-                                    },
-                                    child: const Text('Xác nhận'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            color: Vx.white,
-                            child: "Xoá".text.gray600.bold.xl.make(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              decrement(context);
-                            },
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: DesignCourseAppTheme.nearlyWhite,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8.0),
+              widget.type == CartDetailType.card
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 120,
+                            height: 42,
+                            child: Center(
+                              child: SizedBox(
+                                child: RaisedButton(
+                                  onPressed: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Center(
+                                          child: Text('Xác nhận xoá')),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Huỷ'),
+                                          child: const Text('Huỷ'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            BlocProvider.of<CartBloc>(context)
+                                                .add(RemoveFromCart(
+                                                    widget.cart));
+
+                                            Navigator.pop(context, 'Xác nhận');
+                                          },
+                                          child: const Text('Xác nhận'),
+                                        ),
+                                      ],
                                     ),
-                                    border: Border.all(
-                                      color: Vx.green500,
-                                    )),
-                                child: const Icon(
-                                  Icons.remove,
-                                  color: Vx.green500,
-                                  size: 28,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: DesignCourseAppTheme.nearlyWhite,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                border: Border.all(
-                                  color: Vx.green500,
-                                )),
-                            child: TextFormField(
-                              onFieldSubmitted: (value) {
-                                widget.cart.quantity = int.parse(value);
-                                context.read<CartBloc>().add(
-                                      UpdateCart(widget.cart),
-                                    );
-                              },
-                              textInputAction: TextInputAction.go,
-                              controller: TextEditingController(
-                                  text: widget.cart.quantity.toString()),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[+]?\d+([.]\d+)?$')),
-                                //  Giới hạn 3 kí tự
-                                LengthLimitingTextInputFormatter(3),
-                              ],
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 14.0),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: DesignCourseAppTheme.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () => increment(context),
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: DesignCourseAppTheme.nearlyWhite,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0),
                                   ),
-                                  border: Border.all(
-                                    color: Vx.green500,
-                                  )),
-                              child: const Icon(
-                                Icons.add,
-                                color: Vx.green500,
-                                size: 28,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                  color: Vx.white,
+                                  child: "Xoá".text.gray600.bold.xl.make(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    //Cart icon
-                  ],
-                ),
-              )
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      decrement(context);
+                                    },
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                DesignCourseAppTheme.nearlyWhite,
+                                            borderRadius: const BorderRadius.all(
+                                              Radius.circular(8.0),
+                                            ),
+                                            border: Border.all(
+                                              color: Vx.green500,
+                                            )),
+                                        child: const Icon(
+                                          Icons.remove,
+                                          color: Vx.green500,
+                                          size: 28,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        color: DesignCourseAppTheme.nearlyWhite,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        ),
+                                        border: Border.all(
+                                          color: Vx.green500,
+                                        )),
+                                    child: TextFormField(
+                                      onFieldSubmitted: (value) {
+                                        widget.cart.quantity = int.parse(value);
+                                        BlocProvider.of<CartBloc>(context)
+                                            .add(UpdateCart(widget.cart));
+                                      },
+                                      textInputAction: TextInputAction.go,
+                                      controller: TextEditingController(
+                                          text: widget.cart.quantity.toString()),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^[+]?\d+([.]\d+)?$')),
+                                        //  Giới hạn 3 kí tự
+                                        LengthLimitingTextInputFormatter(3),
+                                      ],
+                                      textAlignVertical: TextAlignVertical.center,
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 14.0),
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          color: DesignCourseAppTheme.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => increment(context),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: DesignCourseAppTheme.nearlyWhite,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        ),
+                                        border: Border.all(
+                                          color: Vx.green500,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Vx.green500,
+                                        size: 28,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //Cart icon
+                        ],
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

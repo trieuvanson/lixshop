@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/models/models.dart';
+import 'package:lixshop/repositories/repositories.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../core/core.dart';
@@ -25,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       listener: (context, state) async {
         if (state is LogoutAuthState) {
           bottomNavigationCubit.changeNavigation(0);
+          BlocProvider.of<CartBloc>(context).add(RemoveAllCart());
           Get.to(() => const LoginScreen());
         }
       },
@@ -35,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverPersistentHeader(
-              delegate: SliverHeaderBar(expandedHeight: 170),
+              delegate: SliverHeaderBar(expandedHeight: 200),
               pinned: false,
             ),
             SliverToBoxAdapter(
@@ -116,22 +119,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   _HistoryItem(
                                       onTap: () => Get.to(
                                             () => const OrderHistoryListScreen(
-                                            tabIndex: 2),
-                                      ),
+                                                tabIndex: 2),
+                                          ),
                                       title: "Đang giao hàng",
                                       icon: Icons.check_circle_outline),
                                   _HistoryItem(
                                       onTap: () => Get.to(
                                             () => const OrderHistoryListScreen(
-                                            tabIndex: 3),
-                                      ),
+                                                tabIndex: 3),
+                                          ),
                                       title: "Hoàn tất",
                                       icon: Icons.check_circle_outline),
                                   _HistoryItem(
                                       onTap: () => Get.to(
                                             () => const OrderHistoryListScreen(
-                                            tabIndex: 4),
-                                      ),
+                                                tabIndex: 4),
+                                          ),
                                       title: "Đã huỷ",
                                       icon: Icons.check_circle_outline),
                                 ],
@@ -262,7 +265,8 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
       child: InkWell(
         onTap: () {},
         child: Stack(
-          clipBehavior: Clip.none, fit: StackFit.expand,
+          clipBehavior: Clip.none,
+          fit: StackFit.expand,
           children: [
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -274,83 +278,82 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                   ],
                 ),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
                 children: [
-                  InkWell(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        child: IconButton(
+                          onPressed: () {
+                            Get.to(() => const CartScreen());
+                          },
+                          icon: const Icon(Icons.shopping_cart,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
                     onTap: () {
                       Get.to(
                         () => const ProfileInformationScreen(),
                         curve: Curves.easeInToLinear,
                       );
                     },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              width: 50,
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                  "https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                                ),
-                              ),
-                            ),
-                            16.widthBox,
-                            Column(
+                    child: FutureBuilder(
+                        future: authRepository.currentUser(),
+                        builder: (context, AsyncSnapshot<AuthUser?> snapshot) {
+                          print('snapshot.data: ${snapshot.data}');
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(
-                                  width: 200,
-                                  child: Text(
-                                    "Cửa hàng ABC Cửa hàng ABC Cửa hang ABC cua",
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                4.heightBox,
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Vx.green500,
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    child: Text(
-                                      "Thứ hạng",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 80,
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(50),
+                                        ),
+                                        child: Image.asset(
+                                          "assets/images/avatar-den-co-don-9.webp",
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    16.widthBox,
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        snapshot.hasData
+                                            ? SizedBox(
+                                                child: Text(
+                                                  snapshot.data!.name!,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                      ],
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        )),
-                  ),
-                  SizedBox(
-                    child: IconButton(
-                      onPressed: () {},
-                      icon:
-                          const Icon(Icons.shopping_cart, color: Colors.white),
-                    ),
-                  ),
+                            ),
+                          );
+                        }),
+                  )
                 ],
               ),
             ),

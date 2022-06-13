@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               _loading = false;
             });
-            Get.to(
+            Get.offAll(
               () => const ScreenLayout(),
             );
           } else {

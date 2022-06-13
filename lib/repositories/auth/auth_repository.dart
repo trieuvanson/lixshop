@@ -25,7 +25,6 @@ class AuthRepository {
   Future<AuthUser?> currentUser() async {
     try {
       final token = await secureStorage.readToken();
-      print('token: $token');
       var response = await dio.get(
         "$mainUrl/api/data/shoplix/info",
         options: Options(

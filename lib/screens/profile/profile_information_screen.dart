@@ -1,5 +1,4 @@
-
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -20,14 +19,14 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      animationDuration: const Duration(milliseconds: 300),
+      length: 2,
       child: Scaffold(
         appBar: _appBar(context),
         body: TabBarView(
           physics: const BouncingScrollPhysics(),
           children: [
             buildProfileInformation(context),
-            const _CheckoutItem(),
             const _CheckoutItem(),
           ],
         ),
@@ -60,7 +59,6 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
         tabs: [
           Tab(text: "Tài khoản"),
           Tab(text: "Thông tin xuất hoá đơn"),
-          Tab(text: "Điểm thành viên"),
         ],
       ),
       title: "Danh sách đơn hàng".text.black.make(),
@@ -80,150 +78,156 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   Widget buildProfileInformation(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 32),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                ),
+      child: FutureBuilder(
+          builder: (context, snapshot) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 32),
+              child: Form(
+                key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      decoration: TextFormFieldCommonStyle.textFormFieldStyle(
-                          "Tên cửa hàng"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Không được để trống';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
-                    15.heightBox,
-                    TextFormField(
-                      decoration: TextFormFieldCommonStyle.textFormFieldStyle(
-                          "Họ và tên chủ cửa hàng"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Không được để trống';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
-                    15.heightBox,
-                    TextFormField(
-                      decoration: TextFormFieldCommonStyle.textFormFieldStyle(
-                          "Địa chỉ"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Không được để trống';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
-                    15.heightBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        "Hình ảnh cửa hàng"
-                            .text
-                            .size(16)
-                            .color(appColor)
-                            .make(),
-                        16.heightBox,
-                        SizedBox(
-                          height: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            decoration:
+                                TextFormFieldCommonStyle.textFormFieldStyle(
+                                    "Tên cửa hàng"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Không được để trống';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          15.heightBox,
+                          TextFormField(
+                            decoration:
+                                TextFormFieldCommonStyle.textFormFieldStyle(
+                                    "Họ và tên chủ cửa hàng"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Không được để trống';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          15.heightBox,
+                          TextFormField(
+                            decoration:
+                                TextFormFieldCommonStyle.textFormFieldStyle(
+                                    "Địa chỉ"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Không được để trống';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          15.heightBox,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const ImageItem(
-                                  image:
-                                  "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
-                                  title: "Hình ảnh bên ngoài"),
-                              20.widthBox,
-                              const ImageItem(
-                                  image:
-                                  "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
-                                  title: "Hình ảnh bên trong"),
+                              "Hình ảnh cửa hàng"
+                                  .text
+                                  .size(16)
+                                  .color(appColor)
+                                  .make(),
+                              16.heightBox,
+                              SizedBox(
+                                height: 150,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    const ImageItem(
+                                        image:
+                                            "https://lzd-img-global.slatic.net/g/p/f38c534f05bf02b847146873236e6000.png_200x200q80.jpg_.webp",
+                                        title: "Hình ảnh bên ngoài"),
+                                    20.widthBox,
+                                    const ImageItem(
+                                        image:
+                                            "https://lzd-img-global.slatic.net/g/p/195f5d3dfe75bde3ad817f833b37e548.jpg_200x200q80.jpg_.webp",
+                                        title: "Hình ảnh bên trong"),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    TextFormField(
-                      decoration: TextFormFieldCommonStyle.textFormFieldStyle(
-                          "Số điện thoại"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Không được để trống';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
-                    15.heightBox,
-                    TextFormField(
-                      decoration: TextFormFieldCommonStyle.textFormFieldStyle(
-                          "Email"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Không được để trống';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
-                    15.heightBox,
-                    20.heightBox,
-                    Material(
-                      color: appColor,
-                      borderRadius: BorderRadius.circular(8),
-                      child: InkWell(
-                        onTap: () {},
-                        child: AnimatedContainer(
-                          duration: const Duration(seconds: 1),
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: 50,
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "Cập nhật",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          const Divider(),
+                          TextFormField(
+                            decoration:
+                                TextFormFieldCommonStyle.textFormFieldStyle(
+                                    "Số điện thoại"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Không được để trống';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          15.heightBox,
+                          TextFormField(
+                            decoration:
+                                TextFormFieldCommonStyle.textFormFieldStyle(
+                                    "Email"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Không được để trống';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                          15.heightBox,
+                          20.heightBox,
+                          Material(
+                            color: appColor,
+                            borderRadius: BorderRadius.circular(8),
+                            child: InkWell(
+                              onTap: () {},
+                              child: AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                width: MediaQuery.of(context).size.width,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  "Cập nhật",
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }
@@ -349,10 +353,7 @@ class ImageItem extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.4,
+          width: MediaQuery.of(context).size.width * 0.4,
           height: 150,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -376,10 +377,7 @@ class ImageItem extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.4,
             decoration: BoxDecoration(
               color: Colors.grey[200]?.withOpacity(0.5),
               borderRadius: const BorderRadius.only(

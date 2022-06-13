@@ -54,7 +54,7 @@ class _OrderHistoryItemDetailScreenState
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.only(bottom: 16.0),
               child: _CartCard(order: widget.order),
             ),
             Padding(
@@ -231,7 +231,6 @@ class _CartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -289,7 +288,6 @@ class _CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
@@ -301,7 +299,6 @@ class _CartItem extends StatelessWidget {
         ],
         border: Border.all(color: Vx.gray500.withOpacity(0.1)),
       ),
-      width: MediaQuery.of(context).size.width,
       // height: 220-16,
       child: Material(
         child: InkWell(
@@ -347,7 +344,7 @@ class _CartItem extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          " x${orderDetail.quantityDetail?.toInt()}",
+                                          " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Vx.red700,
@@ -365,11 +362,7 @@ class _CartItem extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    child: "Thùng 13 bịch x 12 gói x 25g"
-                                        .text
-                                        .size(10)
-                                        .gray500
-                                        .make(),
+                                    child: "".text.size(10).gray500.make(),
                                   ),
                                   // SizedBox(
                                   //   child: GestureDetector(
@@ -399,7 +392,7 @@ class _CartItem extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  "100,000đ/Thùng"
+                                  "${convertCurrencyToVND(orderDetail.priceDetail!.toInt())}đ/${orderDetail.productUnit}"
                                       .text
                                       .xl
                                       .size(10)

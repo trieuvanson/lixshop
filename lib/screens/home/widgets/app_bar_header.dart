@@ -19,8 +19,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
 
   @override
   void initState() {
-    init();
     super.initState();
+    init();
   }
 
   init() async {

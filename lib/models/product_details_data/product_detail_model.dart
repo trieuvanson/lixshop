@@ -9,6 +9,7 @@ class ProductDetail {
   int? changeValue;
   int? price;
   String? pathImg;
+  String? description;
   List<VoucherMethod>? voucherMethods;
 
 
@@ -22,6 +23,7 @@ class ProductDetail {
     this.changeValue,
     this.pathImg,
     this.price,
+    this.description,
     this.voucherMethods,
   });
 
@@ -36,6 +38,7 @@ class ProductDetail {
       changeValue: json["changeValue"],
       pathImg: json["pathImg"],
       price: json["gia"],
+      description: json["description"],
       voucherMethods: List<VoucherMethod>.from(
           json["hinhThucKMDTOs"].map((x) => VoucherMethod.fromJson(x)))
   );
@@ -51,6 +54,7 @@ class ProductDetail {
     "changeValue": changeValue,
     "pathImg": pathImg,
     "gia": price,
+    "description": description,
     "hinhThucKMDTOs": List<dynamic>.from(voucherMethods!.map((x) => x.toJson())),
   };
 

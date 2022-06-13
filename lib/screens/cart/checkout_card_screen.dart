@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/controllers/cart/cart_controller.dart';
 import '../../constants/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/screen_layout.dart';
@@ -346,29 +347,11 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                             width: 150,
                             height: 50,
                             child: RaisedButton(
-                              onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Center(
-                                      child: Text('Xác nhận đặt hàng')),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'Huỷ'),
-                                      child: const Text('Huỷ'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        context
-                                            .read<CheckoutBloc>()
-                                            .add(const CheckoutConfirm());
-                                        Navigator.pop(context, 'Xác nhận');
-                                      },
-                                      child: const Text('Xác nhận'),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              onPressed: () {
+                                context
+                                    .read<CheckoutBloc>()
+                                    .add(const CheckoutConfirm());
+                              },
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8),
@@ -492,13 +475,15 @@ class _CheckoutItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Material(
       borderRadius: const BorderRadius.all(
         Radius.circular(16.0),
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => CartDetailScreen(idNpp: idNPP));
+          Get.to(() =>
+              CartDetailScreen(type: CartDetailType.checkout, idNpp: idNPP));
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -507,10 +492,24 @@ class _CheckoutItem extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    child: "Nhà phân phối $idNPP".text.xl.bold.make(),
-                  ),
+                  FutureBuilder(
+                      future: cartController.agentName(idNPP),
+                      builder: (context, snapshot) {
+                        return snapshot.hasData
+                            ? SizedBox(
+                                width: size.width * 0.8,
+                                child: snapshot.data
+                                    .toString()
+                                    .text
+                                    .maxLines(2)
+                                    .xl
+                                    .bold
+                                    .make(),
+                              )
+                            : Container();
+                      }),
                   const Icon(
                     Icons.arrow_forward_ios,
                     color: Vx.green700,

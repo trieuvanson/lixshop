@@ -33,11 +33,15 @@ class VoucherController {
     List<VoucherDetailsDTO> voucherDetails = [];
     try {
       for (var detail in method.voucherMethodDetails!) {
-        int quantity = cart.quantity!~/detail.value!;
+        int? value = cart.unit != "THÙNG"
+            ? cart.quantity! ~/ cart.productDetail!.changeValue!
+            : cart.quantity;
+        int quantity = value! ~/ detail.value!;
         if (quantity > 0) {
           voucherDetails.add(VoucherDetailsDTO(
             voucherDetailName: detail.name!,
-            quantity: (quantity * detail.countValue!).toInt().toString() + " ${detail.productVoucherUnit!}",
+            quantity: (quantity * detail.countValue!).toInt().toString() +
+                " ${detail.productVoucherUnit!}",
           ));
         }
       }

@@ -30,8 +30,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (state is CartLoaded) {
       try {
         //Nếu tồn tại thì cập nhật, ngược lại thêm vào
-        List<Cart> cart = (await cartController.readCartFromFileJson()).cart;
-        var currentCartList = checkBeforeAdd(cart, event.cart);
+        CartModel cart = await cartController.readCartFromFileJson();
+        var currentCartList =
+            cartController.checkBeforeAdd(cart.cart, event.cart);
         cartController.saveCartToFileJson(currentCartList);
         emit(CartLoaded(cartModel: CartModel(cart: [...currentCartList])));
       } catch (e) {
@@ -44,14 +45,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _updateCart(UpdateCart event, Emitter<CartState> emit) async {
     if (state is CartLoaded) {
       try {
-        //Tăng bớt số lượng
-        List<Cart> cart = (state as CartLoaded).cartModel.cart;
-        var currentCartList = checkBeforeUpdate(cart, event.cart);
+        CartModel cart = await cartController.readCartFromFileJson();
+
+        var currentCartList =
+            cartController.checkBeforeUpdate(cart.cart, event.cart);
         cartController.saveCartToFileJson(currentCartList);
-        emit(
-            CartLoaded(cartModel: await cartController.readCartFromFileJson()));
+        emit(CartLoaded(cartModel: CartModel(cart: [...currentCartList])));
       } catch (e) {
-        print('Error: $e');
+        print('Error Update: $e');
         emit(CartError(message: e.toString()));
       }
     }
@@ -60,14 +61,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _removeFromCart(RemoveFromCart event, Emitter<CartState> emit) async {
     if (state is CartLoaded) {
       try {
-        List<Cart> cart = List.from((state as CartLoaded).cartModel.cart)
-          ..remove(event.cart);
-        cartController.saveCartToFileJson(cart);
+        CartModel cart = await cartController.readCartFromFileJson();
+        cartController.removeElementCart(event.cart, cart);
         emit(
           CartLoaded(
-            cartModel: CartModel(
-              cart: cart,
-            ),
+            cartModel: cart,
           ),
         );
       } on Exception catch (e) {
@@ -92,53 +90,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartError(message: e.toString()));
       }
     }
-  }
-
-  //extension ...
-
-  List<Cart> checkBeforeAdd(List<Cart> carts, Cart current) {
-    // print(current);
-    List<Cart> currentCartList = carts.isNotEmpty ? carts : [];
-    bool check = true;
-
-    for (var item in carts) {
-      if (item.typeformVoucherCustom == current.typeformVoucherCustom &&
-          item.typeformVoucher == current.typeformVoucher &&
-          item.productDetail!.code!.contains(current.productDetail!.code!) &&
-          item.unit!.contains(current.unit!)) {
-        check = false;
-        item.quantity = item.quantity! + current.quantity!;
-        break;
-      }
-    }
-
-    if (check) {
-      currentCartList.add(current);
-    }
-    print('currentCartList:${currentCartList.length}');
-
-    return currentCartList;
-  }
-
-  List<Cart> checkBeforeUpdate(List<Cart> carts, Cart current) {
-    // print(current);
-    List<Cart> currentCartList = carts.isNotEmpty ? carts : [];
-    bool check = false;
-
-    for (var item in carts) {
-      if (item.productDetail!.code == current.productDetail!.code &&
-          item.typeformVoucher == current.typeformVoucher &&
-          item.unit == current.unit) {
-        item.quantity = current.quantity!;
-        check = true;
-        break;
-      }
-    }
-    print('check: $check');
-
-    if (!check) {
-      currentCartList.add(current);
-    }
-    return currentCartList;
   }
 }

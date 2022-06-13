@@ -39,21 +39,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: DesignCourseAppTheme.nearlyWhite,
-        child: BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
-          builder: (context, state) {
-            if (state.isLoading) {
-              return _buildLoadingWidget();
-            } else if (state.isError) {
-              return _buildErrorWidget("Lỗi");
-            } else if (state.isSuccess) {
-              return BuildProductDetailWidget(
-                resultDetailsDataModel: state.resultDetailsDataModel!,
-              );
-            }
-            return Container();
-          },
-        ));
+      color: DesignCourseAppTheme.nearlyWhite,
+      child: BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return _buildLoadingWidget();
+          } else if (state.isError) {
+            return _buildErrorWidget("Lỗi");
+          } else if (state.isSuccess) {
+            return BuildProductDetailWidget(
+              resultDetailsDataModel: state.resultDetailsDataModel!,
+            );
+          }
+          return Container();
+        },
+      ),
+    );
   }
 
   Widget _buildLoadingWidget() {
@@ -120,7 +121,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   @override
   void initState() {
-    quantityController = TextEditingController(text: quantity.toString());
+    quantityController = TextEditingController(
+      text: quantity.toString(),
+    );
     products = productDetailsDataController.getProductDetails(
         widget.resultDetailsDataModel,
         widget.resultDetailsDataModel.sizes!.first);
@@ -128,31 +131,36 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   }
 
   void changeProductSize(String size, int index) {
-    setState(() {
-      this.index = index;
-      products = productDetailsDataController.getProductDetails(
-          widget.resultDetailsDataModel, size);
-      reset();
-      selectVoucher = 1;
-      selectProduct = changeProduct(selectProduct, selectProductEmptyVoucher);
-    });
+    setState(
+      () {
+        this.index = index;
+        products = productDetailsDataController.getProductDetails(
+            widget.resultDetailsDataModel, size);
+        reset();
+        selectVoucher = 1;
+        selectProduct = changeProduct(selectProduct, selectProductEmptyVoucher);
+        _cart.unit = "THÙNG";
+      },
+    );
   }
 
   void reset() {
-    setState(() {
-      _cart.quantity = 1;
-    });
+    setState(
+      () {
+        _cart.quantity = 1;
+      },
+    );
   }
 
   int changeProduct(int selVoucher, String selectProductEmptyVoucher) {
     if (selectProductEmptyVoucher.isNotEmpty && selVoucher == -1) {
-      for (var item in (products as List<ProductDetail>)) {
+      for (var item in products) {
         if (item.code == selectProductEmptyVoucher) {
           return products.indexOf(item);
         }
       }
     } else {
-      for (var item in (products as List<ProductDetail>)) {
+      for (var item in products) {
         for (var item2 in item.voucherMethods!) {
           if (item2.typeformCus == selVoucher) {
             return products.indexOf(item);
@@ -165,31 +173,43 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   void changeVoucher(
       int index, String selectProductEmptyVoucher, int typeFormVoucherCustom) {
-    setState(() {
-      selectVoucher = index;
-      _cart.typeformVoucherCustom = typeFormVoucherCustom;
-      reset();
-      selectProduct = changeProduct(index, selectProductEmptyVoucher);
-    });
+    setState(
+      () {
+        selectVoucher = index;
+        _cart.typeformVoucherCustom = typeFormVoucherCustom;
+        reset();
+        selectProduct = changeProduct(index, selectProductEmptyVoucher);
+        if (selectProductEmptyVoucher.isNotEmpty) {
+          _cart.productDetail = products[selectProduct];
+        } else {}
+      },
+    );
   }
 
-  void increaseQuantity() {
+  increaseQuantity() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     if (_cart.quantity! <= 999) {
-      setState(() {
-        quantity++;
-        _cart.quantity = quantity;
-        quantityController.text = quantity.toString();
-      });
+      setState(
+        () {
+          quantity++;
+          _cart.quantity = quantity;
+          quantityController.text = quantity.toString();
+        },
+      );
     }
   }
 
-  void decreaseQuantity() {
+  Future<void> decreaseQuantity() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
     if (_cart.quantity! > 1) {
-      setState(() {
-        quantity--;
-        _cart.quantity = quantity;
-        quantityController.text = quantity.toString();
-      });
+      setState(
+        () {
+          quantity--;
+          _cart.quantity = quantity;
+          quantityController.text = quantity.toString();
+        },
+      );
     }
   }
 
@@ -198,8 +218,10 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
       "productIdAgent": cart.productDetail!.idAgent,
       "productCode": cart.productDetail!.code,
       "productVoucherCustomCode": cart.productDetail!.voucherMethods
-          ?.firstWhere((element) => element.typeformCus == selectVoucher,
-              orElse: () => VoucherMethod(typeform: -1))
+          ?.firstWhere(
+            (element) => element.typeformCus == selectVoucher,
+            orElse: () => VoucherMethod(typeform: -1),
+          )
           .typeform, //Mặc định
       "test": cart.getVoucherMethodFromProductDetail(
           cart.productDetail!, selectVoucher),
@@ -236,8 +258,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 decoration: BoxDecoration(
                   color: DesignCourseAppTheme.nearlyWhite,
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(32.0),
-                      topRight: Radius.circular(32.0)),
+                    topLeft: Radius.circular(32.0),
+                    topRight: Radius.circular(32.0),
+                  ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -291,8 +314,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
                         boxShadow: <BoxShadow>[
                           BoxShadow(
                               color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -313,7 +337,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                   child: Row(
                                     children: [
                                       "Chọn loại hàng ".text.bold.make(),
-                                      "(${(products as List<ProductDetail>).length} sản phẩm)"
+                                      "(${(products).length} sản phẩm)"
                                           .text
                                           .italic
                                           .make(),
@@ -344,28 +368,33 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                           horizontal: 8.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: index == i
-                                                ? Vx.green500
-                                                : DesignCourseAppTheme
-                                                    .nearlyWhite,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(8.0)),
-                                            border:
-                                                Border.all(color: Vx.green500)),
+                                          color: index == i
+                                              ? Vx.green500
+                                              : DesignCourseAppTheme
+                                                  .nearlyWhite,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(8.0),
+                                          ),
+                                          border:
+                                              Border.all(color: Vx.green500),
+                                        ),
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
                                             splashColor: Colors.white24,
                                             borderRadius:
                                                 const BorderRadius.all(
-                                                    Radius.circular(8.0)),
-                                            onTap: () {
-                                              changeProductSize(
-                                                  widget.resultDetailsDataModel
-                                                      .sizes![i],
-                                                  i);
-                                            },
+                                              Radius.circular(8.0),
+                                            ),
+                                            onTap: index == i
+                                                ? () {}
+                                                : () {
+                                                    changeProductSize(
+                                                        widget
+                                                            .resultDetailsDataModel
+                                                            .sizes![i],
+                                                        i);
+                                                  },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   top: 8,
@@ -419,9 +448,11 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         children: [
           TabBar(
             onTap: (index) {
-              setState(() {
-                selectTabIndex = index;
-              });
+              setState(
+                () {
+                  selectTabIndex = index;
+                },
+              );
             },
             physics: const BouncingScrollPhysics(),
             isScrollable: true,
@@ -440,75 +471,45 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
               Tab(text: "Thông tin sản phẩm"),
             ],
           ),
-          Builder(builder: (_) {
-            if (selectTabIndex == 1) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: DesignCourseAppTheme.nearlyWhite,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                        offset: const Offset(1.1, 1.1),
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        child: "Thông tin chi tiết".text.bold.make(),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Divider(
-                        color: DesignCourseAppTheme.grey.withOpacity(0.6),
-                        height: 1,
-                      ),
-                      for (var i = 0; i < 4; i++)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 120,
-                                child: Text(
-                                  'Tồn kho ${i + 1}',
-                                  style: const TextStyle(
-                                    color: DesignCourseAppTheme.darkerText,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 136,
-                                child: Text(
-                                  "Đây là văn bản test $i",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      _buildExpandAbleDescription(),
+          Builder(
+            builder: (_) {
+              if (selectTabIndex == 1) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: DesignCourseAppTheme.nearlyWhite,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 8.0),
                     ],
                   ),
-                ),
-              ); //1st custom tabBarView
-            } else {
-              return _buildVoucher(
-                products[selectProduct],
-                products,
-                selectProduct,
-              ); //2nd tabView
-            }
-          }),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildExpandAbleDescription(
+                            products[index].description!),
+                      ],
+                    ),
+                  ),
+                ); //1st custom tabBarView
+              } else {
+                return _buildVoucher(
+                  products[selectProduct],
+                  products,
+                  selectProduct,
+                ); //2nd tabView
+              }
+            },
+          ),
         ],
       ),
     );
@@ -558,9 +559,10 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                               : BorderRadius.circular(0.0),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                                color: DesignCourseAppTheme.notWhite
-                                    .withOpacity(0.2),
-                                offset: const Offset(1.1, 1.1)),
+                              color: DesignCourseAppTheme.notWhite
+                                  .withOpacity(0.2),
+                              offset: const Offset(1.1, 1.1),
+                            ),
                           ],
                         ),
                         padding: const EdgeInsets.symmetric(
@@ -571,11 +573,13 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text("Không sử dụng khuyến mãi",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.red)),
+                                  const Text(
+                                    "Không sử dụng khuyến mãi",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red),
+                                  ),
                                   selectVoucher == -1
                                       ? Align(
                                           alignment: Alignment.topRight,
@@ -607,211 +611,233 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
               : const SizedBox(),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-            child: Text("Lựa chọn hình thức khuyến mãi",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+            child: Text(
+              "Lựa chọn hình thức khuyến mãi",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
           ),
           for (var product in products)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Builder(builder: (_) {
-                var vouchers =
-                    voucherMethodController.getVoucherMethodsByProduct(product);
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Builder(builder: (_) {
-                      return Column(
-                        children: [
-                          for (var voucher in vouchers)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 8.0, left: 4, right: 4, top: 4),
-                              child: Material(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    changeVoucher(voucher.typeformCus!, "",
-                                        voucher.typeformCus!);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border:
-                                          voucher.typeformCus == selectVoucher
+              child: Builder(
+                builder: (_) {
+                  var vouchers = voucherMethodController
+                      .getVoucherMethodsByProduct(product);
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Builder(
+                        builder: (_) {
+                          return Column(
+                            children: [
+                              for (var voucher in vouchers)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 8.0, left: 4, right: 4, top: 4),
+                                  child: Material(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        changeVoucher(voucher.typeformCus!, "",
+                                            voucher.typeformCus!);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: voucher.typeformCus ==
+                                                  selectVoucher
                                               ? Border.all(
                                                   color: Vx.green500,
                                                 )
                                               : null,
-                                      borderRadius:
-                                          voucher.typeformCus == selectVoucher
+                                          borderRadius: voucher.typeformCus ==
+                                                  selectVoucher
                                               ? BorderRadius.circular(8.0)
                                               : BorderRadius.circular(0.0),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: DesignCourseAppTheme.notWhite
-                                                .withOpacity(0.2),
-                                            offset: const Offset(1.1, 1.1)),
-                                      ],
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Hình thức ${voucher.typeformCus}',
-                                                style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              //Sticker when click
-
-                                              voucher.typeformCus ==
-                                                      selectVoucher
-                                                  ? Align(
-                                                      alignment:
-                                                          Alignment.topRight,
-                                                      child: Row(
-                                                        children: const [
-                                                          Icon(
-                                                            Icons.check,
-                                                            color: Vx.green500,
-                                                            size: 16,
-                                                          ),
-                                                          Text(
-                                                            'Đang sử dụng',
-                                                            style: TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Vx.green500,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : const SizedBox(),
-                                            ]),
-                                        Builder(builder: (_) {
-                                          var voucherDetails = voucherController
-                                              .getVoucherMethodDetailsByMethod(
-                                                  voucher);
-                                          return Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              for (var detail in voucherDetails)
-                                                Container(
-                                                  width: MediaQuery.of(_)
-                                                      .size
-                                                      .width,
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 4,
-                                                          // left: 16,
-                                                          // right: 16,
-                                                          bottom: 4),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.of(_)
-                                                                        .size
-                                                                        .width *
-                                                                    0.7,
-                                                            child: Text(
-                                                              '${detail.name}',
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              //
-                                                              style: const TextStyle(
-                                                                  fontStyle:
-                                                                      FontStyle
-                                                                          .italic,
-                                                                  fontSize: 10),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'Số lượng: ${detail.countValue?.toInt()} ${detail.productVoucherUnit?.toLowerCase()}',
-                                                            //
-                                                            style: const TextStyle(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                                fontSize: 10),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            detail.wrap!
-                                                                ? 'Ghi chú: Quấn kèm'
-                                                                : "",
-                                                            //
-                                                            style: const TextStyle(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                                fontSize: 10),
-                                                          ),
-                                                          Text(
-                                                            'Điều kiện: Mua ${detail.value!.toInt()} thùng.',
-                                                            //
-                                                            style: const TextStyle(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 10),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                              color: DesignCourseAppTheme
+                                                  .notWhite
+                                                  .withOpacity(0.2),
+                                              offset: const Offset(1.1, 1.1),
+                                            ),
+                                          ],
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Hình thức ${voucher.typeformCus}',
+                                                    style: const TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
                                                   ),
-                                                ),
-                                            ],
-                                          );
-                                        }),
-                                      ],
+                                                  //Sticker when click
+
+                                                  voucher.typeformCus ==
+                                                          selectVoucher
+                                                      ? Align(
+                                                          alignment: Alignment
+                                                              .topRight,
+                                                          child: Row(
+                                                            children: const [
+                                                              Icon(
+                                                                Icons.check,
+                                                                color:
+                                                                    Vx.green500,
+                                                                size: 16,
+                                                              ),
+                                                              Text(
+                                                                'Đang sử dụng',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Vx
+                                                                      .green500,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : const SizedBox(),
+                                                ]),
+                                            Builder(
+                                              builder: (_) {
+                                                var voucherDetails =
+                                                    voucherController
+                                                        .getVoucherMethodDetailsByMethod(
+                                                            voucher);
+                                                return Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    for (var detail
+                                                        in voucherDetails)
+                                                      Container(
+                                                        width: MediaQuery.of(_)
+                                                            .size
+                                                            .width,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                top: 4,
+                                                                // left: 16,
+                                                                // right: 16,
+                                                                bottom: 4),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              _)
+                                                                          .size
+                                                                          .width *
+                                                                      0.7,
+                                                                  child: Text(
+                                                                    '${detail.name}',
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    //
+                                                                    style: const TextStyle(
+                                                                        fontStyle:
+                                                                            FontStyle
+                                                                                .italic,
+                                                                        fontSize:
+                                                                            10),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  'Số lượng: ${detail.countValue?.toInt()} ${detail.productVoucherUnit?.toLowerCase()}',
+                                                                  //
+                                                                  style: const TextStyle(
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic,
+                                                                      fontSize:
+                                                                          10),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  detail.wrap!
+                                                                      ? 'Ghi chú: Quấn kèm'
+                                                                      : "",
+                                                                  //
+                                                                  style: const TextStyle(
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic,
+                                                                      fontSize:
+                                                                          10),
+                                                                ),
+                                                                Text(
+                                                                  'Điều kiện: Mua ${detail.value!.toInt()} thùng.',
+                                                                  //
+                                                                  style: const TextStyle(
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      fontSize:
+                                                                          10),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                        ],
-                      );
-                    })
-                  ],
-                );
-              }),
+                            ],
+                          );
+                        },
+                      )
+                    ],
+                  );
+                },
+              ),
             )
         ],
       ),
@@ -891,7 +917,9 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             color: DesignCourseAppTheme.darkGrey,
           ),
           onPressed: () {
-            Get.to(() => const CartScreen());
+            Get.to(
+              () => const CartScreen(),
+            );
           },
         ),
         DropdownButtonHideUnderline(
@@ -910,7 +938,10 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                   child: MenuItems.buildItem(item),
                 ),
               ),
-              const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
+              const DropdownMenuItem<Divider>(
+                enabled: false,
+                child: Divider(),
+              ),
               ...MenuItems.secondItems.map(
                 (item) => DropdownMenuItem<MenuItem>(
                   value: item,
@@ -961,13 +992,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                         height: 30,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: DesignCourseAppTheme.nearlyWhite,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8.0),
-                              ),
-                              border: Border.all(
-                                color: Vx.green500,
-                              )),
+                            color: DesignCourseAppTheme.nearlyWhite,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            border: Border.all(
+                              color: Vx.green500,
+                            ),
+                          ),
                           child: const Icon(
                             Icons.remove,
                             color: Vx.green500,
@@ -983,29 +1015,35 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: DesignCourseAppTheme.nearlyWhite,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                          border: Border.all(
-                            color: Vx.green500,
-                          )),
+                        color: DesignCourseAppTheme.nearlyWhite,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8.0),
+                        ),
+                        border: Border.all(
+                          color: Vx.green500,
+                        ),
+                      ),
                       child: TextFormField(
                         onChanged: (value) {
                           _cart.quantity = int.parse(value);
-                          setState(() {});
+                          setState(
+                            () {},
+                          );
                           // print();
                         },
                         controller: quantityController,
                         onFieldSubmitted: (value) {
                           quantity = int.parse(value);
                           _cart.quantity = quantity;
-                          setState(() {});
+                          setState(
+                            () {},
+                          );
                           // print();
                         },
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                              RegExp(r'^[+]?\d+([.]\d+)?$')),
+                            RegExp(r'^[+]?\d+([.]\d+)?$'),
+                          ),
                           //  Giới hạn 3 kí tự
                           LengthLimitingTextInputFormatter(3),
                         ],
@@ -1031,13 +1069,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       height: 30,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: DesignCourseAppTheme.nearlyWhite,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                            border: Border.all(
-                              color: Vx.green500,
-                            )),
+                          color: DesignCourseAppTheme.nearlyWhite,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          border: Border.all(
+                            color: Vx.green500,
+                          ),
+                        ),
                         child: const Icon(
                           Icons.add,
                           color: Vx.green500,
@@ -1068,11 +1107,13 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 hint: 'Đơn vị tính',
                 value: _cart.unit,
                 onChanged: (String? value) {
-                  setState(() {
-                    _cart = Cart(quantity: 1, unit: value);
-                  });
+                  setState(
+                    () {
+                      _cart = Cart(quantity: 1, unit: value);
+                    },
+                  );
                 },
-                dropdownItems: [productDetail.unit??"", "THÙNG"],
+                dropdownItems: [productDetail.unit ?? "CAN/CHAI/GÓI", "THÙNG"],
                 dropdownWidth: 200,
               ),
               16.widthBox,
@@ -1081,7 +1122,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                   return Expanded(
                     child: FlatButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       padding: const EdgeInsets.all(0),
                       color: Vx.green500,
                       onPressed: () {
@@ -1093,16 +1135,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                         _cart.voucherMethod =
                             _cart.getVoucherMethodFromProductDetailVoucher(
                                 productDetail, selectVoucher);
-                        print(
-                            'cart: ${_cart.typeformVoucher} ${_cart.typeformVoucherCustom} ${_cart.unit}');
-                        context.read<CartBloc>().add(
-                              AddToCart(
-                                _cart,
-                              ),
-                            );
+                        BlocProvider.of<CartBloc>(context)
+                            .add(AddToCart(_cart));
+
                         _cart.quantity = quantity;
                         showSnackBar("Thêm thành công", context);
-                        setState(() {});
+                        setState(
+                          () {},
+                        );
                       },
                       child: const SizedBox(
                         height: 48,
@@ -1130,36 +1170,14 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
     );
   }
 
-  Widget _buildExpandAbleDescription() {
-    String abc =
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test Đây là văn bản test "
-        "Đây là văn bản test";
+  Widget _buildExpandAbleDescription(String? description) {
     return SizedBox(
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: ExpandText(abc),
-      ),
-    );
+        child: description!.isNotEmpty
+            ? Card(
+                clipBehavior: Clip.antiAlias,
+                child: ExpandText(description),
+              )
+            : const Text("Đang cập nhật thông tin"));
   }
 
   Widget _buildProductEmptyVoucherPopup(
@@ -1191,9 +1209,10 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         children: [
           const SizedBox(
             child: Center(
-                child: Text("Khuyến mãi của sản phẩm",
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+                child: Text(
+              "Khuyến mãi của sản phẩm",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            )),
           ),
           4.heightBox,
           const SizedBox(
@@ -1247,215 +1266,219 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   Widget _buildVoucherList(List<ProductDetail> emptyVoucherProducts) {
     return ListView.builder(
-        itemCount: emptyVoucherProducts.length,
-        itemBuilder: (context, index) {
-          ProductDetail product = emptyVoucherProducts[index];
-          return Container(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Vx.gray200.withOpacity(0.1),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                ),
-              ],
-              border: Border.all(color: Vx.gray500.withOpacity(0.1)),
+      itemCount: emptyVoucherProducts.length,
+      itemBuilder: (context, index) {
+        ProductDetail product = emptyVoucherProducts[index];
+        return Container(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Vx.gray200.withOpacity(0.1),
+                blurRadius: 8,
+                spreadRadius: 2,
+              ),
+            ],
+            border: Border.all(
+              color: Vx.gray500.withOpacity(0.1),
             ),
-            width: MediaQuery.of(context).size.width,
-            // height: 220-16,
-            child: Material(
-              child: InkWell(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 8),
-                      child: SizedBox(
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 130,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.network(
-                                  product.pathImg ??
-                                      "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
-                                  errorBuilder: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            16.widthBox,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 180,
-                                    child: RichText(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18),
-                                          text: product.name.toString()),
-                                    ),
-                                  ),
-                                ),
-                                5.heightBox,
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 180,
-                                  child: SizedBox(
-                                    child: "Thùng 13 bịch x 12 gói x 25g"
-                                        .text
-                                        .gray500
-                                        .make(),
-                                  ),
-                                ),
-                                5.heightBox,
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 180,
-                                  child:
-                                      "${convertCurrencyToVND(product.price!)}/Thùng"
-                                          .text
-                                          .xl
-                                          .gray500
-                                          .make(),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
+          ),
+          width: MediaQuery.of(context).size.width,
+          // height: 220-16,
+          child: Material(
+            child: InkWell(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 8),
+                    child: SizedBox(
+                      height: 100,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                           SizedBox(
-                            width: 120,
-                            height: 42,
-                            child: Center(
-                              child: SizedBox(
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    changeVoucher(-1, product.code!, -1);
-                                    Get.back();
-                                  },
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                  ),
-                                  color: Vx.white,
-                                  child: "Chọn".text.gray600.bold.xl.make(),
-                                ),
+                            width: 100,
+                            height: 130,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(
+                                product.pathImg ??
+                                    "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
+                                errorBuilder: (context, url, error) =>
+                                    const Icon(Icons.error),
+                                height: 80,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          // Row(
-                          //   children: [
-                          //     Padding(
-                          //       padding: const EdgeInsets.only(right: 8.0),
-                          //       child: SizedBox(
-                          //         width: 40,
-                          //         height: 40,
-                          //         child: Container(
-                          //           decoration: BoxDecoration(
-                          //               color: DesignCourseAppTheme.nearlyWhite,
-                          //               borderRadius: const BorderRadius.all(
-                          //                 Radius.circular(8.0),
-                          //               ),
-                          //               border: Border.all(
-                          //                 color: Vx.green500,
-                          //               )),
-                          //           child: const Icon(
-                          //             Icons.remove,
-                          //             color: Vx.green500,
-                          //             size: 28,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     Padding(
-                          //       padding: const EdgeInsets.only(right: 8.0),
-                          //       child: Container(
-                          //         width: 48,
-                          //         height: 48,
-                          //         decoration: BoxDecoration(
-                          //             color: DesignCourseAppTheme.nearlyWhite,
-                          //             borderRadius: const BorderRadius.all(
-                          //               Radius.circular(8.0),
-                          //             ),
-                          //             border: Border.all(
-                          //               color: Vx.green500,
-                          //             )),
-                          //         child: TextFormField(
-                          //           inputFormatters: [
-                          //             FilteringTextInputFormatter.allow(
-                          //                 RegExp(r'^[+]?\d+([.]\d+)?$')),
-                          //             //  Giới hạn 3 kí tự
-                          //             LengthLimitingTextInputFormatter(3),
-                          //           ],
-                          //           textAlignVertical: TextAlignVertical.center,
-                          //           keyboardType: TextInputType.number,
-                          //           textAlign: TextAlign.center,
-                          //           decoration: InputDecoration(
-                          //             hintText: '${cart.quantity}',
-                          //             contentPadding:
-                          //                 const EdgeInsets.only(bottom: 14.0),
-                          //             border: InputBorder.none,
-                          //             hintStyle: const TextStyle(
-                          //               color: DesignCourseAppTheme.grey,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 40,
-                          //       height: 40,
-                          //       child: Container(
-                          //         decoration: BoxDecoration(
-                          //             color: DesignCourseAppTheme.nearlyWhite,
-                          //             borderRadius: const BorderRadius.all(
-                          //               Radius.circular(8.0),
-                          //             ),
-                          //             border: Border.all(
-                          //               color: Vx.green500,
-                          //             )),
-                          //         child: const Icon(
-                          //           Icons.add,
-                          //           color: Vx.green500,
-                          //           size: 28,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          //Cart icon
+                          16.widthBox,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child: RichText(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                      text: product.name.toString(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              5.heightBox,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 180,
+                                child: SizedBox(
+                                  child: "Thùng 13 bịch x 12 gói x 25g"
+                                      .text
+                                      .gray500
+                                      .make(),
+                                ),
+                              ),
+                              5.heightBox,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 180,
+                                child:
+                                    "${convertCurrencyToVND(product.price!)}/Thùng"
+                                        .text
+                                        .xl
+                                        .gray500
+                                        .make(),
+                              )
+                            ],
+                          )
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 120,
+                          height: 42,
+                          child: Center(
+                            child: SizedBox(
+                                child: RaisedButton(
+                              onPressed: () {
+                                changeVoucher(-1, product.code!, -1);
+                                Get.back();
+                              },
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              color: Vx.white,
+                              child:
+                                  _cart.productDetail?.code == product.code &&
+                                          _cart.typeformVoucherCustom! == -1
+                                      ? "Đang chọn".text.red500.bold.xl.make()
+                                      : "Chọn".text.gray600.bold.xl.make(),
+                            )),
+                          ),
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Padding(
+                        //       padding: const EdgeInsets.only(right: 8.0),
+                        //       child: SizedBox(
+                        //         width: 40,
+                        //         height: 40,
+                        //         child: Container(
+                        //           decoration: BoxDecoration(
+                        //               color: DesignCourseAppTheme.nearlyWhite,
+                        //               borderRadius: const BorderRadius.all(
+                        //                 Radius.circular(8.0),
+                        //               ),
+                        //               border: Border.all(
+                        //                 color: Vx.green500,
+                        //               ),),
+                        //           child: const Icon(
+                        //             Icons.remove,
+                        //             color: Vx.green500,
+                        //             size: 28,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     Padding(
+                        //       padding: const EdgeInsets.only(right: 8.0),
+                        //       child: Container(
+                        //         width: 48,
+                        //         height: 48,
+                        //         decoration: BoxDecoration(
+                        //             color: DesignCourseAppTheme.nearlyWhite,
+                        //             borderRadius: const BorderRadius.all(
+                        //               Radius.circular(8.0),
+                        //             ),
+                        //             border: Border.all(
+                        //               color: Vx.green500,
+                        //             ),),
+                        //         child: TextFormField(
+                        //           inputFormatters: [
+                        //             FilteringTextInputFormatter.allow(
+                        //                 RegExp(r'^[+]?\d+([.]\d+)?$'),),
+                        //             //  Giới hạn 3 kí tự
+                        //             LengthLimitingTextInputFormatter(3),
+                        //           ],
+                        //           textAlignVertical: TextAlignVertical.center,
+                        //           keyboardType: TextInputType.number,
+                        //           textAlign: TextAlign.center,
+                        //           decoration: InputDecoration(
+                        //             hintText: '${cart.quantity}',
+                        //             contentPadding:
+                        //                 const EdgeInsets.only(bottom: 14.0),
+                        //             border: InputBorder.none,
+                        //             hintStyle: const TextStyle(
+                        //               color: DesignCourseAppTheme.grey,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     SizedBox(
+                        //       width: 40,
+                        //       height: 40,
+                        //       child: Container(
+                        //         decoration: BoxDecoration(
+                        //             color: DesignCourseAppTheme.nearlyWhite,
+                        //             borderRadius: const BorderRadius.all(
+                        //               Radius.circular(8.0),
+                        //             ),
+                        //             border: Border.all(
+                        //               color: Vx.green500,
+                        //             ),),
+                        //         child: const Icon(
+                        //           Icons.add,
+                        //           color: Vx.green500,
+                        //           size: 28,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        //Cart icon
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

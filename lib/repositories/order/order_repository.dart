@@ -16,7 +16,7 @@ class OrderRepository {
             "Authorization": "Bearer ${authorization!.accessToken}",
           }));
       if (response.data['err'] == -1) {
-        throw Exception(response.data['msg']);
+        return [];
       }
       List<Order> orders = response.data['dt'].map<Order>((json) {
         return Order.fromJson(json);
@@ -29,11 +29,10 @@ class OrderRepository {
       } else if (e.response?.statusCode == 404) {
         print('ahihi');
       }
-      throw Exception(e.response?.data['msg']);
     } catch (e) {
       print(e);
-      return null;
     }
+    return [];
   }
 }
 
