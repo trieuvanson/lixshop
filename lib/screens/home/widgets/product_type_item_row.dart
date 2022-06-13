@@ -23,7 +23,7 @@ class ProductTypeItemRow extends StatefulWidget {
 }
 
 class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
-  var products;
+ late List<ProductOutsideBrand> products;
   final productOutsideBrandController = ProductOutsideBrandController();
 
   @override
@@ -65,9 +65,7 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
                       })
                     ],
                   )
-                : const ProductItemsLoader(
-                    type: ProductLoaderType.error,
-                  )
+                : Container()
             : const ProductItemsLoader(
                 type: ProductLoaderType.loading,
               );

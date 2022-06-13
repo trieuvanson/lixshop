@@ -36,14 +36,6 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search, color: Vx.black),
-          onPressed: () {
-            // showSearch(context: context, delegate: OrderHistorySearchDelegate());
-          },
-        ),
-      ],
       bottom: const TabBar(
         physics: BouncingScrollPhysics(),
         isScrollable: true,
@@ -61,7 +53,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
           Tab(text: "Thông tin xuất hoá đơn"),
         ],
       ),
-      title: "Danh sách đơn hàng".text.black.make(),
+      title: "Thông tin cá nhân".text.black.make(),
       titleSpacing: 0.0,
       leading: IconButton(
         icon: const Icon(

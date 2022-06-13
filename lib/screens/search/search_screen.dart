@@ -139,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         for (var i = 0; i < products.length; i++)
                           _MenuItem(
-                            image: products[i].brand!,
+                              image: products[i].brand!,
                               title: "${products[i].brandName}",
                               onTap: () {
                                 Get.to(() => ProductDetailsScreen(

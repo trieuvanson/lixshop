@@ -481,9 +481,10 @@ class _CartItemState extends State<_CartItem> {
                                       height: 30,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color:
-                                                DesignCourseAppTheme.nearlyWhite,
-                                            borderRadius: const BorderRadius.all(
+                                            color: DesignCourseAppTheme
+                                                .nearlyWhite,
+                                            borderRadius:
+                                                const BorderRadius.all(
                                               Radius.circular(8.0),
                                             ),
                                             border: Border.all(
@@ -519,14 +520,16 @@ class _CartItemState extends State<_CartItem> {
                                       },
                                       textInputAction: TextInputAction.go,
                                       controller: TextEditingController(
-                                          text: widget.cart.quantity.toString()),
+                                          text:
+                                              widget.cart.quantity.toString()),
                                       inputFormatters: [
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'^[+]?\d+([.]\d+)?$')),
                                         //  Giới hạn 3 kí tự
                                         LengthLimitingTextInputFormatter(3),
                                       ],
-                                      textAlignVertical: TextAlignVertical.center,
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
                                       keyboardType: TextInputType.number,
                                       textAlign: TextAlign.center,
                                       decoration: const InputDecoration(

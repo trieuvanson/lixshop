@@ -25,7 +25,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String password = "";
   String confirmPassword = "";
   final _formKey = GlobalKey<FormState>();
-  bool showPassword = false;
+  bool showPassword = true;
   Timer? _timer;
   int _start = 120;
   bool _counting = false;

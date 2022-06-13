@@ -34,22 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   handleLogin(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      // setState(() {
-      //   _loading = true;
-      // });
-      // print('email: $_loading');
-      // await Future.delayed(
-      //   const Duration(seconds: 5),
-      // );
-      // if (email == "admin" && password == "admin123") {
-      //   await Navigator.of(context).pushReplacementNamed("/");
-      //   showSnackBar("content", context);
-      // } else {
-      //   showSnackBar("error", context);
-      // }
-      // setState(() {
-      //   _loading = false;
-      // });
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isLogin', true);
       setState(() {});
@@ -57,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         () => const ScreenLayout(),
         routeName: "/register",
       );
-      print('email: $_loading');
     }
   }
 
@@ -92,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               _loading = false;
             });
-            errorMessageSnack(context, state.error);
+            errorMessageSnack(context, "Có lỗi xảy ra, vui lòng thử lại sau!");
           } else if (state is SuccessAuthState) {
             setState(() {
               _loading = false;

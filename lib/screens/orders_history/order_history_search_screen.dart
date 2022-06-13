@@ -1,125 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/controllers/order/order_controller.dart';
-import 'package:lixshop/repositories/order/order_repository.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../controllers/order/order_controller.dart';
+import '../../controllers/search_controller.dart';
+import '../../core/core.dart';
 import '../../models/order/order.dart';
+import '../../repositories/order/order_repository.dart';
+import '../../utils/design_course_app_theme.dart';
 import '../screen.dart';
 import 'constants/order_status.dart';
-import 'order_history_search_screen.dart';
 
-class OrderHistoryListScreen extends StatefulWidget {
-  final int tabIndex;
-
-  const OrderHistoryListScreen({Key? key, required this.tabIndex})
-      : super(key: key);
-
+class OrderHistorySearch extends SearchDelegate<String> {
   @override
-  State<OrderHistoryListScreen> createState() => _OrderHistoryListScreenState();
-}
-
-class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
-    with TickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(length: orderStatus.length, vsync: this);
-    _tabController.index = widget.tabIndex;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: orderStatus.length,
-        child: Scaffold(
-          appBar: _appBar(context),
-          body: TabBarView(
-              controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: orderStatus
-                  .map(
-                    (status) => Tab(
-                        child: TabBarPage(
-                            tabIndex: _tabController.index, status: status)),
-                  )
-                  .toList()),
-        ));
-  }
-
-  PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search, color: Vx.black),
-          onPressed: () {
-            showSearch(context: context, delegate: OrderHistorySearch());
-          },
-        ),
-      ],
-      bottom: TabBar(
-        physics: const BouncingScrollPhysics(),
-        controller: _tabController,
-        isScrollable: true,
-        labelColor: Vx.green500,
-        unselectedLabelColor: Vx.gray500,
-        labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        indicator: const UnderlineTabIndicator(
-          borderSide: BorderSide(
-            width: 3,
-            color: Vx.green500,
-          ),
-        ),
-        tabs: orderStatus
-            .map(
-              (status) => Tab(text: status),
-            )
-            .toList(),
-      ),
-      title: "Danh sách đơn hàng".text.black.make(),
-      titleSpacing: 0.0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
         onPressed: () {
-          Navigator.pop(context);
+          query = '';
         },
       ),
-      backgroundColor: Colors.white,
-    );
+    ];
   }
-}
-
-class TabBarPage extends StatelessWidget {
-  final String status;
-  final int tabIndex;
-
-  const TabBarPage({Key? key, required this.status, required this.tabIndex})
-      : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: orderRepository.getOrdersByUser(),
-      builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        List<Order> orders = orderController.filterByStatus(
-            snapshot.data!, orderStatusMap[status]!);
-        return orders.isNotEmpty
-            ? ListView(
-                children: List<Widget>.generate(
-                  orders.length,
-                  (index) => HistoryItem(order: orders[index]),
-                ),
-              )
-            : const Center(child: Text("Không có dữ liệu"));
+  String get searchFieldLabel => 'Tìm kiếm';
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
       },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return query.isEmpty
+        ? const Center(
+            child: Text('Kết quả'),
+          )
+        : FutureBuilder(
+            future: orderRepository.getOrdersByUser(),
+            builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              List<Order> orders =
+                  orderController.searchByOrderId(snapshot.data!, query);
+              return orders.isNotEmpty
+                  ? ListView(
+                      children: List<Widget>.generate(
+                        orders.length,
+                        (index) => HistoryItem(order: orders[index]),
+                      ),
+                    )
+                  : const Center(child: Text("Không có dữ liệu"));
+            },
+          );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return const Center(
+      child: Text('Kết quả'),
     );
   }
 }
@@ -140,7 +88,6 @@ class HistoryItem extends StatelessWidget {
           Get.to(
             () => OrderHistoryItemDetailScreen(order: order),
             curve: Curves.easeInToLinear,
-            transition: Transition.rightToLeft,
           );
         },
         child: Padding(
