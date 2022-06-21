@@ -360,18 +360,16 @@ class _CartItemState extends State<_CartItem> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 130,
+                      AspectRatio(
+                        aspectRatio: 309/510,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
                             widget.cart.productDetail!.pathImg ??
                                 "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
-                            errorBuilder: (context, url, error) =>
-                                const Icon(Icons.error),
-                            loadingBuilder: (context, url, loading) =>
-                                const Icon(Icons.error),
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.error);
+                            },
                             height: 80,
                             fit: BoxFit.cover,
                           ),

@@ -26,23 +26,24 @@ class ProductCard extends StatelessWidget {
             ));
       },
       child: Container(
-        width: size.width * 0.4,
+        width: size.width * 0.45,
         margin: const EdgeInsets.only(
           left: kDefaultPadding / 2,
           top: kDefaultPadding / 2,
-          bottom: kDefaultPadding * 2.5,
+          bottom: kDefaultPadding * 1.5,
         ),
+        color: Colors.white,
         child: Column(
           children: [
             Image.network(
               product.brand ??
                   "https://lzd-img-global.slatic.net/g/p/91154bf9a81671b7c88b928533bffcc1.png_200x200q80.jpg_.webp",
-              width: size.width * 0.4,
-              height: size.height * 0.3,
-              errorBuilder: (context, url, error) => SizedBox(
-                width: size.width * 0.4,
-                height: size.height * 0.3,
-                child: const Center(
+              width: 309/2,
+              height: 510/2,
+              errorBuilder: (context, url, error) => const SizedBox(
+                width: 309/2,
+                height: 510/2,
+                child: Center(
                   child: Icon(
                     Icons.error,
                     color: Colors.red,

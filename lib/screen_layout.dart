@@ -10,6 +10,7 @@ import 'constants/colors.dart';
 import 'core/core.dart';
 import 'core/cubits/bottom_navigation/navigation_state.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/get_started/get_started_screen.dart';
 import 'screens/introduction_animation/introduction_animation_screen.dart';
 import 'utils/global_variable.dart';
 
@@ -31,7 +32,7 @@ class _ScreenLayoutState extends State<ScreenLayout>
     if (!checkFirstTime!) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const IntroductionAnimationScreen(),
+          builder: (context) => const GetStartedScreens(),
         ),
       );
     }

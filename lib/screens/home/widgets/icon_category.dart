@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/products_outside_data/product_outside_category_model.dart';
 import 'package:lixshop/screens/home/categories_products_screen.dart';
+import 'package:lixshop/utils/design_course_app_theme.dart';
 
 import '../../../controllers/controllers.dart';
 import '../../../models/models.dart';
@@ -30,21 +31,23 @@ class _IconCategoryState extends State<IconCategory> {
             ));
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: SizedBox(
-          width: 100.0,
-          height: 130,
+          width: 309 / 3.0,
+          height: 510 / 2.5,
           child: Column(
             children: [
               Container(
-                height: 80.0,
-                width: 100.0,
+                width: 309 / 4.0,
+                height: 510 / 4.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                        color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.5)
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 2.0,
+                        spreadRadius: 0.5)
                   ],
                   image: DecorationImage(
                     image: NetworkImage(

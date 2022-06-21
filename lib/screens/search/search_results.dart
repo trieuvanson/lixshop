@@ -143,7 +143,7 @@ class _SearchResultsState extends State<SearchResults> {
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: index,
-                                    mainAxisExtent: size.height * 0.4,
+                                    childAspectRatio: 309/510,
                                     mainAxisSpacing: 10,
                                     crossAxisSpacing: 10,
                                   ),
@@ -152,8 +152,9 @@ class _SearchResultsState extends State<SearchResults> {
                                     return InkWell(
                                       onTap: () {
                                         Get.to(() => ProductDetailsScreen(
-                                          idBrand: product.brandId?.toInt() ?? 0,
-                                        ));
+                                              idBrand:
+                                                  product.brandId?.toInt() ?? 0,
+                                            ));
                                       },
                                       child: Stack(
                                         children: [

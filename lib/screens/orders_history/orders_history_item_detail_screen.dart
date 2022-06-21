@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/models/order/order.dart';
 import 'package:lixshop/models/order/order_detail.dart';
@@ -216,7 +217,7 @@ class _OrderHistoryItemDetailScreenState
           color: Colors.black,
         ),
         onPressed: () {
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -306,19 +307,21 @@ class _CartItem extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                    top: 16.0, left: 4, right: 4, bottom: 0),
+                padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                 child: SizedBox(
+                  height: 140,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: size.width * 0.3,
-                        height: 140,
+                      AspectRatio(
+                        aspectRatio: 309/510,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            orderDetail.productImage!,
+                              orderDetail.productImage!,
+                            errorBuilder: (context, url, error) =>
+                            const Icon(Icons.error),
                             height: 80,
                             fit: BoxFit.cover,
                           ),
@@ -326,7 +329,7 @@ class _CartItem extends StatelessWidget {
                       ),
                       16.widthBox,
                       SizedBox(
-                        width: size.width * 0.6,
+                        width: size.width * 0.75,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -344,7 +347,7 @@ class _CartItem extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
+                                      " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Vx.red700,
@@ -359,7 +362,7 @@ class _CartItem extends StatelessWidget {
                               width: MediaQuery.of(context).size.width - 150,
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
                                     child: "".text.size(10).gray500.make(),
@@ -390,7 +393,7 @@ class _CartItem extends StatelessWidget {
                             SizedBox(
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   "${convertCurrencyToVND(orderDetail.priceDetail!.toInt())}đ/${orderDetail.productUnit}"
                                       .text
@@ -410,10 +413,192 @@ class _CartItem extends StatelessWidget {
                           ],
                         ),
                       )
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     Flexible(
+                      //       child: SizedBox(
+                      //         width: MediaQuery.of(context).size.width - 150,
+                      //         child: RichText(
+                      //           maxLines: 2,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           text: TextSpan(
+                      //               style: const TextStyle(
+                      //                   color: Colors.black, fontSize: 18),
+                      //               text: widget.cart.productDetail!.name
+                      //                   .toString()),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     5.heightBox,
+                      //     SizedBox(
+                      //       width: MediaQuery.of(context).size.width - 150,
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //         children: [
+                      //           SizedBox(
+                      //             child: widget.cart.unit == "THÙNG"
+                      //                 ? "Thùng ${widget.cart.productDetail!.changeValue} ${widget.cart.productDetail!.unit!.toLowerCase()} x ${widget.cart.productDetail!.wunit!}"
+                      //                 .text
+                      //                 .gray500
+                      //                 .make()
+                      //                 : null,
+                      //           ),
+                      //           SizedBox(
+                      //             child: GestureDetector(
+                      //               // onTap: () {
+                      //               //   Navigator.of(context).push(
+                      //               //     HeroDialogRoute(
+                      //               //         builder: (context) => Column(
+                      //               //               children: [
+                      //               //                 Flexible(
+                      //               //                     child: Container(),
+                      //               //                     flex: 2),
+                      //               //                 const _DetailCartItemPopup(),
+                      //               //               ],
+                      //               //             ),
+                      //               //         fullscreenDialog: false),
+                      //               //   );
+                      //               // },
+                      //                 child: "".text.green500.xl.make()),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     5.heightBox,
+                      //     SizedBox(
+                      //       width: MediaQuery.of(context).size.width - 150,
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //         children: [
+                      //           "${widget.cart.getPricesChangeValue()}"
+                      //               .text
+                      //               .xl
+                      //               .gray500
+                      //               .make(),
+                      //           "${convertCurrencyToVND(widget.cart.getPrices()!)}đ"
+                      //               .text
+                      //               .color(Vx.black.withOpacity(0.8))
+                      //               .bold
+                      //               .xl2
+                      //               .make(),
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       top: 16.0, left: 4, right: 4, bottom: 0),
+              //   child: SizedBox(
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         ClipRRect(
+              //           borderRadius: BorderRadius.circular(16),
+              //           child: Image.network(
+              //             orderDetail.productImage!,
+              //             height: 80,
+              //             fit: BoxFit.cover,
+              //             errorBuilder: (context, error, stackTrace) {
+              //               return const Icon(Icons.error);
+              //             },
+              //           ),
+              //         ),
+              //           16.widthBox,
+              //         SizedBox(
+              //           width: size.width * 0.6,
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               SizedBox(
+              //                 width: MediaQuery.of(context).size.width - 150,
+              //                 child: RichText(
+              //                   maxLines: 5,
+              //                   overflow: TextOverflow.ellipsis,
+              //                   text: TextSpan(
+              //                     style: const TextStyle(
+              //                         color: Colors.black, fontSize: 16),
+              //                     children: [
+              //                       TextSpan(
+              //                         text: orderDetail.productName!,
+              //                       ),
+              //                       TextSpan(
+              //                         text:
+              //                             " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
+              //                         style: const TextStyle(
+              //                           fontWeight: FontWeight.bold,
+              //                           color: Vx.red700,
+              //                         ),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ),
+              //               5.heightBox,
+              //               SizedBox(
+              //                 width: MediaQuery.of(context).size.width - 150,
+              //                 child: Row(
+              //                   mainAxisAlignment:
+              //                       MainAxisAlignment.spaceBetween,
+              //                   children: [
+              //                     SizedBox(
+              //                       child: "".text.size(10).gray500.make(),
+              //                     ),
+              //                     // SizedBox(
+              //                     //   child: GestureDetector(
+              //                     //       onTap: () {
+              //                     //         Navigator.of(context).push(
+              //                     //           HeroDialogRoute(
+              //                     //               builder: (context) => Column(
+              //                     //                     children: [
+              //                     //                       Flexible(
+              //                     //                           child: Container(),
+              //                     //                           flex: 2),
+              //                     //                       const _DetailCartItemPopup(),
+              //                     //                     ],
+              //                     //                   ),
+              //                     //               fullscreenDialog: false),
+              //                     //         );
+              //                     //       },
+              //                     //       child:
+              //                     //           "Chi tiết".text.green500.xl.make()),
+              //                     // ),
+              //                   ],
+              //                 ),
+              //               ),
+              //               5.heightBox,
+              //               SizedBox(
+              //                 child: Row(
+              //                   mainAxisAlignment:
+              //                       MainAxisAlignment.spaceBetween,
+              //                   children: [
+              //                     "${convertCurrencyToVND(orderDetail.priceDetail!.toInt())}đ/${orderDetail.productUnit}"
+              //                         .text
+              //                         .xl
+              //                         .size(10)
+              //                         .gray500
+              //                         .make(),
+              //                     "${convertCurrencyToVND(orderDetail.totalDetail!.toInt())}đ"
+              //                         .text
+              //                         .color(Vx.black.withOpacity(0.8))
+              //                         .bold
+              //                         .xl2
+              //                         .make(),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
               orderDetail.donHangDetailKmDTO2s!.isNotEmpty
                   ? Padding(
                       padding:
@@ -524,119 +709,119 @@ class _CartItem extends StatelessWidget {
 }
 
 //Voucher
-class _DetailCartItemPopup extends StatelessWidget {
-  const _DetailCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(16),
-      color: DesignCourseAppTheme.nearlyWhite,
-      child: Container(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            children: [
-              const _HeaderCartItemPopup(),
-              const Divider(),
-              const _DetailCartItemList().expand(),
-              const Divider(),
-              const _FooterCartItemPopup(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HeaderCartItemPopup extends StatelessWidget {
-  const _HeaderCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        children: [
-          const SizedBox(
-            child: Center(
-                child: Text("Chi tiết",
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-          ),
-          4.heightBox,
-          const SizedBox(
-            child: Text(
-              "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FooterCartItemPopup extends StatelessWidget {
-  const _FooterCartItemPopup({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Container(
-          height: 48,
-          decoration: BoxDecoration(
-            color: Vx.green500,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
-                  offset: const Offset(1.1, 1.1),
-                  blurRadius: 10.0),
-            ],
-          ),
-          child: const Center(
-            child: Text(
-              'Đóng',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                letterSpacing: 0.0,
-                color: DesignCourseAppTheme.nearlyWhite,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DetailCartItemList extends StatefulWidget {
-  const _DetailCartItemList({Key? key}) : super(key: key);
-
-  @override
-  State<_DetailCartItemList> createState() => _DetailCartItemListState();
-}
-
-class _DetailCartItemListState extends State<_DetailCartItemList> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 100,
-        itemBuilder: (context, index) => Container(
-              child: Text("$index"),
-            ));
-  }
-}
+// class _DetailCartItemPopup extends StatelessWidget {
+//   const _DetailCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       borderRadius: BorderRadius.circular(16),
+//       color: DesignCourseAppTheme.nearlyWhite,
+//       child: Container(
+//         constraints:
+//             BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 1.5),
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//           child: Column(
+//             children: [
+//               const _HeaderCartItemPopup(),
+//               const Divider(),
+//               const _DetailCartItemList().expand(),
+//               const Divider(),
+//               const _FooterCartItemPopup(),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class _HeaderCartItemPopup extends StatelessWidget {
+//   const _HeaderCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 16.0),
+//       child: Column(
+//         children: [
+//           const SizedBox(
+//             child: Center(
+//                 child: Text("Chi tiết",
+//                     style:
+//                         TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+//           ),
+//           4.heightBox,
+//           const SizedBox(
+//             child: Text(
+//               "Các hình thức khuyến mãi của sản phẩm nhằm áp dụng để có thể tiết kiệm được một khoản chi phí.",
+//               style: TextStyle(fontSize: 16),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class _FooterCartItemPopup extends StatelessWidget {
+//   const _FooterCartItemPopup({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         Navigator.pop(context);
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.only(bottom: 8.0),
+//         child: Container(
+//           height: 48,
+//           decoration: BoxDecoration(
+//             color: Vx.green500,
+//             borderRadius: const BorderRadius.all(
+//               Radius.circular(16.0),
+//             ),
+//             boxShadow: <BoxShadow>[
+//               BoxShadow(
+//                   color: DesignCourseAppTheme.nearlyBlue.withOpacity(0.5),
+//                   offset: const Offset(1.1, 1.1),
+//                   blurRadius: 10.0),
+//             ],
+//           ),
+//           child: const Center(
+//             child: Text(
+//               'Đóng',
+//               textAlign: TextAlign.center,
+//               style: TextStyle(
+//                 fontWeight: FontWeight.w600,
+//                 fontSize: 18,
+//                 letterSpacing: 0.0,
+//                 color: DesignCourseAppTheme.nearlyWhite,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class _DetailCartItemList extends StatefulWidget {
+//   const _DetailCartItemList({Key? key}) : super(key: key);
+//
+//   @override
+//   State<_DetailCartItemList> createState() => _DetailCartItemListState();
+// }
+//
+// class _DetailCartItemListState extends State<_DetailCartItemList> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//         itemCount: 100,
+//         itemBuilder: (context, index) => Container(
+//               child: Text("$index"),
+//             ));
+//   }
+// }

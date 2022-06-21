@@ -46,7 +46,6 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
                       Container(
                         padding: EdgeInsets.only(top: padding.top),
                         color: kBackgroundColor,
-                        width: double.infinity,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -116,7 +115,7 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get minExtent => 146 + padding.top;
+  double get minExtent => 224;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
@@ -124,5 +123,5 @@ class _HeaderSliver extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 146 + padding.top;
+  double get maxExtent => 224;
 }

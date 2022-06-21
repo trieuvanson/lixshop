@@ -29,7 +29,7 @@ class CategoryItemsLoader extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               width: 100.0,
-                              height: 130 + padding.top,
+                              height: 224,
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(10.0),
@@ -51,7 +51,7 @@ class CategoryItemsLoader extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 130 + padding.top,
+                    height: 224,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10.0),

@@ -8,12 +8,14 @@ import 'package:lixshop/screens/cart/cart_screen.dart';
 import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../screen.dart';
+import 'widgets/product_card.dart';
 
 class ProductsTypeScreen extends StatefulWidget {
   final List<ProductOutsideBrand> products;
   final String title;
 
-  const ProductsTypeScreen({Key? key, required this.products, required this.title})
+  const ProductsTypeScreen(
+      {Key? key, required this.products, required this.title})
       : super(key: key);
 
   @override
@@ -43,35 +45,28 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     super.initState();
   }
 
-  void loadMore() {
-    _scrollController.addListener(() {
+  loadMore() {
+    _scrollController.addListener(() async {
       if (_scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent &&
           _currentProducts.length != widget.products.length) {
         //show SnackBar indicator
-        setState(()  {
+        setState(() {
           _isLoading = true;
-          int length = widget.products.length - (widget.products.length % 10);
-          if (_isLoading) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              duration: Duration(milliseconds: 500),
-              content: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(kPrimaryColor),
-              ),
-              backgroundColor: Colors.white,
-            ));
-          }
-          if (_currentMaxItem < length) {
-            _currentMaxItem += 10;
-          } else {
-            _currentMaxItem = widget.products.length;
-          }
-          _currentProducts = widget.products.sublist(
-            0,
-            _currentMaxItem,
-          );
-          _isLoading = false;
         });
+        await Future.delayed(const Duration(milliseconds: 500));
+        int length = widget.products.length - (widget.products.length % 10);
+        if (_currentMaxItem < length) {
+          _currentMaxItem += 10;
+        } else {
+          _currentMaxItem = widget.products.length;
+        }
+        _currentProducts = widget.products.sublist(
+          0,
+          _currentMaxItem,
+        );
+        _isLoading = false;
+        setState(() {});
       }
     });
   }
@@ -86,6 +81,82 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
+    print('size.width: ${size.width}');
+    // return Scaffold(
+    //   appBar: appBar(),
+    //   body: Container(
+    //     padding: const EdgeInsets.symmetric(
+    //         horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
+    //     color: DesignCourseAppTheme.notWhite,
+    //     child: SingleChildScrollView(
+    //       controller: _scrollController,
+    //       child: Wrap(
+    //         alignment: WrapAlignment.center,
+    //         spacing: kDefaultPadding,
+    //         runSpacing: kDefaultPadding,
+    //         children: [
+    //           Container(
+    //             height: 100,
+    //             width: 500,
+    //             color: Colors.black,
+    //           ),
+    //           Container(
+    //             height: 200,
+    //             width: 200,
+    //             color: Colors.black,
+    //           ),
+    //           Container(
+    //             height: 200,
+    //             width: 200,
+    //             color: Colors.black,
+    //           ),
+    //           Container(
+    //             height: 200,
+    //             width: 200,
+    //             color: Colors.black,
+    //           ),
+    //           Container(
+    //             height: 200,
+    //             width: 200,
+    //             color: Colors.black,
+    //           ),
+    //           Container(
+    //             height: 100,
+    //             width: 500,
+    //             color: Colors.black,
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    return Scaffold(
+      appBar: appBar(),
+      body: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
+        color: DesignCourseAppTheme.notWhite,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            children: [
+              for (var product in _currentProducts)
+                ProductCard(
+                  product: product,
+                ),
+              if (_isLoading)
+                const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.black),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       appBar: appBar(),
       body: Container(
@@ -98,7 +169,8 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
           physics: const ScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: index,
-            mainAxisExtent: size.height * 0.35,
+            childAspectRatio: 309 / 510,
+            // mainAxisExtent: 510/1.5,
             mainAxisSpacing: kDefaultPadding / 2,
             crossAxisSpacing: kDefaultPadding / 2,
           ),
@@ -107,8 +179,8 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
             return InkWell(
               onTap: () {
                 Get.to(() => ProductDetailsScreen(
-                  idBrand: product.brandId?.toInt() ?? 0,
-                ));
+                      idBrand: product.brandId?.toInt() ?? 0,
+                    ));
               },
               child: Stack(
                 children: [
@@ -167,16 +239,13 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     return AppBar(
       elevation: 0,
       leadingWidth: 30,
-      title: Text(widget.title, style: const TextStyle(fontSize: 18, color: Colors.black)),
+      title: Text(widget.title,
+          style: const TextStyle(fontSize: 18, color: Colors.black)),
       leading: IconButton(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
-          Get.to(
-            () => const ScreenLayout(),
-            transition: Transition.leftToRight,
-            duration: const Duration(milliseconds: 500),
-          );
+          Navigator.pop(context);
         },
       ),
       backgroundColor: Colors.white,

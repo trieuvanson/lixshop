@@ -7,6 +7,7 @@ import '../../utils/design_course_app_theme.dart';
 import '../cart/cart_screen.dart';
 import '../screen.dart';
 import 'constants/constants.dart';
+import 'widgets/product_card.dart';
 
 class CategoryProductScreen extends StatefulWidget {
   final category;
@@ -85,6 +86,31 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
+    return Scaffold(
+      appBar: appBar(widget.category),
+      body: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            children: [
+              for (var product in _currentProducts)
+                ProductCard(
+                  product: product,
+                ),
+              if (_isLoading)
+                const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.black),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       appBar: appBar(widget.category),
       body: Container(
@@ -178,10 +204,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
-          Get.to(
-            () => const ScreenLayout(),
-            duration: const Duration(milliseconds: 500),
-          );
+          Navigator.pop(context);
         },
       ),
       backgroundColor: Colors.white,

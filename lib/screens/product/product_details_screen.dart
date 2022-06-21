@@ -243,177 +243,173 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.of(context).padding;
     return Scaffold(
       appBar: _appBar(context),
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
       bottomNavigationBar: _buildBottom(products[selectProduct]),
-      body: SizedBox(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildImage(products[selectProduct].code!,
-                  products[selectProduct].pathImg ?? ""),
-              Container(
-                decoration: BoxDecoration(
-                  color: DesignCourseAppTheme.nearlyWhite,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(32.0),
-                    topRight: Radius.circular(32.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                        offset: const Offset(1.1, 1.1),
-                        blurRadius: 10.0),
-                  ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildImage(products[selectProduct].code!,
+                products[selectProduct].pathImg ?? ""),
+            Container(
+              decoration: BoxDecoration(
+                color: DesignCourseAppTheme.nearlyWhite,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(32.0),
+                  topRight: Radius.circular(32.0),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Name
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 16.0, left: 8, right: 8),
-                      child: Text(
-                        products[selectProduct].name ?? "",
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          letterSpacing: 0.27,
-                          color: DesignCourseAppTheme.darkerText,
-                        ),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                      offset: const Offset(1.1, 1.1),
+                      blurRadius: 10.0),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //Name
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 16.0, left: 8, right: 8),
+                    child: Text(
+                      products[selectProduct].name ?? "",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        letterSpacing: 0.27,
+                        color: DesignCourseAppTheme.darkerText,
                       ),
                     ),
-                    //Price
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, bottom: 8, top: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            _cart.unit != "THÙNG"
-                                ? 'đ${convertCurrencyToVND(products[selectProduct].price!)}'
-                                : 'đ${convertCurrencyToVND(products[selectProduct].price! * products[selectProduct].changeValue!)}',
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              letterSpacing: 0.27,
-                              color: Vx.red700,
-                            ),
+                  ),
+                  //Price
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 8, bottom: 8, top: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          _cart.unit != "THÙNG"
+                              ? 'đ${convertCurrencyToVND(products[selectProduct].price!)}'
+                              : 'đ${convertCurrencyToVND(products[selectProduct].price! * products[selectProduct].changeValue!)}',
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            letterSpacing: 0.27,
+                            color: Vx.red700,
                           ),
-                        ],
-                      ),
-                    ),
-                    10.heightBox,
-                    //Size
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: DesignCourseAppTheme.nearlyWhite,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(8.0),
                         ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                              offset: const Offset(1.1, 1.1),
-                              blurRadius: 8.0),
-                        ],
+                      ],
+                    ),
+                  ),
+                  10.heightBox,
+                  //Size
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: DesignCourseAppTheme.nearlyWhite,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                            offset: const Offset(1.1, 1.1),
+                            blurRadius: 8.0),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, right: 8.0, top: 12.0, bottom: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                child: Row(
+                                  children: [
+                                    "Chọn loại hàng ".text.bold.make(),
+                                    "(${(products).length} sản phẩm)"
+                                        .text
+                                        .italic
+                                        .make(),
+                                  ],
+                                ),
+                              ),
+                              // 64.widthBox,
+                              const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
                               children: [
-                                SizedBox(
-                                  child: Row(
-                                    children: [
-                                      "Chọn loại hàng ".text.bold.make(),
-                                      "(${(products).length} sản phẩm)"
-                                          .text
-                                          .italic
-                                          .make(),
-                                    ],
-                                  ),
-                                ),
-                                // 64.widthBox,
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  for (var i = 0;
-                                      i <
-                                          widget.resultDetailsDataModel.sizes!
-                                              .length;
-                                      i++)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: index == i
-                                              ? Vx.green500
-                                              : DesignCourseAppTheme
-                                                  .nearlyWhite,
+                                for (var i = 0;
+                                    i <
+                                        widget.resultDetailsDataModel.sizes!
+                                            .length;
+                                    i++)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: index == i
+                                            ? Vx.green500
+                                            : DesignCourseAppTheme.nearlyWhite,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        ),
+                                        border: Border.all(color: Vx.green500),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          splashColor: Colors.white24,
                                           borderRadius: const BorderRadius.all(
                                             Radius.circular(8.0),
                                           ),
-                                          border:
-                                              Border.all(color: Vx.green500),
-                                        ),
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            splashColor: Colors.white24,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8.0),
-                                            ),
-                                            onTap: index == i
-                                                ? () {}
-                                                : () {
-                                                    changeProductSize(
-                                                        widget
-                                                            .resultDetailsDataModel
-                                                            .sizes![i],
-                                                        i);
-                                                  },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8,
-                                                  bottom: 8,
-                                                  left: 8,
-                                                  right: 8),
-                                              child: Center(
-                                                child: Text(
-                                                  widget.resultDetailsDataModel
-                                                      .sizes![i],
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 14,
-                                                    letterSpacing: 0.27,
-                                                    color: index == i
-                                                        ? Vx.white
-                                                        : Vx.green500,
-                                                  ),
+                                          onTap: index == i
+                                              ? () {}
+                                              : () {
+                                                  changeProductSize(
+                                                      widget
+                                                          .resultDetailsDataModel
+                                                          .sizes![i],
+                                                      i);
+                                                },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 8,
+                                                bottom: 8,
+                                                left: 8,
+                                                right: 8),
+                                            child: Center(
+                                              child: Text(
+                                                widget.resultDetailsDataModel
+                                                    .sizes![i],
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                  letterSpacing: 0.27,
+                                                  color: index == i
+                                                      ? Vx.white
+                                                      : Vx.green500,
                                                 ),
                                               ),
                                             ),
@@ -421,20 +417,20 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                         ),
                                       ),
                                     ),
-                                ],
-                              ),
+                                  ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                    10.heightBox,
-                    _buildDefaultTab(),
-                  ],
-                ),
+                  ),
+                  10.heightBox,
+                  _buildDefaultTab(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -496,7 +492,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildExpandAbleDescription(
-                            products[index].description!),
+                            products[selectProduct].description??""),
                       ],
                     ),
                   ),
@@ -845,34 +841,33 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
   }
 
   Widget _buildImage(String code, String img) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: SizedBox(
-        // color: appColor,
-        child: Image.network(
-          img,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+    return SizedBox(
+      // color: appColor,
+      child: Image.network(
+        img,
+        width: 309,
+        height: 510,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return const SizedBox(
+            width: 309,
+            height: 510,
+            child: Center(
+              child: Icon(
+                Icons.error,
+                color: Colors.red,
               ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 2,
-              child: const Center(
-                child: Icon(
-                  Icons.error,
-                  color: Colors.red,
-                ),
-              ),
-            );
-          },
-          fit: BoxFit.cover,
-        ),
+            ),
+          );
+        },
+        fit: BoxFit.cover,
       ),
     );
   }
