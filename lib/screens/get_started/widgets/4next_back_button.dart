@@ -4,7 +4,7 @@ import '../constants/get_started_controller.dart';
 import '../constants/global.dart';
 
 
-Widget buildNextbackBtn(double currentPage) => SizedBox(
+Widget buildNextBackBtn(double currentPage) => SizedBox(
       height: 50,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.00),

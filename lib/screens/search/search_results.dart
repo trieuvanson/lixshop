@@ -59,6 +59,7 @@ class _SearchResultsState extends State<SearchResults> {
           if (state.isSuccess) {
             return SingleChildScrollView(
               child: Container(
+                height: size.height,
                 color: DesignCourseAppTheme.notWhite,
                 child: Padding(
                   padding: const EdgeInsets.only(

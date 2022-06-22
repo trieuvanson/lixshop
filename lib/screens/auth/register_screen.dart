@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/repositories/app_repository.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -7,7 +8,6 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../constants/colors.dart';
 import '../../core/core.dart';
 import '../../screen_layout.dart';
-import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';
 import '../screen.dart';
 
@@ -162,10 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ScreenLayout(),
-                settings: const RouteSettings(name: '/'),
-              ));
+              Get.to(() => const ScreenLayout());
             },
           ),
         ),

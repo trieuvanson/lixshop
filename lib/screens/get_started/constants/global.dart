@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:velocity_x/velocity_x.dart';
 
-Color primaryColor = HexColor("#7DA3F3");
+Color primaryColor = Vx.green500;

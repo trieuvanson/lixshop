@@ -20,6 +20,17 @@ class CenterNextButton extends StatefulWidget {
 }
 
 class _CenterNextButtonState extends State<CenterNextButton> {
+  onLoginClick() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isFirstTime', true);
+    setState(() {
+    });
+    Get.to(
+          () => const LoginScreen(),
+      routeName: "/login",
+      transition: Transition.rightToLeft,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final _topMoveAnimation = Tween<Offset>(
@@ -59,17 +70,7 @@ class _CenterNextButtonState extends State<CenterNextButton> {
       ),
     );
 
-    Future<void> onLoginClick() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isFirstTime', true);
-      setState(() {
-      });
-      Get.to(
-            () => const LoginScreen(),
-        routeName: "/login",
-        transition: Transition.rightToLeft,
-      );
-    }
+
 
     return Padding(
       padding:
