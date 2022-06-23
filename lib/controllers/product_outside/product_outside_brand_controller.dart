@@ -2,10 +2,19 @@ import '../../models/models.dart';
 import '../../screens/home/widgets/product_card.dart';
 
 class ProductOutsideBrandController {
+  // List<ProductOutsideBrand> getProductOutsideBrandList(
+  //     ResultDataModel resultDataModel) {
+  //   List<ProductOutsideBrand> productOutsideBrandList = [];
+  //   for (var element in resultDataModel.productOutsideCategory!) {
+  //     productOutsideBrandList.addAll(element.productBrand!);
+  //   }
+  //   return productOutsideBrandList;
+  // }
+
   List<ProductOutsideBrand> getProductOutsideBrandList(
-      ResultDataModel resultDataModel) {
+      List<ProductOutsideCategory> productOutsideCategory) {
     List<ProductOutsideBrand> productOutsideBrandList = [];
-    for (var element in resultDataModel.productOutsideCategory!) {
+    for (var element in productOutsideCategory) {
       productOutsideBrandList.addAll(element.productBrand!);
     }
     return productOutsideBrandList;
@@ -35,8 +44,7 @@ class ProductOutsideBrandController {
   }
 
   List<ProductOutsideBrand> getByCategory(
-      {required List<ProductOutsideBrand> list,
-      required String category}) {
+      {required List<ProductOutsideBrand> list, required String category}) {
     List<ProductOutsideBrand> productOutsideBrandList = [];
     for (var element in list) {
       if (element.brand == category) {
@@ -45,7 +53,6 @@ class ProductOutsideBrandController {
     }
     return productOutsideBrandList;
   }
-
-
-
 }
+
+final productOutsideBrandController = ProductOutsideBrandController();

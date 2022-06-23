@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import '../screen.dart';
 import 'widgets/1body.dart';
 
 class GetStartedScreens extends StatefulWidget {
@@ -15,6 +13,21 @@ class GetStartedScreens extends StatefulWidget {
 class _GetStartedScreensState extends State<GetStartedScreens> {
   String? name;
   bool? checkValue;
+
+  @override
+  void initState() {
+    requestPermission();
+    super.initState();
+  }
+
+  void requestPermission() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+      print('Ahihi');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

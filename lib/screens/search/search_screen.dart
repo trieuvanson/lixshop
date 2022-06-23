@@ -313,7 +313,7 @@ class _MenuItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
                     image: NetworkImage(image),
-                    fit: BoxFit.cover,
+                    scale: 309/510
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
@@ -321,11 +321,6 @@ class _MenuItem extends StatelessWidget {
                         offset: const Offset(1.1, 1.1),
                         blurRadius: 8.0),
                   ],
-                ),
-                child: const Icon(
-                  Icons.search,
-                  color: DesignCourseAppTheme.nearlyBlue,
-                  size: 30,
                 ),
               ),
               const Spacer(),

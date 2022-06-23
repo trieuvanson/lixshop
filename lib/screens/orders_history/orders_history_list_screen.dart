@@ -22,12 +22,19 @@ class OrderHistoryListScreen extends StatefulWidget {
 class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  List<Order>? _orders;
 
   @override
   void initState() {
     _tabController = TabController(length: orderStatus.length, vsync: this);
     _tabController.index = widget.tabIndex;
+    getOrders();
     super.initState();
+  }
+
+  getOrders() async {
+    _orders = await orderRepository.getOrdersByUser();
+    setState(() {});
   }
 
   @override
@@ -43,7 +50,9 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
                   .map(
                     (status) => Tab(
                         child: TabBarPage(
-                            tabIndex: _tabController.index, status: status)),
+                            orders: _orders ?? [],
+                            tabIndex: _tabController.index,
+                            status: status)),
                   )
                   .toList()),
         ));
@@ -97,30 +106,27 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
 class TabBarPage extends StatelessWidget {
   final String status;
   final int tabIndex;
+  final List<Order> orders;
 
-  const TabBarPage({Key? key, required this.status, required this.tabIndex})
+  const TabBarPage(
+      {Key? key,
+      required this.status,
+      required this.tabIndex,
+      required this.orders})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: orderRepository.getOrdersByUser(),
-      builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        List<Order> orders = orderController.filterByStatus(
-            snapshot.data!, orderStatusMap[status]!);
-        return orders.isNotEmpty
-            ? ListView(
-                children: List<Widget>.generate(
-                  orders.length,
-                  (index) => HistoryItem(order: orders[index]),
-                ),
-              )
-            : const Center(child: Text("Không có dữ liệu"));
-      },
-    );
+    List<Order> orders =
+        orderController.filterByStatus(this.orders, orderStatusMap[status]!);
+    return orders.isNotEmpty
+        ? ListView(
+            children: List<Widget>.generate(
+              orders.length,
+              (index) => HistoryItem(order: orders[index]),
+            ),
+          )
+        : const Center(child: Text("Không có dữ liệu"));
   }
 }
 

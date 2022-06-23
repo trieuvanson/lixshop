@@ -18,8 +18,6 @@ class IconCategory extends StatefulWidget {
 
 class _IconCategoryState extends State<IconCategory> {
   var products;
-  final productOutsideBrandController = ProductOutsideBrandController();
-
   @override
   Widget build(BuildContext context) {
     var products = widget.item.productBrand;

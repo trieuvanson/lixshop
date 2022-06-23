@@ -27,9 +27,6 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await dotenv.load(fileName: ".env");
-  await Hive.initFlutter();
-  Hive.registerAdapter(CartHiveAdapter());
-  await Hive.openBox<CartHive>('cart');
   BlocOverrides.runZoned(
       () {
         runApp(

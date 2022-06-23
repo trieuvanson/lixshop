@@ -33,10 +33,10 @@ class ResultOutsideDataRepository {
       return resultDataModel;
     } on DioError catch (e) {
       print('getResultData error 1 : $e');
-      return ResultDataModel();
+      return ResultDataModel(productOutsideCategory: null);
     } catch (err) {
       print('getResultData error 2: $err');
-      return ResultDataModel();
+      return ResultDataModel(productOutsideCategory: null);
     }
   }
 

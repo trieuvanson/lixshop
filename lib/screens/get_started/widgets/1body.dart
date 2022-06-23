@@ -17,16 +17,6 @@ class BuildBody extends StatefulWidget {
 }
 
 class _BuildBodyState extends State<BuildBody> {
-  onLoginClick() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setBool('isFirstTime', true);
-    print('Click');
-    setState(() {});
-    Get.to(
-      () => const LoginScreen(),
-      transition: Transition.rightToLeft,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

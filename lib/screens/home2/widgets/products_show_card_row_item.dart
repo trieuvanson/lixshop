@@ -133,7 +133,7 @@ class _ProductShowCardRowItemState extends State<ProductShowCardRowItem> {
 
   Widget _buildProductsWidget(ResultDataModel resultDataModel) {
     List<ProductOutsideBrand> productsOutside = productOutsideBrandController
-        .getProductOutsideBrandList(resultDataModel);
+        .getProductOutsideBrandList(resultDataModel.productOutsideCategory!);
     products = productOutsideBrandController.filterProductsBrand(
         list: productsOutside, type: widget.type);
     return Row(

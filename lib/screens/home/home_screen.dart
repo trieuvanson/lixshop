@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         elevation: 0,
         backgroundColor: kPrimaryColor,
-        child: const Icon(Icons.shopping_cart),
+        child: const Icon(Icons.shopping_cart, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: const HomeScreenBody(),

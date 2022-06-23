@@ -81,7 +81,6 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
-    print('size.width: ${size.width}');
     // return Scaffold(
     //   appBar: appBar(),
     //   body: Container(

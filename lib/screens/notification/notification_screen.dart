@@ -24,16 +24,16 @@ class NotificationScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8),
           color: DesignCourseAppTheme.nearlyWhite,
           child: Column(
-            children: [
-              for (var i = 0; i < 10; i++)
-                _NotificationItem(
-                  title: "Chương trình khuyến mãi $i",
-                  content: "Thông báo $i",
-                  time: "Thứ 2, ngày 12/12/2020",
-                  image: "assets/images/lix3.png",
-                  onTap: () {
-                  },
-                ),
+            children: const [
+              // for (var i = 0; i < 10; i++)
+              //   _NotificationItem(
+              //     title: "Chương trình khuyến mãi $i",
+              //     content: "Thông báo $i",
+              //     time: "Thứ 2, ngày 12/12/2020",
+              //     image: "assets/images/lix3.png",
+              //     onTap: () {
+              //     },
+              //   ),
             ],
           ),
         ),

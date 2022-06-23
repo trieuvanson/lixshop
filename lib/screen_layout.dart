@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -11,7 +12,6 @@ import 'core/core.dart';
 import 'core/cubits/bottom_navigation/navigation_state.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/get_started/get_started_screen.dart';
-import 'screens/introduction_animation/introduction_animation_screen.dart';
 import 'utils/global_variable.dart';
 
 class ScreenLayout extends StatefulWidget {
@@ -23,20 +23,8 @@ class ScreenLayout extends StatefulWidget {
 
 class _ScreenLayoutState extends State<ScreenLayout>
     with TickerProviderStateMixin<ScreenLayout> {
-  bool? checkFirstTime = false;
-
-  Future checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
-    setState(() {});
-    if (!checkFirstTime!) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const GetStartedScreens(),
-        ),
-      );
-    }
-  }
+  bool checkFirstTime = false;
+  bool isLogin = false;
 
   @override
   void initState() {
@@ -44,10 +32,37 @@ class _ScreenLayoutState extends State<ScreenLayout>
     super.initState();
   }
 
+  void checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
+    setState(() {});
+    if (!checkFirstTime) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const GetStartedScreens(),
+        ),
+      );
+    } else {
+      checkLogin();
+    }
+  }
+
+  checkLogin() async {
+    isLogin = await secureStorage.checkLogin();
+    setState(() {});
+    if (!isLogin) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    return !checkFirstTime!
+    return !checkFirstTime
         ? Container(
             color: Colors.white,
             child: const Center(
@@ -56,18 +71,22 @@ class _ScreenLayoutState extends State<ScreenLayout>
               ),
             ),
           )
-        : Scaffold(
-            backgroundColor: Colors.white,
-            body: BlocBuilder<NavigationCubit, NavigationState>(
-              builder: (context, state) {
-                return Center(
-                  child: homeScreenItems.elementAt(
-                      BlocProvider.of<NavigationCubit>(context).state.index),
-                );
-              },
-            ),
-            bottomNavigationBar: _bottomNavigation(context, authBloc),
-          );
+        : !isLogin
+            ? const SizedBox.shrink()
+            : Scaffold(
+                backgroundColor: Colors.white,
+                body: BlocBuilder<NavigationCubit, NavigationState>(
+                  builder: (context, state) {
+                    return Center(
+                      child: homeScreenItems.elementAt(
+                          BlocProvider.of<NavigationCubit>(context)
+                              .state
+                              .index),
+                    );
+                  },
+                ),
+                bottomNavigationBar: _bottomNavigation(context, authBloc),
+              );
   }
 
   Widget _bottomNavigation(BuildContext context, final authBloc) {

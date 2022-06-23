@@ -14,8 +14,13 @@ import 'widgets.dart';
 class ProductTypeItemRow extends StatefulWidget {
   final ProductCardType type;
   final String title;
+  final List<ProductOutsideCategory> productOutsideCategory;
 
-  const ProductTypeItemRow({Key? key, required this.type, required this.title})
+  const ProductTypeItemRow(
+      {Key? key,
+      required this.type,
+      required this.title,
+      required this.productOutsideCategory})
       : super(key: key);
 
   @override
@@ -23,53 +28,41 @@ class ProductTypeItemRow extends StatefulWidget {
 }
 
 class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
- late List<ProductOutsideBrand> products;
-  final productOutsideBrandController = ProductOutsideBrandController();
+  List<ProductOutsideBrand>? _products;
+
+  @override
+  void initState() {
+    var _subProducts = productOutsideBrandController
+        .getProductOutsideBrandList(widget.productOutsideCategory);
+    _products = productOutsideBrandController.filterProductsBrand(
+        type: widget.type, list: _subProducts);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: resultDataOutsideRepository.getResultData(),
-      builder: (context, AsyncSnapshot<ResultDataModel> snapshot) {
-        ResultDataModel? resultDataModel = snapshot.data;
-        return snapshot.hasData
-            ? resultDataModel!.productOutsideCategory!.isNotEmpty
-                ? Column(
-                    children: [
-                      TitleWithMoreButton(
-                          title: widget.title,
-                          onPressed: () => {
-                                Get.to(() => ProductsTypeScreen(
-                                      products: products,
-                                      title: widget.title,
-                                    ))
-                              }),
-                      Builder(builder: (_) {
-                        List<ProductOutsideBrand> subProducts =
-                            productOutsideBrandController
-                                .getProductOutsideBrandList(resultDataModel);
-                        products =
-                            productOutsideBrandController.filterProductsBrand(
-                                list: subProducts, type: widget.type);
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (final product in products.take(10))
-                                ProductCard(
-                                  product: product,
-                                ),
-                            ],
-                          ),
-                        );
-                      })
-                    ],
-                  )
-                : Container()
-            : const ProductItemsLoader(
-                type: ProductLoaderType.loading,
-              );
-      },
+    return Column(
+      children: [
+        TitleWithMoreButton(
+            title: widget.title,
+            onPressed: () => {
+                  Get.to(() => ProductsTypeScreen(
+                        products: _products!,
+                        title: widget.title,
+                      ))
+                }),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final product in _products!.take(10))
+                ProductCard(
+                  product: product,
+                ),
+            ],
+          ),
+        )
+      ],
     );
 
     return BlocBuilder<ResultOutsideCubit, ResultOutsideState>(
@@ -83,7 +76,7 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
                     ? () {}
                     : () => {
                           Get.to(() => ProductsTypeScreen(
-                                products: products,
+                                products: _products!,
                                 title: widget.title,
                               ))
                         }),
@@ -93,16 +86,16 @@ class _ProductTypeItemRowState extends State<ProductTypeItemRow> {
                     type: ProductLoaderType.loading);
               } else if (state.isError) {
               } else if (state.isSuccess) {
-                List<ProductOutsideBrand> subProducts =
-                    productOutsideBrandController
-                        .getProductOutsideBrandList(state.resultDataModel!);
-                products = productOutsideBrandController.filterProductsBrand(
-                    list: subProducts, type: widget.type);
+                // List<ProductOutsideBrand> subProducts =
+                //     productOutsideBrandController.getProductOutsideBrandList(
+                //         state.resultDataModel!.productOutsideCategory!);
+                // products = productOutsideBrandController.filterProductsBrand(
+                //     list: subProducts, type: widget.type);
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      for (final product in products.take(10))
+                      for (final product in _products!.take(10))
                         ProductCard(
                           product: product,
                         ),

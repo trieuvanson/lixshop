@@ -894,17 +894,17 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         },
       ),
       actions: <Widget>[
-        BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            return IconButton(
-              icon: const Icon(
-                Icons.favorite_border,
-                color: DesignCourseAppTheme.darkGrey,
-              ),
-              onPressed: () {},
-            );
-          },
-        ),
+        // BlocBuilder<CartBloc, CartState>(
+        //   builder: (context, state) {
+        //     return IconButton(
+        //       icon: const Icon(
+        //         Icons.favorite_border,
+        //         color: DesignCourseAppTheme.darkGrey,
+        //       ),
+        //       onPressed: () {},
+        //     );
+        //   },
+        // ),
         //share
         IconButton(
           icon: const Icon(
@@ -917,48 +917,48 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
             );
           },
         ),
-        DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            customButton: const Icon(
-              Icons.more_vert,
-              color: DesignCourseAppTheme.darkGrey,
-              size: 24,
-            ),
-            customItemsIndexes: const [3],
-            customItemsHeight: 8,
-            items: [
-              ...MenuItems.firstItems.map(
-                (item) => DropdownMenuItem<MenuItem>(
-                  value: item,
-                  child: MenuItems.buildItem(item),
-                ),
-              ),
-              const DropdownMenuItem<Divider>(
-                enabled: false,
-                child: Divider(),
-              ),
-              ...MenuItems.secondItems.map(
-                (item) => DropdownMenuItem<MenuItem>(
-                  value: item,
-                  child: MenuItems.buildItem(item),
-                ),
-              ),
-            ],
-            onChanged: (value) {
-              MenuItems.onChanged(context, value as MenuItem);
-            },
-            itemHeight: 48,
-            itemPadding: const EdgeInsets.only(left: 16, right: 16),
-            dropdownWidth: 200,
-            dropdownPadding: const EdgeInsets.symmetric(vertical: 0),
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            dropdownElevation: 8,
-            offset: const Offset(0, 8),
-          ),
-        ),
+        // DropdownButtonHideUnderline(
+        //   child: DropdownButton2(
+        //     customButton: const Icon(
+        //       Icons.more_vert,
+        //       color: DesignCourseAppTheme.darkGrey,
+        //       size: 24,
+        //     ),
+        //     customItemsIndexes: const [3],
+        //     customItemsHeight: 8,
+        //     items: [
+        //       ...MenuItems.firstItems.map(
+        //         (item) => DropdownMenuItem<MenuItem>(
+        //           value: item,
+        //           child: MenuItems.buildItem(item),
+        //         ),
+        //       ),
+        //       const DropdownMenuItem<Divider>(
+        //         enabled: false,
+        //         child: Divider(),
+        //       ),
+        //       ...MenuItems.secondItems.map(
+        //         (item) => DropdownMenuItem<MenuItem>(
+        //           value: item,
+        //           child: MenuItems.buildItem(item),
+        //         ),
+        //       ),
+        //     ],
+        //     onChanged: (value) {
+        //       MenuItems.onChanged(context, value as MenuItem);
+        //     },
+        //     itemHeight: 48,
+        //     itemPadding: const EdgeInsets.only(left: 16, right: 16),
+        //     dropdownWidth: 200,
+        //     dropdownPadding: const EdgeInsets.symmetric(vertical: 0),
+        //     dropdownDecoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(8),
+        //       color: Colors.white,
+        //     ),
+        //     dropdownElevation: 8,
+        //     offset: const Offset(0, 8),
+        //   ),
+        // ),
       ],
     );
   }
