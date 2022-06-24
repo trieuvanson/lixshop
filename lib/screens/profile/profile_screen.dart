@@ -18,6 +18,20 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
+  AuthUser? _authUser;
+
+  @override
+  initState() {
+    getUser();
+    super.initState();
+  }
+
+  getUser() async {
+    _authUser = await authRepository.currentUser();
+    _authUser ??= const AuthUser();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
@@ -38,13 +52,13 @@ class _ProfileScreenState extends State<ProfileScreen>
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverPersistentHeader(
-              delegate: SliverHeaderBar(expandedHeight: 200),
+              delegate: SliverHeaderBar(expandedHeight: 200, user: _authUser ?? const AuthUser()),
               pinned: false,
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, left: 8, right: 8, bottom: 8),
+                padding:
+                    const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
                 child: Column(
                   children: [
                     Container(
@@ -55,8 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color:
-                                  DesignCourseAppTheme.grey.withOpacity(0.2),
+                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
                               offset: const Offset(1.1, 1.1),
                               blurRadius: 8.0),
                         ],
@@ -69,8 +82,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             GestureDetector(
                               onTap: () {
                                 Get.to(
-                                  () => const OrderHistoryListScreen(
-                                      tabIndex: 0),
+                                  () =>
+                                      const OrderHistoryListScreen(tabIndex: 0),
                                 );
                               },
                               child: Row(
@@ -78,11 +91,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    child: "Lịch sử nhập hàng"
-                                        .text
-                                        .xl
-                                        .bold
-                                        .make(),
+                                    child:
+                                        "Lịch sử nhập hàng".text.xl.bold.make(),
                                   ),
                                   Row(
                                     children: [
@@ -104,8 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             10.heightBox,
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _HistoryItem(
                                     onTap: () => Get.to(
@@ -196,8 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color:
-                                  DesignCourseAppTheme.grey.withOpacity(0.2),
+                              color: DesignCourseAppTheme.grey.withOpacity(0.2),
                               offset: const Offset(1.1, 1.1),
                               blurRadius: 8.0),
                         ],
@@ -259,8 +267,9 @@ class _ProfileScreenState extends State<ProfileScreen>
 
 class SliverHeaderBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
+  final AuthUser user;
 
-  SliverHeaderBar({required this.expandedHeight});
+  SliverHeaderBar({required this.expandedHeight, required this.user});
 
   @override
   Widget build(
@@ -306,56 +315,48 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                         curve: Curves.easeInToLinear,
                       );
                     },
-                    child: FutureBuilder(
-                        future: authRepository.currentUser(),
-                        builder: (context, AsyncSnapshot<AuthUser?> snapshot) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(50),
-                                        ),
-                                        child: Image.asset(
-                                          "assets/images/avatar-den-co-don-9.webp",
-                                          fit: BoxFit.cover,
-                                        ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 80,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(50),
+                                  ),
+                                  child: Image.asset(
+                                    "assets/images/avatar-den-co-don-9.webp",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              16.widthBox,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    child: Text(
+                                      user.name ?? "",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    16.widthBox,
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        snapshot.hasData
-                                            ? SizedBox(
-                                                child: Text(
-                                                  snapshot.data!.name!,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox(),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        }),
+                                  )
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),

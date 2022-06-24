@@ -26,6 +26,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
   init() async {
     final user = await authRepository.currentUser();
     if (user != null) {
+      if (!mounted) return;
+
       setState(() {
         address = user.address ?? '';
         name = user.name ?? '';

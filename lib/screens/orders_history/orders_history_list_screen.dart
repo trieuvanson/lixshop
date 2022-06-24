@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/controllers/order/order_controller.dart';
@@ -23,6 +24,8 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   List<Order>? _orders;
+  bool _isLoading = true;
+  bool _isError = false;
 
   @override
   void initState() {
@@ -34,7 +37,11 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
 
   getOrders() async {
     _orders = await orderRepository.getOrdersByUser();
-    setState(() {});
+    if (!mounted) return;
+
+    _isLoading = false;
+    setState(() {
+    });
   }
 
   @override
@@ -50,6 +57,7 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
                   .map(
                     (status) => Tab(
                         child: TabBarPage(
+                            isLoading: _isLoading,
                             orders: _orders ?? [],
                             tabIndex: _tabController.index,
                             status: status)),
@@ -107,26 +115,34 @@ class TabBarPage extends StatelessWidget {
   final String status;
   final int tabIndex;
   final List<Order> orders;
+  final bool isLoading;
 
   const TabBarPage(
       {Key? key,
       required this.status,
       required this.tabIndex,
-      required this.orders})
+      required this.orders,
+      required this.isLoading})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Order> orders =
         orderController.filterByStatus(this.orders, orderStatusMap[status]!);
-    return orders.isNotEmpty
-        ? ListView(
-            children: List<Widget>.generate(
-              orders.length,
-              (index) => HistoryItem(order: orders[index]),
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Vx.green500),
             ),
           )
-        : const Center(child: Text("Không có dữ liệu"));
+        : orders.isNotEmpty
+            ? ListView(
+                children: List<Widget>.generate(
+                  orders.length,
+                  (index) => HistoryItem(order: orders[index]),
+                ),
+              )
+            : const Center(child: Text("Không có dữ liệu"));
   }
 }
 

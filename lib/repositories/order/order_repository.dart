@@ -22,13 +22,13 @@ class OrderRepository {
         return Order.fromJson(json);
       }).toList();
       return orders;
-    } on DioError catch (e) {
-      print('getOrdersByUser error: $e');
-      if (e.response?.statusCode == 401) {
-        print('Token expired');
-      } else if (e.response?.statusCode == 404) {
-        print('ahihi');
-      }
+    // } on DioError catch (e) {
+    //   print('getOrdersByUser error: $e');
+    //   if (e.response?.statusCode == 401) {
+    //     print('Token expired');
+    //   } else if (e.response?.statusCode == 404) {
+    //     print('ahihi');
+    //   }
     } catch (e) {
       print(e);
     }
