@@ -6,23 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
-import 'package:lixshop/models/cart_hive/cart_hive.dart';
-import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
+import 'app_bloc_observer.dart';
 import 'constants/contains.dart';
 import 'screen_layout.dart';
-import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
-import 'app_bloc_observer.dart';
 import 'screens/auth/send_forgot_code_screen.dart';
 
 Future<void> main() async {
-  setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

@@ -60,226 +60,212 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-    return WillPopScope(
-      onWillPop: () {
-        Get.to(() => const ScreenLayout());
-        return Future.value(false);
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoadingAuthState) {
+          setState(() {
+            _loading = true;
+          });
+        } else if (state is FailureAuthState) {
+          setState(() {
+            _loading = false;
+          });
+          errorMessageSnack(context, "Có lỗi xảy ra, vui lòng thử lại sau!");
+        } else if (state is SuccessAuthState) {
+          setState(() {
+            _loading = false;
+          });
+          Get.offAll(
+            () => const ScreenLayout(),
+          );
+        } else {
+          setState(() {
+            _loading = false;
+          });
+        }
       },
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is LoadingAuthState) {
-            setState(() {
-              _loading = true;
-            });
-          } else if (state is FailureAuthState) {
-            setState(() {
-              _loading = false;
-            });
-            errorMessageSnack(context, "Có lỗi xảy ra, vui lòng thử lại sau!");
-          } else if (state is SuccessAuthState) {
-            setState(() {
-              _loading = false;
-            });
-            Get.offAll(
-              () => const ScreenLayout(),
-            );
-          } else {
-            setState(() {
-              _loading = false;
-            });
-          }
-        },
-        child: Scaffold(
-          // backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: appColor,
-            // shadowColor: Colors.transparent,
-            elevation: 0,
-            // iconTheme: const IconThemeData(color: Vx.black),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ScreenLayout(),
-                  settings: const RouteSettings(name: '/'),
-                ));
-              },
-            ),
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    _buildImageHeader(context),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                      ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _emailController,
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Số điện thoại"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                email = value;
-                              });
-                            },
+      child: Scaffold(
+        // backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: appColor,
+          // shadowColor: Colors.transparent,
+          elevation: 0,
+          // iconTheme: const IconThemeData(color: Vx.black),
+          leading: const SizedBox.shrink(),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildImageHeader(context),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _emailController,
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                  "Số điện thoại"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Không được để trống';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
+                        ),
+                        15.heightBox,
+                        TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Không được để trống';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                          obscureText: showPassword ? false : true,
+                          decoration:
+                              TextFormFieldCommonStyle.textFormFieldStyle(
+                                      "Mật khẩu")
+                                  .copyWith(
+                            suffixIcon: showPassword
+                                ? IconButton(
+                                    icon: const Icon(Icons.visibility,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(Icons.visibility_off,
+                                        color: appColor),
+                                    onPressed: () => handleShowPassword(),
+                                  ),
                           ),
-                          15.heightBox,
-                          TextFormField(
-                            onChanged: (value) {
-                              setState(() {
-                                password = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              } else if (value.length < 6) {
-                                return 'Password must be at least 6 characters';
-                              }
-                              return null;
-                            },
-                            obscureText: showPassword ? false : true,
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                        "Mật khẩu")
-                                    .copyWith(
-                              suffixIcon: showPassword
-                                  ? IconButton(
-                                      icon: const Icon(Icons.visibility,
-                                          color: appColor),
-                                      onPressed: () => handleShowPassword(),
-                                    )
-                                  : IconButton(
-                                      icon: const Icon(Icons.visibility_off,
-                                          color: appColor),
-                                      onPressed: () => handleShowPassword(),
-                                    ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SendForgotCodeScreen(),
-                                      settings: const RouteSettings(
-                                          name: '/forgot-password'),
-                                    ));
-                                  },
-                                  child: const Text(
-                                    "Quên mật khẩu?",
-                                    style: TextStyle(
-                                      color: appColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SendForgotCodeScreen(),
+                                    settings: const RouteSettings(
+                                        name: '/forgot-password'),
+                                  ));
+                                },
+                                child: const Text(
+                                  "Quên mật khẩu?",
+                                  style: TextStyle(
+                                    color: appColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          20.heightBox,
-                          Material(
-                            color: appColor,
-                            borderRadius: BorderRadius.circular(8),
-                            child: InkWell(
-                              onTap: _loading
-                                  ? () {}
-                                  : () {
-                                      if (_formKey.currentState!.validate()) {
-                                        authBloc.add(
-                                          AuthLoggedEvent(
-                                            Login(
-                                                username: email,
-                                                password: password),
-                                          ),
-                                        );
-                                      }
-                                    },
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: _loading
-                                    ? const CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.white),
-                                      )
-                                    : const Text(
-                                        "Đăng nhập",
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
                               ),
+                            ],
+                          ),
+                        ),
+                        20.heightBox,
+                        Material(
+                          color: appColor,
+                          borderRadius: BorderRadius.circular(8),
+                          child: InkWell(
+                            onTap: _loading
+                                ? () {}
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      authBloc.add(
+                                        AuthLoggedEvent(
+                                          Login(
+                                              username: email,
+                                              password: password),
+                                        ),
+                                      );
+                                    }
+                                  },
+                            child: AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              alignment: Alignment.center,
+                              child: _loading
+                                  ? const CircularProgressIndicator(
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
+                                              Colors.white),
+                                    )
+                                  : const Text(
+                                      "Đăng nhập",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
-                          10.heightBox,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: "Bạn chưa có tài khoản?"
+                        ),
+                        10.heightBox,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: "Bạn chưa có tài khoản?"
+                                  .text
+                                  .color(appColor)
+                                  .make(),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegisterScreen(),
+                                    settings: const RouteSettings(
+                                      name: '/register',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                child: " Đăng ký ngay."
                                     .text
+                                    .bold
                                     .color(appColor)
+                                    .textStyle(const TextStyle(
+                                        fontWeight: FontWeight.bold))
                                     .make(),
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterScreen(),
-                                      settings: const RouteSettings(
-                                        name: '/register',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  child: " Đăng ký ngay."
-                                      .text
-                                      .bold
-                                      .color(appColor)
-                                      .textStyle(const TextStyle(
-                                          fontWeight: FontWeight.bold))
-                                      .make(),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
