@@ -412,6 +412,7 @@ class _HistoryItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           width: size.width/5,
+          color: Colors.white,
           child: Center(
             child: Wrap(
               direction: Axis.vertical,
