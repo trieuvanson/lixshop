@@ -392,7 +392,7 @@ class _PaymentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.7,
       height: 65,
       decoration: BoxDecoration(
         color: Colors.white,
