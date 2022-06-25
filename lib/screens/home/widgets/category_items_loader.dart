@@ -58,7 +58,7 @@ class CategoryItemsLoader extends StatelessWidget {
                     ),
                     child: const Center(
                       child: Text(
-                        'Chưa cài đặt dữ liệu cho khu vực này',
+                        'Có lỗi xảy ra, vui lòng thử lại sau!',
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 16.0,

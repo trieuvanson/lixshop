@@ -43,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (await secureStorage.checkLogin()) {
         final user = await authRepository.currentUser();
         if (user != null && user.isLoggedIn!) {
+          await secureStorage.saveCurrentUser(jsonEncode(user.user!.toJson()));
           final token = await secureStorage.readToken();
           emit(SuccessAuthState(user.user!, token?.accessToken ?? ''));
         } else if (user!.isError!) {

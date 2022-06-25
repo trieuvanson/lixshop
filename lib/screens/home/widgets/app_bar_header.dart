@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lixshop/screens/screen.dart';
 
 import '../../../repositories/repositories.dart';
+import '../../../utils/helpers/secure_storage.dart';
 import '../constants/constants.dart';
 
 class AppBarHeaderSliver extends StatefulWidget {
@@ -24,13 +25,13 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
   }
 
   init() async {
-    final user = await authRepository.currentUser();
-    if (user != null) {
+    final currentUser = await secureStorage.getCurrentUser();
+    if (currentUser != null) {
       if (!mounted) return;
 
       setState(() {
-        address = user.user!.address ?? '';
-        name = user.user!.name ?? '';
+        address = currentUser.address ?? '';
+        name = currentUser.name ?? '';
       });
     }
   }
