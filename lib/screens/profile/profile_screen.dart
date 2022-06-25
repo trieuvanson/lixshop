@@ -405,31 +405,39 @@ class _HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Material(
       child: InkWell(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-          child: Wrap(
-            direction: Axis.vertical,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              SizedBox(
-                child: Icon(
-                  icon,
-                  color: Colors.black,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          width: size.width/5,
+          child: Center(
+            child: Wrap(
+              direction: Axis.vertical,
+              children: [
+                SizedBox(
+                  width: size.width * 20/100,
+                  child: Icon(
+                    icon,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                maxLines: 2,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: size.width/5,
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
