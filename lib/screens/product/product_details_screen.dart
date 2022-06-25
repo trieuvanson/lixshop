@@ -732,11 +732,12 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                             .width,
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
-                                                                top: 4,
-                                                                // left: 16,
-                                                                // right: 16,
-                                                                bottom: 4),
+                                                                .only(
+                                                          top: 4,
+                                                          // left: 16,
+                                                          // right: 16,
+                                                          bottom: 4,
+                                                        ),
                                                         child: Column(
                                                           children: [
                                                             Row(
@@ -752,7 +753,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                                                                               _)
                                                                           .size
                                                                           .width *
-                                                                      0.7,
+                                                                      0.5,
                                                                   child: Text(
                                                                     '${detail.name}',
                                                                     maxLines: 1,
