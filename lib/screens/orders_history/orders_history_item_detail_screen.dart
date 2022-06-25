@@ -161,6 +161,7 @@ class _OrderHistoryItemDetailScreenState
   }
 
   PreferredSizeWidget _appBar() {
+    final size = MediaQuery.of(context).size;
     return AppBar(
       backgroundColor: Colors.white,
       titleSpacing: 0.0,
@@ -173,11 +174,14 @@ class _OrderHistoryItemDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
-              Text("${widget.order.agentLixName}",
-                  style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Vx.green500))
+              SizedBox(
+                width: size.width * 0.4,
+                child: Text("${widget.order.agentLixName}",
+                    style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Vx.green500)),
+              )
             ],
           ),
           Container(
