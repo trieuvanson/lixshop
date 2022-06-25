@@ -26,7 +26,7 @@ class ProductCard extends StatelessWidget {
             ));
       },
       child: Container(
-        width: size.width * 0.45,
+        width: size.width * 0.4,
         margin: const EdgeInsets.only(
           left: kDefaultPadding / 2,
           top: kDefaultPadding / 2,
