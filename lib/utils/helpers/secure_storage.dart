@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lixshop/models/auth/token_response.dart';
-
+import 'package:lixshop/models/models.dart';
 
 class SecureStorageFrave {
   final secureStorage = const FlutterSecureStorage();
@@ -37,6 +37,16 @@ class SecureStorageFrave {
     return await secureStorage.read(key: key);
   }
 
+  saveCurrentUser(String user) async {
+    await secureStorage.write(key: 'current_user', value: user);
+  }
+
+  getCurrentUser() async {
+    final user = await secureStorage.read(key: 'current_user');
+    if (user == null) return null;
+    final currentUser = AuthUser.fromJson(jsonDecode(user));
+    return currentUser;
+  }
 }
 
 final secureStorage = SecureStorageFrave();

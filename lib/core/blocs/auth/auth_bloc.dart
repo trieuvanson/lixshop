@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
@@ -22,14 +23,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(LoadingAuthState());
       final data = await authRepository.signInWithEmailAndPassword(event.login);
-      print(data.msg);
       if (data.err != 0) {
         emit(FailureAuthState(data.msg));
       } else {
         await secureStorage.deleteSecureStorage();
         await secureStorage.persistenceToken(data.dt!);
         final user = await authRepository.currentUser();
-        emit(SuccessAuthState(user!, data.dt!.accessToken!));
+        await secureStorage.saveCurrentUser(jsonEncode(user!.user!.toJson()));
+        emit(SuccessAuthState(user.user!, data.dt!.accessToken!));
       }
     } catch (e) {
       emit(FailureAuthState(e.toString()));
@@ -41,19 +42,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       if (await secureStorage.checkLogin()) {
         final user = await authRepository.currentUser();
-        if (user != null) {
-          print(user.address);
+        if (user != null && user.isLoggedIn!) {
           final token = await secureStorage.readToken();
-          emit(SuccessAuthState(user, token?.accessToken ?? ''));
-        } else {
-          emit(LogoutAuthState());
+          emit(SuccessAuthState(user.user!, token?.accessToken ?? ''));
+        } else if (user!.isError!) {
+          emit(FailureAuthState("Có lỗi xảy ra, vui lòng thử lại sau"));
         }
       } else {
+        await secureStorage.deleteSecureStorage();
         emit(LogoutAuthState());
       }
     } catch (e) {
-      print('error: $e');
-      emit(LogoutAuthState());
+      emit(FailureAuthState("Có lỗi xảy ra, vui lòng thử lại sau"));
     }
   }
 
@@ -65,6 +65,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(LogoutAuthState());
     }
-    // emit(const AuthState());
   }
 }

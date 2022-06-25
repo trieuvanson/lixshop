@@ -8,7 +8,7 @@ class ResultDetailsDataRepository {
   // final String detailsUrl = 'https://api.jsonbin.io/b/6253c7b4d8a4cc06909edfed';
   static final _dio = Dio();
 
-  Future<ResultDetailsDataModel> getResultDetailsData(int idBrand) async {
+  Future<ResultDetailsDataModel?> getResultDetailsData(int idBrand) async {
     try {
       var authorization = await secureStorage.readToken();
       String idDist = await secureStorage.readKey("idDist");
@@ -17,7 +17,6 @@ class ResultDetailsDataRepository {
           options: Options(headers: {
             "Authorization": "Bearer ${authorization!.accessToken}",
           }));
-      print(response.realUri);
       print(response.data);
       if (response.data['err'] == -1) {
         throw Exception(response.data['msg']);
@@ -29,11 +28,10 @@ class ResultDetailsDataRepository {
       } else if (e.response?.statusCode == 404) {
 
       }
-      throw Exception(e.response?.data['msg']);
     } catch (e) {
       print('error: $e');
-      return {} as ResultDetailsDataModel;
     }
+    return null;
   }
 }
 final resultDetailsDataRepository = ResultDetailsDataRepository();

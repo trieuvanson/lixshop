@@ -29,8 +29,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
       if (!mounted) return;
 
       setState(() {
-        address = user.address ?? '';
-        name = user.name ?? '';
+        address = user.user!.address ?? '';
+        name = user.user!.name ?? '';
       });
     }
   }
@@ -85,29 +85,25 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Row(
+                      child: Wrap(
+                        direction: Axis.horizontal,
                         children: [
-                          SizedBox(
-                            width: size.width * 0.8 - 100,
-                            child: Text(
-                              "Giao tới: $address",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2
-                                  ?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11),
-                            ),
-                          ),
-                          const Spacer(),
-                          //dropdown icon
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.white,
-                          ),
+                          Text(
+                            "Giao tới: $address",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2
+                                ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13),
+                          )
+                          // const Icon(
+                          //   Icons.arrow_drop_down,
+                          //   color: Colors.white,
+                          // ),
                         ],
                       ),
                     ),

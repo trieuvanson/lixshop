@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
+import 'package:lixshop/repositories/repositories.dart';
 import 'package:lixshop/screens/cart/cart_screen.dart';
 import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -29,31 +30,34 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  ResultDetailsDataModel? _resultDetailsDataModel;
+  bool _isLoading = true;
+
   @override
   void initState() {
-    BlocProvider.of<ResultDetailsDataCubit>(context)
-        .getProductOutside(widget.idBrand);
+    getDetail();
     super.initState();
+  }
+
+  getDetail() async {
+    _resultDetailsDataModel =
+        await resultDetailsDataRepository.getResultDetailsData(widget.idBrand);
+    if (!mounted) return;
+    _isLoading = false;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
-      child: BlocBuilder<ResultDetailsDataCubit, ResultDetailsDataState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return _buildLoadingWidget();
-          } else if (state.isError) {
-            return _buildErrorWidget("Lỗi");
-          } else if (state.isSuccess) {
-            return BuildProductDetailWidget(
-              resultDetailsDataModel: state.resultDetailsDataModel!,
-            );
-          }
-          return Container();
-        },
-      ),
+      child: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _resultDetailsDataModel == null
+              ? _buildErrorWidget("Có lỗi xảy ra, vui lòng thử lại sau!")
+              : BuildProductDetailWidget(
+                  resultDetailsDataModel: _resultDetailsDataModel!,
+                ),
     );
   }
 
@@ -77,18 +81,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   //display error
   Widget _buildErrorWidget(dynamic error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            error!.toString(),
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.black,
-            ),
-          )
-        ],
+    return Scaffold(
+      body: Center(
+        child: Text(
+          error!.toString(),
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
@@ -492,7 +493,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildExpandAbleDescription(
-                            products[selectProduct].description??""),
+                            products[selectProduct].description ?? ""),
                       ],
                     ),
                   ),
@@ -1294,9 +1295,8 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: 100,
-                            height: 130,
+                          AspectRatio(
+                            aspectRatio: 309 / 510,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(

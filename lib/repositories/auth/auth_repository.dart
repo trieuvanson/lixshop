@@ -22,7 +22,7 @@ class AuthRepository {
     return token != null;
   }
 
-  Future<AuthUser?> currentUser() async {
+  Future<AuthUserResponse?> currentUser() async {
     try {
       final token = await secureStorage.readToken();
       var response = await dio.get(
@@ -32,24 +32,35 @@ class AuthRepository {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${token?.accessToken ?? ""}",
           },
+
         ),
       );
-      return AuthUser.fromJson(response.data['dt']);
+      var authUser = AuthUser.fromJson(response.data['dt']);
+      return AuthUserResponse(
+        isLoggedIn: true,
+        user: authUser,
+        isError: false,
+      );
     } on DioError catch (e) {
-      if (e.response?.statusCode == 404) {
-        await secureStorage.deleteSecureStorage();
-        return null;
+      if (e.type == DioErrorType.other) {
+        return const AuthUserResponse(
+          isLoggedIn: false,
+          isError: true,
+        );
       }
     } catch (e) {
-      print(e);
+      return const AuthUserResponse(
+        isLoggedIn: false,
+        isError: true,
+      );
     }
-    return null;
+    return const AuthUserResponse();
   }
 
   Future<ResponseDTO> sendForgotPasswordOTP({required String phone}) async {
     try {
-      final response = await dio.post(sendOtpUrl,
-          data: jsonEncode({'phone': phone}));
+      final response =
+          await dio.post(sendOtpUrl, data: jsonEncode({'phone': phone}));
       return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
       print(e);

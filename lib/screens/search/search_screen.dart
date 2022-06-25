@@ -312,9 +312,7 @@ class _MenuItem extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: NetworkImage(image),
-                    scale: 309/510
-                  ),
+                      image: NetworkImage(image), scale: 309 / 510),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: DesignCourseAppTheme.grey.withOpacity(0.2),
@@ -324,23 +322,22 @@ class _MenuItem extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: title.text
-                      .size(16)
-                      .gray700
-                      .overflow(TextOverflow.ellipsis)
-                      .make()),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: title.text
+                    .size(16)
+                    .gray700
+                    .overflow(TextOverflow.ellipsis)
+                    .make(),
+              ),
               Row(
                 children: [
                   subTitle ?? const SizedBox.shrink(),
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Vx.gray500,
-                      size: 20,
-                    ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Vx.gray500,
+                    size: 20,
                   ),
                 ],
               ),

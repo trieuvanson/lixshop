@@ -44,3 +44,33 @@ class AuthUser extends Equatable {
         address!,
       ];
 }
+
+class AuthUserResponse {
+  final bool? isLoggedIn;
+  final AuthUser? user;
+  final bool? isError;
+
+  const AuthUserResponse({
+    this.isLoggedIn = false,
+    this.user = const AuthUser(),
+    this.isError = false,
+  });
+
+  factory AuthUserResponse.fromJson(Map<String, dynamic> json) {
+    return AuthUserResponse(
+      isLoggedIn: json['isLoggedIn'],
+      user: json['user'] != null ? AuthUser.fromJson(json['user']) : null,
+      isError: json['isError'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'isLoggedIn': isLoggedIn,
+      'user': user?.toJson(),
+      'isError': isError,
+    };
+  }
+
+
+}

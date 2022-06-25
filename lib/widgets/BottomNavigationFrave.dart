@@ -6,7 +6,7 @@ class BottomNavigationFrave extends StatelessWidget {
 
   final int index;
 
-  BottomNavigationFrave(this.index);
+  const BottomNavigationFrave(this.index);
 
   @override
   Widget build(BuildContext context)

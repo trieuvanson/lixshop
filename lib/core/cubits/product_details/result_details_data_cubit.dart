@@ -13,7 +13,7 @@ class ResultDetailsDataCubit extends Cubit<ResultDetailsDataState> {
     emit(state.copyWith(isLoading: true));
     try {
       final resultDetailsDataModel = await resultDetailsDataRepository.getResultDetailsData(idBrand);
-      if (resultDetailsDataModel.productSizesList!.isEmpty) {
+      if (resultDetailsDataModel!.productSizesList!.isEmpty) {
         emit(state.copyWith(isLoading: false, isError: true));
       } else {
         emit(state.copyWith(

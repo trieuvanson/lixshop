@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/repositories/repositories.dart';
+import 'package:lixshop/utils/helpers/secure_storage.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../core/core.dart';
@@ -27,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   getUser() async {
-    _authUser = await authRepository.currentUser();
+    _authUser = await secureStorage.getCurrentUser();
     _authUser ??= const AuthUser();
     setState(() {});
   }
@@ -36,13 +37,15 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final bottomNavigationCubit = BlocProvider.of<NavigationCubit>(context);
-    authBloc.add(CheckLoginEvent());
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is LogoutAuthState) {
           bottomNavigationCubit.changeNavigation(0);
           BlocProvider.of<CartBloc>(context).add(RemoveAllCart());
-          Get.to(() => const LoginScreen());
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false);
         }
       },
       child: Scaffold(
@@ -52,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen>
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverPersistentHeader(
-              delegate: SliverHeaderBar(expandedHeight: 200, user: _authUser ?? const AuthUser()),
+              delegate: SliverHeaderBar(
+                  expandedHeight: 200, user: _authUser ?? const AuthUser()),
               pinned: false,
             ),
             SliverToBoxAdapter(
@@ -403,11 +407,42 @@ class _HistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap ?? () {},
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
-          child: SizedBox(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+          child: Wrap(
+            direction: Axis.vertical,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              SizedBox(
+                child: Icon(
+                  icon,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                maxLines: 2,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    return Material(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
+        color: Colors.white,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: onTap ?? () {},
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
