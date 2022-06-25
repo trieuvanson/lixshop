@@ -127,19 +127,19 @@ class _ScreenLayoutState extends State<ScreenLayout>
     return const [
       GButton(
         icon: LineIcons.home,
-        text: 'Trang chủ',
+        text: '',
       ),
       GButton(
         icon: Icons.notifications_none,
-        text: 'Thông báo',
+        text: '',
       ),
       GButton(
         icon: Icons.message_outlined,
-        text: 'Hộp thư',
+        text: '',
       ),
       GButton(
         icon: LineIcons.user,
-        text: 'Cá nhân',
+        text: '',
       ),
     ];
   }
