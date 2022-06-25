@@ -430,13 +430,12 @@ class _CartItemState extends State<_CartItem> {
                           ),
                           5.heightBox,
                           SizedBox(
-                            width: MediaQuery.of(context).size.width - 150,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 "${widget.cart.getPricesChangeValue()}"
                                     .text
-                                    .xl
+                                    .sm
                                     .gray500
                                     .make(),
                                 "${convertCurrencyToVND(widget.cart.getPrices()!)}đ"

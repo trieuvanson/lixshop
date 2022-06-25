@@ -175,7 +175,7 @@ class _OrderHistoryItemDetailScreenState
             children: [
               "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
               SizedBox(
-                width: size.width * 0.4,
+                width: size.width * 0.5,
                 child: Text("${widget.order.agentLixName}",
                     style: const TextStyle(
                         fontSize: 10,
@@ -333,7 +333,7 @@ class _CartItem extends StatelessWidget {
                       ),
                       16.widthBox,
                       SizedBox(
-                        width: size.width * 0.75,
+                        width: size.width * 0.6,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
