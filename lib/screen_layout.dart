@@ -37,10 +37,11 @@ class _ScreenLayoutState extends State<ScreenLayout>
     checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
     setState(() {});
     if (!checkFirstTime) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const GetStartedScreens(),
         ),
+        (route) => false,
       );
     } else {
       checkLogin();
@@ -51,10 +52,11 @@ class _ScreenLayoutState extends State<ScreenLayout>
     isLogin = await secureStorage.checkLogin();
     setState(() {});
     if (!isLogin) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         ),
+        (route) => false,
       );
     }
   }
