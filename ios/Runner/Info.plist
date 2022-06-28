@@ -8,6 +8,7 @@
     <string>your description</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>your description.</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
