@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             _loading = false;
           });
-          errorMessageSnack(context, "Có lỗi xảy ra, vui lòng thử lại sau!");
+          errorMessageSnack(context, state.error?? "Có lỗi xảy ra, vui lòng thử lại sau!");
         } else if (state is SuccessAuthState) {
           setState(() {
             _loading = false;

@@ -211,7 +211,6 @@ class _SliverHeaderBar extends SliverPersistentHeaderDelegate {
     return Material(
       child: Stack(
         fit: StackFit.expand,
-        overflow: Overflow.visible,
         clipBehavior: Clip.antiAlias,
         children: [
           Container(

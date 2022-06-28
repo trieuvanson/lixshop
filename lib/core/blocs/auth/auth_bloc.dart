@@ -24,7 +24,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(LoadingAuthState());
       final data = await authRepository.signInWithEmailAndPassword(event.login);
       if (data.err != 0) {
-        emit(FailureAuthState(data.msg));
+        emit(FailureAuthState(data.msg!.contains("null check")
+            ? "Có lỗi xảy ra, vui lòng thử lại sau!"
+            : data.msg));
       } else {
         await secureStorage.deleteSecureStorage();
         await secureStorage.persistenceToken(data.dt!);
