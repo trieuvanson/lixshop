@@ -82,7 +82,8 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/logos/logo.png"
+  remove_alpha_ios: true
+  image_path: "assets/logos/logo1024.png"
 flutter_app_name:
   name: "LixShop"
 
