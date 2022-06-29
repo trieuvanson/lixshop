@@ -47,6 +47,8 @@ class SecureStorageFrave {
     final currentUser = AuthUser.fromJson(jsonDecode(user));
     return currentUser;
   }
+
+
 }
 
 final secureStorage = SecureStorageFrave();

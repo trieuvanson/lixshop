@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/main_screen.dart';
 import 'package:lixshop/models/models.dart';
 
 import '../../screen_layout.dart';
@@ -70,7 +71,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-            () => const ScreenLayout(),
+            () => const MainScreen(),
             transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 500),
           );

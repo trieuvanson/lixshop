@@ -8,6 +8,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
 import '../../core/core.dart';
+import '../../main_screen.dart';
 import '../../screen_layout.dart';
 import '../../utils/helpers/error_message.dart';
 import '../../widgets/widgets.dart';
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       prefs.setBool('isLogin', true);
       setState(() {});
       Get.to(
-        () => const ScreenLayout(),
+        () => const MainScreen(),
         routeName: "/register",
       );
     }
@@ -76,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _loading = false;
           });
           Get.offAll(
-            () => const ScreenLayout(),
+            () => const MainScreen(),
           );
         } else {
           setState(() {

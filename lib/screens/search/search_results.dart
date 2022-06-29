@@ -6,6 +6,7 @@ import 'package:get/get_navigation/src/routes/transitions_type.dart'
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/core/core.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
+import 'package:lixshop/main_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../controllers/search_controller.dart';
@@ -244,7 +245,7 @@ class _SearchResultsState extends State<SearchResults> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () {
           Get.to(
-            () => const ScreenLayout(),
+            () => const MainScreen(),
             duration: const Duration(milliseconds: 500),
           );
         },

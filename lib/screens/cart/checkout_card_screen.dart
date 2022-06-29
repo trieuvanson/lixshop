@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/controllers/cart/cart_controller.dart';
+import 'package:lixshop/main_screen.dart';
 import '../../constants/contains.dart';
 import 'package:lixshop/models/cart/cart_model.dart';
 import 'package:lixshop/screen_layout.dart';
@@ -328,7 +329,7 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ScreenLayout()),
+                                            const MainScreen()),
                                     (route) => false);
                                 cartBloc.add(RemoveAllCart());
                               });

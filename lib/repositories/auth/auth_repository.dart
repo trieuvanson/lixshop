@@ -100,9 +100,14 @@ class AuthRepository {
           await dio.post(loginUrl, data: jsonEncode(login.toJson()));
       return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        return ResponseDTO.fromJson({
+          'msg': "Có lỗi xảy ra, vui lòng thử lại!",
+        });
+      }
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      return {} as ResponseDTO;
+      return ResponseDTO();
     }
   }
 

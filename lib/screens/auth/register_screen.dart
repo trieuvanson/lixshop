@@ -162,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Vx.white),
             onPressed: () {
-              Get.to(() => const ScreenLayout());
+              Get.to(() => const HomeScreen());
             },
           ),
         ),

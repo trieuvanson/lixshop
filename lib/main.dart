@@ -1,5 +1,3 @@
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,18 +22,18 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   BlocOverrides.runZoned(
       () {
-        runApp(
-          DevicePreview(
-            enabled: !kReleaseMode,
-            tools: const [
-              ...DevicePreview.defaultTools,
-            ],
-            builder: (context) => const LixShop(),
-          ),
-        );
         // runApp(
-        //   const LixShop(),
+        //   DevicePreview(
+        //     enabled: !kReleaseMode,
+        //     tools: const [
+        //       ...DevicePreview.defaultTools,
+        //     ],
+        //     builder: (context) => const LixShop(),
+        //   ),
         // );
+        runApp(
+          const LixShop(),
+        );
       },
       blocObserver: AppBlocObserver(),
     );

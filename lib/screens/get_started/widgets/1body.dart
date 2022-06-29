@@ -23,20 +23,22 @@ class _BuildBodyState extends State<BuildBody> {
     return ValueListenableBuilder<double>(
       valueListenable: currentPage,
       builder: (context, value, _) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const BuildPageView(),
-              30.heightBox,
-              buildDotIndicator(),
-              100.heightBox,
-              const Spacer(),
-              BuildGetStartedButton(context: context),
-              const Spacer(),
-            ],
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const BuildPageView(),
+                30.heightBox,
+                buildDotIndicator(),
+                100.heightBox,
+                const Spacer(),
+                BuildGetStartedButton(context: context),
+                const Spacer(),
+              ],
+            ),
           ),
         );
       },

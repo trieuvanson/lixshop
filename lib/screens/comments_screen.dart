@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lixshop/main_screen.dart';
 import 'package:lixshop/screen_layout.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
@@ -22,7 +23,7 @@ class ProfileClientPage extends StatelessWidget {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ScreenLayout()));
+                    builder: (context) => const MainScreen()));
         }
 
         // print('ProfileClientPage: ${state.toString()}');
