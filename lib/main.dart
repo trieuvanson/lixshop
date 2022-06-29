@@ -2,41 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lixshop/core/cubits/filter/filter_cubit.dart';
 import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
+import 'package:lixshop/main_screen.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import '../../core/core.dart';
 import 'app_bloc_observer.dart';
 import 'constants/contains.dart';
 import 'screen_layout.dart';
-import 'screens/auth/login_screen.dart';
-import 'screens/auth/register_screen.dart';
-import 'screens/auth/send_forgot_code_screen.dart';
 
-Future<void> main() async {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await dotenv.load(fileName: ".env");
+  setPathUrlStrategy();
   BlocOverrides.runZoned(
-      () {
-        // runApp(
-        //   DevicePreview(
-        //     enabled: !kReleaseMode,
-        //     tools: const [
-        //       ...DevicePreview.defaultTools,
-        //     ],
-        //     builder: (context) => const LixShop(),
-        //   ),
-        // );
-        runApp(
-          const LixShop(),
-        );
-      },
-      blocObserver: AppBlocObserver(),
-    );
+    () {
+      // runApp(
+      //   DevicePreview(
+      //     enabled: !kReleaseMode,
+      //     tools: const [
+      //       ...DevicePreview.defaultTools,
+      //     ],
+      //     builder: (context) => const LixShop(),
+      //   ),
+      // );
+      runApp(
+        const LixShop(),
+      );
+    },
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class LixShop extends StatelessWidget {
@@ -77,16 +78,52 @@ class LixShop extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         darkTheme: ThemeData.dark(),
-        initialRoute: "/",
-        // home: const LoadingScreen(),
-        routes: {
-          '/': (context) => const ScreenLayout(),
-          '/login': (_) => const LoginScreen(),
-          '/register': (_) => const RegisterScreen(),
-          "/forgot-password": (_) => const SendForgotCodeScreen(),
-          // "/product-detail": (_) => const ProductDetailScreen(),
-        },
+        home: const ScreenLayout(),
+        // routes: {
+        //   '/': (context) => const MainScreen(),
+        // },
+        // onGenerateRoute: RouteSettingsWithArguments.generateRoute,
       ),
+    );
+  }
+}
+
+class RouteSettingsWithArguments extends RouteSettings {
+  final RouteSettings settings;
+
+  const RouteSettingsWithArguments({
+    required this.settings,
+  });
+
+  @override
+  String? get name => settings.name;
+
+  @override
+  dynamic get arguments => settings.arguments;
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => const ScreenLayout());
+      default:
+        return MaterialPageRoute(
+            builder: (_) => const NotFound(
+                  message: '404 NOT FOUND\n'
+                      'Không tìm thấy trang này.\n',
+                ));
+    }
+  }
+}
+
+class NotFound extends StatelessWidget {
+  final String? message;
+
+  const NotFound({Key? key, this.message}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text(message!)),
     );
   }
 }

@@ -1,16 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:lixshop/controllers/order/order_controller.dart';
-import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
-import 'package:lixshop/repositories/app_repository.dart';
-import 'package:lixshop/repositories/repositories.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../models/models.dart';
-import '../models/order/order.dart';
-import '../repositories/order/order_repository.dart';
 
 class InboxScreen extends StatefulWidget {
   const InboxScreen({Key? key}) : super(key: key);
