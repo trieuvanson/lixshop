@@ -58,7 +58,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/logos/test.jpg"
+  image_path: "assets/logos/ic_launcher.png"
 flutter_app_name:
   name: "LixShop"
 
