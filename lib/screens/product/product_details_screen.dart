@@ -281,7 +281,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 22,
+                        fontSize: 18,
                         letterSpacing: 0.27,
                         color: DesignCourseAppTheme.darkerText,
                       ),
@@ -301,7 +301,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                            fontSize: 18,
                             letterSpacing: 0.27,
                             color: Vx.red700,
                           ),
@@ -1097,7 +1097,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                 ),
                 icon: const Icon(
                   Icons.arrow_forward_ios_outlined,
-                  size: 18,
+                  size: 16,
                   color: Vx.green500,
                 ),
                 buttonWidth: 120,
@@ -1149,7 +1149,7 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                              fontSize: 14,
                               letterSpacing: 0.0,
                               color: DesignCourseAppTheme.nearlyWhite,
                             ),
