@@ -27,22 +27,23 @@ class _ScreenLayoutState extends State<ScreenLayout>
   }
 
   checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
-    isLogin = await secureStorage.checkLogin();
-    isLogin ? _isLoading = false : _isLoading = true;
-    setState(() {});
-    await Future.delayed(const Duration(seconds: 3));
-    if (!checkFirstTime!) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const GetStartedScreens(),
-        ),
-        (route) => false,
-      );
-    } else {
-      checkLogin();
-    }
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // checkFirstTime = (prefs.getBool('isFirstTime') ?? false);
+    // isLogin = await secureStorage.checkLogin();
+    // isLogin ? _isLoading = false : _isLoading = true;
+    // setState(() {});
+    // await Future.delayed(const Duration(seconds: 3));
+    // if (!checkFirstTime!) {
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //       builder: (context) => const GetStartedScreens(),
+    //     ),
+    //     (route) => false,
+    //   );
+    // } else {
+    //   checkLogin();
+    // }
+    checkLogin();
     _isLoading = false;
     setState(() {});
   }
