@@ -6,6 +6,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'main_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/get_started/get_started_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ScreenLayout extends StatefulWidget {
   const ScreenLayout({Key? key}) : super(key: key);
@@ -22,8 +23,17 @@ class _ScreenLayoutState extends State<ScreenLayout>
 
   @override
   void initState() {
+    requestPermission();
     checkFirstSeen();
     super.initState();
+  }
+
+   requestPermission() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+      print('Ahihi');
+    }
   }
 
   checkFirstSeen() async {

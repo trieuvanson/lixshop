@@ -9,7 +9,7 @@ import 'constants/colors.dart';
 import 'core/core.dart';
 import 'core/cubits/bottom_navigation/navigation_state.dart';
 import 'screens/auth/login_screen.dart';
-import 'utils/global_variable.dart';
+import 'screens/global_variable_screens.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);

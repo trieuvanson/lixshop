@@ -16,17 +16,10 @@ class _GetStartedScreensState extends State<GetStartedScreens> {
 
   @override
   void initState() {
-    requestPermission();
     super.initState();
   }
 
-  void requestPermission() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-      print('Ahihi');
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

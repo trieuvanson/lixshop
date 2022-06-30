@@ -135,20 +135,58 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                     return Container();
                                   },
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    "Thêm ghi chú".text.green500.xl.make(),
-                                    //Icon ghi chú
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Icon(
-                                      Icons.edit,
-                                      color: Vx.green500,
-                                      size: 20,
-                                    ),
-                                  ],
+                                TextButton(
+                                  onPressed: () {
+                                    //show dialog input note
+                                    //set width dialog
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Ghi chú"),
+                                        content: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          child: TextField(
+                                            maxLength: 200,
+                                            maxLines: null,
+                                            onChanged: (value) {
+                                              print('value: $value');
+                                            },
+                                          ),
+                                        ),
+                                        actions: [
+                                          FlatButton(
+                                            child: const Text("Hủy"),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: const Text("Xác nhận"),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      "Thêm ghi chú".text.green500.xl.make(),
+                                      //Icon ghi chú
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      const Icon(
+                                        Icons.edit,
+                                        color: Vx.green500,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -303,7 +341,7 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                             Row(
                               children: [
                                 "Tạm tính".text.xl2.black.bold.make(),
-                                " (đã có VAT)"
+                                ""
                                     .text
                                     .color(Vx.gray800.withOpacity(0.8))
                                     .xl
@@ -584,51 +622,51 @@ class _CheckoutItem extends StatelessWidget {
                   "Tp. HCM, Dĩ An, Bình Dương.".text.xl.make(),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
-                    border: Border.all(
-                      color: Vx.green200,
-                      width: 1,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        "Dự kiến giao: Trước 22:00 ngày 11/03/2022"
-                            .text
-                            .xl
-                            .make(),
-                        5.heightBox,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            "Hẹn thời gian ".text.green500.xl.make(),
-                            //Icon ghi chú
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            const Icon(
-                              Icons.timer,
-                              color: Vx.green500,
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 16.0),
+              //   child: Container(
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       borderRadius: const BorderRadius.all(
+              //         Radius.circular(8.0),
+              //       ),
+              //       border: Border.all(
+              //         color: Vx.green200,
+              //         width: 1,
+              //       ),
+              //     ),
+              //     child: Padding(
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 8.0, vertical: 16),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           "Dự kiến giao: Trước 22:00 ngày 11/03/2022"
+              //               .text
+              //               .xl
+              //               .make(),
+              //           5.heightBox,
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.start,
+              //             children: [
+              //               "Hẹn thời gian ".text.green500.xl.make(),
+              //               //Icon ghi chú
+              //               const SizedBox(
+              //                 width: 8,
+              //               ),
+              //               const Icon(
+              //                 Icons.timer,
+              //                 color: Vx.green500,
+              //                 size: 20,
+              //               ),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

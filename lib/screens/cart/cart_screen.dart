@@ -134,7 +134,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                                           child:
                                                               "${snapshot.data}"
                                                                   .text
-                                                                  .xl
+                                                                  .medium
                                                                   .maxLines(2)
                                                                   .bold
                                                                   .make(),
@@ -165,7 +165,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                                                 .color(
                                                     Vx.red700.withOpacity(0.8))
                                                 .bold
-                                                .xl2
+                                                .xl
                                                 .make(),
                                           ],
                                         ),
@@ -223,62 +223,43 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                         const Spacer(),
                         "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
                             .text
-                            .color(Vx.black.withOpacity(0.8))
+                            .color(Vx.red700.withOpacity(0.8))
                             .bold
                             .xl2
-                            .make(),
+                            .make()
                       ],
                     ),
                     5.heightBox,
                     const Divider(),
-                    Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            "Tạm tính".text.xl2.black.bold.make(),
-                            "${convertCurrencyToVND(state.cartModel.getTotalPrice()!)}đ"
-                                .text
-                                .color(Vx.red700.withOpacity(0.8))
-                                .bold
-                                .xl2
-                                .make(),
-                          ],
-                        ),
-                        const Spacer(),
-                        // Button thanh toán
-                        SizedBox(
-                          width: 150,
-                          height: 50,
-                          child: RaisedButton(
-                            onPressed: () {
-                              if (authBloc.state is SuccessAuthState) {
-                                if (state.cartModel.cart.isEmpty) {
-                                  showSnackBar(
-                                      "Vui lòng thêm sản phẩm vào giỏ hàng",
-                                      context);
-                                } else {
-                                  Get.to(
-                                    () => const CheckoutCardScreen(),
-                                  );
-                                }
-                              } else {
-                                Get.to(
-                                  () => const LoginScreen(),
-                                );
-                              }
-                            },
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            color: Vx.green500,
-                            child: "Đặt hàng".text.white.bold.xl.make(),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: RaisedButton(
+                        onPressed: () {
+                          if (authBloc.state is SuccessAuthState) {
+                            if (state.cartModel.cart.isEmpty) {
+                              showSnackBar(
+                                  "Vui lòng thêm sản phẩm vào giỏ hàng",
+                                  context);
+                            } else {
+                              Get.to(
+                                () => const CheckoutCardScreen(),
+                              );
+                            }
+                          } else {
+                            Get.to(
+                              () => const LoginScreen(),
+                            );
+                          }
+                        },
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
                           ),
-                        )
-                        //Cart icon
-                      ],
+                        ),
+                        color: Vx.green500,
+                        child: "Đặt hàng".text.white.bold.xl.make(),
+                      ),
                     ),
                   ],
                 ),
@@ -387,7 +368,7 @@ class _CartItemState extends State<_CartItem> {
                                 overflow: TextOverflow.ellipsis,
                                 text: TextSpan(
                                     style: const TextStyle(
-                                        color: Colors.black, fontSize: 18),
+                                        color: Colors.black, fontSize: 14),
                                     text: widget.cart.productDetail!.name
                                         .toString()),
                               ),
@@ -438,11 +419,12 @@ class _CartItemState extends State<_CartItem> {
                                     .sm
                                     .gray500
                                     .make(),
+                                20.widthBox,
                                 "${convertCurrencyToVND(widget.cart.getPrices()!)}đ"
                                     .text
                                     .color(Vx.black.withOpacity(0.8))
                                     .bold
-                                    .xl2
+                                    .xl
                                     .make(),
                               ],
                             ),

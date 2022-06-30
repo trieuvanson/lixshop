@@ -72,7 +72,7 @@ class LixShop extends StatelessWidget {
           primaryColor: kPrimaryColor,
           primarySwatch: MaterialColor(kPrimaryColor.value, kPrimaryColorMap),
           textTheme: Theme.of(context).textTheme.apply(
-                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontFamily: GoogleFonts.notoSans().fontFamily,
                 bodyColor: kTextColor,
               ),
           visualDensity: VisualDensity.adaptivePlatformDensity,

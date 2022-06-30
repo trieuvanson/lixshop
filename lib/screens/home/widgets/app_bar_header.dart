@@ -44,8 +44,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
       elevation: 0,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
-      expandedHeight: size.height * 0.25 - 27,
-      collapsedHeight: size.height * 0.25 - 27,
+      expandedHeight: 150,
+      collapsedHeight: 150,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,

@@ -1,13 +1,31 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:lixshop/repositories/slide/slide_repository.dart';
 import 'package:readmore/readmore.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+
+
+
+  @override
+  void initState() {
+    getSlides();
+    super.initState();
+  }
+
+  getSlides() {
+    slideRepository.getSlides();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +75,7 @@ class _NotificationItem extends StatelessWidget {
       required this.image,
       this.onTap})
       : super(key: key);
-  static const content1 =
-      "Công ti xin thông báo chương trình khuyến mãi "
+  static const content1 = "Công ti xin thông báo chương trình khuyến mãi "
       "Công ti xin thông báo chương trình khuyến mãi "
       "Công ti xin thông báo chương trình khuyến mãi "
       "Công ti xin thông báo chương trình khuyến mãi "

@@ -31,3 +31,6 @@ export 'city/city_model.dart';
 export 'city/districts_model.dart';
 export 'city/wards_model.dart';
 
+//news
+export 'slides/slide.dart';
+

@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   "Quên mật khẩu?",
                                   style: TextStyle(
                                     color: appColor,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : const Text(
                                       "Đăng nhập",
                                       style: TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),

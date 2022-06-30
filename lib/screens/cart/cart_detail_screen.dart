@@ -130,8 +130,8 @@ class _CartDetailScreenState extends State<CartDetailScreen>
                       children: <Widget>[
                         Row(
                           children: [
-                            "Tạm tính".text.xl2.black.bold.make(),
-                            " (đã có VAT)"
+                            "Tổng cộng".text.xl2.black.bold.make(),
+                            ""
                                 .text
                                 .color(Vx.gray800.withOpacity(0.8))
                                 .xl
@@ -255,7 +255,7 @@ class _CartItemState extends State<_CartItem> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       AspectRatio(
-                        aspectRatio: 309/510,
+                        aspectRatio: 309 / 510,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
@@ -280,7 +280,7 @@ class _CartItemState extends State<_CartItem> {
                                 overflow: TextOverflow.ellipsis,
                                 text: TextSpan(
                                     style: const TextStyle(
-                                        color: Colors.black, fontSize: 18),
+                                        color: Colors.black, fontSize: 14),
                                     text: widget.cart.productDetail!.name
                                         .toString()),
                               ),
@@ -296,6 +296,7 @@ class _CartItemState extends State<_CartItem> {
                                   child: widget.cart.unit == "THÙNG"
                                       ? "Thùng ${widget.cart.productDetail!.changeValue} ${widget.cart.productDetail!.unit!.toLowerCase()} x ${widget.cart.productDetail!.wunit!}"
                                           .text
+                                          .size(10)
                                           .gray500
                                           .make()
                                       : null,
@@ -331,11 +332,12 @@ class _CartItemState extends State<_CartItem> {
                                     .sm
                                     .gray500
                                     .make(),
+                                20.widthBox,
                                 "${convertCurrencyToVND(widget.cart.getPrices()!)}đ"
                                     .text
                                     .color(Vx.black.withOpacity(0.8))
                                     .bold
-                                    .xl2
+                                    .xl
                                     .make(),
                               ],
                             ),
@@ -346,232 +348,233 @@ class _CartItemState extends State<_CartItem> {
                   ),
                 ),
               ),
-              // voucher.isNotEmpty
-              //     ? Padding(
-              //         padding:
-              //             const EdgeInsets.only(bottom: 16, left: 8, right: 8),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.start,
-              //           children: [
-              //             Column(
-              //               crossAxisAlignment: CrossAxisAlignment.start,
-              //               children: [
-              //                 SizedBox(
-              //                   width: MediaQuery.of(context).size.width - 150,
-              //                   child: Row(
-              //                     mainAxisAlignment:
-              //                         MainAxisAlignment.spaceBetween,
-              //                     children: [
-              //                       "Khuyến mãi"
-              //                           .text
-              //                           .color(Vx.black.withOpacity(0.8))
-              //                           .bold
-              //                           .make(),
-              //                       "".text.xl.gray500.make(),
-              //                     ],
-              //                   ),
-              //                 ),
-              //                 SizedBox(
-              //                   width: size.width * 0.9,
-              //                   child: Column(
-              //                     children: List.generate(
-              //                       voucher.length,
-              //                       (index) {
-              //                         var item = voucher[index];
-              //                         return Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             SizedBox(
-              //                               width: size.width * 0.6,
-              //                               child: Text(
-              //                                 item.voucherDetailName!,
-              //                                 overflow: TextOverflow.ellipsis,
-              //                                 maxLines: 1,
-              //                                 style: const TextStyle(
-              //                                   color: Vx.gray500,
-              //                                   fontSize: 12,
-              //                                   fontWeight: FontWeight.bold,
-              //                                   fontStyle: FontStyle.italic,
-              //                                 ),
-              //                               ),
-              //                             ),
-              //                             "${voucher[index].quantity}"
-              //                                 .text
-              //                                 .italic
-              //                                 .bold
-              //                                 .size(12)
-              //                                 .gray500
-              //                                 .make(),
-              //                           ],
-              //                         );
-              //                       },
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             )
-              //           ],
-              //         ),
-              //       )
-              //     : Container(),
-              // widget.type == CartDetailType.card
-              //     ? Padding(
-              //         padding: const EdgeInsets.only(bottom: 16.0),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           crossAxisAlignment: CrossAxisAlignment.center,
-              //           children: <Widget>[
-              //             SizedBox(
-              //               width: 120,
-              //               height: 42,
-              //               child: Center(
-              //                 child: SizedBox(
-              //                   child: RaisedButton(
-              //                     onPressed: () => showDialog<String>(
-              //                       context: context,
-              //                       builder: (BuildContext context) =>
-              //                           AlertDialog(
-              //                         title: const Center(
-              //                             child: Text('Xác nhận xoá')),
-              //                         actions: <Widget>[
-              //                           TextButton(
-              //                             onPressed: () =>
-              //                                 Navigator.pop(context, 'Huỷ'),
-              //                             child: const Text('Huỷ'),
-              //                           ),
-              //                           TextButton(
-              //                             onPressed: () {
-              //                               BlocProvider.of<CartBloc>(context)
-              //                                   .add(RemoveFromCart(
-              //                                       widget.cart));
-              //
-              //                               Navigator.pop(context, 'Xác nhận');
-              //                             },
-              //                             child: const Text('Xác nhận'),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                     shape: const RoundedRectangleBorder(
-              //                       borderRadius: BorderRadius.all(
-              //                         Radius.circular(8),
-              //                       ),
-              //                     ),
-              //                     color: Vx.white,
-              //                     child: "Xoá".text.gray600.bold.xl.make(),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //             Padding(
-              //               padding: const EdgeInsets.only(right: 10),
-              //               child: Row(
-              //                 children: [
-              //                   Padding(
-              //                     padding: const EdgeInsets.only(right: 8.0),
-              //                     child: InkWell(
-              //                       onTap: () {
-              //                         decrement(context);
-              //                       },
-              //                       child: SizedBox(
-              //                         width: 30,
-              //                         height: 30,
-              //                         child: Container(
-              //                           decoration: BoxDecoration(
-              //                               color: DesignCourseAppTheme
-              //                                   .nearlyWhite,
-              //                               borderRadius:
-              //                                   const BorderRadius.all(
-              //                                 Radius.circular(8.0),
-              //                               ),
-              //                               border: Border.all(
-              //                                 color: Vx.green500,
-              //                               )),
-              //                           child: const Icon(
-              //                             Icons.remove,
-              //                             color: Vx.green500,
-              //                             size: 28,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                   Padding(
-              //                     padding: const EdgeInsets.only(right: 8.0),
-              //                     child: Container(
-              //                       width: 40,
-              //                       height: 40,
-              //                       decoration: BoxDecoration(
-              //                           color: DesignCourseAppTheme.nearlyWhite,
-              //                           borderRadius: const BorderRadius.all(
-              //                             Radius.circular(8.0),
-              //                           ),
-              //                           border: Border.all(
-              //                             color: Vx.green500,
-              //                           )),
-              //                       child: TextFormField(
-              //                         onFieldSubmitted: (value) {
-              //                           widget.cart.quantity = int.parse(value);
-              //                           BlocProvider.of<CartBloc>(context)
-              //                               .add(UpdateCart(widget.cart));
-              //                         },
-              //                         textInputAction: TextInputAction.go,
-              //                         controller: TextEditingController(
-              //                             text:
-              //                                 widget.cart.quantity.toString()),
-              //                         inputFormatters: [
-              //                           FilteringTextInputFormatter.allow(
-              //                               RegExp(r'^[+]?\d+([.]\d+)?$')),
-              //                           //  Giới hạn 3 kí tự
-              //                           LengthLimitingTextInputFormatter(3),
-              //                         ],
-              //                         textAlignVertical:
-              //                             TextAlignVertical.center,
-              //                         keyboardType: TextInputType.number,
-              //                         textAlign: TextAlign.center,
-              //                         decoration: const InputDecoration(
-              //                           contentPadding:
-              //                               EdgeInsets.only(bottom: 14.0),
-              //                           border: InputBorder.none,
-              //                           hintStyle: TextStyle(
-              //                             color: DesignCourseAppTheme.grey,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                   InkWell(
-              //                     onTap: () => increment(context),
-              //                     child: SizedBox(
-              //                       width: 30,
-              //                       height: 30,
-              //                       child: Container(
-              //                         decoration: BoxDecoration(
-              //                           color: DesignCourseAppTheme.nearlyWhite,
-              //                           borderRadius: const BorderRadius.all(
-              //                             Radius.circular(8.0),
-              //                           ),
-              //                           border: Border.all(
-              //                             color: Vx.green500,
-              //                           ),
-              //                         ),
-              //                         child: const Icon(
-              //                           Icons.add,
-              //                           color: Vx.green500,
-              //                           size: 28,
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //             //Cart icon
-              //           ],
-              //         ),
-              //       )
-              //     : Container(),
+              voucher.isNotEmpty
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    "Khuyến mãi"
+                                        .text
+                                        .medium
+                                        .color(Vx.black.withOpacity(0.8))
+                                        .bold
+                                        .make(),
+                                    "".text.xl.gray500.make(),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.9,
+                                child: Column(
+                                  children: List.generate(
+                                    voucher.length,
+                                    (index) {
+                                      var item = voucher[index];
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: size.width * 0.6,
+                                            child: Text(
+                                              item.voucherDetailName!,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                color: Vx.gray500,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                                          ),
+                                          "${voucher[index].quantity}"
+                                              .text
+                                              .italic
+                                              .bold
+                                              .size(10)
+                                              .gray500
+                                              .make(),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  : Container(),
+              widget.type == CartDetailType.card
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 120,
+                            height: 42,
+                            child: Center(
+                              child: SizedBox(
+                                child: RaisedButton(
+                                  onPressed: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Center(
+                                          child: Text('Xác nhận xoá')),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Huỷ'),
+                                          child: const Text('Huỷ'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            BlocProvider.of<CartBloc>(context)
+                                                .add(RemoveFromCart(
+                                                    widget.cart));
+
+                                            Navigator.pop(context, 'Xác nhận');
+                                          },
+                                          child: const Text('Xác nhận'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                  color: Vx.white,
+                                  child: "Xoá".text.gray600.bold.xl.make(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      decrement(context);
+                                    },
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: DesignCourseAppTheme
+                                                .nearlyWhite,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8.0),
+                                            ),
+                                            border: Border.all(
+                                              color: Vx.green500,
+                                            )),
+                                        child: const Icon(
+                                          Icons.remove,
+                                          color: Vx.green500,
+                                          size: 28,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        color: DesignCourseAppTheme.nearlyWhite,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        ),
+                                        border: Border.all(
+                                          color: Vx.green500,
+                                        )),
+                                    child: TextFormField(
+                                      onFieldSubmitted: (value) {
+                                        widget.cart.quantity = int.parse(value);
+                                        BlocProvider.of<CartBloc>(context)
+                                            .add(UpdateCart(widget.cart));
+                                      },
+                                      textInputAction: TextInputAction.go,
+                                      controller: TextEditingController(
+                                          text:
+                                              widget.cart.quantity.toString()),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^[+]?\d+([.]\d+)?$')),
+                                        //  Giới hạn 3 kí tự
+                                        LengthLimitingTextInputFormatter(3),
+                                      ],
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 14.0),
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          color: DesignCourseAppTheme.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => increment(context),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: DesignCourseAppTheme.nearlyWhite,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        ),
+                                        border: Border.all(
+                                          color: Vx.green500,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Vx.green500,
+                                        size: 28,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //Cart icon
+                        ],
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

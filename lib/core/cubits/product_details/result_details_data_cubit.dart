@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../models/models.dart';
-import '../../../repositories/product_details_repositories/result_details_data_model.dart';
-
+import '../../../repositories/repositories.dart';
 part 'result_details_data_state.dart';
 
 class ResultDetailsDataCubit extends Cubit<ResultDetailsDataState> {

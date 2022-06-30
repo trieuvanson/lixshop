@@ -122,7 +122,7 @@ class _SendForgotCodeScreenState extends State<SendForgotCodeScreen> {
                                   : const Text(
                                       "Gửi mã",
                                       style: TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),

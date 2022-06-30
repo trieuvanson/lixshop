@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
 
-import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
-import '../cart/cart_screen.dart';
 import '../screen.dart';
 import 'constants/constants.dart';
 import 'widgets/product_card.dart';
