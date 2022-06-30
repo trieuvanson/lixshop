@@ -538,7 +538,7 @@ class _CheckoutItem extends StatelessWidget {
                       builder: (context, snapshot) {
                         return snapshot.hasData
                             ? SizedBox(
-                                width: size.width * 0.8,
+                                width: size.width * 0.75,
                                 child: snapshot.data
                                     .toString()
                                     .text
