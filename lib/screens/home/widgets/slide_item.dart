@@ -28,7 +28,7 @@ class _SlideItemState extends State<SlideItem> {
             clipBehavior: Clip.none, children: <Widget>[
               Container(
                 constraints: const BoxConstraints(
-                    minHeight: 300),
+                    minHeight: 200),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.0),
@@ -36,7 +36,7 @@ class _SlideItemState extends State<SlideItem> {
                   ),
                   child: Image.network(
                     widget.img,
-                    height: 300,
+                    height: 200,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       print('$error');

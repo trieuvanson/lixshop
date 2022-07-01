@@ -46,6 +46,12 @@ class _OrderHistoryItemDetailScreenState
   }
 
   @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
@@ -165,63 +171,125 @@ class _OrderHistoryItemDetailScreenState
     return AppBar(
       backgroundColor: Colors.white,
       titleSpacing: 0.0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
-              SizedBox(
-                width: size.width * 0.5,
-                child: Text("${widget.order.agentLixName}",
-                    style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Vx.green500)),
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(right: 8.0, top: 8),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Vx.green200,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8.0),
-                ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Vx.green50.withOpacity(0.5),
-                      offset: const Offset(1.1, 1.1),
-                      blurRadius: 8.0),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: "${orderStatusMapReverse[widget.order.status]}"
+      title: SizedBox(
+        width: size.width,
+        child: Stack(
+          children: [
+            Wrap(
+              direction: Axis.vertical,
+              children: [
+                Container(
+                  child: "Đơn hàng #${widget.order.idDH}"
                       .text
-                      .green500
-                      .size(10)
-                      .bold
-                      .sm
+                      .size(16)
+                      .black
                       .make(),
+                ),
+                SizedBox(
+                  width: size.width * 0.7,
+                  child: Text("${widget.order.agentLixName}",
+                      style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Vx.green500)),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                margin: const EdgeInsets.only(right: 8.0, top: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Vx.green200,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Vx.green50.withOpacity(0.5),
+                          offset: const Offset(1.1, 1.1),
+                          blurRadius: 8.0),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: "${orderStatusMapReverse[widget.order.status]}"
+                          .text
+                          .green500
+                          .size(10)
+                          .bold
+                          .sm
+                          .make(),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      // title: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: [
+      //     Column(
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         "Đơn hàng #${widget.order.idDH}".text.size(16).black.make(),
+      //         Wrap(
+      //           children: [
+      //                     Text("${widget.order.agentLixName}",
+      //               style: const TextStyle(
+      //                     fontSize: 10,
+      //                     fontWeight: FontWeight.bold,
+      //                     color: Vx.green500)),
+      //                   ],
+      //         )
+      //       ],
+      //     ),
+      //     Container(
+      //       margin: const EdgeInsets.only(right: 8.0, top: 8),
+      //       child: Container(
+      //         decoration: BoxDecoration(
+      //           color: Vx.green200,
+      //           borderRadius: const BorderRadius.all(
+      //             Radius.circular(8.0),
+      //           ),
+      //           boxShadow: <BoxShadow>[
+      //             BoxShadow(
+      //                 color: Vx.green50.withOpacity(0.5),
+      //                 offset: const Offset(1.1, 1.1),
+      //                 blurRadius: 8.0),
+      //           ],
+      //         ),
+      //         child: Padding(
+      //           padding: const EdgeInsets.all(8.0),
+      //           child: Center(
+      //             child: "${orderStatusMapReverse[widget.order.status]}"
+      //                 .text
+      //                 .green500
+      //                 .size(10)
+      //                 .bold
+      //                 .sm
+      //                 .make(),
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black,
         ),
         onPressed: () {
-          Get.back();
+          //get.pop
+          Navigator.pop(context);
         },
       ),
     );
@@ -312,20 +380,20 @@ class _CartItem extends StatelessWidget {
             children: [
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                 child: SizedBox(
                   height: 140,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       AspectRatio(
-                        aspectRatio: 309/510,
+                        aspectRatio: 309 / 510,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                              orderDetail.productImage!,
+                            orderDetail.productImage!,
                             errorBuilder: (context, url, error) =>
-                            const Icon(Icons.error),
+                                const Icon(Icons.error),
                             height: 80,
                             fit: BoxFit.cover,
                           ),
@@ -333,88 +401,94 @@ class _CartItem extends StatelessWidget {
                       ),
                       16.widthBox,
                       SizedBox(
-                        width: size.width * 0.6,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 150,
-                              child: RichText(
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 16),
-                                  children: [
-                                    TextSpan(
-                                      text: orderDetail.productName!,
-                                    ),
-                                    TextSpan(
-                                      text:
-                                      " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Vx.red700,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            alignment: WrapAlignment.start,
+                            direction: Axis.vertical,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: RichText(
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                    children: [
+                                      TextSpan(
+                                        text: orderDetail.productName!,
                                       ),
-                                    ),
+                                      TextSpan(
+                                        text:
+                                            " x${orderDetail.quantityDetail?.toInt()} ${orderDetail.productUnit}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Vx.red700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // 5.heightBox,
+                              // SizedBox(
+                              //   width: MediaQuery.of(context).size.width - 150,
+                              //   child: Row(
+                              //     mainAxisAlignment:
+                              //     MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       SizedBox(
+                              //         child: "".text.size(10).gray500.make(),
+                              //       ),
+                              //       // SizedBox(
+                              //       //   child: GestureDetector(
+                              //       //       onTap: () {
+                              //       //         Navigator.of(context).push(
+                              //       //           HeroDialogRoute(
+                              //       //               builder: (context) => Column(
+                              //       //                     children: [
+                              //       //                       Flexible(
+                              //       //                           child: Container(),
+                              //       //                           flex: 2),
+                              //       //                       const _DetailCartItemPopup(),
+                              //       //                     ],
+                              //       //                   ),
+                              //       //               fullscreenDialog: false),
+                              //       //         );
+                              //       //       },
+                              //       //       child:
+                              //       //           "Chi tiết".text.green500.xl.make()),
+                              //       // ),
+                              //     ],
+                              //   ),
+                              // ),
+                              5.heightBox,
+                              SizedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    "${convertCurrencyToVND(orderDetail.priceDetail!.toInt())}đ/${orderDetail.productUnit}"
+                                        .text
+                                        .xl
+                                        .size(10)
+                                        .gray500
+                                        .make(),
+                                    20.widthBox,
+                                    "${convertCurrencyToVND(orderDetail.totalDetail!.toInt())}đ"
+                                        .text
+                                        .color(Vx.black.withOpacity(0.8))
+                                        .bold
+                                        .xl2
+                                        .make(),
                                   ],
                                 ),
                               ),
-                            ),
-                            5.heightBox,
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 150,
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    child: "".text.size(10).gray500.make(),
-                                  ),
-                                  // SizedBox(
-                                  //   child: GestureDetector(
-                                  //       onTap: () {
-                                  //         Navigator.of(context).push(
-                                  //           HeroDialogRoute(
-                                  //               builder: (context) => Column(
-                                  //                     children: [
-                                  //                       Flexible(
-                                  //                           child: Container(),
-                                  //                           flex: 2),
-                                  //                       const _DetailCartItemPopup(),
-                                  //                     ],
-                                  //                   ),
-                                  //               fullscreenDialog: false),
-                                  //         );
-                                  //       },
-                                  //       child:
-                                  //           "Chi tiết".text.green500.xl.make()),
-                                  // ),
-                                ],
-                              ),
-                            ),
-                            5.heightBox,
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  "${convertCurrencyToVND(orderDetail.priceDetail!.toInt())}đ/${orderDetail.productUnit}"
-                                      .text
-                                      .xl
-                                      .size(10)
-                                      .gray500
-                                      .make(),
-                                  "${convertCurrencyToVND(orderDetail.totalDetail!.toInt())}đ"
-                                      .text
-                                      .color(Vx.black.withOpacity(0.8))
-                                      .bold
-                                      .xl2
-                                      .make(),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       )
                       // Column(

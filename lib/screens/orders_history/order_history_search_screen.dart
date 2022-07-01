@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../controllers/order/order_controller.dart';
-import '../../controllers/search_controller.dart';
-import '../../core/core.dart';
 import '../../models/order/order.dart';
 import '../../repositories/order/order_repository.dart';
-import '../../utils/design_course_app_theme.dart';
 import '../screen.dart';
 import 'constants/order_status.dart';
 
 class OrderHistorySearch extends SearchDelegate<String> {
+  late final List<Order> orders;
+
+  OrderHistorySearch({required this.orders});
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -40,35 +40,40 @@ class OrderHistorySearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+    List<Order> _orders = orderController.searchByOrderId(orders, query);
     return query.isEmpty
-        ? const Center(
-            child: Text('Kết quả'),
-          )
-        : FutureBuilder(
-            future: orderRepository.getOrdersByUser(),
-            builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              List<Order> orders =
-                  orderController.searchByOrderId(snapshot.data!, query);
-              return orders.isNotEmpty
-                  ? ListView(
-                      children: List<Widget>.generate(
-                        orders.length,
-                        (index) => HistoryItem(order: orders[index]),
-                      ),
-                    )
-                  : const Center(child: Text("Không có dữ liệu"));
-            },
-          );
+        ? const SizedBox.shrink()
+        : _orders.isNotEmpty
+            ? ListView(
+                children: List<Widget>.generate(
+                  _orders.length,
+                  (index) => HistoryItem(order: _orders[index]),
+                ),
+              )
+            : const Center(child: Text("Không có dữ liệu"));
+    return FutureBuilder(
+      future: orderRepository.getOrdersByUser(),
+      builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        List<Order> orders =
+            orderController.searchByOrderId(snapshot.data!, query);
+        return orders.isNotEmpty
+            ? ListView(
+                children: List<Widget>.generate(
+                  orders.length,
+                  (index) => HistoryItem(order: orders[index]),
+                ),
+              )
+            : const Center(child: Text("Không có dữ liệu"));
+      },
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(
-      child: Text('Kết quả'),
-    );
+    return const SizedBox.shrink();
   }
 }
 

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
+import '../../models/models.dart';
+import '../../utils/helpers/secure_storage.dart';
 import '../../widgets/widgets.dart';
 
 class ProfileInformationScreen extends StatefulWidget {
@@ -15,6 +17,18 @@ class ProfileInformationScreen extends StatefulWidget {
 
 class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   final _formKey = GlobalKey<FormState>();
+  AuthUser? _currentUser;
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+
+  getUser() async {
+    _currentUser = await secureStorage.getCurrentUser();
+    print('');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +41,14 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
           physics: const BouncingScrollPhysics(),
           children: [
             buildProfileInformation(context),
-            Container()
+            const Center(
+              child: Text(
+                'Chức năng đang được phát triển',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             // const _CheckoutItem(),
           ],
         ),
@@ -37,22 +58,28 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      bottom: const TabBar(
-        physics: BouncingScrollPhysics(),
-        isScrollable: true,
-        labelColor: Vx.green500,
-        unselectedLabelColor: Vx.gray500,
-        labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        indicator: UnderlineTabIndicator(
-          borderSide: BorderSide(
-            width: 3,
-            color: Vx.green500,
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TabBar(
+            physics: BouncingScrollPhysics(),
+            isScrollable: true,
+            labelColor: Vx.green500,
+            unselectedLabelColor: Vx.gray500,
+            labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(
+                width: 3,
+                color: Vx.green500,
+              ),
+            ),
+            tabs: [
+              Tab(text: "Tài khoản"),
+              Tab(text: "Thông tin xuất hoá đơn"),
+            ],
           ),
         ),
-        tabs: [
-          Tab(text: "Tài khoản"),
-          Tab(text: "Thông tin xuất hoá đơn"),
-        ],
       ),
       title: "Thông tin cá nhân".text.black.make(),
       titleSpacing: 0.0,
@@ -71,156 +98,145 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   Widget buildProfileInformation(BuildContext context) {
     return SingleChildScrollView(
-      child: FutureBuilder(
-          builder: (context, snapshot) {
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 32),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
+      child: FutureBuilder(builder: (context, snapshot) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 32),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Tên cửa hàng"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {});
+                        },
                       ),
-                      child: Column(
+                      15.heightBox,
+                      // TextFormField(
+                      //   decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                      //       "Họ và tên chủ cửa hàng"),
+                      //   validator: (value) {
+                      //     if (value!.isEmpty) {
+                      //       return 'Không được để trống';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   onChanged: (value) {
+                      //     setState(() {});
+                      //   },
+                      // ),
+                      // 15.heightBox,
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Địa chỉ"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      15.heightBox,
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Số điện thoại"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      15.heightBox,
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Tên cửa hàng"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
-                          15.heightBox,
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Họ và tên chủ cửa hàng"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
-                          15.heightBox,
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Địa chỉ"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
-                          15.heightBox,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              "Hình ảnh cửa hàng"
-                                  .text
-                                  .size(16)
-                                  .color(appColor)
-                                  .make(),
-                              16.heightBox,
-                              SizedBox(
-                                height: 150,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const ImageItem(
-                                        image:
-                                            "",
-                                        title: "Hình ảnh bên ngoài"),
-                                    20.widthBox,
-                                    const ImageItem(
-                                        image:
-                                            "",
-                                        title: "Hình ảnh bên trong"),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Divider(),
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Số điện thoại"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
-                          15.heightBox,
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Email"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
-                          15.heightBox,
-                          20.heightBox,
-                          Material(
-                            color: appColor,
-                            borderRadius: BorderRadius.circular(8),
-                            child: InkWell(
-                              onTap: () {},
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  "Cập nhật",
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                          "Hình ảnh cửa hàng"
+                              .text
+                              .size(16)
+                              .color(appColor)
+                              .make(),
+                          16.heightBox,
+                          SizedBox(
+                            height: 150,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const ImageItem(
+                                    image: "", title: "Hình ảnh bên ngoài"),
+                                20.widthBox,
+                                const ImageItem(
+                                    image: "", title: "Hình ảnh bên trong"),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      const Divider(),
+                      //
+                      // TextFormField(
+                      //   decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                      //       "Email"),
+                      //   validator: (value) {
+                      //     if (value!.isEmpty) {
+                      //       return 'Không được để trống';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   onChanged: (value) {
+                      //     setState(() {});
+                      //   },
+                      // ),
+                      35.heightBox,
+                      Material(
+                        color: appColor,
+                        borderRadius: BorderRadius.circular(8),
+                        child: InkWell(
+                          onTap: () {},
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Cập nhật",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -354,8 +370,7 @@ class ImageItem extends StatelessWidget {
                 image,
               ),
               fit: BoxFit.fill,
-              onError: (a,e) {
-              },
+              onError: (a, e) {},
             ),
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),

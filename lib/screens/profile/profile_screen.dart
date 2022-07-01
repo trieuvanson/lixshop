@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/repositories/repositories.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../core/core.dart';
@@ -226,21 +227,43 @@ class _ProfileScreenState extends State<ProfileScreen>
                               icon: Icons.add_to_home_screen,
                               title: "Trưng bày",
                               onTap: () {
+                                showSnackBar(
+                                    "Chức năng đang được phát triển", context);
                                 // Get.to(() => const GarnitureScreen());
                               },
                             ),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Điều khoản và chính sách"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Gửi phản hồi"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Câu hỏi thường gặp"),
-                            const _MenuItem(
-                                icon: Icons.add_to_home_screen,
-                                title: "Liên hệ"),
+                            _MenuItem(
+                              icon: Icons.add_to_home_screen,
+                              title: "Điều khoản và chính sách",
+                              onTap: () {
+                                showSnackBar(
+                                    "Chức năng đang được phát triển", context);
+                              },
+                            ),
+                            _MenuItem(
+                              icon: Icons.add_to_home_screen,
+                              title: "Gửi phản hồi",
+                              onTap: () {
+                                showSnackBar(
+                                    "Chức năng đang được phát triển", context);
+                              },
+                            ),
+                            _MenuItem(
+                              icon: Icons.add_to_home_screen,
+                              title: "Câu hỏi thường gặp",
+                              onTap: () {
+                                showSnackBar(
+                                    "Chức năng đang được phát triển", context);
+                              },
+                            ),
+                            _MenuItem(
+                              icon: Icons.add_to_home_screen,
+                              title: "Liên hệ",
+                              onTap: () {
+                                showSnackBar(
+                                    "Chức năng đang được phát triển", context);
+                              },
+                            ),
                             _MenuItem(
                                 onTap: () {
                                   authBloc.add(AuthLogoutEvent());
@@ -280,7 +303,12 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Material(
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Get.to(
+            () => ProfileInformationScreen(),
+            curve: Curves.easeInToLinear,
+          );
+        },
         child: Stack(
           clipBehavior: Clip.none,
           fit: StackFit.expand,
@@ -312,54 +340,46 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(
-                        () => const ProfileInformationScreen(),
-                        curve: Curves.easeInToLinear,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(50),
-                                  ),
-                                  child: Image.asset(
-                                    "assets/images/avatar-den-co-don-9.webp",
-                                    fit: BoxFit.cover,
-                                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50),
+                                ),
+                                child: Image.asset(
+                                  "assets/images/avatar-den-co-don-9.webp",
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              16.widthBox,
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    child: Text(
-                                      user.name ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            16.widthBox,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  child: Text(
+                                    user.name ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -411,14 +431,14 @@ class _HistoryItem extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          width: size.width/5,
+          width: size.width / 5,
           color: Colors.white,
           child: Center(
             child: Wrap(
               direction: Axis.vertical,
               children: [
                 SizedBox(
-                  width: size.width * 20/100,
+                  width: size.width * 20 / 100,
                   child: Icon(
                     icon,
                     color: Colors.black,
@@ -426,7 +446,7 @@ class _HistoryItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 SizedBox(
-                  width: size.width/5,
+                  width: size.width / 5,
                   child: Text(
                     title,
                     textAlign: TextAlign.center,

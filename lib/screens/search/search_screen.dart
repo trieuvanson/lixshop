@@ -304,7 +304,6 @@ class _MenuItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //image
               Container(
                 width: 40,
                 height: 40,
@@ -321,10 +320,9 @@ class _MenuItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.7,
                 child: title.text
                     .size(16)
                     .gray700

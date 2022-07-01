@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../constants/constants.dart';
-
-
 
 class TitleWithMoreButton extends StatelessWidget {
   const TitleWithMoreButton(
@@ -28,18 +26,21 @@ class TitleWithMoreButton extends StatelessWidget {
               padding: MaterialStateProperty.all<EdgeInsets>(
                 const EdgeInsets.symmetric(horizontal: kDefaultPadding),
               ),
+              elevation: MaterialStateProperty.all<double>(0),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                kPrimaryColor
-              ),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ),
             child: const Text(
-              'Thêm',
-              style: TextStyle(color: Colors.white),
+              'Xem thêm',
+              style: TextStyle(
+                color: Vx.green500,
+                fontStyle: FontStyle.italic,
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
         ],

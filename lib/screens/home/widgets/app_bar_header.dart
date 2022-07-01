@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lixshop/main_screen.dart';
 import 'package:lixshop/screens/screen.dart';
 
 import '../../../repositories/repositories.dart';
@@ -44,8 +45,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
       elevation: 0,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
-      expandedHeight: 150,
-      collapsedHeight: 150,
+      expandedHeight: 125,
+      collapsedHeight: 125,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
@@ -71,22 +72,24 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
               top: padding.top,
               left: kDefaultPadding,
               right: kDefaultPadding,
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Xin chào, $name",
-                      style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Wrap(
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => const ProfileInformationScreen());
+                },
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Xin chào, $name",
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                      ),
+                      Wrap(
                         direction: Axis.horizontal,
                         children: [
                           Text(
@@ -107,8 +110,8 @@ class _AppBarHeaderSliverState extends State<AppBarHeaderSliver> {
                           // ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -147,7 +150,7 @@ class _SearchBar extends StatelessWidget {
         },
         child: Container(
           width: size.width,
-          height: size.height * 0.07,
+          height: 50,
           alignment: Alignment.center,
           margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
           padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),

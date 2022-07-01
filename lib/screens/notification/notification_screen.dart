@@ -13,9 +13,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-
-
-
   @override
   void initState() {
     getSlides();
@@ -26,33 +23,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
     slideRepository.getSlides();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    return const Scaffold(
+      body: ContactsPage(),
+    );
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: "Thông báo".text.black.make(),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          padding: const EdgeInsets.only(top: 8),
-          color: DesignCourseAppTheme.nearlyWhite,
-          child: Column(
-            children: const [
-              // for (var i = 0; i < 10; i++)
-              //   _NotificationItem(
-              //     title: "Chương trình khuyến mãi $i",
-              //     content: "Thông báo $i",
-              //     time: "Thứ 2, ngày 12/12/2020",
-              //     image: "assets/images/lix3.png",
-              //     onTap: () {
-              //     },
-              //   ),
-            ],
+      body: const Center(
+        child: Text(
+          'Chức năng đang được phát triển',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -136,6 +124,96 @@ class _NotificationItem extends StatelessWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class Contact {
+  final String name;
+
+  Contact(this.name);
+}
+
+class ContactsPage extends StatefulWidget {
+  const ContactsPage({Key? key}) : super(key: key);
+
+  @override
+  _ContactsPageState createState() => _ContactsPageState();
+}
+
+class _ContactsPageState extends State<ContactsPage> {
+
+  final contacts = [
+    Contact("sahar"),
+    Contact("Joe"),
+    Contact("fo"),
+    Contact("Fifo"),
+    Contact("Moshe"),
+  ];
+
+  var _displayAll = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("contacts"),),
+      backgroundColor: Colors.white,
+      body: Center(
+        child:_gridContacts(),
+      ),
+    );
+  }
+
+  Widget _gridContacts() {
+    final size = _displayAll ? contacts.length : contacts.length - 2;
+    final contactsWidget = List.generate(
+        size, (index) => _contactItem(contacts[index]))
+      ..add(_seeNoSeeMore());
+    return GridView.count(
+      crossAxisCount: 3,
+      childAspectRatio: 2/1,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      children: contactsWidget,);
+  }
+
+
+  Widget _contactItem(Contact item) {
+    return Container(
+      color: Colors.blue.withOpacity(0.5),
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.person),
+          Text(item.name),
+        ],
+      ),
+    );
+  }
+
+  Widget _seeNoSeeMore() {
+    return InkWell(
+      onTap: ()=>setState(()=>_displayAll = !_displayAll),
+      child: Container(
+        color: Colors.blue.withOpacity(0.5),
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.person),
+            Text(_displayAll?"hide":"Show all"),
           ],
         ),
       ),

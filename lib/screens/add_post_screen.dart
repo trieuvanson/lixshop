@@ -47,6 +47,21 @@ class _InboxScreenState extends State<InboxScreen> {
         automaticallyImplyLeading: false,
         title: "Hộp thư".text.black.make(),
       ),
+      body: const Center(
+        child: Text(
+          'Chức năng đang được phát triển',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        title: "Hộp thư".text.black.make(),
+      ),
       body: Container(),
       // body: Center(
       //   child: Column(

@@ -47,7 +47,12 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             onPressed: () => showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: const Center(child: Text('Xác nhận xoá')),
+                title: const Center(
+                  child: Text(
+                    'Xoá tất cả các sản phẩm trong giỏ hàng?',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'Huỷ'),
@@ -205,15 +210,15 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
         if (state is CartLoaded) {
           return Container(
             margin: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 120,
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    Row(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 120,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
                         "Tổng ${state.cartModel.cart.length} sản phẩm"
                             .text
@@ -229,9 +234,12 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                             .make()
                       ],
                     ),
-                    5.heightBox,
-                    const Divider(),
-                    SizedBox(
+                  ),
+                  5.heightBox,
+                  const Divider(),
+                  Expanded(
+                    flex: 4,
+                    child: SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: RaisedButton(
@@ -252,17 +260,12 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
                             );
                           }
                         },
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
                         color: Vx.green500,
                         child: "Đặt hàng".text.white.bold.xl.make(),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -342,7 +345,7 @@ class _CartItemState extends State<_CartItem> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       AspectRatio(
-                        aspectRatio: 309/510,
+                        aspectRatio: 309 / 510,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
@@ -451,7 +454,7 @@ class _CartItemState extends State<_CartItem> {
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title:
-                                    const Center(child: Text('Xác nhận xoá')),
+                                    const Center(child: Text('Xoá sản phẩm?')),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () =>

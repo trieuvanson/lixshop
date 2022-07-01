@@ -28,35 +28,35 @@ class _SliverHeaderBannerState extends State<SliverHeaderBanner> {
     getSlides();
     super.initState();
   }
-  //
-  // List<Widget> restaurantList(BuildContext context) {
-  //   return _slides
-  //       .map((slide) {
-  //         return Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-  //           child: Card(
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(8),
-  //             ),
-  //             child: Container(
-  //               padding: const EdgeInsets.symmetric(horizontal: 8),
-  //               constraints: const BoxConstraints(),
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(8.0),
-  //               ),
-  //               child: SlideItem(
-  //                 img: slide.imageUrl!,
-  //                 title: slide.title!,
-  //                 address: slide.content!,
-  //                 rating: slide.type!,
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       })
-  //       .toList();
-  // }
-  //
+
+  List<Widget> slides(BuildContext context) {
+    return _slides
+        .map((slide) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                constraints: const BoxConstraints(),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: SlideItem(
+                  img: slide.imageUrl!,
+                  title: slide.title!,
+                  address: slide.content!,
+                  rating: slide.type!,
+                ),
+              ),
+            ),
+          );
+        })
+        .toList();
+  }
+
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
@@ -88,7 +88,7 @@ class _SliverHeaderBannerState extends State<SliverHeaderBanner> {
                     CarouselSlider(
                       carouselController: _controller,
                       options: CarouselOptions(
-                        height: 310,
+                        height: 210,
                         autoPlay: true,
                         scrollDirection: Axis.horizontal,
                         autoPlayInterval: const Duration(seconds: 3),

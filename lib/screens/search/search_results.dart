@@ -48,6 +48,7 @@ class _SearchResultsState extends State<SearchResults> {
     int index = size.width > 1024 ? 4 : 2;
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: DesignCourseAppTheme.notWhite,
       endDrawer: ClipRRect(
         borderRadius: const BorderRadius.all(
           Radius.circular(12),
@@ -59,168 +60,164 @@ class _SearchResultsState extends State<SearchResults> {
         builder: (context, state) {
           if (state.isSuccess) {
             return SingleChildScrollView(
-              child: Container(
-                height: size.height,
-                color: DesignCourseAppTheme.notWhite,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, left: 8, right: 8, bottom: 8),
-                  child: SingleChildScrollView(
-                    child: Container(
-                      color: DesignCourseAppTheme.notWhite,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8, left: 8, right: 8, bottom: 8),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(bottom: 16, top: 16),
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  "Kết quả tìm kiếm".text.bold.size(16).make(),
-                                  // const Spacer(),
-                                  // CustomDropdownButton2(
-                                  //   dropdownWidth: 100,
-                                  //   buttonWidth: 120,
-                                  //   buttonDecoration: BoxDecoration(
-                                  //     color: DesignCourseAppTheme.nearlyWhite,
-                                  //     borderRadius: const BorderRadius.all(
-                                  //       Radius.circular(8.0),
-                                  //     ),
-                                  //     border: Border.all(
-                                  //       color: Vx.gray300,
-                                  //     ),
-                                  //   ),
-                                  //   icon: const Icon(
-                                  //     Icons.arrow_drop_down,
-                                  //     size: 24,
-                                  //   ),
-                                  //   hint: 'Đơn vị tính',
-                                  //   value: 'Tất cả',
-                                  //   onChanged: (String? value) {},
-                                  //   dropdownItems: const [
-                                  //     "Tất cả",
-                                  //     "Tên A-Z",
-                                  //     "Tên Z-A",
-                                  //   ],
-                                  // ),
-                                  // 8.widthBox,
-                                  // InkWell(
-                                  //   onTap: () {
-                                  //     scaffoldKey.currentState?.openEndDrawer();
-                                  //   },
-                                  //   child: Wrap(
-                                  //     alignment: WrapAlignment.center,
-                                  //     crossAxisAlignment:
-                                  //         WrapCrossAlignment.center,
-                                  //     children: [
-                                  //       const Icon(
-                                  //         Icons.filter_list,
-                                  //         color: Vx.gray700,
-                                  //       ),
-                                  //       "Lọc"
-                                  //           .text
-                                  //           .bold
-                                  //           .color(Vx.gray700)
-                                  //           .make(),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  //create a tabbar with catogries
-                                ],
-                              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8, left: 8, right: 8, bottom: 8),
+                child: SingleChildScrollView(
+                  child: Container(
+                    color: DesignCourseAppTheme.notWhite,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 8, left: 8, right: 8, bottom: 8),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin:
+                                const EdgeInsets.only(bottom: 16, top: 16),
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                                "Kết quả tìm kiếm".text.bold.size(16).make(),
+                                // const Spacer(),
+                                // CustomDropdownButton2(
+                                //   dropdownWidth: 100,
+                                //   buttonWidth: 120,
+                                //   buttonDecoration: BoxDecoration(
+                                //     color: DesignCourseAppTheme.nearlyWhite,
+                                //     borderRadius: const BorderRadius.all(
+                                //       Radius.circular(8.0),
+                                //     ),
+                                //     border: Border.all(
+                                //       color: Vx.gray300,
+                                //     ),
+                                //   ),
+                                //   icon: const Icon(
+                                //     Icons.arrow_drop_down,
+                                //     size: 24,
+                                //   ),
+                                //   hint: 'Đơn vị tính',
+                                //   value: 'Tất cả',
+                                //   onChanged: (String? value) {},
+                                //   dropdownItems: const [
+                                //     "Tất cả",
+                                //     "Tên A-Z",
+                                //     "Tên Z-A",
+                                //   ],
+                                // ),
+                                // 8.widthBox,
+                                // InkWell(
+                                //   onTap: () {
+                                //     scaffoldKey.currentState?.openEndDrawer();
+                                //   },
+                                //   child: Wrap(
+                                //     alignment: WrapAlignment.center,
+                                //     crossAxisAlignment:
+                                //         WrapCrossAlignment.center,
+                                //     children: [
+                                //       const Icon(
+                                //         Icons.filter_list,
+                                //         color: Vx.gray700,
+                                //       ),
+                                //       "Lọc"
+                                //           .text
+                                //           .bold
+                                //           .color(Vx.gray700)
+                                //           .make(),
+                                //     ],
+                                //   ),
+                                // ),
+                                //create a tabbar with catogries
+                              ],
                             ),
-                            Builder(builder: (context) {
-                              if (widget.keyword.isNotEmpty) {
-                                var products = searchController.search(
-                                    keyword: widget.keyword,
-                                    categories: state.resultDataModel!
-                                        .productOutsideCategory!);
-                                return GridView.builder(
-                                  controller: _scrollController,
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: index,
-                                    childAspectRatio: 309/510,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    var product = products[index];
-                                    return InkWell(
-                                      onTap: () {
-                                        Get.to(() => ProductDetailsScreen(
-                                              idBrand:
-                                                  product.brandId?.toInt() ?? 0,
-                                            ));
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                  product.brand!,
-                                                ),
-                                                onError: (context, error) {},
-                                                fit: BoxFit.fill,
+                          ),
+                          Builder(builder: (context) {
+                            if (widget.keyword.isNotEmpty) {
+                              var products = searchController.search(
+                                  keyword: widget.keyword,
+                                  categories: state.resultDataModel!
+                                      .productOutsideCategory!);
+                              return GridView.builder(
+                                controller: _scrollController,
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: index,
+                                  childAspectRatio: 309/510,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                ),
+                                itemBuilder: (context, index) {
+                                  var product = products[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      Get.to(() => ProductDetailsScreen(
+                                            idBrand:
+                                                product.brandId?.toInt() ?? 0,
+                                          ));
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                product.brand!,
                                               ),
+                                              onError: (context, error) {},
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
-                                          Positioned(
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: size.width,
-                                              height: size.height * 0.08,
-                                              color: kBackgroundColor
-                                                  .withOpacity(0.8),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Spacer(),
-                                                    Text(
-                                                      product.brandName!,
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                        ),
+                                        Positioned(
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Container(
+                                            width: size.width,
+                                            height: size.height * 0.08,
+                                            color: kBackgroundColor
+                                                .withOpacity(0.8),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Spacer(),
+                                                  Text(
+                                                    product.brandName!,
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    const Spacer(),
-                                                  ],
-                                                ),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  const Spacer(),
+                                                ],
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  itemCount: products.length,
-                                );
-                              }
-                              return const Center(
-                                child: Text("Không tìm thấy sản phẩm"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                itemCount: products.length,
                               );
-                            }),
-                          ],
-                        ),
+                            }
+                            return const Center(
+                              child: Text("Không tìm thấy sản phẩm"),
+                            );
+                          }),
+                        ],
                       ),
                     ),
                   ),

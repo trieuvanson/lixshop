@@ -40,7 +40,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   getDetail() async {
-    _resultDetailsDataModel =
+     _resultDetailsDataModel =
         await resultDetailsDataRepository.getResultDetailsData(widget.idBrand);
     if (!mounted) return;
     _isLoading = false;

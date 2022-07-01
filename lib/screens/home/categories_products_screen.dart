@@ -81,10 +81,11 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     int index = size.width > 1024 ? 4 : 2;
     return Scaffold(
+      backgroundColor: DesignCourseAppTheme.notWhite,
       appBar: appBar(widget.category),
       body: Container(
         padding: const EdgeInsets.symmetric(

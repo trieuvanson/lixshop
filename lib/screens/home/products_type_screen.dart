@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/models/models.dart';
 import 'package:lixshop/screens/cart/cart_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
@@ -131,11 +132,11 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
     // );
 
     return Scaffold(
+      backgroundColor: DesignCourseAppTheme.notWhite,
       appBar: appBar(),
       body: Container(
         padding: const EdgeInsets.symmetric(
             horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
-        color: DesignCourseAppTheme.notWhite,
         child: SingleChildScrollView(
           controller: _scrollController,
           child: SizedBox(
@@ -149,11 +150,54 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
                       product: product,
                     ),
                   if (_isLoading)
-                    const Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.black),
-                      ),
-                    ),
+                    for (var i = 0; i < 2; i++)
+                      Shimmer.fromColors(
+                        highlightColor: Colors.white,
+                        baseColor: Colors.grey[300]!,
+                        child: Container(
+                          width: size.width * 0.45,
+                          margin: const EdgeInsets.only(
+                            left: kDefaultPadding / 2,
+                            top: kDefaultPadding / 2,
+                            bottom: kDefaultPadding * 2.5,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: size.width * 0.4,
+                                height: size.height * 0.3,
+                                decoration: BoxDecoration(
+                                  color: kBackgroundColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.all(kDefaultPadding / 3),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 10),
+                                      blurRadius: 50,
+                                      color: kPrimaryColor.withOpacity(0.23),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  color: kBackgroundColor,
+                                  width: size.width * 0.4,
+                                  height: 36,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                 ],
               ),
             ),

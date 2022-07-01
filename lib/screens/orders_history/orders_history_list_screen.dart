@@ -67,46 +67,52 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.search, color: Vx.black),
-          onPressed: () {
-            showSearch(context: context, delegate: OrderHistorySearch());
-          },
-        ),
-      ],
-      bottom: TabBar(
-        physics: const BouncingScrollPhysics(),
-        controller: _tabController,
-        isScrollable: true,
-        labelColor: Vx.green500,
-        unselectedLabelColor: Vx.gray500,
-        labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        indicator: const UnderlineTabIndicator(
-          borderSide: BorderSide(
-            width: 3,
-            color: Vx.green500,
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: AppBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Vx.black),
+              onPressed: () {
+                showSearch(context: context, delegate: OrderHistorySearch(orders: _orders!));
+              },
+            ),
+          ],
+          bottom: TabBar(
+            physics: const BouncingScrollPhysics(),
+            controller: _tabController,
+            isScrollable: true,
+            labelColor: Vx.green500,
+            unselectedLabelColor: Vx.gray500,
+            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            indicator: const UnderlineTabIndicator(
+              borderSide: BorderSide(
+                width: 3,
+                color: Vx.green500,
+              ),
+            ),
+            tabs: orderStatus
+                .map(
+                  (status) => Tab(text: status),
+                )
+                .toList(),
           ),
+          title: "Danh sách đơn hàng".text.black.make(),
+          titleSpacing: 0.0,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Colors.white,
         ),
-        tabs: orderStatus
-            .map(
-              (status) => Tab(text: status),
-            )
-            .toList(),
       ),
-      title: "Danh sách đơn hàng".text.black.make(),
-      titleSpacing: 0.0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-      backgroundColor: Colors.white,
     );
   }
 }
