@@ -31,8 +31,8 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
 
   @override
   void initState() {
-    if (widget.products.length > 10) {
-      _currentMaxItem = 10;
+    if (widget.products.length > 20) {
+      _currentMaxItem = 20;
     } else {
       _currentMaxItem = widget.products.length;
     }
@@ -56,9 +56,9 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
           _isLoading = true;
         });
         await Future.delayed(const Duration(milliseconds: 500));
-        int length = widget.products.length - (widget.products.length % 10);
+        int length = widget.products.length - (widget.products.length % 20);
         if (_currentMaxItem < length) {
-          _currentMaxItem += 10;
+          _currentMaxItem += 20;
         } else {
           _currentMaxItem = widget.products.length;
         }
