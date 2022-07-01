@@ -143,7 +143,7 @@ class _ProductsTypeScreenState extends State<ProductsTypeScreen> {
             width: double.infinity,
             child: Center(
               child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
+                alignment: WrapAlignment.start,
                 children: [
                   for (var product in _currentProducts)
                     ProductCard(

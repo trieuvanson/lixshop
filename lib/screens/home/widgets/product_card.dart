@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         Get.to(() => ProductDetailsScreen(
@@ -26,7 +26,7 @@ class ProductCard extends StatelessWidget {
             ));
       },
       child: Container(
-        width: size.width * 0.45,
+        width: size.width >= 1024? size.width * 0.2 : size.width * 0.45,
         margin: const EdgeInsets.only(
           left: kDefaultPadding / 2,
           top: kDefaultPadding / 2,

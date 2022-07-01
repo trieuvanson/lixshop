@@ -15,21 +15,15 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
-    getSlides();
     super.initState();
   }
 
-  getSlides() {
-    slideRepository.getSlides();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: ContactsPage(),
-    );
-
-
+    // return const Scaffold(
+    //   body: ContactsPage(),
+    // );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
