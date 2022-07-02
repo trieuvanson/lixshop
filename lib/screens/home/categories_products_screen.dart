@@ -94,22 +94,20 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
           controller: _scrollController,
           child: SizedBox(
             width: double.infinity,
-            child: Center(
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  for (var product in _currentProducts)
-                    ProductCard(
-                      product: product,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                for (var product in _currentProducts)
+                  ProductCard(
+                    product: product,
+                  ),
+                if (_isLoading)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.black),
                     ),
-                  if (_isLoading)
-                    const Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.black),
-                      ),
-                    ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         ),
