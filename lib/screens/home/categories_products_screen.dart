@@ -95,7 +95,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
           child: SizedBox(
             width: double.infinity,
             child: Wrap(
-              alignment: WrapAlignment.spaceBetween,
+              alignment: WrapAlignment.start,
               children: [
                 for (var product in _currentProducts)
                   ProductCard(
