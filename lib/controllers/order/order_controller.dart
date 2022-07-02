@@ -18,7 +18,8 @@ class OrderController {
 
   List<Order> searchByOrderId(List<Order> orders, String keyword) {
     List<Order> filteredOrders = [];
-    for (var order in orders) {
+
+    condition(final order) {
       if (order.idDH.toString().contains(keyword) ||
           vietnameseParserEngine
               .unsigned(order.agentLixName!.toLowerCase())
@@ -26,6 +27,22 @@ class OrderController {
                   vietnameseParserEngine.unsigned(keyword.toLowerCase())) ||
           vietnameseParserEngine.unsigned(order.status!.toLowerCase()).contains(
               vietnameseParserEngine.unsigned(keyword.toLowerCase()))) {
+        return true;
+      }
+      return false;
+    }
+    for (var order in orders) {
+      // if (order.idDH.toString().contains(keyword) ||
+      //     vietnameseParserEngine
+      //         .unsigned(order.agentLixName!.toLowerCase())
+      //         .contains(
+      //             vietnameseParserEngine.unsigned(keyword.toLowerCase())) ||
+      //     vietnameseParserEngine.unsigned(order.status!.toLowerCase()).contains(
+      //         vietnameseParserEngine.unsigned(keyword.toLowerCase()))) {
+      //   filteredOrders.add(order);
+      // }
+
+      if (condition(order)) {
         filteredOrders.add(order);
       }
     }
