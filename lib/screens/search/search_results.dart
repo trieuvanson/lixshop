@@ -61,113 +61,102 @@ class _SearchResultsState extends State<SearchResults> {
         builder: (context, state) {
           if (state.isSuccess) {
             return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, left: 8, right: 8, bottom: 8),
-                child: SingleChildScrollView(
-                  child: Container(
-                    color: DesignCourseAppTheme.notWhite,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 8, left: 8, right: 8, bottom: 8),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin:
-                                const EdgeInsets.only(bottom: 16, top: 16),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16, top: 16),
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding/2),
+                          child: "Kết quả tìm kiếm".text.bold.size(16).make(),
+                        ),
+                        // const Spacer(),
+                        // CustomDropdownButton2(
+                        //   dropdownWidth: 100,
+                        //   buttonWidth: 120,
+                        //   buttonDecoration: BoxDecoration(
+                        //     color: DesignCourseAppTheme.nearlyWhite,
+                        //     borderRadius: const BorderRadius.all(
+                        //       Radius.circular(8.0),
+                        //     ),
+                        //     border: Border.all(
+                        //       color: Vx.gray300,
+                        //     ),
+                        //   ),
+                        //   icon: const Icon(
+                        //     Icons.arrow_drop_down,
+                        //     size: 24,
+                        //   ),
+                        //   hint: 'Đơn vị tính',
+                        //   value: 'Tất cả',
+                        //   onChanged: (String? value) {},
+                        //   dropdownItems: const [
+                        //     "Tất cả",
+                        //     "Tên A-Z",
+                        //     "Tên Z-A",
+                        //   ],
+                        // ),
+                        // 8.widthBox,
+                        // InkWell(
+                        //   onTap: () {
+                        //     scaffoldKey.currentState?.openEndDrawer();
+                        //   },
+                        //   child: Wrap(
+                        //     alignment: WrapAlignment.center,
+                        //     crossAxisAlignment:
+                        //         WrapCrossAlignment.center,
+                        //     children: [
+                        //       const Icon(
+                        //         Icons.filter_list,
+                        //         color: Vx.gray700,
+                        //       ),
+                        //       "Lọc"
+                        //           .text
+                        //           .bold
+                        //           .color(Vx.gray700)
+                        //           .make(),
+                        //     ],
+                        //   ),
+                        // ),
+                        //create a tabbar with catogries
+                      ],
+                    ),
+                  ),
+                  Builder(builder: (context) {
+                    if (widget.keyword.isNotEmpty) {
+                      var products = searchController.search(
+                          keyword: widget.keyword,
+                          categories:
+                              state.resultDataModel!.productOutsideCategory!);
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: kDefaultPadding / 2,
+                            vertical: kDefaultPadding / 2),
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: SizedBox(
                             width: double.infinity,
-                            child: Row(
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
                               children: [
-                                "Kết quả tìm kiếm".text.bold.size(16).make(),
-                                // const Spacer(),
-                                // CustomDropdownButton2(
-                                //   dropdownWidth: 100,
-                                //   buttonWidth: 120,
-                                //   buttonDecoration: BoxDecoration(
-                                //     color: DesignCourseAppTheme.nearlyWhite,
-                                //     borderRadius: const BorderRadius.all(
-                                //       Radius.circular(8.0),
-                                //     ),
-                                //     border: Border.all(
-                                //       color: Vx.gray300,
-                                //     ),
-                                //   ),
-                                //   icon: const Icon(
-                                //     Icons.arrow_drop_down,
-                                //     size: 24,
-                                //   ),
-                                //   hint: 'Đơn vị tính',
-                                //   value: 'Tất cả',
-                                //   onChanged: (String? value) {},
-                                //   dropdownItems: const [
-                                //     "Tất cả",
-                                //     "Tên A-Z",
-                                //     "Tên Z-A",
-                                //   ],
-                                // ),
-                                // 8.widthBox,
-                                // InkWell(
-                                //   onTap: () {
-                                //     scaffoldKey.currentState?.openEndDrawer();
-                                //   },
-                                //   child: Wrap(
-                                //     alignment: WrapAlignment.center,
-                                //     crossAxisAlignment:
-                                //         WrapCrossAlignment.center,
-                                //     children: [
-                                //       const Icon(
-                                //         Icons.filter_list,
-                                //         color: Vx.gray700,
-                                //       ),
-                                //       "Lọc"
-                                //           .text
-                                //           .bold
-                                //           .color(Vx.gray700)
-                                //           .make(),
-                                //     ],
-                                //   ),
-                                // ),
-                                //create a tabbar with catogries
+                                for (var product in products)
+                                  ProductCard(
+                                    product: product,
+                                  ),
                               ],
                             ),
                           ),
-                          Builder(builder: (context) {
-                            if (widget.keyword.isNotEmpty) {
-                              var products = searchController.search(
-                                  keyword: widget.keyword,
-                                  categories: state.resultDataModel!
-                                      .productOutsideCategory!);
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
-                                child: SingleChildScrollView(
-                                  controller: _scrollController,
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Center(
-                                      child: Wrap(
-                                        alignment: WrapAlignment.start,
-                                        children: [
-                                          for (var product in products)
-                                            ProductCard(
-                                              product: product,
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            return const Center(
-                              child: Text("Không tìm thấy sản phẩm"),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: Text("Không tìm thấy sản phẩm"),
+                    );
+                  }),
+                ],
               ),
             );
           }
