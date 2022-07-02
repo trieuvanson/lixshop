@@ -20,7 +20,10 @@ class OrderController {
     List<Order> filteredOrders = [];
 
     condition(final order) {
-      if (order.idDH.toString().contains(keyword) ||
+      if (vietnameseParserEngine
+              .unsigned("Đơn hàng #${order.idDH}".toLowerCase())
+              .contains(
+                  vietnameseParserEngine.unsigned(keyword.toLowerCase())) ||
           vietnameseParserEngine
               .unsigned(order.agentLixName!.toLowerCase())
               .contains(
@@ -31,6 +34,7 @@ class OrderController {
       }
       return false;
     }
+
     for (var order in orders) {
       // if (order.idDH.toString().contains(keyword) ||
       //     vietnameseParserEngine

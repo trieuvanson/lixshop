@@ -40,8 +40,7 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
     if (!mounted) return;
 
     _isLoading = false;
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -71,9 +70,11 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
       actions: [
         IconButton(
           icon: const Icon(Icons.search, color: Vx.black),
-          onPressed: () {
-            showSearch(context: context, delegate: OrderHistorySearch(orders: _orders!));
-          },
+          onPressed: _isLoading
+              ? () {}
+              : () => showSearch(
+                  context: context,
+                  delegate: OrderHistorySearch(orders: _orders!)),
         ),
       ],
       bottom: PreferredSize(
@@ -86,7 +87,8 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
             isScrollable: true,
             labelColor: Vx.green500,
             unselectedLabelColor: Vx.gray500,
-            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            labelStyle:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             indicator: const UnderlineTabIndicator(
               borderSide: BorderSide(
                 width: 3,
