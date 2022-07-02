@@ -67,20 +67,20 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(100),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: AppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, color: Vx.black),
-              onPressed: () {
-                showSearch(context: context, delegate: OrderHistorySearch(orders: _orders!));
-              },
-            ),
-          ],
-          bottom: TabBar(
+    return AppBar(
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search, color: Vx.black),
+          onPressed: () {
+            showSearch(context: context, delegate: OrderHistorySearch(orders: _orders!));
+          },
+        ),
+      ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(40),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TabBar(
             physics: const BouncingScrollPhysics(),
             controller: _tabController,
             isScrollable: true,
@@ -99,20 +99,20 @@ class _OrderHistoryListScreenState extends State<OrderHistoryListScreen>
                 )
                 .toList(),
           ),
-          title: "Danh sách đơn hàng".text.black.make(),
-          titleSpacing: 0.0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Colors.white,
         ),
       ),
+      title: "Danh sách đơn hàng".text.black.make(),
+      titleSpacing: 0.0,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      backgroundColor: Colors.white,
     );
   }
 }
