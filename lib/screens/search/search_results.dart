@@ -12,6 +12,7 @@ import 'package:velocity_x/velocity_x.dart';
 import '../../controllers/search_controller.dart';
 import '../../screen_layout.dart';
 import '../../utils/design_course_app_theme.dart';
+import '../home/widgets/product_card.dart';
 import '../screen.dart';
 
 class SearchResults extends StatefulWidget {
@@ -136,81 +137,26 @@ class _SearchResultsState extends State<SearchResults> {
                                   keyword: widget.keyword,
                                   categories: state.resultDataModel!
                                       .productOutsideCategory!);
-                              return GridView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: index,
-                                  childAspectRatio: 309/510,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                ),
-                                itemBuilder: (context, index) {
-                                  var product = products[index];
-                                  return InkWell(
-                                    onTap: () {
-                                      Get.to(() => ProductDetailsScreen(
-                                            idBrand:
-                                                product.brandId?.toInt() ?? 0,
-                                          ));
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                product.brand!,
-                                              ),
-                                              onError: (context, error) {},
-                                              fit: BoxFit.fill,
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
+                                child: SingleChildScrollView(
+                                  controller: _scrollController,
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Center(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.start,
+                                        children: [
+                                          for (var product in products)
+                                            ProductCard(
+                                              product: product,
                                             ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: Container(
-                                            width: size.width,
-                                            height: size.height * 0.08,
-                                            color: kBackgroundColor
-                                                .withOpacity(0.8),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Spacer(),
-                                                  Text(
-                                                    product.brandName!,
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  const Spacer(),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  );
-                                },
-                                itemCount: products.length,
+                                  ),
+                                ),
                               );
                             }
                             return const Center(

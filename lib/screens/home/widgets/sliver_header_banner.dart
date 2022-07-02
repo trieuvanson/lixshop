@@ -70,7 +70,6 @@ class _SliverHeaderBannerState extends State<SliverHeaderBanner> {
     _slides = slides!;
     _isLoading = false;
     setState(() {});
-    Future.delayed(const Duration(seconds: 1));
   }
 
   @override
