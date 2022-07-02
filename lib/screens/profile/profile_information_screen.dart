@@ -27,6 +27,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   getUser() async {
     _currentUser = await secureStorage.getCurrentUser();
+    setState(() {});
     print('');
   }
 
@@ -121,6 +122,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                           }
                           return null;
                         },
+                        controller: TextEditingController(
+                          text: _currentUser?.name,
+                        ),
                         onChanged: (value) {
                           setState(() {});
                         },
@@ -152,6 +156,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                         onChanged: (value) {
                           setState(() {});
                         },
+                        controller: TextEditingController(
+                          text: _currentUser?.address,
+                        ),
                       ),
                       15.heightBox,
                       TextFormField(
@@ -166,6 +173,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                         onChanged: (value) {
                           setState(() {});
                         },
+                        controller: TextEditingController(
+                          text: _currentUser?.phone,
+                        ),
                       ),
                       15.heightBox,
                       Column(
