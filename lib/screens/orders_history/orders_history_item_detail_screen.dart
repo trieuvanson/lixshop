@@ -199,6 +199,7 @@ class _OrderHistoryItemDetailScreenState
             Positioned(
               top: 0,
               right: 0,
+              bottom: 0,
               child: Container(
                 margin: const EdgeInsets.only(right: 8.0, top: 8),
                 child: Container(
