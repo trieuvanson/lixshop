@@ -5,6 +5,7 @@ import 'package:lixshop/constants/contains.dart';
 import 'package:lixshop/models/order/order.dart';
 import 'package:lixshop/models/order/order_detail.dart';
 import 'package:lixshop/screens/orders_history/constants/order_status.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../utils/design_course_app_theme.dart';
@@ -333,7 +334,7 @@ class _BottomNavigation extends StatelessWidget {
           width: 150,
           height: 50,
           child: RaisedButton(
-            onPressed: () {},
+            onPressed: () => showSnackBar("Chức năng đang nâng cấp", context),
             color: Vx.green500,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
