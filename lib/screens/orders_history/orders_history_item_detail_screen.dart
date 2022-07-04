@@ -171,6 +171,7 @@ class _OrderHistoryItemDetailScreenState
     return AppBar(
       backgroundColor: Colors.white,
       titleSpacing: 0.0,
+      elevation: 0.0,
       title: SizedBox(
         width: size.width,
         child: Stack(
