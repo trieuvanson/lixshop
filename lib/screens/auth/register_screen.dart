@@ -201,12 +201,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration:
                                 TextFormFieldCommonStyle.textFormFieldStyle(
                                     "Tên hiển thị"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
                             onChanged: (value) {
                               setState(() {
                                 register.shopName = value;
