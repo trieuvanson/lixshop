@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           slivers: [
             SliverPersistentHeader(
               delegate: SliverHeaderBar(
-                  expandedHeight: 200, user: _authUser ?? const AuthUser()),
+                  expandedHeight: 210, user: _authUser ?? const AuthUser()),
               pinned: false,
             ),
             SliverToBoxAdapter(
@@ -305,7 +305,7 @@ class SliverHeaderBar extends SliverPersistentHeaderDelegate {
       child: InkWell(
         onTap: () {
           Get.to(
-            () => ProfileInformationScreen(),
+            () => const ProfileInformationScreen(),
             curve: Curves.easeInToLinear,
           );
         },
