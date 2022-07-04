@@ -121,7 +121,7 @@ class HeaderSliver extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    bool visible = shrinkOffset > 0;
+    // bool visible = shrinkOffset > 0;
     final padding = MediaQuery.of(context).padding;
     return isLoading
         ? const CategoryItemsLoader(

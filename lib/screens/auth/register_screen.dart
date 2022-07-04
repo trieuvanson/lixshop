@@ -200,7 +200,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextFormField(
                             decoration:
                                 TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Tên cửa hàng"),
+                                    "Tên hiển thị"),
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Không được để trống';

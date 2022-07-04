@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:lixshop/repositories/repositories.dart';
 
+import '../../constants/env.dart';
 import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
 
@@ -25,7 +26,7 @@ class ResultOutsideDataRepository {
           : /*["DCtbW1k="]*/ [];
       var responses = await Future.wait([
         for (var link in distLinks)
-          _dio.get("http://192.168.0.248:8081/shopee/datas/$link"),
+          _dio.get("$baseUrl/datas/$link"),
       ]);
       ResultDataModel resultDataModel = _getProductCateFromResponse(responses);
       await secureStorage.addKey("idDist", resultDataModel.idNpp);
