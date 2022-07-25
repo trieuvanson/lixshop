@@ -20,6 +20,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _loading = false;
+  bool _isLoading = false;
   bool changeButton = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -68,9 +69,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           },
         );
-      } else {
-        userBloc.add(UserEventRegister(register: register));
+        return;
       }
+      userBloc.add(UserEventRegister(register: register));
     }
   }
 
@@ -80,10 +81,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   getCities() async {
-    _loading = true;
+    _isLoading = true;
     try {
       final res = await appRepository.getCityHttp();
-      isError = res.error != null;
+      isError = res.error != "";
       setState(() {
         cities = res.cities;
       });
@@ -91,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       print(e);
     } finally {
-      _loading = false;
+      _isLoading = false;
     }
   }
 
@@ -209,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   children: [
                     _buildImageHeader(context),
-                    _loading
+                    _isLoading
                         ? const Center(
                             child: CircularProgressIndicator(
                               valueColor:
