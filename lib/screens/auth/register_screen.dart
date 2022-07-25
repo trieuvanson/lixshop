@@ -26,19 +26,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool showPassword = false;
 
   Register register = Register();
+  int selectedCity = 0;
+  int selectDistrict = 0;
+  int selectWard = 0;
+
+  List<DropdownMenuItem<int>> districtsDropdown = [];
+  List<DropdownMenuItem<int>> wardsDropdown = [];
+  bool isError = false;
+
+  List<City>? cities;
 
   @override
   initState() {
+    getCities();
     super.initState();
-  }
-
-  handleRegister(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      _loading = true;
-
-      _loading = false;
-      setState(() {});
-    }
   }
 
   handleShowPassword() {
@@ -47,21 +48,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
+  onRegister(final userBloc) {
+    if (_formKey.currentState!.validate()) {
+      if (isError) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Thông báo'),
+              content: const Text("Không thể kết nối tới máy chủ"),
+              actions: <Widget>[
+                FlatButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        userBloc.add(UserEventRegister(register: register));
+      }
+    }
+  }
+
   @override
   Future<void> dispose() async {
     super.dispose();
   }
 
-  int selectedCity = 0;
-  int selectDistrict = 0;
-  int selectWard = 0;
-
-  List<DropdownMenuItem<int>> districtsDropdown = [];
-  List<DropdownMenuItem<int>> wardsDropdown = [];
+  getCities() async {
+    _loading = true;
+    try {
+      final res = await appRepository.getCityHttp();
+      isError = res.error != null;
+      setState(() {
+        cities = res.cities;
+      });
+      print('cities:');
+    } catch (e) {
+      print(e);
+    } finally {
+      _loading = false;
+    }
+  }
 
   void selectedCityDropdown(List<City> listCity, int value) {
     districtsDropdown = [];
-    final districts = AppRepository().getDistrictsByCity(listCity, value);
+    final districts = appRepository.getDistrictsByCity(listCity, value);
     for (var item in districts.districts!) {
       districtsDropdown.add(DropdownMenuItem(
         child: Text(item.name!),
@@ -75,9 +111,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void selectedDistrictDropdown(List<City> cities, int value) {
     wardsDropdown = [];
-    final districts = AppRepository().getDistrictsByCity(cities, selectedCity);
-    final wards =
-        AppRepository().getWardsByDistrict(districts.districts!, value);
+    final districts = appRepository.getDistrictsByCity(cities, selectedCity);
+    final wards = appRepository.getWardsByDistrict(districts.districts!, value);
 
     for (var item in wards.wards!) {
       wardsDropdown.add(DropdownMenuItem(
@@ -174,50 +209,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   children: [
                     _buildImageHeader(context),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                      ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Số điện thoại"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                register.phone = value;
-                              });
-                            },
-                          ),
-                          15.heightBox,
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Tên hiển thị"),
-                            onChanged: (value) {
-                              setState(() {
-                                register.shopName = value;
-                              });
-                            },
-                          ),
-                          15.heightBox,
-                          FutureBuilder<CityModel>(
-                            future: AppRepository().getCity(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if (snapshot.data!.error != null &&
-                                    snapshot.data!.error!.isNotEmpty) {
-                                  return _buildErrorWidget(
-                                      snapshot.data!.error);
-                                }
-                                return Column(
+                    _loading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Vx.green500),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  decoration: TextFormFieldCommonStyle
+                                      .textFormFieldStyle("Số điện thoại"),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Không được để trống';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      register.phone = value;
+                                    });
+                                  },
+                                ),
+                                15.heightBox,
+                                TextFormField(
+                                  decoration: TextFormFieldCommonStyle
+                                      .textFormFieldStyle("Tên hiển thị"),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      register.shopName = value;
+                                    });
+                                  },
+                                ),
+                                15.heightBox,
+                                Column(
                                   children: [
                                     FormField<int>(
                                       builder: (FormFieldState<int> state) {
@@ -235,13 +266,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               isDense: true,
                                               onChanged: (newValue) {
                                                 selectedCityDropdown(
-                                                    snapshot.data!.cities!,
-                                                    newValue!);
+                                                    cities!, newValue!);
                                                 register.city = newValue;
                                                 setState(() {});
                                               },
-                                              items: snapshot.data!.cities!
-                                                  .map((City city) {
+                                              items: cities!.map((City city) {
                                                 return DropdownMenuItem<int>(
                                                   value: city.id!,
                                                   child: Text(city.name!),
@@ -267,8 +296,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               isDense: true,
                                               onChanged: (newValue) {
                                                 selectedDistrictDropdown(
-                                                    snapshot.data!.cities!,
-                                                    newValue!);
+                                                    cities!, newValue!);
                                                 register.district = newValue;
                                                 setState(() {});
                                               },
@@ -310,99 +338,88 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                     15.heightBox,
                                   ],
-                                );
-                              } else if (snapshot.hasError) {
-                                return _buildErrorWidget(snapshot.error);
-                              } else {
-                                return _buildLoadingWidget();
-                              }
-                            },
-                          ),
-                          TextFormField(
-                            decoration:
-                                TextFormFieldCommonStyle.textFormFieldStyle(
-                                    "Số nhà, tên đường,..."),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Không được để trống';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                register.address = value;
-                              });
-                              print(register.address);
-                            },
-                          ),
-                          35.heightBox,
-                          Material(
-                            color: appColor,
-                            borderRadius: BorderRadius.circular(8),
-                            child: InkWell(
-                              onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  userBloc.add(
-                                      UserEventRegister(register: register));
-                                }
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: _loading
-                                    ? const CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.white),
-                                      )
-                                    : const Text(
-                                        "Đăng ký",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                ),
+                                TextFormField(
+                                  decoration: TextFormFieldCommonStyle
+                                      .textFormFieldStyle(
+                                          "Số nhà, tên đường,..."),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Không được để trống';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      register.address = value;
+                                    });
+                                    print(register.address);
+                                  },
+                                ),
+                                35.heightBox,
+                                Material(
+                                  color: appColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: InkWell(
+                                    onTap: () => onRegister(userBloc),
+                                    child: AnimatedContainer(
+                                      duration: const Duration(seconds: 1),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 50,
+                                      alignment: Alignment.center,
+                                      child: _loading
+                                          ? const CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Colors.white),
+                                            )
+                                          : const Text(
+                                              "Đăng ký",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                                10.heightBox,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: "Bạn đã có tài khoản?"
+                                          .text
+                                          .color(appColor)
+                                          .make(),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginScreen()));
+                                      },
+                                      child: Container(
+                                        child: " Đăng nhập ngay."
+                                            .text
+                                            .bold
+                                            .color(appColor)
+                                            .textStyle(const TextStyle(
+                                                fontWeight: FontWeight.bold))
+                                            .make(),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                       ),
-                              ),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                           ),
-                          10.heightBox,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: "Bạn đã có tài khoản?"
-                                    .text
-                                    .color(appColor)
-                                    .make(),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoginScreen()));
-                                },
-                                child: Container(
-                                  child: " Đăng nhập ngay."
-                                      .text
-                                      .bold
-                                      .color(appColor)
-                                      .textStyle(const TextStyle(
-                                          fontWeight: FontWeight.bold))
-                                      .make(),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -434,20 +451,7 @@ Widget _buildLoadingWidget() {
 
 //display error
 Widget _buildErrorWidget(dynamic error) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const <Widget>[
-        Text(
-          'Something is wrong',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        )
-      ],
-    ),
-  );
+  return Container();
 }
 
 _buildImageHeader(BuildContext context) {

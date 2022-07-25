@@ -17,6 +17,16 @@ class ResultDataModel {
     this.idAndNameNpp,
   });
 
+  //init
+  ResultDataModel.init() {
+    idNpp = null;
+    nppName = null;
+    createDate = null;
+    createUser = null;
+    productOutsideCategory = null;
+    idAndNameNpp = null;
+  }
+
   factory ResultDataModel.fromJson(Map<String, dynamic> json) =>
       ResultDataModel(
         idNpp: json["idnpp"].toInt().toString(),

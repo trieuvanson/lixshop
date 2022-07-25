@@ -1,11 +1,9 @@
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:lixshop/core/cubits/product_details/result_details_data_cubit.dart';
 import 'package:lixshop/repositories/repositories.dart';
 import 'package:lixshop/screens/cart/cart_screen.dart';
 import 'package:lixshop/utils/utils.dart';
@@ -17,7 +15,6 @@ import '../../core/core.dart';
 import '../../models/models.dart';
 import '../../utils/design_course_app_theme.dart';
 import '../../utils/hero_dialog_route.dart';
-import 'widget/menu_popup.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final int idBrand;
@@ -851,9 +848,13 @@ class _BuildProductDetailWidgetState extends State<BuildProductDetailWidget> {
         height: 510,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          return const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+          return const SizedBox(
+            width: 309,
+            height: 510,
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Vx.black),
+              ),
             ),
           );
         },

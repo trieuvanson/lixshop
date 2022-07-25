@@ -10,16 +10,16 @@ class AppRepository {
 
   final String? mainUrl = dotenv.env['MAIN_API_URL'];
 
-  Future<CityModel> getCity() async {
+  Future<CityModel> getCityHttp() async {
     try {
       final response = await dio.get('$mainUrl/datas/KxQcAQ9cWEJYLw==');
       return CityModel.fromJson(jsonDecode(response.data));
     } on DioError catch (e) {
       print(e);
-      return CityModel.withError(e.toString());
+      return CityModel.withError("Không thể kết nối đến máy chủ");
     } catch (e) {
       print(e);
-      return CityModel.withError(e.toString());
+      return CityModel.withError("Không thể kết nối đến máy chủ");
     }
   }
 
@@ -59,3 +59,6 @@ class AppRepository {
     }
   }
 }
+
+
+final appRepository = AppRepository();

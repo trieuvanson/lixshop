@@ -19,11 +19,9 @@ class ResultOutsideDataRepository {
    * */
   Future<ResultDataModel> getResultData() async {
     try {
-      //delay
-      await Future.delayed(const Duration(seconds: 1));
       List<String> distLinks = await secureStorage.checkLogin()
           ? await userRepository.loadLocation()
-          : /*["DCtbW1k="]*/ [];
+          : [];
       var responses = await Future.wait([
         for (var link in distLinks)
           _dio.get("$baseUrl/datas/$link"),
@@ -34,10 +32,10 @@ class ResultOutsideDataRepository {
       return resultDataModel;
     } on DioError catch (e) {
       print('getResultData error 1 : $e');
-      return ResultDataModel(productOutsideCategory: null);
+      return ResultDataModel.init();
     } catch (err) {
       print('getResultData error 2: $err');
-      return ResultDataModel(productOutsideCategory: null);
+      return ResultDataModel.init();
     }
   }
 

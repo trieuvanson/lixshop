@@ -34,7 +34,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     ResultDataModel? _resultDataModel =
         await resultDataOutsideRepository.getResultData();
     if (!mounted) return;
-    if (_resultDataModel.productOutsideCategory == null) {
+    if (_resultDataModel.productOutsideCategory!.isEmpty) {
       setState(() {
         _isError = true;
         _isLoading = false;
@@ -45,6 +45,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
         _isLoading = false;
       });
     }
+
   }
 
   @override
@@ -69,8 +70,10 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     );
   }
 
-  Widget buildProductTypeRow(
-      {required String title, required ProductCardType type}) {
+  Widget buildProductTypeRow({
+    required String title,
+    required ProductCardType type,
+  }) {
     return SliverPadding(
       padding: const EdgeInsets.only(
         left: kDefaultPadding / 2,
@@ -91,16 +94,15 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
   }
 
   Widget buildCategoryRow() {
-    final padding = MediaQuery.of(context).padding;
     return SliverPadding(
-      sliver: SliverPersistentHeader(
-        delegate: HeaderSliver(
-          isLoading: _isLoading,
-          isError: _isError,
-          productOutsideCategory: _subProducts ?? [],
-        ),
-        pinned: true,
-      ),
+      sliver:SliverPersistentHeader(
+                  delegate: HeaderSliver(
+                    isLoading: _isLoading,
+                    isError: _isError,
+                    productOutsideCategory: _subProducts ?? [],
+                  ),
+                  pinned: true,
+                ),
       padding: const EdgeInsets.only(
         bottom: kDefaultPadding,
       ),
@@ -113,42 +115,46 @@ class HeaderSliver extends SliverPersistentHeaderDelegate {
   final bool isError;
   final List<ProductOutsideCategory> productOutsideCategory;
 
-  HeaderSliver(
-      {required this.isLoading,
-      required this.isError,
-      required this.productOutsideCategory});
+  HeaderSliver({
+    required this.isLoading,
+    required this.isError,
+    required this.productOutsideCategory,
+  });
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     // bool visible = shrinkOffset > 0;
     final padding = MediaQuery.of(context).padding;
-    return isLoading
+    return  isLoading
         ? const CategoryItemsLoader(
-            type: CategoryLoaderType.loading,
-          )
+      type: CategoryLoaderType.loading,
+    )
         : isError
-            ? const CategoryItemsLoader(
-                type: CategoryLoaderType.error,
-              )
-            : Stack(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: padding.top),
-                    color: kBackgroundColor,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (var item in productOutsideCategory) ...[
-                            IconCategory(item: item),
-                          ]
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
+        ? const CategoryItemsLoader(
+      type: CategoryLoaderType.error,
+    )
+        :  Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.only(top: padding.top),
+          color: kBackgroundColor,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (var item in productOutsideCategory) ...[
+                  IconCategory(item: item),
+                ]
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
