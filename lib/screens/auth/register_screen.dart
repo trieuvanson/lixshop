@@ -106,6 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ));
     }
     selectDistrict = 0;
+    selectWard = 0;
     selectedCity = value;
     setState(() {});
   }

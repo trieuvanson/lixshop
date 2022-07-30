@@ -30,7 +30,7 @@ class SecureStorageFrave {
   }
 
   Future<void> addKey(String key, dynamic value) async {
-    await secureStorage.write(key: key, value: (value));
+    await secureStorage.write(key: key, value: value);
   }
 
   Future<dynamic> readKey(String key) async {

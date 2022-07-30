@@ -118,7 +118,9 @@ class CartController {
     if (agent != null) {
       var agentList = jsonDecode(agent);
       for (var item in agentList) {
-        return item[idAgent.toString()];
+        if (item[idAgent.toString()] != null) {
+          return item[idAgent.toString()];
+        }
       }
     }
   }
