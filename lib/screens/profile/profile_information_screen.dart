@@ -35,7 +35,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       animationDuration: const Duration(milliseconds: 300),
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: _appBar(context),
         body: TabBarView(
@@ -50,6 +50,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                 ),
               ),
             ),
+            buildProfileChangePassword(context),
             // const _CheckoutItem(),
           ],
         ),
@@ -58,7 +59,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
+      return AppBar(
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: Align(
@@ -78,6 +79,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
             tabs: [
               Tab(text: "Tài khoản"),
               Tab(text: "Thông tin xuất hoá đơn"),
+              Tab(text: "Đổi mật khẩu"),
             ],
           ),
         ),
@@ -202,6 +204,119 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                           ),
                         ],
                       ),
+                      const Divider(),
+                      //
+                      // TextFormField(
+                      //   decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                      //       "Email"),
+                      //   validator: (value) {
+                      //     if (value!.isEmpty) {
+                      //       return 'Không được để trống';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   onChanged: (value) {
+                      //     setState(() {});
+                      //   },
+                      // ),
+                      35.heightBox,
+                      Material(
+                        color: appColor,
+                        borderRadius: BorderRadius.circular(8),
+                        child: InkWell(
+                          onTap: () {},
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Cập nhật",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+  Widget buildProfileChangePassword(BuildContext context) {
+    return SingleChildScrollView(
+      child: FutureBuilder(builder: (context, snapshot) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 32),
+          child: Form(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Mật khẩu cũ"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        controller: TextEditingController(
+                          text: _currentUser?.name,
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      15.heightBox,
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Mật khẩu mới"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        controller: TextEditingController(
+                          text: _currentUser?.name,
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      15.heightBox,
+                      TextFormField(
+                        decoration: TextFormFieldCommonStyle.textFormFieldStyle(
+                            "Nhập lại mật khẩu mới"),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Không được để trống';
+                          }
+                          return null;
+                        },
+                        controller: TextEditingController(
+                          text: _currentUser?.name,
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      15.heightBox,
                       const Divider(),
                       //
                       // TextFormField(

@@ -56,12 +56,16 @@ class CategoryItemsLoader extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Có lỗi xảy ra, vui lòng thử lại sau!',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 16.0,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          'Tạm thời chưa chương trình đơn giá, vui lòng thử lại sau',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16.0,
+                          ),
                         ),
                       ),
                     ),
