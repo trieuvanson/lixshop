@@ -12,6 +12,7 @@ class OrderController {
       if (order.status == status) {
         filteredOrders.add(order);
       }
+
     }
     return filteredOrders;
   }

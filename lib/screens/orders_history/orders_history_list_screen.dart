@@ -135,20 +135,23 @@ class TabBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Order> orders =
-        orderController.filterByStatus(this.orders, orderStatusMap[status]!);
+    List<Order> subOrders =
+        orderController.filterByStatus(orders, orderStatusMap[status]!);
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Vx.green500),
             ),
           )
-        : orders.isNotEmpty
+        : subOrders.isNotEmpty
             ? ListView(
-                children: List<Widget>.generate(
-                  orders.length,
-                  (index) => HistoryItem(order: orders[index]),
-                ),
+                children: subOrders
+                    .map(
+                      (order) => HistoryItem(
+                        order: order
+                      ),
+                    )
+                    .toList(),
               )
             : const Center(child: Text("Không có dữ liệu"));
   }
