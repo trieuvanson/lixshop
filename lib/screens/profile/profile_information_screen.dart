@@ -1,11 +1,16 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:lixshop/utils/utils.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../constants/colors.dart';
+import '../../core/core.dart';
 import '../../models/models.dart';
 import '../../utils/helpers/secure_storage.dart';
 import '../../widgets/widgets.dart';
+import '../auth/login_screen.dart';
 
 class ProfileInformationScreen extends StatefulWidget {
   const ProfileInformationScreen({Key? key}) : super(key: key);
@@ -18,9 +23,13 @@ class ProfileInformationScreen extends StatefulWidget {
 class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   final _formKey = GlobalKey<FormState>();
   AuthUser? _currentUser;
+  String? confirmDelete;
+  bool hideConfirmDelete = true;
+  late final _userBloc;
 
   @override
   void initState() {
+    _userBloc = BlocProvider.of<UserBloc>(context);
     getUser();
     super.initState();
   }
@@ -31,11 +40,19 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
     print('');
   }
 
+  deleteUser() async {
+    try {
+      _userBloc.add(UserEventDisable(password: confirmDelete!));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       animationDuration: const Duration(milliseconds: 300),
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: _appBar(context),
         body: TabBarView(
@@ -50,7 +67,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                 ),
               ),
             ),
-            buildProfileChangePassword(context),
+            // buildProfileChangePassword(context),
             // const _CheckoutItem(),
           ],
         ),
@@ -59,7 +76,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
-      return AppBar(
+    return AppBar(
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: Align(
@@ -79,12 +96,118 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
             tabs: [
               Tab(text: "Tài khoản"),
               Tab(text: "Thông tin xuất hoá đơn"),
-              Tab(text: "Đổi mật khẩu"),
+              // Tab(text: "Đổi mật khẩu"),
             ],
           ),
         ),
       ),
       title: "Thông tin cá nhân".text.black.make(),
+      actions: [
+        //delete
+        BlocListener<UserBloc, UserState>(
+          listener: (context, state) async {
+            if(state is UserSuccessState) {
+              showSnackBar(state.message, context, duration: 2000, color: Vx.green500);
+              Navigator.pop(context);
+              await Future.delayed(const Duration(milliseconds: 2000));
+              Get.offAll(() => const LoginScreen());
+            }
+            if(state is UserErrorState) {
+              showSnackBar(state.error, context, duration: 2000, color: Vx.red500);
+              Navigator.pop(context);
+            }
+          },
+          child: IconButton(
+            icon: const Icon(Icons.delete, color: Vx.black),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      elevation: 0,
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("Xác nhận xoá vĩnh viễn tài khoản?"),
+                          Text(
+                            "* Xoá tài khoản sẽ làm mất tất cả dữ liệu của bạn",
+                            style: TextStyle(
+                              color: Vx.gray800,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            "* Vui lòng nhập mật khẩu để xoá tài khoản!",
+                            style: TextStyle(
+                              color: Vx.gray800,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      titleTextStyle: const TextStyle(
+                        color: Vx.red500,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      content: SizedBox(
+                        child: TextFormField(
+                          obscureText: hideConfirmDelete ? true : false,
+                          maxLines: 1,
+                          onChanged: (value) {
+                            confirmDelete = value;
+                            setState(() {
+                            });
+                          },
+                          //suffixIcon
+                          decoration: InputDecoration(
+                            //secure = true
+                            suffixIcon: IconButton(
+                              icon: Icon(hideConfirmDelete
+                                  ? Icons.remove_red_eye
+                                  : Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  hideConfirmDelete = !hideConfirmDelete;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      actions: [
+                        FlatButton(
+                          child: const Text("Hủy"),
+                          onPressed: () {
+                            setState(() {
+                              confirmDelete = null;
+                              hideConfirmDelete = true;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: const Text("Xác nhận"),
+                          onPressed: () => {
+                            deleteUser(),
+                            setState(() {
+                              confirmDelete = null;
+                              hideConfirmDelete = true;
+                            }),
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+            //tooltip
+            tooltip: "Xoá vĩnh viễn tài khoản",
+          ),
+        ),
+      ],
       titleSpacing: 0.0,
       leading: IconButton(
         icon: const Icon(
@@ -224,7 +347,13 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                         color: appColor,
                         borderRadius: BorderRadius.circular(8),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            showSnackBar(
+                              "Chức năng đang được phát triển",
+                              context,
+                              duration: 2000,
+                            );
+                          },
                           child: AnimatedContainer(
                             duration: const Duration(seconds: 1),
                             width: MediaQuery.of(context).size.width,
@@ -251,6 +380,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
       }),
     );
   }
+
   Widget buildProfileChangePassword(BuildContext context) {
     return SingleChildScrollView(
       child: FutureBuilder(builder: (context, snapshot) {
@@ -501,14 +631,14 @@ class ImageItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        Positioned(
-          top: 5,
-          right: 5,
-          child: Icon(
-            Icons.add_a_photo,
-            color: Colors.black.withOpacity(0.5),
-          ),
-        ),
+        // Positioned(
+        //   top: 5,
+        //   right: 5,
+        //   child: Icon(
+        //     Icons.add_a_photo,
+        //     color: Colors.black.withOpacity(0.5),
+        //   ),
+        // ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(

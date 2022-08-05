@@ -21,3 +21,12 @@ class UserEventRegister extends UserEvent {
   @override
   List<Object> get props => [register];
 }
+
+class UserEventDisable extends UserEvent {
+  final String password;
+
+  const UserEventDisable({required this.password});
+
+  @override
+  List<Object> get props => [password];
+}

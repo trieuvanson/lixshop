@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lixshop/utils/helpers/secure_storage.dart';
 
@@ -16,15 +17,23 @@ class UserRepository {
     try {
       final response =
           await dio.post(registerUrl, data: jsonEncode(register.toJson()));
-      print(register.toJson());
-      print('response: ${response.data}');
+      if (kDebugMode) {
+        print(register.toJson());
+      }
+      if (kDebugMode) {
+        print('response: ${response.data}');
+      }
 
       return ResponseDTO.fromJson(response.data);
     } on DioError catch (e) {
-      print('DioError: ${e.response!.data}');
+      if (kDebugMode) {
+        print('DioError: ${e.response!.data}');
+      }
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
-      print('Error1: $e');
+      if (kDebugMode) {
+        print('Error1: $e');
+      }
       return {} as ResponseDTO;
     }
   }
@@ -44,11 +53,43 @@ class UserRepository {
           .map((e) => e as String)
           .toList();
     } on DioError catch (e) {
-      print('DioError: ${e.response!.data}');
+      if (kDebugMode) {
+        print('DioError: ${e.response!.data}');
+      }
       return [];
     } catch (e) {
-      print('Error1: $e');
+      if (kDebugMode) {
+        print('Error1: $e');
+      }
       return [];
+    }
+  }
+
+  disableUser(String password) async {
+    try {
+      TokenResponse? tokenResponse = await secureStorage.readToken();
+
+      final response = await dio.put('$mainUrl/api/data/shoplix/disable-shoplix',
+          data: jsonEncode({
+            'pass': password,
+          }),
+          options: Options(headers: {
+            'Authorization': 'Bearer ${tokenResponse?.accessToken ?? ""}',
+          }));
+      return {
+        'err': response.data['err'],
+        'msg': response.data['msg'],
+      };
+    } on DioError catch (e) {
+      if (kDebugMode) {
+        print('DioError: ${e.response!.data}');
+      }
+      return "Lỗi hệ thống, vui lòng thử lại sau!";
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error111: $e');
+      }
+      return "Đã có lỗi xảy ra, vui lòng thử lại sau!";
     }
   }
 }

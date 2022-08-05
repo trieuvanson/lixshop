@@ -35,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(SuccessAuthState(user.user!, data.dt!.accessToken!));
       }
     } catch (e) {
-      emit(FailureAuthState(e.toString()));
+      emit(FailureAuthState("Có lỗi xảy ra, vui lòng thử lại sau"));
     }
   }
 

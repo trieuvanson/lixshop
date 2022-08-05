@@ -22,40 +22,50 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  SharedPreferences? prefs;
   bool _loading = false;
-  String email = "";
+  String phoneNumber = "";
   String password = "";
   bool changeButton = false;
   final _formKey = GlobalKey<FormState>();
 
   bool showPassword = false;
 
+  @override
+  initState() {
+    super.initState();
+    getPres();
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    _phoneNumberController.dispose();
+    _passwordController.dispose();
+  }
+
+//Function
+  getPres() async {
+    prefs = await SharedPreferences.getInstance();
+    _phoneNumberController.text = prefs?.getString('phoneNumber') ?? "";
+    phoneNumber = _phoneNumberController.text;
+    setState(() {});
+  }
+
   handleLogin(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isLogin', true);
-      setState(() {});
-      Get.to(
-        () => const MainScreen(),
-        routeName: "/register",
-      );
-    }
+    prefs?.setBool('isLogin', true);
+    prefs?.setString('phoneNumber', phoneNumber);
+    print('phoneNumber: ${prefs?.getString('phoneNumber')}');
+    _loading = false;
+    setState(() {});
   }
 
   handleShowPassword() {
     setState(() {
       showPassword = !showPassword;
     });
-  }
-
-  @override
-  Future<void> dispose() async {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
   }
 
   @override
@@ -71,11 +81,10 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             _loading = false;
           });
-          errorMessageSnack(context, state.error?? "Có lỗi xảy ra, vui lòng thử lại sau!");
+          errorMessageSnack(
+              context, state.error ?? "Có lỗi xảy ra, vui lòng thử lại sau!");
         } else if (state is SuccessAuthState) {
-          setState(() {
-            _loading = false;
-          });
+          handleLogin(context);
           Get.offAll(
             () => const MainScreen(),
           );
@@ -108,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          controller: _emailController,
+                          controller: _phoneNumberController,
                           decoration:
                               TextFormFieldCommonStyle.textFormFieldStyle(
                                   "Số điện thoại"),
@@ -120,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           onChanged: (value) {
                             setState(() {
-                              email = value;
+                              phoneNumber = value;
                             });
                           },
                         ),
@@ -165,8 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Container(),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context)
-                                      .push(MaterialPageRoute(
+                                  Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         const SendForgotCodeScreen(),
                                     settings: const RouteSettings(
@@ -197,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       authBloc.add(
                                         AuthLoggedEvent(
                                           Login(
-                                              username: email,
+                                              username: phoneNumber,
                                               password: password),
                                         ),
                                       );
@@ -210,9 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               alignment: Alignment.center,
                               child: _loading
                                   ? const CircularProgressIndicator(
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(
-                                              Colors.white),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
                                     )
                                   : const Text(
                                       "Đăng nhập",
@@ -234,8 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .text
                                   .color(appColor)
                                   .make(),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                             ),
                             GestureDetector(
                               onTap: () {

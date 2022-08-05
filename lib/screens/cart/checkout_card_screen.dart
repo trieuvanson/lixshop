@@ -122,7 +122,10 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                               .bold
                                               .make(),
                                           5.heightBox,
-                                          "${state.user.phone}".text.xl.make(),
+                                          (state.user.phone ?? "")
+                                              .text
+                                              .xl
+                                              .make(),
                                           5.heightBox,
                                           "${state.user.address}"
                                               .text
@@ -134,59 +137,6 @@ class _CheckoutCardScreenState extends State<CheckoutCardScreen>
                                     }
                                     return Container();
                                   },
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    //show dialog input note
-                                    //set width dialog
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text("Ghi chú"),
-                                        content: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.8,
-                                          child: TextField(
-                                            maxLength: 200,
-                                            maxLines: null,
-                                            onChanged: (value) {
-                                              print('value: $value');
-                                            },
-                                          ),
-                                        ),
-                                        actions: [
-                                          FlatButton(
-                                            child: const Text("Hủy"),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: const Text("Xác nhận"),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  child: Row(
-                                    children: [
-                                      "Thêm ghi chú".text.green500.xl.make(),
-                                      //Icon ghi chú
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      const Icon(
-                                        Icons.edit,
-                                        color: Vx.green500,
-                                        size: 20,
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               ],
                             ),
@@ -593,12 +543,66 @@ class _CheckoutItem extends StatelessWidget {
                   ),
                 ),
               ),
+              // TextButton(
+              //   onPressed: () {
+              //     //show dialog input note
+              //     //set width dialog
+              //     showDialog(
+              //       context: context,
+              //       builder: (context) => AlertDialog(
+              //         title: const Text("Ghi chú"),
+              //         content: SizedBox(
+              //           width: MediaQuery.of(context)
+              //               .size
+              //               .width *
+              //               0.8,
+              //           child: TextField(
+              //             maxLength: 200,
+              //             maxLines: null,
+              //             onChanged: (value) {
+              //               // var thisCart = cartModel.cart.firstWhere(
+              //               //     (element) => element.idNPP == idNPP);
+              //             },
+              //           ),
+              //         ),
+              //         actions: [
+              //           FlatButton(
+              //             child: const Text("Hủy"),
+              //             onPressed: () {
+              //               Navigator.pop(context);
+              //             },
+              //           ),
+              //           FlatButton(
+              //             child: const Text("Xác nhận"),
+              //             onPressed: () {
+              //               Navigator.pop(context);
+              //             },
+              //           ),
+              //         ],
+              //       ),
+              //     );
+              //   },
+              //   child: Row(
+              //     children: [
+              //       "Thêm ghi chú".text.green500.xl.make(),
+              //       //Icon ghi chú
+              //       const SizedBox(
+              //         width: 10,
+              //       ),
+              //       const Icon(
+              //         Icons.edit,
+              //         color: Vx.green500,
+              //         size: 20,
+              //       ),
+              //     ],
+              //   ),
+              // ),
               5.heightBox,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   "Giá sau ưu đãi".text.xl.gray500.make(),
-                  "${convertCurrencyToVND(cartModel.getTotalPrice()!)}đ"
+                  "${convertCurrencyToVND(cartModel.totalPriceByIdAgent(idNPP)!)}đ"
                       .text
                       .color(Vx.red700.withOpacity(0.8))
                       .bold
@@ -614,14 +618,14 @@ class _CheckoutItem extends StatelessWidget {
                   "Miễn phí".text.color(Vx.green500).bold.xl2.make(),
                 ],
               ),
-              5.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  "Giao từ".text.xl.gray500.make(),
-                  "Tp. HCM, Dĩ An, Bình Dương.".text.xl.make(),
-                ],
-              ),
+              // 5.heightBox,
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     "Giao từ".text.xl.gray500.make(),
+              //     "Tp. HCM, Dĩ An, Bình Dương.".text.xl.make(),
+              //   ],
+              // ),
               // Padding(
               //   padding: const EdgeInsets.only(top: 16.0),
               //   child: Container(

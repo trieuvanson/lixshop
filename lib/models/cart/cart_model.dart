@@ -11,19 +11,22 @@ class Cart {
   int? typeformVoucherCustom;
   int? brandId;
   VoucherMethod? voucherMethod;
+  String? note;
 
-  Cart(
-      {this.productDetail,
-      this.quantity,
-      this.unit,
-      this.typeformVoucher,
-      this.typeformVoucherCustom,
-      this.brandId,
-      this.voucherMethod});
+  Cart({
+    this.productDetail,
+    this.quantity,
+    this.unit,
+    this.typeformVoucher,
+    this.typeformVoucherCustom,
+    this.brandId,
+    this.voucherMethod,
+    this.note,
+  });
 
   @override
   String toString() {
-    return 'Cart{productDetail: ${productDetail ?? ""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher, typeformVoucherCustom: $typeformVoucherCustom, brandId: $brandId, voucherMethod: $voucherMethod}';
+    return 'Cart{productDetail: ${productDetail ?? ""}, quantity: $quantity, unit: $unit, typeformVoucher: $typeformVoucher, typeformVoucherCustom: $typeformVoucherCustom, brandId: $brandId, voucherMethod: $voucherMethod, note: $note}';
   }
 
   int? getVoucherMethodFromProductDetail(
@@ -71,6 +74,7 @@ class Cart {
         typeformVoucherCustom: json["typeformVoucherCustom"],
         brandId: json["brandId"],
         voucherMethod: VoucherMethod.fromJson(json["voucherMethod"]),
+        note: json["note"],
       );
 
 //  Tojson
@@ -83,6 +87,7 @@ class Cart {
       'typeformVoucherCustom': typeformVoucherCustom,
       'brandId': brandId,
       'voucherMethod': voucherMethod?.toJson(),
+      'note': note,
     };
   }
 
@@ -93,7 +98,8 @@ class Cart {
       unit.hashCode ^
       typeformVoucher.hashCode ^
       brandId.hashCode ^
-      voucherMethod.hashCode;
+      voucherMethod.hashCode ^
+      note.hashCode;
 
 //  Trường hợp 1. Nếu là thùng => Tính KM
 //  Trường hợp 2. Nếu là khác Thùng => Số lượng / changeValue

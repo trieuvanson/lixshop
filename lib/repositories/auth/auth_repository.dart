@@ -105,6 +105,12 @@ class AuthRepository {
           'msg': "Có lỗi xảy ra, vui lòng thử lại!",
         });
       }
+      //type other
+      if (e.type == DioErrorType.other) {
+        return ResponseDTO.fromJson({
+          'msg': "Có lỗi xảy ra, vui lòng thử lại!",
+        });
+      }
       return ResponseDTO.fromJson(e.response!.data);
     } catch (e) {
       return ResponseDTO();
@@ -112,11 +118,7 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    try {
-      await secureStorage.deleteSecureStorage();
-    } on DioError catch (e) {
-      print('DioError: $e');
-    }
+    await secureStorage.deleteSecureStorage();
   }
 }
 

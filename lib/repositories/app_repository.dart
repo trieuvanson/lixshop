@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../models/models.dart';
@@ -15,10 +16,14 @@ class AppRepository {
       final response = await dio.get('$mainUrl/datas/KxQcAQ9cWEJYLw==');
       return CityModel.fromJson(jsonDecode(response.data));
     } on DioError catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return CityModel.withError("Không thể kết nối đến máy chủ");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return CityModel.withError("Không thể kết nối đến máy chủ");
     }
   }
@@ -33,10 +38,14 @@ class AppRepository {
       }
       return DistrictsModel(districts: districtsModel.districts);
     } on DioError catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return DistrictsModel(error: e.toString());
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return DistrictsModel(error: e.toString());
     }
   }
@@ -51,10 +60,14 @@ class AppRepository {
       }
       return WardsModel(wards: wardsModel.wards);
     } on DioError catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return WardsModel(error: e.toString());
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return WardsModel(error: e.toString());
     }
   }
