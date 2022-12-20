@@ -113,6 +113,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
         ),
       ),
     );
+/*
     return Scaffold(
       appBar: appBar(widget.category),
       body: Container(
@@ -188,6 +189,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
         ),
       ),
     );
+*/
   }
 
   AppBar appBar(final category) {

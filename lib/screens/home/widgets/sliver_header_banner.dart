@@ -74,7 +74,6 @@ class _SliverHeaderBannerState extends State<SliverHeaderBanner> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return _isLoading || _slides.isEmpty
         ? const SliverToBoxAdapter(child: SizedBox.shrink())
         : SliverPadding(

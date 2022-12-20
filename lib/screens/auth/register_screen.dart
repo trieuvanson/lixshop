@@ -345,12 +345,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   decoration: TextFormFieldCommonStyle
                                       .textFormFieldStyle(
                                           "Số nhà, tên đường,..."),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Không được để trống';
-                                    }
-                                    return null;
-                                  },
                                   onChanged: (value) {
                                     setState(() {
                                       register.address = value;
